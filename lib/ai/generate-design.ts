@@ -16,7 +16,10 @@ export async function generateDesignForProject(projectId: string) {
   await transitionStatus(supabase, projectId, 'design_generating', { note: '디자인 생성 시작' })
 
   const content = script.content as any
-  const heroSection = content.sections?.find((s: any) => s.type === 'hero')
+  if (!content.sections || !Array.isArray(content.sections)) {
+    throw new Error('Invalid script content: missing sections')
+  }
+  const heroSection = content.sections.find((s: any) => s.type === 'hero')
   const imagePrompt = `E-commerce product detail page hero banner for ${project.company_name}.
 ${heroSection?.image_description ?? project.product_highlights}.
 Style: ${content.tone}, Color: ${content.color_suggestion}.
@@ -25,7 +28,8 @@ Professional product photography, white background, high quality.`
   try {
     const imageBuffer = await generateProductImage(imagePrompt)
     const storagePath = `projects/${projectId}/design_v1_${Date.now()}.png`
-    await supabase.storage.from('designs').upload(storagePath, imageBuffer, { contentType: 'image/png' })
+    const { error: uploadError } = await supabase.storage.from('designs').upload(storagePath, imageBuffer, { contentType: 'image/png' })
+    if (uploadError) throw new Error(`Storage upload failed: ${uploadError.message}`)
     const { data: { publicUrl } } = supabase.storage.from('designs').getPublicUrl(storagePath)
 
     await supabase.from('designs').insert({

@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     note: '촬영 완료',
   })
 
-  generateDesignForProject(project_id) // fire-and-forget
+  generateDesignForProject(project_id).catch(console.error) // fire-and-forget
 
   return NextResponse.json({ success: true })
 }

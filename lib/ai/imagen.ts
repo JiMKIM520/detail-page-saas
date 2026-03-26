@@ -1,7 +1,8 @@
 import { PredictionServiceClient, helpers } from '@google-cloud/aiplatform'
 
 const client = new PredictionServiceClient()
-const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT_ID!
+const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT_ID
+if (!PROJECT_ID) throw new Error('GOOGLE_CLOUD_PROJECT_ID is required')
 const LOCATION = 'us-central1'
 const ENDPOINT = `projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/imagen-4.0-generate-preview-05-20`
 
