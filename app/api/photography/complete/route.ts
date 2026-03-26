@@ -1,5 +1,6 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { transitionStatus } from '@/lib/status-machine'
+import { generateDesignForProject } from '@/lib/ai/generate-design'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -10,7 +11,7 @@ export async function POST(request: Request) {
     note: '촬영 완료',
   })
 
-  // NOTE: generateDesignForProject will be added in Task 9 — do NOT import it yet
+  generateDesignForProject(project_id) // fire-and-forget
 
   return NextResponse.json({ success: true })
 }
