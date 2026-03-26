@@ -1,8 +1,9 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { transitionStatus } from '@/lib/status-machine'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { project_id } = await request.json()
 
   // 최신 승인된 스크립트에서 촬영 요구사항 추출
@@ -21,6 +22,10 @@ export async function POST(request: Request) {
   const shootingReqs = content.shooting_requirements as {
     nukki_shots: string[]
     styling_shots: string[]
+  } | undefined
+
+  if (!shootingReqs?.nukki_shots || !shootingReqs?.styling_shots) {
+    return NextResponse.json({ error: 'Missing shooting requirements in script' }, { status: 400 })
   }
 
   // 촬영 항목을 photos 테이블에 초기 레코드로 생성
@@ -39,11 +44,14 @@ export async function POST(request: Request) {
     })),
   ]
 
-  await supabase.from('photos').insert(photoItems)
-  await supabase
-    .from('projects')
-    .update({ status: 'photo_scheduled' })
-    .eq('id', project_id)
+  const { error: insertError } = await supabase.from('photos').insert(photoItems)
+  if (insertError) {
+    return NextResponse.json({ error: insertError.message }, { status: 500 })
+  }
+
+  await transitionStatus(supabase, project_id, 'photo_scheduled', {
+    note: '촬영 리스트 생성',
+  })
 
   return NextResponse.json({ success: true })
 }

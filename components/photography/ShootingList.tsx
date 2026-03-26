@@ -27,22 +27,30 @@ export function ShootingList({
     setUploading(photoId)
     const path = `projects/${projectId}/${photoId}_${file.name}`
     const { error } = await supabase.storage.from('photos').upload(path, file)
-    if (!error) {
-      await supabase
-        .from('photos')
-        .update({ storage_path: path })
-        .eq('id', photoId)
-      router.refresh()
+    if (error) {
+      alert(`업로드 실패: ${error.message}`)
+      setUploading(null)
+      return
     }
+    await supabase
+      .from('photos')
+      .update({ storage_path: path })
+      .eq('id', photoId)
     setUploading(null)
+    router.refresh()
   }
 
   async function markAllUploaded() {
-    await fetch('/api/photography/complete', {
+    const res = await fetch('/api/photography/complete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ project_id: projectId }),
     })
+    if (!res.ok) {
+      const body = await res.json().catch(() => null)
+      alert(`촬영 완료 처리 실패: ${body?.error ?? res.statusText}`)
+      return
+    }
     router.push('/planner')
   }
 
