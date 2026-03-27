@@ -17,8 +17,8 @@ export default async function ClientLayout({ children }: { children: React.React
 
   const displayName = profile?.name || user.user_metadata?.name || user.email?.split('@')[0] || ''
   const usageCount = profile?.usage_count ?? 0
-  const usageLimit = profile?.usage_limit ?? 3
-  const usagePercent = Math.min((usageCount / usageLimit) * 100, 100)
+  const usageLimit = profile?.usage_limit ?? 1
+  const usageExhausted = usageCount >= usageLimit
 
   return (
     <div className="min-h-screen bg-background">
@@ -35,16 +35,21 @@ export default async function ClientLayout({ children }: { children: React.React
 
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-2.5">
-              <div className="text-right">
-                <p className="text-xs text-text-tertiary leading-none mb-0.5">사용량</p>
-                <p className="text-sm font-semibold text-text-primary">{usageCount}/{usageLimit}</p>
-              </div>
-              <div className="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all ${usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 60 ? 'bg-amber-500' : 'bg-primary-500'}`}
-                  style={{ width: `${usagePercent}%` }}
-                />
-              </div>
+              {usageExhausted ? (
+                <span className="text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-1.5">
+                  1건 사용 완료
+                </span>
+              ) : (
+                <>
+                  <div className="text-right">
+                    <p className="text-xs text-text-tertiary leading-none mb-0.5">사용량</p>
+                    <p className="text-sm font-semibold text-text-primary">{usageCount}/{usageLimit}</p>
+                  </div>
+                  <div className="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all bg-primary-500" style={{ width: `${Math.min((usageCount / usageLimit) * 100, 100)}%` }} />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="h-5 w-px bg-border" />

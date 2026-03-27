@@ -348,6 +348,9 @@ export function IntakeForm({ platforms }: { platforms: Platform[] }) {
 
       {/* 제출 */}
       <div className="pt-2">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-4">
+          <p className="text-blue-700 text-sm font-medium">기업당 1건의 상세페이지 제작이 제공됩니다. 신중하게 입력해주세요.</p>
+        </div>
         <button type="submit" disabled={isSubmitting || !!uploadProgress}
           className="w-full bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm hover:shadow-md transition-all text-base">
           {uploadProgress || (isSubmitting ? '제출 중...' : '작업 의뢰하기')}

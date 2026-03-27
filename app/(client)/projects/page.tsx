@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { ProjectCard } from '@/components/shared/ProjectCard'
 import type { ProjectStatus } from '@/lib/status-machine'
 import Link from 'next/link'
@@ -12,6 +13,17 @@ export default async function ClientProjectsPage() {
     .eq('client_id', user!.id)
     .order('created_at', { ascending: false })
 
+  const service = createServiceClient()
+  const { data: profile } = await service
+    .from('user_profiles')
+    .select('usage_count, usage_limit')
+    .eq('id', user!.id)
+    .single()
+
+  const usageCount = profile?.usage_count ?? 0
+  const usageLimit = profile?.usage_limit ?? 1
+  const usageExhausted = usageCount >= usageLimit
+
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
@@ -19,14 +31,29 @@ export default async function ClientProjectsPage() {
           <h1 className="text-2xl font-bold text-text-primary">내 프로젝트</h1>
           <p className="text-sm text-text-tertiary mt-1">의뢰한 상세페이지 프로젝트를 확인하세요</p>
         </div>
-        <Link href="/intake"
-          className="inline-flex items-center gap-2 bg-primary-600 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-primary-700 shadow-sm hover:shadow-md transition-all">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          새 의뢰
-        </Link>
+        {usageExhausted ? (
+          <span className="inline-flex items-center gap-2 bg-gray-100 text-text-tertiary rounded-xl px-5 py-2.5 text-sm font-semibold cursor-not-allowed">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            1건 사용 완료
+          </span>
+        ) : (
+          <Link href="/intake"
+            className="inline-flex items-center gap-2 bg-primary-600 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-primary-700 shadow-sm hover:shadow-md transition-all">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            새 의뢰
+          </Link>
+        )}
       </div>
+
+      {usageExhausted && (
+        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
+          <p className="text-sm text-amber-800 font-medium">기업당 1건의 상세페이지 제작이 제공됩니다. 이미 사용이 완료되었습니다.</p>
+        </div>
+      )}
 
       {projects && projects.length > 0 ? (
         <div className="grid gap-4">
@@ -51,13 +78,15 @@ export default async function ClientProjectsPage() {
           </div>
           <h3 className="text-lg font-semibold text-text-primary mb-1">아직 프로젝트가 없습니다</h3>
           <p className="text-sm text-text-tertiary mb-6">첫 번째 상세페이지 제작을 의뢰해보세요</p>
-          <Link href="/intake"
-            className="inline-flex items-center gap-2 bg-primary-600 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-primary-700 shadow-sm transition-all">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            첫 의뢰 시작하기
-          </Link>
+          {!usageExhausted && (
+            <Link href="/intake"
+              className="inline-flex items-center gap-2 bg-primary-600 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-primary-700 shadow-sm transition-all">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              첫 의뢰 시작하기
+            </Link>
+          )}
         </div>
       )}
     </div>
