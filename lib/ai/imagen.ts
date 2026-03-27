@@ -1,12 +1,29 @@
 import { PredictionServiceClient, helpers } from '@google-cloud/aiplatform'
 
-const client = new PredictionServiceClient()
-const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT_ID
-if (!PROJECT_ID) throw new Error('GOOGLE_CLOUD_PROJECT_ID is required')
-const LOCATION = 'us-central1'
-const ENDPOINT = `projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/imagen-4.0-generate-preview-05-20`
+let _client: PredictionServiceClient | null = null
+
+function getClient() {
+  if (!_client) {
+    const keyJson = process.env.GOOGLE_SERVICE_ACCOUNT_KEY
+    if (keyJson) {
+      const credentials = JSON.parse(keyJson)
+      _client = new PredictionServiceClient({ credentials })
+    } else {
+      // Falls back to GOOGLE_APPLICATION_CREDENTIALS file path
+      _client = new PredictionServiceClient()
+    }
+  }
+  return _client
+}
+
+function getEndpoint() {
+  const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID
+  if (!projectId) throw new Error('GOOGLE_CLOUD_PROJECT_ID is required')
+  return `projects/${projectId}/locations/us-central1/publishers/google/models/imagen-4.0-generate-preview-05-20`
+}
 
 export async function generateProductImage(prompt: string): Promise<Buffer> {
+  const client = getClient()
   const instance = helpers.toValue({ prompt })
   const parameters = helpers.toValue({
     sampleCount: 1,
@@ -16,7 +33,7 @@ export async function generateProductImage(prompt: string): Promise<Buffer> {
   })
 
   const [response] = await client.predict({
-    endpoint: ENDPOINT,
+    endpoint: getEndpoint(),
     instances: [instance!],
     parameters,
   })
