@@ -39,6 +39,12 @@ export interface Database {
         Update: { id?: string; project_id?: string; from_status?: string | null; to_status?: string; changed_by?: string | null; note?: string | null; created_at?: string }
         Relationships: []
       }
+      user_profiles: {
+        Row: { id: string; name: string | null; avatar_url: string | null; role: string; usage_count: number; usage_limit: number; created_at: string; updated_at: string }
+        Insert: { id: string; name?: string | null; avatar_url?: string | null; role?: string; usage_count?: number; usage_limit?: number; created_at?: string; updated_at?: string }
+        Update: { id?: string; name?: string | null; avatar_url?: string | null; role?: string; usage_count?: number; usage_limit?: number; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
       intake_files: {
         Row: { id: string; project_id: string; file_type: string; storage_path: string; file_name: string; mime_type: string | null; file_size: number | null; created_at: string }
         Insert: { id?: string; project_id: string; file_type: string; storage_path: string; file_name: string; mime_type?: string | null; file_size?: number | null; created_at?: string }

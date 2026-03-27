@@ -59,29 +59,42 @@ export function ShootingList({
   const allUploaded = photos.length > 0 && photos.every((p) => p.storage_path)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {[
-        { label: '누끼 컷', items: nukki },
-        { label: '스타일링 컷', items: styling },
-      ].map(({ label, items }) => (
+        { label: '누끼 컷', items: nukki, color: 'blue' },
+        { label: '스타일링 컷', items: styling, color: 'violet' },
+      ].map(({ label, items, color }) => (
         <div key={label}>
-          <h3 className="font-semibold text-gray-900 mb-3">{label}</h3>
+          <h3 className="font-semibold text-text-primary mb-3 flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full bg-${color}-500`} />
+            {label}
+            <span className="text-xs font-normal text-text-tertiary">{items.length}장</span>
+          </h3>
           <div className="space-y-2">
             {items.map((photo) => (
               <div
                 key={photo.id}
-                className="flex items-center gap-4 bg-white border rounded-lg p-4"
+                className="flex items-center gap-4 bg-surface border border-border rounded-xl p-4"
               >
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-text-primary truncate">
                     {photo.shooting_list_item}
                   </p>
-                  <p className="text-xs text-gray-400">
-                    {photo.storage_path ? '업로드 완료' : '미업로드'}
+                  <p className="text-xs text-text-tertiary mt-0.5">
+                    {photo.storage_path ? (
+                      <span className="inline-flex items-center gap-1 text-emerald-600">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        업로드 완료
+                      </span>
+                    ) : (
+                      <span className="text-amber-500">미업로드</span>
+                    )}
                   </p>
                 </div>
                 {!photo.storage_path && (
-                  <label className="cursor-pointer bg-blue-50 text-blue-600 border border-blue-200 rounded-lg px-3 py-1 text-sm hover:bg-blue-100">
+                  <label className="cursor-pointer bg-primary-50 text-primary-600 border border-primary-200 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-primary-100 transition-colors flex-shrink-0">
                     {uploading === photo.id ? '업로드 중...' : '파일 선택'}
                     <input
                       type="file"
@@ -96,6 +109,9 @@ export function ShootingList({
                 )}
               </div>
             ))}
+            {items.length === 0 && (
+              <p className="text-sm text-text-tertiary py-4 text-center">항목 없음</p>
+            )}
           </div>
         </div>
       ))}
@@ -103,9 +119,12 @@ export function ShootingList({
       {allUploaded && (
         <button
           onClick={markAllUploaded}
-          className="w-full bg-indigo-600 text-white rounded-lg py-3 font-medium hover:bg-indigo-700"
+          className="w-full bg-primary-600 text-white rounded-xl py-3 font-semibold hover:bg-primary-700 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
         >
-          촬영 완료 → 디자인 생성 시작
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          촬영 완료 — 디자인 생성 시작
         </button>
       )}
     </div>

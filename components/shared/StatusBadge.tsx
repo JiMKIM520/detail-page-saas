@@ -1,22 +1,23 @@
 import { STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
-import clsx from 'clsx'
 
-const STATUS_COLORS: Record<ProjectStatus, string> = {
-  intake_submitted:  'bg-gray-100 text-gray-700',
-  script_generating: 'bg-yellow-100 text-yellow-700',
-  script_review:     'bg-orange-100 text-orange-700',
-  script_approved:   'bg-green-100 text-green-700',
-  photo_scheduled:   'bg-blue-100 text-blue-700',
-  photo_uploaded:    'bg-indigo-100 text-indigo-700',
-  design_generating: 'bg-purple-100 text-purple-700',
-  design_review:     'bg-pink-100 text-pink-700',
-  design_approved:   'bg-emerald-100 text-emerald-700',
-  delivered:         'bg-slate-100 text-slate-700',
+const STATUS_STYLES: Record<ProjectStatus, { bg: string; text: string; dot: string }> = {
+  intake_submitted:  { bg: 'bg-gray-50',    text: 'text-gray-600',    dot: 'bg-gray-400' },
+  script_generating: { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-400' },
+  script_review:     { bg: 'bg-orange-50',  text: 'text-orange-700',  dot: 'bg-orange-400' },
+  script_approved:   { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400' },
+  photo_scheduled:   { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400' },
+  photo_uploaded:    { bg: 'bg-indigo-50',  text: 'text-indigo-700',  dot: 'bg-indigo-400' },
+  design_generating: { bg: 'bg-violet-50',  text: 'text-violet-700',  dot: 'bg-violet-400' },
+  design_review:     { bg: 'bg-pink-50',    text: 'text-pink-700',    dot: 'bg-pink-400' },
+  design_approved:   { bg: 'bg-teal-50',    text: 'text-teal-700',    dot: 'bg-teal-400' },
+  delivered:         { bg: 'bg-slate-100',  text: 'text-slate-600',   dot: 'bg-slate-400' },
 }
 
 export function StatusBadge({ status }: { status: ProjectStatus }) {
+  const style = STATUS_STYLES[status] ?? STATUS_STYLES.intake_submitted
   return (
-    <span className={clsx('px-2 py-1 rounded-full text-xs font-medium', STATUS_COLORS[status])}>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${style.bg} ${style.text}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
       {STATUS_LABELS[status]}
     </span>
   )
