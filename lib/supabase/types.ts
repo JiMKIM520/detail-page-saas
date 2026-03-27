@@ -51,6 +51,12 @@ export interface Database {
         Update: { id?: string; project_id?: string; file_type?: string; storage_path?: string; file_name?: string; mime_type?: string | null; file_size?: number | null; created_at?: string }
         Relationships: []
       }
+      comments: {
+        Row: { id: string; project_id: string; user_id: string; content: string; created_at: string }
+        Insert: { id?: string; project_id: string; user_id: string; content: string; created_at?: string }
+        Update: { id?: string; project_id?: string; user_id?: string; content?: string; created_at?: string }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
