@@ -3,6 +3,8 @@ import { transitionStatus } from '@/lib/status-machine'
 import { generateScriptForProject } from '@/lib/ai/generate-script'
 import { NextResponse } from 'next/server'
 
+export const maxDuration = 60
+
 export async function POST(request: Request) {
   const { project_id, script_id, action, notes } = await request.json()
   const supabase = createServiceClient()
@@ -35,7 +37,14 @@ export async function POST(request: Request) {
     }
   } else if (action === 'regenerate') {
     await supabase.from('scripts').update({ planner_notes: notes }).eq('id', script_id)
-    generateScriptForProject(project_id) // fire-and-forget, uses service role internally
+    await generateScriptForProject(project_id)
+  } else if (action === 'edit') {
+    // 기획자 직접 편집
+    await supabase.from('scripts').update({
+      content: notes.content,
+      planner_notes: notes.memo || null,
+      planner_status: 'edited',
+    }).eq('id', script_id)
   }
 
   return NextResponse.json({ success: true })

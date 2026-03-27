@@ -56,7 +56,7 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
           )}
         </div>
         <div>
-          <ReviewPanel projectId={id} scriptId={script?.id} />
+          <ReviewPanel projectId={id} scriptId={script?.id} scriptContent={script?.content} />
         </div>
       </div>
     </div>
