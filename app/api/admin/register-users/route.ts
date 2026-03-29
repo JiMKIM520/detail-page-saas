@@ -30,10 +30,11 @@ export async function POST(request: Request) {
       continue
     }
 
-    // 1. Create auth user (password = business_number)
+    // 1. Create auth user (password = business_number, 하이픈 제거)
+    const normalizedBN = business_number.replace(/-/g, '')
     const { data: authData, error: authError } = await service.auth.admin.createUser({
       email,
-      password: business_number,
+      password: normalizedBN,
       user_metadata: { role: 'client', name: company_name },
       email_confirm: true,
     })
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
         role: 'client',
         usage_limit: 1,
         usage_count: 0,
-        business_number,
+        business_number: normalizedBN,
       })
 
     if (profileError) {
