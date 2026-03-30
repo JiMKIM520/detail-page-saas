@@ -4,7 +4,10 @@ import Link from 'next/link'
 
 export default async function IntakePage() {
   const supabase = await createClient()
-  const { data: platforms } = await supabase.from('platforms').select('id, name')
+  const [{ data: platforms }, { data: categories }] = await Promise.all([
+    supabase.from('platforms').select('id, name, slug'),
+    supabase.from('categories').select('id, name, slug'),
+  ])
 
   return (
     <div>
@@ -21,7 +24,7 @@ export default async function IntakePage() {
         </p>
       </div>
       <div className="bg-surface rounded-2xl border border-border p-6 sm:p-8 shadow-card">
-        <IntakeForm platforms={platforms ?? []} />
+        <IntakeForm platforms={platforms ?? []} categories={categories ?? []} />
       </div>
     </div>
   )

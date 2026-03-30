@@ -1,10 +1,11 @@
 'use client'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { getCompatibility, getCompatibilityLabel, isBlocked, isWarning } from '@/lib/ai/prompts/compatibility'
 
 const schema = z.object({
   company_name: z.string().min(1, '기업명을 입력하세요'),
@@ -13,12 +14,13 @@ const schema = z.object({
   product_highlights: z.string().min(10, '강조 포인트를 10자 이상 입력하세요'),
   reference_notes: z.string().optional(),
   platform_id: z.string().uuid('플랫폼을 선택하세요'),
-  category: z.string().min(1, '카테고리를 선택하세요'),
+  category_id: z.string().uuid('카테고리를 선택하세요'),
 })
 
 type FormData = z.infer<typeof schema>
 
-interface Platform { id: string; name: string }
+interface Platform { id: string; name: string; slug: string }
+interface Category { id: string; name: string; slug: string }
 
 interface FileGroup {
   file_type: 'product_photo' | 'brochure' | 'detail_capture'
@@ -71,12 +73,26 @@ function FileIcon({ type }: { type: string }) {
   )
 }
 
-export function IntakeForm({ platforms }: { platforms: Platform[] }) {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
+export function IntakeForm({ platforms, categories }: { platforms: Platform[]; categories: Category[] }) {
+  const { register, handleSubmit, formState: { errors, isSubmitting }, control } = useForm<FormData>({
     resolver: zodResolver(schema)
   })
   const router = useRouter()
   const supabase = createClient()
+
+  const selectedCategoryId = useWatch({ control, name: 'category_id' })
+  const selectedPlatformId = useWatch({ control, name: 'platform_id' })
+
+  const compatibility = useMemo(() => {
+    const cat = categories.find(c => c.id === selectedCategoryId)
+    const plat = platforms.find(p => p.id === selectedPlatformId)
+    if (!cat || !plat) return null
+    const compat = getCompatibility(cat.slug, plat.slug)
+    const label = getCompatibilityLabel(compat)
+    const blocked = isBlocked(cat.slug, plat.slug)
+    const warning = isWarning(cat.slug, plat.slug)
+    return { compat, label, blocked, warning }
+  }, [selectedCategoryId, selectedPlatformId, categories, platforms])
 
   const [fileGroups, setFileGroups] = useState<Record<string, File[]>>({
     product_photo: [],
@@ -140,6 +156,12 @@ export function IntakeForm({ platforms }: { platforms: Platform[] }) {
   async function onSubmit(data: FormData) {
     if (fileGroups.product_photo.length === 0) {
       setFileError('제품 사진을 최소 1장 업로드해주세요.')
+      return
+    }
+
+    // 조합 검증: blocked 조합 차단
+    if (compatibility?.blocked) {
+      setApiError('선택한 카테고리와 플랫폼 조합은 지원되지 않습니다. 다른 조합을 선택해주세요.')
       return
     }
 
@@ -214,16 +236,32 @@ export function IntakeForm({ platforms }: { platforms: Platform[] }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1.5">카테고리 *</label>
-              <select {...register('category')}
+              <select {...register('category_id')}
                 className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                 <option value="">선택하세요</option>
-                {['식품', '패션', '뷰티', '생활용품', '전자제품', '기타'].map(c =>
-                  <option key={c} value={c}>{c}</option>
+                {categories.map(c =>
+                  <option key={c.id} value={c.id}>{c.name}</option>
                 )}
               </select>
-              {errors.category && <p className="text-red-500 text-sm mt-1.5">{errors.category.message}</p>}
+              {errors.category_id && <p className="text-red-500 text-sm mt-1.5">{errors.category_id.message}</p>}
             </div>
           </div>
+
+          {compatibility && (
+            <div className={`rounded-xl px-4 py-3 text-sm ${
+              compatibility.blocked
+                ? 'bg-red-50 border border-red-200 text-red-700'
+                : compatibility.warning
+                  ? 'bg-amber-50 border border-amber-200 text-amber-700'
+                  : 'bg-green-50 border border-green-200 text-green-700'
+            }`}>
+              <span className="font-semibold">{compatibility.label.emoji} {compatibility.label.label}</span>
+              <span className="ml-2">{compatibility.label.description}</span>
+              {compatibility.blocked && (
+                <p className="mt-1 font-medium">이 조합으로는 의뢰할 수 없습니다. 다른 플랫폼을 선택해주세요.</p>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

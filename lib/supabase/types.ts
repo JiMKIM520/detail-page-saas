@@ -3,6 +3,12 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      categories: {
+        Row: { id: string; name: string; slug: string; legal_summary: string | null; tone: string | null; created_at: string }
+        Insert: { id?: string; name: string; slug: string; legal_summary?: string | null; tone?: string | null; created_at?: string }
+        Update: { id?: string; name?: string; slug?: string; legal_summary?: string | null; tone?: string | null; created_at?: string }
+        Relationships: []
+      }
       platforms: {
         Row: { id: string; name: string; slug: string; style_guide: string | null; created_at: string }
         Insert: { id?: string; name: string; slug: string; style_guide?: string | null; created_at?: string }
@@ -10,10 +16,13 @@ export interface Database {
         Relationships: []
       }
       projects: {
-        Row: { id: string; client_id: string; planner_id: string | null; designer_id: string | null; status: string; company_name: string; homepage_url: string | null; detail_page_url: string | null; product_highlights: string | null; reference_notes: string | null; platform_id: string | null; category: string | null; created_at: string; updated_at: string }
-        Insert: { id?: string; client_id: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; created_at?: string; updated_at?: string }
-        Update: { id?: string; client_id?: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name?: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; created_at?: string; updated_at?: string }
-        Relationships: []
+        Row: { id: string; client_id: string; planner_id: string | null; designer_id: string | null; status: string; company_name: string; homepage_url: string | null; detail_page_url: string | null; product_highlights: string | null; reference_notes: string | null; platform_id: string | null; category: string | null; category_id: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; client_id: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; category_id?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; client_id?: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name?: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; category_id?: string | null; created_at?: string; updated_at?: string }
+        Relationships: [
+          { foreignKeyName: "projects_platform_id_fkey"; columns: ["platform_id"]; isOneToOne: false; referencedRelation: "platforms"; referencedColumns: ["id"] },
+          { foreignKeyName: "projects_category_id_fkey"; columns: ["category_id"]; isOneToOne: false; referencedRelation: "categories"; referencedColumns: ["id"] },
+        ]
       }
       scripts: {
         Row: { id: string; project_id: string; content: Json; ai_model: string | null; planner_status: string | null; planner_notes: string | null; version: number | null; created_at: string }
@@ -62,7 +71,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_usage: {
+        Args: { uid: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

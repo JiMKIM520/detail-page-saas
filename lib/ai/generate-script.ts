@@ -2,6 +2,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import type { Json } from '@/lib/supabase/types'
 import { generateScript, generateScriptWithImages, type ImageInput } from './claude'
 import { SCRIPT_SYSTEM_PROMPT, buildUserPrompt } from './prompts/script-base'
+import { buildDifferentiatedSystemPrompt, buildEnhancedUserPrompt } from './prompts/builder'
 import { transitionStatus } from '@/lib/status-machine'
 
 const IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
@@ -53,7 +54,7 @@ export async function generateScriptForProject(projectId: string) {
 
   const { data: project } = await supabase
     .from('projects')
-    .select('*, platforms(name, style_guide)')
+    .select('*, platforms(name, slug, style_guide), categories(name, slug)')
     .eq('id', projectId)
     .single()
 
@@ -62,38 +63,64 @@ export async function generateScriptForProject(projectId: string) {
   await transitionStatus(supabase, projectId, 'script_generating', { note: '스크립트 생성 시작' })
 
   try {
-    const userPrompt = buildUserPrompt({
-      company_name: project.company_name,
-      homepage_url: project.homepage_url,
-      detail_page_url: project.detail_page_url,
-      product_highlights: project.product_highlights ?? '',
-      reference_notes: project.reference_notes,
-      category: project.category ?? '',
-      platform_style_guide: (project.platforms as any)?.style_guide ?? '',
-    })
+    const joinedCategory = project.categories as { name: string; slug: string } | null
+    const joinedPlatform = project.platforms as { name: string; slug: string; style_guide: string | null } | null
+    const categorySlug = joinedCategory?.slug
+    const platformSlug = joinedPlatform?.slug
+    const categoryName = joinedCategory?.name ?? project.category ?? ''
+    const platformName = joinedPlatform?.name ?? ''
+    const platformStyleGuide = joinedPlatform?.style_guide ?? ''
+
+    // 카테고리×플랫폼 분화 프롬프트 사용 (slug 존재 시), 없으면 기본 프롬프트 폴백
+    const systemPrompt = categorySlug && platformSlug
+      ? buildDifferentiatedSystemPrompt(categorySlug, platformSlug)
+      : SCRIPT_SYSTEM_PROMPT
+
+    const userPrompt = categorySlug && platformSlug
+      ? buildEnhancedUserPrompt({
+          company_name: project.company_name,
+          homepage_url: project.homepage_url,
+          detail_page_url: project.detail_page_url,
+          product_highlights: project.product_highlights ?? '',
+          reference_notes: project.reference_notes,
+          category_name: categoryName,
+          platform_name: platformName,
+          platform_style_guide: platformStyleGuide,
+        })
+      : buildUserPrompt({
+          company_name: project.company_name,
+          homepage_url: project.homepage_url,
+          detail_page_url: project.detail_page_url,
+          product_highlights: project.product_highlights ?? '',
+          reference_notes: project.reference_notes,
+          category: project.category ?? '',
+          platform_style_guide: platformStyleGuide,
+        })
 
     // 업로드된 이미지 가져오기
     const images = await fetchIntakeImages(supabase, projectId)
 
     let rawScript: string
     if (images.length > 0) {
-      // 이미지가 있으면 Vision으로 분석하며 스크립트 생성
-      rawScript = await generateScriptWithImages(SCRIPT_SYSTEM_PROMPT, userPrompt, images)
+      rawScript = await generateScriptWithImages(systemPrompt, userPrompt, images)
     } else {
-      // 이미지 없으면 텍스트만으로 생성
-      rawScript = await generateScript(SCRIPT_SYSTEM_PROMPT, userPrompt)
+      rawScript = await generateScript(systemPrompt, userPrompt)
     }
 
     let scriptContent: Json
     try {
       scriptContent = JSON.parse(rawScript) as Json
-    } catch {
-      // JSON 파싱 실패 시 재시도
-      const retryPrompt = SCRIPT_SYSTEM_PROMPT + '\n\n반드시 순수 JSON만 응답하세요. 마크다운 없이.'
-      const retried = images.length > 0
-        ? await generateScriptWithImages(retryPrompt, userPrompt, images)
-        : await generateScript(retryPrompt, userPrompt)
-      scriptContent = JSON.parse(retried) as Json
+    } catch (firstErr) {
+      console.warn(`[generate-script] Initial JSON parse failed for project ${projectId}:`, firstErr, `Raw output length: ${rawScript.length}`)
+      const retryPrompt = systemPrompt + '\n\n반드시 순수 JSON만 응답하세요. 마크다운 없이.'
+      try {
+        const retried = images.length > 0
+          ? await generateScriptWithImages(retryPrompt, userPrompt, images)
+          : await generateScript(retryPrompt, userPrompt)
+        scriptContent = JSON.parse(retried) as Json
+      } catch (retryErr) {
+        throw new Error(`Script JSON parse failed after retry. Initial output (first 200 chars): ${rawScript.substring(0, 200)}`)
+      }
     }
 
     await supabase.from('scripts').insert({
