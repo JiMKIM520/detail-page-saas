@@ -37,9 +37,9 @@ export interface Database {
         Relationships: []
       }
       designs: {
-        Row: { id: string; project_id: string; preview_url: string | null; output_url: string | null; designer_status: string | null; designer_notes: string | null; version: number | null; created_at: string }
-        Insert: { id?: string; project_id: string; preview_url?: string | null; output_url?: string | null; designer_status?: string | null; designer_notes?: string | null; version?: number | null; created_at?: string }
-        Update: { id?: string; project_id?: string; preview_url?: string | null; output_url?: string | null; designer_status?: string | null; designer_notes?: string | null; version?: number | null; created_at?: string }
+        Row: { id: string; project_id: string; preview_url: string | null; preview_pdf_url: string | null; output_url: string | null; designer_status: string | null; designer_notes: string | null; version: number | null; created_at: string }
+        Insert: { id?: string; project_id: string; preview_url?: string | null; preview_pdf_url?: string | null; output_url?: string | null; designer_status?: string | null; designer_notes?: string | null; version?: number | null; created_at?: string }
+        Update: { id?: string; project_id?: string; preview_url?: string | null; preview_pdf_url?: string | null; output_url?: string | null; designer_status?: string | null; designer_notes?: string | null; version?: number | null; created_at?: string }
         Relationships: []
       }
       project_logs: {
