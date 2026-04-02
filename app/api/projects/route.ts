@@ -12,6 +12,9 @@ const bodySchema = z.object({
   homepage_url: z.string().url().optional().or(z.literal('')),
   detail_page_url: z.string().url().optional().or(z.literal('')),
   reference_notes: z.string().optional(),
+  brand_name: z.string().optional().nullable(),
+  target_audience: z.array(z.string()).optional().nullable(),
+  design_preference: z.string().optional().nullable(),
 })
 
 export async function POST(request: Request) {
@@ -62,6 +65,9 @@ export async function POST(request: Request) {
       platform_id: body.platform_id,
       category_id: body.category_id,
       category: categoryName,
+      brand_name: body.brand_name || null,
+      target_audience: body.target_audience || null,
+      design_preference: body.design_preference || null,
     })
     .select()
     .single()

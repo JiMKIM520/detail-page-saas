@@ -1,6 +1,7 @@
 import { getCategoryPrompt } from './categories'
 import { getPlatformPrompt } from './platforms'
 import { getCompatibility, getCrossStrategyTip, getCompatibilityLabel } from './compatibility'
+import { DESIGN_GUIDE } from './design-guide'
 
 export function buildDifferentiatedSystemPrompt(
   categorySlug: string,
@@ -134,7 +135,10 @@ ${crossSection}
 - 위 카테고리별 필수 섹션을 모두 포함하고, 금지 표현을 절대 사용하지 마세요
 - 플랫폼 이미지 스펙과 레이아웃 규칙을 반드시 준수하세요
 
-중요: JSON만 출력하세요. 마크다운 코드 블록 없이 순수 JSON으로 응답하세요.`
+중요: JSON만 출력하세요. 마크다운 코드 블록 없이 순수 JSON으로 응답하세요.
+
+## 품질 기준 및 촬영 가이드
+${DESIGN_GUIDE}`
 }
 
 export function buildEnhancedUserPrompt(project: {
@@ -146,15 +150,26 @@ export function buildEnhancedUserPrompt(project: {
   category_name: string
   platform_name: string
   platform_style_guide: string
+  brand_name?: string | null
+  target_audience?: string[] | null
+  design_preference?: string | null
 }): string {
+  const audienceLine = project.target_audience && project.target_audience.length > 0
+    ? `타겟 고객층: ${project.target_audience.join(', ')}`
+    : ''
+
   return `기업명: ${project.company_name}
+${project.brand_name ? `브랜드명: ${project.brand_name}` : ''}
 카테고리: ${project.category_name}
 판매 플랫폼: ${project.platform_name}
+${audienceLine}
 ${project.homepage_url ? `홈페이지: ${project.homepage_url}` : ''}
 ${project.detail_page_url ? `참조 상세페이지: ${project.detail_page_url}` : ''}
 
-강조 포인트:
+사업 소개 및 강조 포인트:
 ${project.product_highlights}
+
+${project.design_preference ? `디자인 선호도:\n${project.design_preference}` : ''}
 
 ${project.reference_notes ? `추가 요청사항:\n${project.reference_notes}` : ''}
 

@@ -5,6 +5,20 @@ import { SCRIPT_SYSTEM_PROMPT, buildUserPrompt } from './prompts/script-base'
 import { buildDifferentiatedSystemPrompt, buildEnhancedUserPrompt } from './prompts/builder'
 import { transitionStatus } from '@/lib/status-machine'
 
+async function fetchUrlContent(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(`https://r.jina.ai/${encodeURIComponent(url)}`, {
+      headers: { 'Accept': 'text/plain', 'X-No-Cache': 'true' },
+      signal: AbortSignal.timeout(15000),
+    })
+    if (!res.ok) return null
+    const text = await res.text()
+    return text.trim().slice(0, 3000) || null
+  } catch {
+    return null
+  }
+}
+
 const IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
 
 const FILE_TYPE_LABELS: Record<string, string> = {
@@ -76,7 +90,35 @@ export async function generateScriptForProject(projectId: string) {
       ? buildDifferentiatedSystemPrompt(categorySlug, platformSlug)
       : SCRIPT_SYSTEM_PROMPT
 
-    const userPrompt = categorySlug && platformSlug
+    // 업로드된 이미지 가져오기
+    const images = await fetchIntakeImages(supabase, projectId)
+
+    // URL 컨텐츠 추출 (Jina AI Reader)
+    const urlContents: string[] = []
+    const urlsToFetch = [project.homepage_url ?? '', project.detail_page_url ?? '']
+    let urlFetchFailed = false
+    for (const url of urlsToFetch) {
+      if (!url) continue
+      const content = await fetchUrlContent(url)
+      if (content) {
+        urlContents.push(content)
+      } else {
+        urlFetchFailed = true
+      }
+    }
+
+    if (urlFetchFailed && images.length === 0) {
+      await supabase.from('project_logs').insert({
+        project_id: projectId,
+        from_status: 'script_generating',
+        to_status: 'script_generating',
+        note: 'URL 컨텐츠 추출 실패 — 관리자 스크린샷 업로드 권장',
+      })
+    }
+
+    const urlContext = urlContents.length > 0 ? urlContents.join('\n\n---\n\n') : null
+
+    const baseUserPrompt = categorySlug && platformSlug
       ? buildEnhancedUserPrompt({
           company_name: project.company_name,
           homepage_url: project.homepage_url,
@@ -86,6 +128,9 @@ export async function generateScriptForProject(projectId: string) {
           category_name: categoryName,
           platform_name: platformName,
           platform_style_guide: platformStyleGuide,
+          brand_name: project.brand_name,
+          target_audience: Array.isArray(project.target_audience) ? project.target_audience as string[] : null,
+          design_preference: project.design_preference,
         })
       : buildUserPrompt({
           company_name: project.company_name,
@@ -97,8 +142,7 @@ export async function generateScriptForProject(projectId: string) {
           platform_style_guide: platformStyleGuide,
         })
 
-    // 업로드된 이미지 가져오기
-    const images = await fetchIntakeImages(supabase, projectId)
+    const userPrompt = baseUserPrompt + (urlContext ? `\n\n## 참조 URL에서 추출한 컨텐츠\n${urlContext}` : '')
 
     let rawScript: string
     if (images.length > 0) {

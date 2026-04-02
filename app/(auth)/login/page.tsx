@@ -9,13 +9,13 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
+    const supabase = createClient()
     const normalizedBN = businessNumber.replace(/-/g, '')
     const { data, error } = await supabase.auth.signInWithPassword({
       email,

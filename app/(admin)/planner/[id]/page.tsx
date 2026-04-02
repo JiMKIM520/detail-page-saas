@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ReviewPanel } from '@/components/planner/ReviewPanel'
+import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
@@ -24,6 +25,15 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
     .limit(1)
     .single()
 
+  const { data: logs } = await supabase
+    .from('project_logs')
+    .select('note')
+    .eq('project_id', id)
+    .order('created_at', { ascending: false })
+    .limit(20)
+
+  const hasUrlFetchFailed = logs?.some(l => l.note?.includes('URL 컨텐츠 추출 실패'))
+
   return (
     <div>
       <Link href="/planner" className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
@@ -42,8 +52,17 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
+          {hasUrlFetchFailed && (
+            <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <p className="text-sm font-semibold text-amber-800 mb-1">URL 컨텐츠 자동 추출 실패</p>
+              <p className="text-sm text-amber-700 mb-3">
+                제품 링크에서 정보를 가져오지 못했습니다. 스크린샷을 직접 업로드하면 AI 결과물이 개선됩니다.
+              </p>
+              <ScreenshotUpload projectId={id} />
+            </div>
+          )}
           {script ? (
-            <ScriptViewer content={script.content as any} />
+            <ScriptViewer content={script.content as any} projectId={id} scriptId={script.id} />
           ) : (
             <div className="flex flex-col items-center justify-center py-20 bg-surface rounded-xl border border-border border-dashed">
               <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-3">
@@ -56,7 +75,7 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
           )}
         </div>
         <div>
-          <ReviewPanel projectId={id} scriptId={script?.id} scriptContent={script?.content} />
+          <ReviewPanel projectId={id} scriptId={script?.id} />
         </div>
       </div>
     </div>

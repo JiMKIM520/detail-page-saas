@@ -1,4 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { createClient } from '@/lib/supabase/server'
 import { transitionStatus } from '@/lib/status-machine'
 import { generateScriptForProject } from '@/lib/ai/generate-script'
 import { NextResponse } from 'next/server'
@@ -6,6 +7,12 @@ import { NextResponse } from 'next/server'
 export const maxDuration = 60
 
 export async function POST(request: Request) {
+  const userSupabase = await createClient()
+  const { data: { user } } = await userSupabase.auth.getUser()
+  if (!user || !['planner', 'designer', 'admin'].includes(user.user_metadata?.role)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const { project_id, script_id, action, notes } = await request.json()
   const supabase = createServiceClient()
 

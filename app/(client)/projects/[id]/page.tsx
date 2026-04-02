@@ -5,9 +5,9 @@ import Link from 'next/link'
 import type { ProjectStatus } from '@/lib/status-machine'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { ProjectProgress } from '@/components/client/ProjectProgress'
-import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ProtectedImage } from '@/components/client/ProtectedImage'
 import { CommentSection } from '@/components/client/CommentSection'
+import { RevisionGuide } from '@/components/client/RevisionGuide'
 
 const STATUS_ORDER: ProjectStatus[] = [
   'intake_submitted',
@@ -39,7 +39,6 @@ export default async function ClientProjectDetailPage({
 
   const service = createServiceClient()
 
-  // Fetch project with platform info
   const { data: project } = await service
     .from('projects')
     .select('*, platforms(name)')
@@ -51,23 +50,8 @@ export default async function ClientProjectDetailPage({
   }
 
   const status = project.status as ProjectStatus
-  const showScript = statusIndex(status) >= statusIndex('script_review')
   const showDesign = statusIndex(status) >= statusIndex('design_review')
 
-  // Fetch script if needed
-  let script = null
-  if (showScript) {
-    const { data } = await service
-      .from('scripts')
-      .select('content')
-      .eq('project_id', id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single()
-    script = data
-  }
-
-  // Fetch design if needed
   let design = null
   if (showDesign) {
     const { data } = await service
@@ -85,7 +69,6 @@ export default async function ClientProjectDetailPage({
 
   return (
     <div className="space-y-8">
-      {/* Back link */}
       <Link
         href="/projects"
         className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary transition-colors"
@@ -96,13 +79,11 @@ export default async function ClientProjectDetailPage({
         프로젝트 목록
       </Link>
 
-      {/* Project header */}
+      {/* 프로젝트 헤더 */}
       <div className="bg-surface rounded-xl border border-border p-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
-            <h1 className="text-xl font-bold text-text-primary">
-              {project.company_name}
-            </h1>
+            <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
             <p className="text-sm text-text-tertiary mt-1">
               {platformName} · {project.category}
             </p>
@@ -111,31 +92,22 @@ export default async function ClientProjectDetailPage({
         </div>
       </div>
 
-      {/* Progress bar */}
+      {/* 진행 상황 */}
       <div className="bg-surface rounded-xl border border-border p-6">
         <h2 className="text-sm font-semibold text-text-secondary mb-4">진행 상황</h2>
         <ProjectProgress status={status} />
       </div>
 
-      {/* Script section */}
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      {showScript && script?.content && (
-        <div>
-          <h2 className="text-lg font-bold text-text-primary mb-4">스크립트</h2>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          <ScriptViewer content={script.content as any} />
-        </div>
-      )}
-
-      {/* Design section */}
+      {/* 상세페이지 초안 */}
       {showDesign && (
-        <div>
-          <h2 className="text-lg font-bold text-text-primary mb-4">디자인</h2>
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold text-text-primary">상세페이지 초안</h2>
+          <RevisionGuide />
           {design?.preview_url ? (
             <div className="bg-surface rounded-xl border border-border overflow-hidden shadow-card">
               <ProtectedImage
                 src={design.preview_url}
-                alt="디자인 미리보기"
+                alt="상세페이지 초안 미리보기"
                 className="w-full"
               />
             </div>
@@ -152,7 +124,7 @@ export default async function ClientProjectDetailPage({
         </div>
       )}
 
-      {/* Comments section */}
+      {/* 코멘트 */}
       <CommentSection projectId={id} />
     </div>
   )
