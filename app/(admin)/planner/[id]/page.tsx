@@ -32,6 +32,14 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
     .order('created_at', { ascending: false })
     .limit(20)
 
+  const { data: clientComments } = await supabase
+    .from('comments')
+    .select('id, content, created_at')
+    .eq('project_id', id)
+    .eq('role', 'client')
+    .order('created_at', { ascending: false })
+    .limit(5)
+
   const hasUrlFetchFailed = logs?.some(l => l.note?.includes('URL 컨텐츠 추출 실패'))
 
   return (
@@ -74,8 +82,24 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
             </div>
           )}
         </div>
-        <div>
+        <div className="space-y-4">
           <ReviewPanel projectId={id} scriptId={script?.id} />
+
+          {clientComments && clientComments.length > 0 && (
+            <div className="bg-surface rounded-xl border border-border p-5">
+              <h3 className="text-sm font-semibold text-text-primary mb-3">클라이언트 코멘트</h3>
+              <ul className="space-y-3">
+                {clientComments.map(c => (
+                  <li key={c.id} className="text-sm">
+                    <p className="text-text-secondary whitespace-pre-wrap">{c.content}</p>
+                    <p className="text-xs text-text-tertiary mt-1">
+                      {new Date(c.created_at).toLocaleDateString('ko-KR')}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

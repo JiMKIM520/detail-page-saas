@@ -44,7 +44,17 @@ export async function POST(request: Request) {
     }
   } else if (action === 'regenerate') {
     await supabase.from('scripts').update({ planner_notes: notes }).eq('id', script_id)
-    await generateScriptForProject(project_id)
+
+    const { data: clientComments } = await supabase
+      .from('comments')
+      .select('content')
+      .eq('project_id', project_id)
+      .eq('role', 'client')
+      .order('created_at', { ascending: false })
+      .limit(3)
+
+    const clientFeedback = clientComments?.map(c => c.content).join('\n---\n') || undefined
+    generateScriptForProject(project_id, clientFeedback)
   } else if (action === 'edit') {
     // 기획자 직접 편집
     await supabase.from('scripts').update({

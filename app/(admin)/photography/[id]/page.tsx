@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { ShootingList } from '@/components/photography/ShootingList'
+import { GenerateStylingButton } from '@/components/photography/GenerateStylingButton'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
@@ -34,11 +35,14 @@ export default async function PhotographyPage({
         촬영 관리 목록
       </Link>
 
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
-        <p className="text-sm text-text-tertiary mt-1">
-          {(project.platforms as any)?.name} · {project.category} · 촬영 리스트 및 사진 업로드
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
+          <p className="text-sm text-text-tertiary mt-1">
+            {(project.platforms as any)?.name} · {project.category} · 촬영 리스트 및 사진 업로드
+          </p>
+        </div>
+        <GenerateStylingButton projectId={id} />
       </div>
 
       <div className="bg-surface rounded-xl border border-border p-6">

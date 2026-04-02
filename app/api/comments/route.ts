@@ -92,8 +92,9 @@ export async function POST(request: Request) {
       project_id: project_id,
       user_id: user.id,
       content: content.trim(),
+      role: role ?? 'client',
     })
-    .select('id, content, created_at, user_id')
+    .select('id, content, created_at, user_id, role')
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

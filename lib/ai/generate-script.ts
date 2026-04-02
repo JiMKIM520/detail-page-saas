@@ -63,7 +63,7 @@ async function fetchIntakeImages(supabase: ReturnType<typeof createServiceClient
   return images
 }
 
-export async function generateScriptForProject(projectId: string) {
+export async function generateScriptForProject(projectId: string, clientFeedback?: string) {
   const supabase = createServiceClient()
 
   const { data: project } = await supabase
@@ -142,7 +142,10 @@ export async function generateScriptForProject(projectId: string) {
           platform_style_guide: platformStyleGuide,
         })
 
-    const userPrompt = baseUserPrompt + (urlContext ? `\n\n## 참조 URL에서 추출한 컨텐츠\n${urlContext}` : '')
+    let userPrompt = baseUserPrompt + (urlContext ? `\n\n## 참조 URL에서 추출한 컨텐츠\n${urlContext}` : '')
+    if (clientFeedback) {
+      userPrompt += `\n\n## 클라이언트 수정 요청\n다음 피드백을 반영하여 스크립트를 수정하세요:\n${clientFeedback}`
+    }
 
     let rawScript: string
     if (images.length > 0) {
