@@ -35,7 +35,7 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
           <DesignPreview design={design} />
         </div>
         <div>
-          <DeliveryPanel projectId={id} designId={design?.id} />
+          <DeliveryPanel projectId={id} designId={design?.id} previewPdfUrl={design?.preview_pdf_url ?? null} />
         </div>
       </div>
     </div>

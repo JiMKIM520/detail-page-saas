@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-export function DeliveryPanel({ projectId, designId }: { projectId: string; designId?: string }) {
+export function DeliveryPanel({ projectId, designId, previewPdfUrl }: { projectId: string; designId?: string; previewPdfUrl?: string | null }) {
   const [notes, setNotes] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
@@ -48,6 +48,24 @@ export function DeliveryPanel({ projectId, designId }: { projectId: string; desi
     router.push('/designer')
   }
 
+  async function handleUseAiPdf() {
+    if (!previewPdfUrl) return
+    setLoading(true)
+    const res = await fetch('/api/designs/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project_id: projectId, design_id: designId, action: 'approve', notes, output_url: previewPdfUrl }),
+    })
+    if (!res.ok) {
+      const body = await res.json().catch(() => null)
+      alert(`납품 처리 실패: ${body?.error ?? res.statusText}`)
+      setLoading(false)
+      return
+    }
+    setLoading(false)
+    router.push('/designer')
+  }
+
   async function handleRegenerate() {
     setLoading(true)
     const res = await fetch('/api/designs/generate', {
@@ -69,6 +87,22 @@ export function DeliveryPanel({ projectId, designId }: { projectId: string; desi
         <h3 className="font-semibold text-text-primary">디자이너 검수</h3>
         <p className="text-xs text-text-tertiary mt-0.5">디자인을 확인하고 납품을 완료하세요</p>
       </div>
+
+      {previewPdfUrl && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
+          <p className="text-xs font-medium text-blue-700">AI 생성 PDF 준비됨</p>
+          <div className="flex gap-2">
+            <a href={previewPdfUrl} target="_blank" rel="noreferrer"
+              className="flex-1 text-center text-xs border border-blue-300 text-blue-700 rounded-lg py-2 hover:bg-blue-100 transition-all">
+              미리보기
+            </a>
+            <button onClick={handleUseAiPdf} disabled={loading}
+              className="flex-1 text-xs bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-700 disabled:opacity-50 transition-all font-medium">
+              이 PDF로 납품
+            </button>
+          </div>
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-text-secondary mb-1.5">최종 납품 파일</label>

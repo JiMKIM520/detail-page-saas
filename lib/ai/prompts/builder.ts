@@ -5,8 +5,10 @@ import { DESIGN_GUIDE } from './design-guide'
 
 export function buildDifferentiatedSystemPrompt(
   categorySlug: string,
-  platformSlug: string
+  platformSlug: string,
+  options: { includeDesignGuide?: boolean } = {}
 ): string {
+  const { includeDesignGuide = true } = options
   const category = getCategoryPrompt(categorySlug)
   const platform = getPlatformPrompt(platformSlug)
 
@@ -137,8 +139,7 @@ ${crossSection}
 
 중요: JSON만 출력하세요. 마크다운 코드 블록 없이 순수 JSON으로 응답하세요.
 
-## 품질 기준 및 촬영 가이드
-${DESIGN_GUIDE}`
+${includeDesignGuide ? `\n## 품질 기준 및 촬영 가이드\n${DESIGN_GUIDE}` : ''}`
 }
 
 export function buildEnhancedUserPrompt(project: {

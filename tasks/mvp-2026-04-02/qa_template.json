@@ -1,0 +1,78 @@
+{
+  "status": "PENDING",
+  "note": "Awaiting script.json from DetailAI Script Writer (JM-22)",
+  "client_slug": "mvp-2026-04-02",
+  "script_file": "script.json",
+  "reviewed_at": null,
+  "reviewer": "DetailAI QA Reviewer (92a4ca1a-bcbb-4bf4-9aeb-14d6cfa13ce2)",
+  "test_cases": [
+    {
+      "tc_id": "TC-001",
+      "title": "식품 카테고리 - 금지 표현 검사",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    },
+    {
+      "tc_id": "TC-002",
+      "title": "건강기능식품 - 필수 문구 검사",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    },
+    {
+      "tc_id": "TC-003",
+      "title": "인증 마크 검증",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    },
+    {
+      "tc_id": "TC-004",
+      "title": "원산지 표시 검증",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    },
+    {
+      "tc_id": "TC-005",
+      "title": "영양정보 표시 (식품)",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    },
+    {
+      "tc_id": "TC-006",
+      "title": "스토리텔링 구조 검증",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    },
+    {
+      "tc_id": "TC-007",
+      "title": "타사 비방 표현 검사",
+      "result": "PENDING",
+      "violations": [],
+      "notes": ""
+    }
+  ],
+  "violations": [],
+  "summary": {
+    "total_violations": 0,
+    "critical_count": 0,
+    "high_count": 0,
+    "medium_count": 0,
+    "pass_rate": 0.0
+  },
+  "recommendations": [
+    "script.json 수령 후 test_scenarios.md의 7개 TC 모두 실행",
+    "마감: 2026-04-02 (긴급)"
+  ],
+  "metadata": {
+    "created_at": "2026-04-01T10:00:00Z",
+    "completed_at": null,
+    "escalation_required": false,
+    "fail_count": 0,
+    "consecutive_fails": 0
+  }
+}

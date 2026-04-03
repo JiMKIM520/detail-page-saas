@@ -26,6 +26,20 @@ export function ReviewPanel({ projectId, scriptId }: ReviewPanelProps) {
     router.push('/planner')
   }
 
+  async function handleAbTest() {
+    if (!scriptId) return
+    setLoading(true)
+    setActiveAction('ab_test')
+    await fetch('/api/scripts/ab-test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project_id: projectId, script_id: scriptId }),
+    })
+    setLoading(false)
+    setActiveAction(null)
+    router.refresh()
+  }
+
   return (
     <div className="bg-surface rounded-xl border border-border p-5 sticky top-24 space-y-5">
       <div>
@@ -55,6 +69,13 @@ export function ReviewPanel({ projectId, scriptId }: ReviewPanelProps) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
           </svg>
           {activeAction === 'regenerate' ? 'AI 재생성 중... (최대 60초)' : 'AI 재생성 (메모 반영)'}
+        </button>
+        <button onClick={handleAbTest} disabled={loading || !scriptId}
+          className="w-full border border-purple-300 text-purple-700 rounded-xl py-2 text-xs font-medium hover:bg-purple-50 disabled:opacity-50 transition-all flex items-center justify-center gap-1.5">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
+          </svg>
+          {activeAction === 'ab_test' ? 'A/B 생성 중...' : 'A/B 비교 생성 (디자인 가이드 제외)'}
         </button>
       </div>
     </div>

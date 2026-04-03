@@ -188,3 +188,70 @@ export async function generateScriptForProject(projectId: string, clientFeedback
     })
   }
 }
+
+export async function generateAbVariant(projectId: string, scriptId: string) {
+  const supabase = createServiceClient()
+
+  const { data: project } = await supabase
+    .from('projects')
+    .select('*, platforms(name, slug, style_guide), categories(name, slug)')
+    .eq('id', projectId)
+    .single()
+
+  if (!project) throw new Error(`Project ${projectId} not found`)
+
+  const joinedCategory = project.categories as { name: string; slug: string } | null
+  const joinedPlatform = project.platforms as { name: string; slug: string; style_guide: string | null } | null
+  const categorySlug = joinedCategory?.slug
+  const platformSlug = joinedPlatform?.slug
+  const categoryName = joinedCategory?.name ?? project.category ?? ''
+  const platformName = joinedPlatform?.name ?? ''
+  const platformStyleGuide = joinedPlatform?.style_guide ?? ''
+
+  // 디자인 가이드 없는 버전으로 시스템 프롬프트 생성
+  const systemPrompt = categorySlug && platformSlug
+    ? buildDifferentiatedSystemPrompt(categorySlug, platformSlug, { includeDesignGuide: false })
+    : SCRIPT_SYSTEM_PROMPT
+
+  const images = await fetchIntakeImages(supabase, projectId)
+
+  const userPrompt = categorySlug && platformSlug
+    ? buildEnhancedUserPrompt({
+        company_name: project.company_name,
+        homepage_url: project.homepage_url,
+        detail_page_url: project.detail_page_url,
+        product_highlights: project.product_highlights ?? '',
+        reference_notes: project.reference_notes,
+        category_name: categoryName,
+        platform_name: platformName,
+        platform_style_guide: platformStyleGuide,
+        brand_name: project.brand_name,
+        target_audience: Array.isArray(project.target_audience) ? project.target_audience as string[] : null,
+        design_preference: project.design_preference,
+      })
+    : buildUserPrompt({
+        company_name: project.company_name,
+        homepage_url: project.homepage_url,
+        detail_page_url: project.detail_page_url,
+        product_highlights: project.product_highlights ?? '',
+        reference_notes: project.reference_notes,
+        category: project.category ?? '',
+        platform_style_guide: platformStyleGuide,
+      })
+
+  const rawScript = images.length > 0
+    ? await generateScriptWithImages(systemPrompt, userPrompt, images)
+    : await generateScript(systemPrompt, userPrompt)
+
+  let abContent: Json
+  try {
+    abContent = JSON.parse(rawScript) as Json
+  } catch {
+    const retried = images.length > 0
+      ? await generateScriptWithImages(systemPrompt + '\n\n반드시 순수 JSON만 응답하세요.', userPrompt, images)
+      : await generateScript(systemPrompt + '\n\n반드시 순수 JSON만 응답하세요.', userPrompt)
+    abContent = JSON.parse(retried) as Json
+  }
+
+  await supabase.from('scripts').update({ ab_content: abContent }).eq('id', scriptId)
+}

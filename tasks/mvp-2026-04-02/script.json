@@ -1,0 +1,582 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-04-01T02:40:00Z",
+  "generated_by": "DetailAI Script Writer (bcd1c940-7705-4306-b343-cc408d27282f)",
+  "client_slug": "mvp-2026-04-02",
+  "description": "DetailAI MVP 발표용 상세페이지 자동화 스크립트 — 카테고리×플랫폼별 분화 예시 2종",
+  "scripts": [
+    {
+      "script_id": "SCR-001",
+      "category": "식품/농축수산물",
+      "platform": "쿠팡",
+      "product_example": "논산 설향딸기 (500g × 2팩)",
+      "tone": "따뜻한 전문성 — 감성적 스토리텔링(산지·생산자)과 객관적 수치(당도·중량·영양성분)를 교차 사용",
+      "color_suggestion": {
+        "primary": "#E8453C",
+        "secondary": "#FFF5F0",
+        "accent": "#2D5016",
+        "background": "#FFFDF9",
+        "text": "#1A1A1A",
+        "rationale": "딸기의 붉은 계열 + 따뜻한 식욕 자극 톤(Warm). 초록 계열 어센트로 신선함·자연 강조."
+      },
+      "sections": [
+        {
+          "id": "S01",
+          "name": "시즐(Sizzle) 후킹",
+          "type": "hero",
+          "order": 1,
+          "platform_notes": "쿠팡 가이드: 브랜드 로고→핵심 베네핏 대표이미지 순서. 모바일 18pt 이상.",
+          "content": {
+            "headline": "당도 12°Brix 이상, 논산 황금딸기",
+            "subheadline": "수확 당일 산지 직송 — 아이스박스로 신선함을 그대로 전달합니다",
+            "body": "충남 논산 3대 딸기 농가에서 매일 아침 직접 수확합니다. 과육이 단단하고 당도가 높아 선물용으로도 손색없는 프리미엄 딸기입니다.",
+            "image_slot": "shot_sizzle_hero",
+            "cta": "지금 바로 주문하기"
+          }
+        },
+        {
+          "id": "S02",
+          "name": "산지 스토리",
+          "type": "story",
+          "order": 2,
+          "content": {
+            "headline": "3대째 이어온 논산 딸기 농장 이야기",
+            "body": "충남 논산시 연산면에 위치한 OO농장은 1979년부터 3대째 딸기를 재배하고 있습니다. GAP 인증과 친환경 인증을 획득하여 철저한 품질 관리로 매년 직접 소비자에게 전달합니다.",
+            "producer_info": {
+              "name": "홍길동 농부",
+              "farm": "OO농장",
+              "location": "충남 논산시 연산면",
+              "certifications": ["GAP", "친환경 농산물"],
+              "experience_years": 25
+            },
+            "image_slot": "shot_producer_farm"
+          }
+        },
+        {
+          "id": "S03",
+          "name": "핵심 USP 3가지",
+          "type": "usp",
+          "order": 3,
+          "platform_notes": "쿠팡 가이드: 3가지 이내 주요 특장점 — 이 기준 준수",
+          "content": {
+            "headline": "이 딸기가 특별한 3가지 이유",
+            "points": [
+              {
+                "order": 1,
+                "title": "당도 12°Brix 이상 보장",
+                "description": "출하 전 당도계로 일일이 측정합니다. 12°Brix 미만 딸기는 출하하지 않습니다.",
+                "evidence_type": "측정 수치",
+                "image_slot": "shot_brix_measurement"
+              },
+              {
+                "order": 2,
+                "title": "GAP 인증 청정 재배",
+                "description": "농산물우수관리(GAP) 인증 기준에 따라 재배 전 과정을 기록·관리합니다.",
+                "evidence_type": "인증마크",
+                "image_slot": "shot_gap_cert"
+              },
+              {
+                "order": 3,
+                "title": "수확 당일 냉장 출하",
+                "description": "오전 수확 후 당일 오후 출하합니다. 두께 3cm 스티로폼 박스와 2kg 아이스팩으로 신선도를 유지합니다.",
+                "evidence_type": "배송 과정",
+                "image_slot": "shot_same_day_shipping"
+              }
+            ]
+          }
+        },
+        {
+          "id": "S04",
+          "name": "활용 제안 (레시피)",
+          "type": "recipe",
+          "order": 4,
+          "content": {
+            "headline": "다양하게 즐기는 논산딸기",
+            "recipes": [
+              {
+                "name": "딸기 연유 빙수",
+                "difficulty": "쉬움",
+                "time_minutes": 10,
+                "description": "생딸기를 반으로 잘라 얼음 위에 올리고 연유를 뿌려주세요."
+              },
+              {
+                "name": "딸기잼",
+                "difficulty": "보통",
+                "time_minutes": 30,
+                "description": "딸기 500g과 설탕 200g을 약불에서 30분간 졸여주세요."
+              },
+              {
+                "name": "딸기 스무디",
+                "difficulty": "쉬움",
+                "time_minutes": 5,
+                "description": "딸기 200g, 우유 200ml, 꿀 1스푼을 믹서에 갈아주세요."
+              }
+            ],
+            "image_slot": "shot_recipe_styled"
+          }
+        },
+        {
+          "id": "S05",
+          "name": "법적 정보 (영양성분 + 알레르기 + 원산지)",
+          "type": "legal_info",
+          "order": 5,
+          "content": {
+            "product_name": "논산 설향딸기",
+            "product_type": "농산물 (과실류)",
+            "origin": "국내산 (충남 논산)",
+            "nutrition_info": {
+              "serving_size": "100g",
+              "calories_kcal": 33,
+              "carbohydrate_g": 7.7,
+              "sugar_g": 4.9,
+              "protein_g": 0.7,
+              "fat_g": 0.3,
+              "saturated_fat_g": 0.0,
+              "trans_fat_g": 0.0,
+              "cholesterol_mg": 0,
+              "sodium_mg": 1,
+              "note": "영양성분 9개 항목 전부 포함 (식품표시광고법 기준)"
+            },
+            "allergens": {
+              "contains": [],
+              "note": "본 제품에는 알레르기 유발물질 22종이 포함되어 있지 않습니다."
+            },
+            "storage_method": "냉장 보관 (0~5°C), 구입 후 가능한 빨리 드시기 바랍니다.",
+            "handling_notes": "배송 중 일부 눌림이 발생할 수 있으며, 이는 신선 농산물 특성으로 교환 사유가 아닙니다.",
+            "expiry": "수확일로부터 5일 이내 섭취 권장",
+            "manufacturer": "OO농장 (충남 논산시 연산면 OO로 00)",
+            "food_traceability": "농산물이력추적관리 적용 품목",
+            "image_slot": "shot_nutrition_table"
+          }
+        },
+        {
+          "id": "S06",
+          "name": "인증 마크",
+          "type": "certification",
+          "order": 6,
+          "content": {
+            "headline": "믿을 수 있는 인증",
+            "certifications": [
+              {
+                "name": "GAP (농산물우수관리)",
+                "issuer": "국립농산물품질관리원",
+                "cert_number": "GAP-00000-2024",
+                "display_position": "눈에 띄게 배치"
+              },
+              {
+                "name": "친환경 농산물",
+                "issuer": "국립농산물품질관리원",
+                "cert_number": "친환경-00000-2024",
+                "display_position": "눈에 띄게 배치"
+              }
+            ],
+            "image_slot": "shot_certifications_food"
+          }
+        },
+        {
+          "id": "S07",
+          "name": "배송/언박싱",
+          "type": "shipping",
+          "order": 7,
+          "content": {
+            "headline": "신선함을 그대로 — 안심 냉장 배송",
+            "shipping_method": "냉장 배송 (스티로폼 박스 + 아이스팩)",
+            "delivery_time": "주문 다음 날 도착 (주문 시간에 따라 상이)",
+            "packaging_details": [
+              "두께 3cm 스티로폼 박스",
+              "2kg 아이스팩 동봉",
+              "딸기 낱개 개별 완충 포장",
+              "외부 기온 20°C 기준 신선도 유지 약 24시간"
+            ],
+            "image_slot": "shot_packaging_unboxing"
+          }
+        },
+        {
+          "id": "S08",
+          "name": "고객 리뷰 + 교환/반품",
+          "type": "review_return",
+          "order": 8,
+          "content": {
+            "review_summary": {
+              "average_rating": 4.8,
+              "review_count_display": "1,200건 이상",
+              "highlight_keywords": ["달콤해요", "신선해요", "선물용으로 완벽", "빠른 배송"]
+            },
+            "return_policy": {
+              "exchange_conditions": [
+                "수령 후 3일 이내 파손·변질 상품",
+                "오배송·누락 상품"
+              ],
+              "non_exchange_conditions": [
+                "단순 변심 (신선 식품 특성상 불가)",
+                "배송 중 일부 눌림 (신선 농산물 특성)"
+              ],
+              "contact": "고객센터 0000-0000 (평일 09:00~18:00)"
+            }
+          }
+        }
+      ],
+      "shooting_requirements": [
+        {
+          "shot_id": "shot_sizzle_hero",
+          "type": "sizzle",
+          "description": "수확 직후 이슬 맺힌 딸기 극강 클로즈업 — 붉은빛 광택, 수분감 강조",
+          "color_temp": "따뜻한 톤 Warm (3200K~4000K)",
+          "lens": "매크로 100mm",
+          "notes": "배경: 나무 쟁반 또는 녹색 잎 연출"
+        },
+        {
+          "shot_id": "shot_producer_farm",
+          "type": "producer",
+          "description": "농부가 비닐하우스에서 딸기를 수확하는 장면 — 얼굴 공개 필수 ('얼굴 있는 먹거리' 신뢰 확보)",
+          "color_temp": "자연광 활용",
+          "notes": "농장 전경 + 인물 컷 각 1장"
+        },
+        {
+          "shot_id": "shot_brix_measurement",
+          "type": "evidence",
+          "description": "당도계로 딸기 당도 측정 컷 — 12.4°Brix 수치가 화면에 보이도록",
+          "notes": "과학적 객관성 강조"
+        },
+        {
+          "shot_id": "shot_gap_cert",
+          "type": "certification",
+          "description": "GAP 인증서 실물 + 인증 마크 클로즈업",
+          "notes": "인증번호 선명하게 노출"
+        },
+        {
+          "shot_id": "shot_same_day_shipping",
+          "type": "logistics",
+          "description": "수확 → 선별 패킹 → 출하 과정 3컷 구성",
+          "notes": "타임스탬프 포함 권장"
+        },
+        {
+          "shot_id": "shot_recipe_styled",
+          "type": "food_styling",
+          "description": "딸기 연유 빙수 완성 플레이팅 — 스타일리시한 테이블 세팅",
+          "color_temp": "Warm, 식욕 자극",
+          "notes": "신선함 강조용 물 스프레이 사용 가능"
+        },
+        {
+          "shot_id": "shot_nutrition_table",
+          "type": "infographic",
+          "description": "영양성분표 인포그래픽 — 9개 항목 명확히 기재, 알레르기 정보 포함",
+          "notes": "모바일 가독성 확보 (폰트 18pt 이상, 쿠팡 기준)"
+        },
+        {
+          "shot_id": "shot_certifications_food",
+          "type": "certification",
+          "description": "GAP + 친환경 인증 마크 나란히 배치 컷",
+          "notes": "흰 배경, 마크 선명하게"
+        },
+        {
+          "shot_id": "shot_packaging_unboxing",
+          "type": "packaging",
+          "description": "스티로폼 박스 개봉 시 딸기 + 아이스팩 언박싱 컷",
+          "notes": "신선도 유지 장치 모두 노출"
+        },
+        {
+          "shot_id": "shot_size_comparison",
+          "type": "size_reference",
+          "description": "딸기 단면 + 손바닥 위 크기 비교 컷",
+          "notes": "중형 딸기 직경 30mm 이상 증빙"
+        }
+      ]
+    },
+    {
+      "script_id": "SCR-002",
+      "category": "건강기능식품",
+      "platform": "네이버 스마트스토어",
+      "product_example": "rTG형 오메가3 (60캡슐, 1개월분)",
+      "tone": "극도로 이성적·논리적·차분한 전문가 톤 — 인체적용시험 통계, 인증 마크 전면 배치, 감정 호소 최소화",
+      "color_suggestion": {
+        "primary": "#1A4B8C",
+        "secondary": "#F0F6FF",
+        "accent": "#0066CC",
+        "background": "#FAFCFF",
+        "text": "#1A1A1A",
+        "rationale": "청색 계열 — 신뢰·과학·위생 연상. 흰 배경 기반으로 정보 가독성 극대화."
+      },
+      "sections": [
+        {
+          "id": "S01",
+          "name": "권위 선언 (인증마크)",
+          "type": "authority",
+          "order": 1,
+          "platform_notes": "스마트스토어 모바일 퍼스트 — 상단 2~3컷에 핵심 셀링포인트 배치",
+          "content": {
+            "headline": "식품의약품안전처 인정 건강기능식품",
+            "certifications_prominent": [
+              {
+                "name": "건강기능식품 인증마크 (식약처 도안)",
+                "issuer": "식품의약품안전처",
+                "display": "최상단 눈에 띄게 배치 — 법적 의무"
+              },
+              {
+                "name": "GMP 인증마크",
+                "issuer": "식품의약품안전처",
+                "display": "최상단 배치"
+              }
+            ],
+            "disclaimer": "본 제품은 질병의 예방 및 치료를 위한 의약품이 아닙니다.",
+            "ad_review_number": "심의필 제XXXX-X호",
+            "image_slot": "shot_authority_marks"
+          }
+        },
+        {
+          "id": "S02",
+          "name": "페인포인트 공감",
+          "type": "pain_point",
+          "order": 2,
+          "content": {
+            "headline": "혹시 이런 고민이 있으신가요?",
+            "pain_points": [
+              "자주 피곤함을 느끼시나요?",
+              "혈중 중성지방 수치가 걱정되시나요?",
+              "건강 관리를 시작하고 싶지만 무엇부터 해야 할지 모르겠다면"
+            ],
+            "bridge": "식약처가 인정한 기능성 원료 rTG형 오메가3로 혈중 중성지방 수치 개선에 도움을 받아보세요.",
+            "compliance_note": "질병명(당뇨·고혈압·암 등) 직접 언급 없음 — 일상적 불편함으로 우회 표현 적용",
+            "image_slot": "shot_pain_point"
+          }
+        },
+        {
+          "id": "S03",
+          "name": "핵심 기능성 (식약처 인정 문구)",
+          "type": "functionality",
+          "order": 3,
+          "content": {
+            "headline": "식약처 인정 기능성 원료",
+            "functional_claims": [
+              {
+                "ingredient": "오메가3 지방산 (EPA 및 DHA 함유 유지)",
+                "claim": "혈중 중성지방 수치를 낮추는 데 도움을 줄 수 있습니다.",
+                "approved_by": "식품의약품안전처",
+                "approval_type": "고시형 기능성 원료",
+                "compliance_note": "식약처 고시 인정 범위 내 문구만 사용"
+              }
+            ],
+            "daily_intake": {
+              "amount": "1일 2캡슐",
+              "timing": "1일 2회, 식사와 함께",
+              "epa_mg_per_day": 600,
+              "dha_mg_per_day": 400
+            },
+            "image_slot": "shot_functionality_claims"
+          }
+        },
+        {
+          "id": "S04",
+          "name": "과학적 증거 (인체적용시험)",
+          "type": "evidence",
+          "order": 4,
+          "content": {
+            "headline": "객관적인 데이터로 증명합니다",
+            "clinical_data": [
+              {
+                "study_type": "인체적용시험",
+                "institution": "OO 임상시험 수행기관",
+                "result": "12주 섭취 후 혈중 중성지방 수치가 대조군 대비 유의미하게 감소",
+                "n_participants": 60,
+                "disclaimer": "개인에 따라 효과가 다를 수 있습니다."
+              }
+            ],
+            "ingredient_info": {
+              "source": "노르웨이산 청정 해양 원료",
+              "extraction_method": "rTG형 (재에스테르화 트리글리세리드) — 흡수율 향상 기술",
+              "heavy_metal_test": "중금속 (납·수은·카드뮴·비소) 기준치 이하 확인"
+            },
+            "image_slot": "shot_clinical_chart"
+          }
+        },
+        {
+          "id": "S05",
+          "name": "제형 디테일 (흡수율·안전성)",
+          "type": "product_detail",
+          "order": 5,
+          "content": {
+            "headline": "제형 설계와 안전 포장",
+            "details": [
+              "rTG형 정제 공정 — 흡수율 향상",
+              "위 자극 감소를 위한 장용성 코팅 캡슐",
+              "PTP 개별 포장 (습기·산화 방지)",
+              "캡슐 크기: 약 18mm × 9mm (1원짜리 동전 크기의 약 0.7배)"
+            ],
+            "capsule_size_note": "동전 대비 실물 크기 사진 첨부 (업계 관행)",
+            "image_slot": "shot_capsule_detail"
+          }
+        },
+        {
+          "id": "S06",
+          "name": "섭취방법 + 주의사항 + 면책문구",
+          "type": "intake_caution",
+          "order": 6,
+          "content": {
+            "intake_method": "1일 2회, 1회 1캡슐, 식사와 함께 충분한 물과 함께 섭취",
+            "cautions": [
+              "어린이, 임산부, 수유부는 섭취 전 전문가와 상담하세요.",
+              "항응고제(와파린 등) 복용 중인 경우 섭취 전 의사와 상담하세요.",
+              "알레르기 유발물질: 어류(생선) 함유",
+              "유통기한이 경과된 제품은 섭취하지 마세요."
+            ],
+            "disclaimer_required": "본 제품은 질병의 예방 및 치료를 위한 의약품이 아닙니다.",
+            "storage": "직사광선을 피하고 서늘한 곳에 보관. 개봉 후 냉장 보관 권장.",
+            "expiry_location": "제품 하단 표기",
+            "image_slot": "shot_intake_guide"
+          }
+        },
+        {
+          "id": "S07",
+          "name": "인증서/시험성적서",
+          "type": "certificates",
+          "order": 7,
+          "content": {
+            "headline": "공인 기관 검증 완료",
+            "documents": [
+              {
+                "name": "건강기능식품 인증서",
+                "issuer": "식품의약품안전처",
+                "display": "사본 이미지"
+              },
+              {
+                "name": "GMP 인증서",
+                "issuer": "식품의약품안전처",
+                "display": "사본 이미지"
+              },
+              {
+                "name": "중금속 시험성적서",
+                "issuer": "공인 시험기관",
+                "display": "사본 이미지"
+              },
+              {
+                "name": "식약처 기능성 인정 원료 확인서",
+                "issuer": "식품의약품안전처",
+                "display": "사본 이미지 첨부 (업계 관행)"
+              }
+            ],
+            "image_slot": "shot_certificates"
+          }
+        },
+        {
+          "id": "S08",
+          "name": "고객 리뷰 + FAQ + 배송/교환/반품",
+          "type": "review_faq_return",
+          "order": 8,
+          "content": {
+            "review_summary": {
+              "average_rating": 4.7,
+              "review_count_display": "800건 이상",
+              "highlight_keywords": ["캡슐이 작아서 먹기 편해요", "비린내 없어요", "꾸준히 먹고 있어요"]
+            },
+            "faq": [
+              {
+                "q": "임산부도 먹을 수 있나요?",
+                "a": "임산부, 수유부는 섭취 전 반드시 의사, 약사 등 전문가와 상담하시기 바랍니다."
+              },
+              {
+                "q": "언제 먹는 게 좋나요?",
+                "a": "식사와 함께 섭취하면 흡수율이 높아집니다. 1일 2회, 1회 1캡슐을 권장합니다."
+              },
+              {
+                "q": "생선 알레르기가 있는데 괜찮나요?",
+                "a": "본 제품은 어류(생선)에서 추출한 원료를 사용합니다. 생선 알레르기가 있으신 분은 섭취를 삼가세요."
+              }
+            ],
+            "return_policy": {
+              "exchange_conditions": [
+                "배송 중 파손 또는 오배송 시"
+              ],
+              "non_exchange_conditions": [
+                "단순 변심",
+                "개봉 후 사용한 제품"
+              ],
+              "contact": "고객센터 0000-0000 (평일 09:00~18:00)"
+            }
+          }
+        }
+      ],
+      "shooting_requirements": [
+        {
+          "shot_id": "shot_authority_marks",
+          "type": "certification",
+          "description": "건강기능식품 인증마크 + GMP 마크 나란히 배치 — 흰 배경, 선명하게",
+          "color_temp": "화이트/블루 톤 (5500K~6500K)",
+          "notes": "최상단 배치, 색상·테두리로 소비자가 명확히 인지할 수 있도록 (공정위 권고 준수)"
+        },
+        {
+          "shot_id": "shot_pain_point",
+          "type": "illustration",
+          "description": "피곤함을 느끼는 자연스러운 일상 장면 — 과장 없는 연출",
+          "notes": "질병 연상 이미지 사용 금지"
+        },
+        {
+          "shot_id": "shot_functionality_claims",
+          "type": "infographic",
+          "description": "EPA·DHA 함유량 및 1일 섭취량 인포그래픽 — 식약처 인정 기능성 문구 텍스트 삽입",
+          "notes": "인체 이미지 활용 시 장기 직접 강조 금지"
+        },
+        {
+          "shot_id": "shot_clinical_chart",
+          "type": "data_visualization",
+          "description": "인체적용시험 결과 막대그래프 — 섭취군 vs 대조군 중성지방 수치 변화",
+          "notes": "출처 및 '개인에 따라 효과 다를 수 있음' 면책 문구 반드시 포함"
+        },
+        {
+          "shot_id": "shot_capsule_detail",
+          "type": "product",
+          "description": "캡슐 실물 접사 컷 + 1원짜리 동전 옆에 크기 비교",
+          "color_temp": "화이트 배경, 블루 그라디언트 조명",
+          "notes": "PTP 포장 개봉 전·후 컷 각 1장"
+        },
+        {
+          "shot_id": "shot_intake_guide",
+          "type": "infographic",
+          "description": "1일 섭취 가이드 인포그래픽 — 1일 2캡슐, 물과 함께 이미지",
+          "notes": "'본 제품은 질병의 예방 및 치료를 위한 의약품이 아닙니다' 면책 문구 포함"
+        },
+        {
+          "shot_id": "shot_certificates",
+          "type": "document",
+          "description": "건강기능식품 인증서, GMP, 중금속 시험성적서, 기능성 인정 원료 확인서 사본 이미지",
+          "notes": "선명하게 읽힐 수 있도록 촬영, 인증번호 노출"
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "compliance_summary": {
+      "prohibited_expressions_check": "CLEAN — 질병명(당뇨·고혈압·암 등) 직접 언급 없음, 신체기능 개선 단정 표현 없음, 타사 비방·간접 폄하 없음, 근거 없는 최상급 표현 없음",
+      "required_elements_food": [
+        "영양성분 9개 항목 전부 포함 (열량·탄수화물·당류·단백질·지방·포화지방·트랜스지방·콜레스테롤·나트륨)",
+        "알레르기 유발물질 22종 표시",
+        "원산지 표시 (국내산, 충남 논산)",
+        "보관 방법 및 주의사항",
+        "인증 마크 (GAP, 친환경)"
+      ],
+      "required_elements_hfs": [
+        "건강기능식품 인증마크 (식약처 도안) — S01 최상단 배치",
+        "GMP 인증마크 — S01 배치",
+        "면책 문구 '본 제품은 질병의 예방 및 치료를 위한 의약품이 아닙니다' — S01 및 S06 두 곳 명시",
+        "식약처 인정 기능성 문구만 사용",
+        "일일 섭취량 및 섭취 방법",
+        "섭취 시 주의사항",
+        "광고 심의필 번호"
+      ]
+    },
+    "tc_coverage": {
+      "TC-001": "SCR-001 S05 법적정보 섹션 — 금지 표현 0건 확인 가능",
+      "TC-002": "SCR-002 S01(면책문구+GMP+건기식 마크), S06(면책문구+주의사항) 포함",
+      "TC-003": "SCR-001 S06(GAP·친환경 인증) / SCR-002 S01·S07(건기식·GMP·시험성적서)",
+      "TC-004": "SCR-001 S05 origin 필드: '국내산 (충남 논산)' 명시",
+      "TC-005": "SCR-001 S05 nutrition_info — 9개 항목 전부, 알레르기 표시 포함",
+      "TC-006": "SCR-001: 8개 섹션(시즐→산지→USP→레시피→법적정보→인증→배송→리뷰) 전부 포함 / SCR-002: 8개 섹션(권위→페인포인트→기능성→증거→제형→섭취법→인증서→리뷰) 전부 포함",
+      "TC-007": "스크립트 전체 — 타사 비방 표현 0건"
+    },
+    "next_steps": {
+      "qa_reviewer_agent": "92a4ca1a-bcbb-4bf4-9aeb-14d6cfa13ce2",
+      "qa_input_file": "tasks/mvp-2026-04-02/script.json",
+      "qa_output_file": "tasks/mvp-2026-04-02/qa_result.json",
+      "pipeline_step": "QA 검증 → Photo Director 촬영 가이드 → Design Director 디자인"
+    }
+  }
+}

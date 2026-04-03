@@ -25,9 +25,9 @@ export interface Database {
         ]
       }
       scripts: {
-        Row: { id: string; project_id: string; content: Json; ai_model: string | null; planner_status: string | null; planner_notes: string | null; version: number | null; created_at: string }
-        Insert: { id?: string; project_id: string; content: Json; ai_model?: string | null; planner_status?: string | null; planner_notes?: string | null; version?: number | null; created_at?: string }
-        Update: { id?: string; project_id?: string; content?: Json; ai_model?: string | null; planner_status?: string | null; planner_notes?: string | null; version?: number | null; created_at?: string }
+        Row: { id: string; project_id: string; content: Json; ab_content: Json | null; ai_model: string | null; planner_status: string | null; planner_notes: string | null; version: number | null; created_at: string }
+        Insert: { id?: string; project_id: string; content: Json; ab_content?: Json | null; ai_model?: string | null; planner_status?: string | null; planner_notes?: string | null; version?: number | null; created_at?: string }
+        Update: { id?: string; project_id?: string; content?: Json; ab_content?: Json | null; ai_model?: string | null; planner_status?: string | null; planner_notes?: string | null; version?: number | null; created_at?: string }
         Relationships: []
       }
       photos: {
