@@ -66,6 +66,7 @@ export default async function ClientProjectsPage() {
               platform_name={(project.platforms as any)?.name ?? '-'}
               status={project.status as ProjectStatus}
               created_at={project.created_at}
+              clientFacing
             />
           ))}
         </div>

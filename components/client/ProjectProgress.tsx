@@ -1,4 +1,4 @@
-import { STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
+import { CLIENT_STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
 
 const ALL_STATUSES: ProjectStatus[] = [
   'intake_submitted',
@@ -53,7 +53,7 @@ export function ProjectProgress({ status }: { status: ProjectStatus }) {
                         : 'text-text-tertiary'
                   }`}
                 >
-                  {STATUS_LABELS[s]}
+                  {CLIENT_STATUS_LABELS[s]}
                 </p>
               </div>
               {i < ALL_STATUSES.length - 1 && (
@@ -72,7 +72,7 @@ export function ProjectProgress({ status }: { status: ProjectStatus }) {
       <div className="sm:hidden">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-semibold text-primary-700">
-            {STATUS_LABELS[status]}
+            {CLIENT_STATUS_LABELS[status]}
           </span>
           <span className="text-xs text-text-tertiary">
             {currentIndex + 1} / {ALL_STATUSES.length}

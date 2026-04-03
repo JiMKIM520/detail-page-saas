@@ -1,4 +1,4 @@
-import { STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
+import { STATUS_LABELS, CLIENT_STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
 
 const STATUS_STYLES: Record<ProjectStatus, { bg: string; text: string; dot: string }> = {
   intake_submitted:  { bg: 'bg-gray-50',    text: 'text-gray-600',    dot: 'bg-gray-400' },
@@ -13,12 +13,13 @@ const STATUS_STYLES: Record<ProjectStatus, { bg: string; text: string; dot: stri
   delivered:         { bg: 'bg-slate-100',  text: 'text-slate-600',   dot: 'bg-slate-400' },
 }
 
-export function StatusBadge({ status }: { status: ProjectStatus }) {
+export function StatusBadge({ status, clientFacing = false }: { status: ProjectStatus; clientFacing?: boolean }) {
   const style = STATUS_STYLES[status] ?? STATUS_STYLES.intake_submitted
+  const labels = clientFacing ? CLIENT_STATUS_LABELS : STATUS_LABELS
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${style.bg} ${style.text}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
-      {STATUS_LABELS[status]}
+      {labels[status]}
     </span>
   )
 }

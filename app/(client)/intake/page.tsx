@@ -20,7 +20,7 @@ export default async function IntakePage() {
         </Link>
         <h1 className="text-2xl font-bold text-text-primary">작업 의뢰하기</h1>
         <p className="text-sm text-text-tertiary mt-1">
-          제품 정보와 자료를 입력하면 AI가 상세페이지 스크립트를 자동 생성합니다.
+          제품 정보와 자료를 입력해주시면 담당 팀이 검토 후 상세페이지 제작을 진행합니다.
         </p>
       </div>
       <div className="bg-surface rounded-2xl border border-border p-6 sm:p-8 shadow-card">

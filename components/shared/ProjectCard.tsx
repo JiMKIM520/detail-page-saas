@@ -10,9 +10,10 @@ interface ProjectCardProps {
   status: ProjectStatus
   created_at: string
   href?: string
+  clientFacing?: boolean
 }
 
-export function ProjectCard({ id, company_name, category, platform_name, status, created_at, href }: ProjectCardProps) {
+export function ProjectCard({ id, company_name, category, platform_name, status, created_at, href, clientFacing }: ProjectCardProps) {
   const card = (
     <div className="group bg-surface rounded-xl border border-border p-5 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer">
       <div className="flex items-start justify-between gap-3">
@@ -24,7 +25,7 @@ export function ProjectCard({ id, company_name, category, platform_name, status,
             {platform_name} · {category}
           </p>
         </div>
-        <StatusBadge status={status} />
+        <StatusBadge status={status} clientFacing={clientFacing} />
       </div>
       <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between">
         <p className="text-xs text-text-tertiary">

@@ -55,7 +55,9 @@ export default function LoginPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-text-primary">DetailAI</h1>
-          <p className="text-sm text-text-tertiary mt-1">AI 상세페이지 자동화 서비스</p>
+          <p className="text-sm text-text-tertiary mt-1">
+            {mode === 'client' ? '전문 팀의 상세페이지 제작 서비스' : 'AI 상세페이지 자동화 서비스'}
+          </p>
         </div>
 
         <div className="bg-surface rounded-2xl border border-border p-8 shadow-card space-y-6">

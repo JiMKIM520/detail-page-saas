@@ -23,6 +23,20 @@ export const STATUS_LABELS: Record<ProjectStatus, string> = {
   delivered:          '납품 완료',
 }
 
+// 클라이언트(기업)에게 보여지는 라벨 — AI/자동화 노출 없이 사람이 작업하는 것처럼 표현
+export const CLIENT_STATUS_LABELS: Record<ProjectStatus, string> = {
+  intake_submitted:   '접수 완료',
+  script_generating:  '담당자 검토 중',
+  script_review:      '담당자 검토 중',
+  script_approved:    '제작 준비 완료',
+  photo_scheduled:    '촬영 예정',
+  photo_uploaded:     '사진 접수 완료',
+  design_generating:  '제작 중',
+  design_review:      '초안 확인 요청',
+  design_approved:    '최종 확인 완료',
+  delivered:          '납품 완료',
+}
+
 const TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
   intake_submitted:  ['script_generating'],
   script_generating: ['script_review'],
