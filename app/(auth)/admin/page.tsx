@@ -3,8 +3,13 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
+// 관리자 ID → Supabase 이메일 매핑
+const ADMIN_ID_MAP: Record<string, string> = {
+  admin: 'admin@kompa.kr',
+}
+
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState('')
+  const [adminId, setAdminId] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -15,12 +20,19 @@ export default function AdminLoginPage() {
     setLoading(true)
     setError('')
 
+    const email = ADMIN_ID_MAP[adminId.trim().toLowerCase()]
+    if (!email) {
+      setError('등록되지 않은 관리자 ID입니다.')
+      setLoading(false)
+      return
+    }
+
     const supabase = createClient()
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     setLoading(false)
 
     if (error) {
-      setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+      setError('아이디 또는 비밀번호가 올바르지 않습니다.')
       return
     }
 
@@ -44,13 +56,12 @@ export default function AdminLoginPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-text-primary">DetailAI</h1>
-          <p className="text-sm text-text-tertiary mt-1">AI 상세페이지 자동화 서비스</p>
+          <p className="text-sm text-text-tertiary mt-1">관리자 전용</p>
         </div>
 
         <div className="bg-surface rounded-2xl border border-border p-8 shadow-card space-y-6">
           <div>
             <h2 className="text-lg font-semibold text-text-primary">관리자 로그인</h2>
-            <p className="text-sm text-text-tertiary mt-0.5">관리자 이메일과 비밀번호를 입력하세요</p>
           </div>
 
           {error && (
@@ -61,10 +72,10 @@ export default function AdminLoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">이메일</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">아이디</label>
               <input
-                type="email" value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="email@example.com" required
+                type="text" value={adminId} onChange={e => setAdminId(e.target.value)}
+                placeholder="아이디 입력" required
                 className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
               />
             </div>
