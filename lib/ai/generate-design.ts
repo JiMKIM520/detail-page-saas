@@ -19,6 +19,18 @@ async function generatePdfFromHtml(html: string): Promise<Buffer | null> {
     })
     const page = await browser.newPage()
     await page.setContent(html, { waitUntil: 'networkidle' })
+    // Illustrator 편집 가능하도록 투명도 관련 CSS 제거
+    // (opacity/rgba/box-shadow/filter 등이 있으면 Chromium이 텍스트를 래스터화함)
+    await page.addStyleTag({ content: `
+      * {
+        opacity: 1 !important;
+        box-shadow: none !important;
+        filter: none !important;
+        backdrop-filter: none !important;
+        text-shadow: none !important;
+        mix-blend-mode: normal !important;
+      }
+    ` })
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
