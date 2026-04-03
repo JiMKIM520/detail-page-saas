@@ -3,12 +3,24 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
+type Mode = 'client' | 'admin'
+
 export default function LoginPage() {
+  const [mode, setMode] = useState<Mode>('client')
   const [email, setEmail] = useState('')
   const [businessNumber, setBusinessNumber] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  function handleModeChange(m: Mode) {
+    setMode(m)
+    setError('')
+    setEmail('')
+    setBusinessNumber('')
+    setPassword('')
+  }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -16,17 +28,16 @@ export default function LoginPage() {
     setError('')
 
     const supabase = createClient()
-    const normalizedBN = businessNumber.replace(/-/g, '')
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password: normalizedBN,
-    })
+    const pw = mode === 'admin' ? password : businessNumber.replace(/-/g, '')
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pw })
     setLoading(false)
 
     if (error) {
-      setError(error.message === 'Invalid login credentials'
-        ? '이메일 또는 사업자등록번호가 올바르지 않습니다.'
-        : error.message)
+      setError(
+        mode === 'admin'
+          ? '이메일 또는 비밀번호가 올바르지 않습니다.'
+          : '이메일 또는 사업자등록번호가 올바르지 않습니다.'
+      )
       return
     }
 
@@ -48,9 +59,41 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-surface rounded-2xl border border-border p-8 shadow-card space-y-6">
+          {/* 탭 */}
+          <div className="flex rounded-xl border border-border overflow-hidden">
+            <button
+              type="button"
+              onClick={() => handleModeChange('client')}
+              className={`flex-1 py-2 text-sm font-medium transition-colors ${
+                mode === 'client'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-text-tertiary hover:text-text-secondary'
+              }`}
+            >
+              기업 로그인
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeChange('admin')}
+              className={`flex-1 py-2 text-sm font-medium transition-colors ${
+                mode === 'admin'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-text-tertiary hover:text-text-secondary'
+              }`}
+            >
+              관리자 로그인
+            </button>
+          </div>
+
           <div>
-            <h2 className="text-lg font-semibold text-text-primary">로그인</h2>
-            <p className="text-sm text-text-tertiary mt-0.5">사전 안내받은 이메일과 사업자등록번호로 로그인하세요</p>
+            <h2 className="text-lg font-semibold text-text-primary">
+              {mode === 'client' ? '기업 로그인' : '관리자 로그인'}
+            </h2>
+            <p className="text-sm text-text-tertiary mt-0.5">
+              {mode === 'client'
+                ? '사전 안내받은 이메일과 사업자등록번호로 로그인하세요'
+                : '관리자 이메일과 비밀번호로 로그인하세요'}
+            </p>
           </div>
 
           {error && (
@@ -68,14 +111,27 @@ export default function LoginPage() {
                 className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">사업자등록번호</label>
-              <input
-                type="text" value={businessNumber} onChange={e => setBusinessNumber(e.target.value)}
-                placeholder="000-00-00000" required
-                className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
-              />
-            </div>
+
+            {mode === 'client' ? (
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">사업자등록번호</label>
+                <input
+                  type="text" value={businessNumber} onChange={e => setBusinessNumber(e.target.value)}
+                  placeholder="000-00-00000" required
+                  className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">비밀번호</label>
+                <input
+                  type="password" value={password} onChange={e => setPassword(e.target.value)}
+                  placeholder="비밀번호 입력" required
+                  className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
+                />
+              </div>
+            )}
+
             <button type="submit" disabled={loading}
               className="w-full bg-primary-600 text-white rounded-xl py-2.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm transition-all">
               {loading ? '로그인 중...' : '로그인'}
