@@ -10,8 +10,12 @@
 - 반복 증상: `design_plan_review -> prompt_ready` 전이는 되지만 `photos` row가 생성되지 않아 `/photography/[id]`에서 업로드할 대상이 없다.
 - 확인된 샘플: `쌀과밀 소금빵` project `c0ff7994-4c13-4bbf-9ddd-d621bcfd5096`
   - status: `prompt_ready`
-  - photos: `0`
+  - 초기 확인 photos: `0`
   - designs: `0`
+  - 후속 수정 `4a4e7ff` 이후 photos: `6`
+    - `photos(photo_type='styling')` 슬롯 6개 생성됨.
+    - 이 중 1개만 `storage_path`가 채워짐: `projects/c0ff7994-4c13-4bbf-9ddd-d621bcfd5096/styling_test_01.png`
+    - 현재 `ShootingList`는 `photos.length > 0 && photos.every((p) => p.storage_path)`일 때만 완료 버튼을 보여주므로, 6개 중 1개만 업로드된 상태는 아직 `photo_uploaded`로 넘어갈 수 있는 실사용 완료 상태가 아니다.
 - 추가 반복 샘플: `청정원 흑마늘진액` project `6eee52ac-696b-4e54-b170-66a68a42d870`
   - status: `design_generating`
   - photos: `0`
@@ -22,7 +26,8 @@
 - 수용 기준:
   - `styling-final-prompts.json`의 shots 기준으로 `photos(photo_type='styling')` row가 생성되거나,
   - 업로드 UI/API가 row 없이도 새 `photos` row를 생성한다.
-  - 업로드 후 `photos.storage_path`가 채워지고 `prompt_ready -> photo_uploaded` 전이가 DB 로그로 확인된다.
+  - 모든 필수 슬롯 업로드 후 `photos.storage_path`가 채워지고 `prompt_ready -> photo_uploaded` 전이가 DB 로그로 확인된다.
+  - 업로드된 스타일링샷으로 `generateDesignForProject` 풀 초안 재생성까지 완료되어 `design_review`의 preview/output이 웹앱에서 확인된다.
 
 ### 2. delivered 샘플이 업로드 스타일링샷 경로 검증을 증명하지 못함
 

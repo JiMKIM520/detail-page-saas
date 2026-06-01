@@ -211,9 +211,12 @@ export async function generateDesignForProject(projectId: string) {
   // 1. 데이터 로드
   const { data: project } = await supabase
     .from('projects').select('*, platforms(name, slug)').eq('id', projectId).single()
+  // 승인 스크립트가 여러 개일 수 있으므로(재생성·재승인 이력) .single() 대신 최신 1건 사용.
+  // .single()은 0건/2건+에서 null을 반환해 'Missing approved script'로 잘못 실패했음.
   const { data: script } = await supabase
     .from('scripts').select('content')
-    .eq('project_id', projectId).eq('planner_status', 'approved').single()
+    .eq('project_id', projectId).eq('planner_status', 'approved')
+    .order('created_at', { ascending: false }).limit(1).maybeSingle()
 
   if (!project || !script) throw new Error('Missing project or approved script')
 
