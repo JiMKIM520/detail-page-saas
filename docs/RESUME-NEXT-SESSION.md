@@ -1,64 +1,45 @@
-# 다음 세션 이어가기 (핸드오프) — 2026-06-01
+# 다음 세션 이어가기 (핸드오프) — 2026-06-01 (compact 직전)
 
-> `/clear` 이후 이 문서를 먼저 읽고 진행. 함께 볼 것: `docs/pipeline-verification-checklist.md`,
-> `docs/template-expansion-roadmap.md`, 메모리 `project_detailai_pipeline_verified`.
+> compact 후 이 문서부터 읽고 진행. 대상은 **소금빵 하나** (`c0ff7994-4c13-4bbf-9ddd-d621bcfd5096`).
 
-## 0. 현재 상태 (커밋 완료, git clean)
-- `248eed7` 초안 생성이 디자이너 업로드 스타일링샷 우선 사용 + 템플릿 로드맵
-- `88b44aa` 파이프라인 차단 버그 수정 + 운영 UI 통합 + 12단계 E2E 검증
-- 파이프라인 1~12단계 전부 실제 데이터로 검증됨. 돈덕 순대 샘플(7섹션+PDF, status=delivered) 생성됨.
+## ★ 핵심 결정 (사용자 확정, 2026-06-01)
+- **현재 우선순위 = 웹앱 완성도 + 상세페이지 "결과물" 완성도.** 이 두 가지에 집중.
+- **템플릿↔이미지 연속성 문제는 "나중에" 해결(보류).** 이유: 비용 절감 위해 "이미지 생성 API 안 쓰고 프롬프트만 출력 → 디자이너가 이미지 제작" 방식으로 갔는데, 그 결과 템플릿(html-builder)에 이미지가 안 채워지는 연속성 문제가 생김. **지금은 이 배선을 파지 말 것.**
+- 참고(보류된 미래 작업): 상세페이지 템플릿은 원래 이미지가 아니라 Figma 편집 가능 HTML(html.to.design)로 가는 게 목표였음.
 
-## 1. 반드시 아는 gotcha / 환경
-- **API 키**: `~/.zshrc`의 전역 `ANTHROPIC_API_KEY`는 주석 처리됨(무효 키였음). 앱은 `.env.local`의 유효 키 사용. 터미널에서 직접 tsx 실행 시 전역 env가 없어야 .env.local이 먹음 → `env -u ANTHROPIC_API_KEY ... --env-file=.env.local` 패턴 사용.
-- **dev 서버 기동**: `env -u ANTHROPIC_API_KEY PORT=3000 npm run dev` (전역 키 잔재 방지). `.next` 손상 시 `rm -rf .next` 후 재기동.
-- **무음 에러 주의**: generateScriptForProject/generateDesignForProject는 실패해도 project_logs에만 기록하고 success 반환. **200 응답을 믿지 말고 항상 DB(project_logs/projects.status)로 검증**.
-- **장시간 작업**: 디자인 기획 ~223초, 초안 생성 ~9분 (로컬 OK, Vercel 300초 초과 → 배포 전 비동기화 필요).
+## ★ 근본 원인 (참고 — 보류된 문제)
+v6에서 비용절감 차 **"이미지 직접 생성 → 프롬프트만 출력"**(`SKIP_IMAGE_GENERATION=true`, styling-shots 빈 배열) → html-builder가 배치할 이미지 0개 → 누끼 fallback 땜빵 → tmp 경로라 Figma 깨짐. **이 연속성 배선은 나중에.**
 
-## 2. 검증 도구 (이미 작성됨, scripts/)
-- `npx tsx --env-file=.env.local scripts/check-project-state.ts <projectId>` — status/script/logs 확인
-- `npx tsx --env-file=.env.local scripts/verify-stage1-script.ts` — Claude 스크립트 생성 단독 검증(DB 미접촉)
-- DB 직접 조회: `@supabase/supabase-js` + service role (`.env.local`)
+## ★ 지금 할 일 (완성도 우선)
+1. **웹앱 완성도**: 작업관리 UI(200스케일·내작업·미배정·필터)는 적용+검증됨 — 디자이너/기획자 계정 실제 로그인 시각 검증, 클라이언트 D-022 시각 확인, 남은 UX/버그 점검. 빌드 green 유지.
+2. **상세페이지 "결과물" 완성도**: 현재 완성된 결과물은 **이미지형 경로(generateDesignForProject)** — 돈덕/황태는 한국어 품질 우수, 쌀과밀 재생성됨. 이걸 데모 수준으로 완성도 점검(품질 일관성, 한글 텍스트, 섹션 구성). (※ 템플릿/Figma 경로는 보류)
+3. 결과물을 사용자에게 실제 렌더로 보여주며 완성도 합의.
 
-## 3. 로그인 (인증된 브라우저로 API 트리거 시)
-- 운영자(admin): `/admin` → `admin` / `DetailAI!2026` (role=admin)
-- 사업자(demo): `/login` → `demo@detailai.app` / `123-45-67890`
-- 인증 필요한 API는 Playwright 브라우저 세션에서 `fetch`(쿠키 포함) 또는 `browser_evaluate`로 호출.
+## 이번 세션 완료(커밋됨)
+- `f6ce46e` 작업관리 UI 200스케일(대시보드 검색/담당자·단계·지연 필터/컬럼 카운트·스크롤/초기화) + 디자이너·기획자 "내 작업" 필터 + 클라이언트 D-022(진행트래커 제거→3구간, 단일 프로젝트 뷰). **200더미로 대시보드 육안 검증 완료**(필터·검색·미배정 동작).
+- `21c4eb2` html-builder 누끼 fallback(빈 슬롯 임시) + 스타일링 프롬프트 품질(3:4·30%여백·삼분법·역할·브랜드컬러·NEGATIVE).
+- `29d8fab` exporter: designer 번들에 images/ 동봉 + 경로 ./images/ 재작성(Figma용).
+- 스타일링샷 **3장 실제 생성**(개선 프롬프트, Gemini, 896x1200≈3:4), 저장 위치:
+  `designs` 버킷 `projects/c0ff7994-.../styling_real/{hero_dark_closeup,overhead_minimal,butter_pairing}.png`
+  (메인이 아직 육안 검토 안 함 — compact 후 확인해 품질 판단)
 
-## 4. 테스트 프로젝트 (시드됨, `scripts/reset-demo.ts`로 리셋 가능)
-- 돈덕 순대 `5d2f266f-4f34-4562-9223-6d3050b518b2` — 이미 delivered까지 완주
-- 쌀과밀 소금빵 `c0ff7994-4c13-4bbf-9ddd-d621bcfd5096` — design_plan_review
-- 황태이야기 `5b919f67-b9b7-4c43-a33a-108bb05dd5d7`
+## 데모 3종 현재 상태 (이미지형 generateDesignForProject 경로, 한국어 OK)
+- 돈덕 순대 delivered(7섹션+PDF), 쌀과밀 design_review(6), 황태 design_review(7), 흑마늘 design_review. 더미 제거됨.
+- ※ 이건 **이미지형(섹션 통째 Gemini 생성)** 결과. 사용자가 원하는 건 **템플릿(Figma) 경로** — 위 남은작업이 그것.
 
-## 5. 다음 세션 작업 순서 (사용자 지정)
+## gotcha / 실행
+- tsx: 항상 `env -u ANTHROPIC_API_KEY node_modules/.bin/tsx --env-file=.env.local <script>` (전역 무효 ANTHROPIC 키 제거). `~/.zshrc:12` 주석됨.
+- dev: `env -u ANTHROPIC_API_KEY PORT=3000 npm run dev`. 빌드 green 유지.
+- **검증은 DB·브라우저·산출물로. HTTP 200/존재만으로 "완료" 선언 금지** (메모리 feedback_no_fake_completion).
+- 템플릿 경로: `runPipelineForProject`(=/api/designs/generate). 이미지형: `generateDesignForProject`(=/api/photography/complete).
+- Vercel 300초 한도: 기획 223초·초안 9분 초과 → 배포 시 비동기 잡 필요(로컬 데모 무관).
 
-### A. 웹앱 기능 체크 (개별 기능 전수 QA) — 미검증분
-인증된 브라우저로 각 기능을 실제 조작해 동작+DB 반영 확인, 실패 시 수정:
-- [ ] 담당자 배정 저장 (`/api/projects/[id]/assign`) — planner_id/designer_id 반영
-- [ ] 사업자 코멘트 작성 (`/api/comments`) + 운영자 확인
-- [ ] A/B 비교 생성 (`/api/scripts/ab-test` → generateAbVariant)
-- [ ] 스크립트 섹션 직접 편집 (scripts/review action=edit)
-- [ ] AI 재생성 (action=regenerate, 클라이언트 피드백 반영)
-- [ ] 사용자 관리 / 직원 등록 (`/users`, `/api/admin/staff`, register-users)
-- [ ] 신규 의뢰 제출 (`/intake` → `/api/projects`) 전체 흐름 + usage_limit=1 검증
-- [ ] 이미지 보호(우클릭/드래그 차단), 미인증 직접 URL 접근 차단(엣지)
-- [ ] /photography(스타일링샷 제작), /designer(초안 제작) 화면 렌더+상호작용
+## 계정 (테스트)
+- admin: `/admin` admin / DetailAI!2026
+- 디자이너: designer1@detailai.app / DetailAI!2026 (designer2도)
+- 기획자: planner1@detailai.app / DetailAI!2026 (planner2도)
+- 사업자: `/login` demo@detailai.app / 123-45-67890
 
-### B. 실제 데이터로 스크립트 뽑기
-- 새 프로젝트(실제 제품 입력)로 intake→generateScriptForProject 실행, 진짜 스크립트 생성 확인.
-- 또는 기존 테스트 프로젝트 재생성. DB로 sections/제품정보 반영 검증.
-
-### C. 스타일링샷 프롬프트 구현/검증
-- `styling-final-prompts.json`(shots N개, finalPrompt) 생성·표시(StylingPromptPanel) 확인.
-- **디자이너 업로드 흐름 검증**: photos 테이블 photo_type='styling' 업로드 → 초안에 반영되는지
-  (generate-design.ts의 fetchUploadedStylingShots 우선 사용 로직, 이번에 추가됨 — E2E 미검증).
-
-### D. 템플릿 활용한 초안 작성 테스트
-- **핵심 미해결**: 두 초안 경로 존재 —
-  - `generateDesignForProject`(generate-design.ts, Gemini 섹션이미지 생성, photography/complete가 트리거) ← 현재 검증된 경로
-  - `runPipelineForProject`(pipeline-bridge.ts → agents/pm runPipeline → html-builder, **선택 템플릿(selectedTemplateId) 적용**, designs/generate가 트리거) ← v6 의도(템플릿+스타일링샷 합성)
-- 어느 경로가 캐노니컬인지 사용자 확정 필요. v6 문서(operations-redesign.md E절)는 html-builder 경로 지향.
-- 템플릿(food/beauty/electronics, agents/templates/)이 실제 초안에 반영되는지 runPipelineForProject로 테스트.
-- 업로드된 스타일링샷이 페이지에 직접 합성되려면 html-builder 경로 통합 필요(현재는 Gemini 참조용).
-
-### (병행) 배포 전 필수
-- 무음 에러 표면화(#2), Vercel 타임아웃 비동기화(`docs/async-jobs-design.md` 미작성).
+## 미검증 잔여 QA
+- 디자이너 계정 로그인 시 /designer "내 작업" 필터 시각 확인(코드만 검증)
+- 클라이언트 단일 프로젝트 강조 뷰(데모 3건이라 미표시 — 데모 1건 정리 시 확인)
