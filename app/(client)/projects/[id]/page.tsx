@@ -3,27 +3,45 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { ProjectStatus } from '@/lib/status-machine'
+import { CLIENT_STATUS_LABELS } from '@/lib/status-machine'
 import { StatusBadge } from '@/components/shared/StatusBadge'
-import { ProjectProgress } from '@/components/client/ProjectProgress'
 import { ProtectedImage } from '@/components/client/ProtectedImage'
 import { CommentSection } from '@/components/client/CommentSection'
 import { RevisionGuide } from '@/components/client/RevisionGuide'
 
-const STATUS_ORDER: ProjectStatus[] = [
-  'intake_submitted',
-  'script_generating',
-  'script_review',
-  'script_approved',
-  'photo_scheduled',
-  'photo_uploaded',
-  'design_generating',
-  'design_review',
-  'design_approved',
-  'delivered',
+// 기업에게 노출되는 3구간 진행 단계
+type ClientStage = 'preparing' | 'review' | 'delivered'
+
+const STAGE_LABELS: Record<ClientStage, string> = {
+  preparing: '제작 중',
+  review:    '초안 확인 요청',
+  delivered: '납품 완료',
+}
+
+const STAGE_DESCRIPTIONS: Record<ClientStage, string> = {
+  preparing: '담당자가 상세페이지를 제작하고 있습니다.',
+  review:    '초안이 완성되었습니다. 아래 내용을 확인하고 수정 의견을 남겨주세요.',
+  delivered: '상세페이지가 완성되었습니다. 담당자가 이메일로 최종 파일을 발송했습니다.',
+}
+
+function getClientStage(status: ProjectStatus): ClientStage {
+  if (status === 'delivered' || status === 'design_approved') return 'delivered'
+  if (status === 'design_review') return 'review'
+  return 'preparing'
+}
+
+const DESIGN_SHOW_STATUSES: ProjectStatus[] = [
+  'design_review', 'design_approved', 'delivered',
 ]
 
 function statusIndex(status: ProjectStatus): number {
-  return STATUS_ORDER.indexOf(status)
+  const ORDER: ProjectStatus[] = [
+    'intake_submitted', 'script_generating', 'script_review', 'script_approved',
+    'design_planning', 'design_plan_review', 'prompt_ready',
+    'photo_scheduled', 'photo_uploaded', 'design_generating',
+    'design_review', 'design_approved', 'delivered',
+  ]
+  return ORDER.indexOf(status)
 }
 
 export default async function ClientProjectDetailPage({
@@ -50,7 +68,8 @@ export default async function ClientProjectDetailPage({
   }
 
   const status = project.status as ProjectStatus
-  const showDesign = statusIndex(status) >= statusIndex('design_review')
+  const clientStage = getClientStage(status)
+  const showDesign = DESIGN_SHOW_STATUSES.includes(status)
 
   let design: { id: string; preview_url: string | null; output_url: string | null } | null = null
   if (showDesign) {
@@ -99,10 +118,55 @@ export default async function ClientProjectDetailPage({
         </div>
       </div>
 
-      {/* 진행 상황 */}
-      <div className="bg-surface rounded-xl border border-border p-6">
-        <h2 className="text-sm font-semibold text-text-secondary mb-4">진행 상황</h2>
-        <ProjectProgress status={status} />
+      {/* 진행 상황 — 기업에게는 3구간 요약만 노출 */}
+      <div className="bg-surface rounded-xl border border-border p-5">
+        <p className="text-xs font-medium text-text-tertiary mb-3">진행 상황</p>
+        {/* 3단계 스텝 바 */}
+        <div className="flex items-center gap-0 mb-4">
+          {(['preparing', 'review', 'delivered'] as ClientStage[]).map((stage, i, arr) => {
+            const isCompleted = (
+              (stage === 'preparing' && (clientStage === 'review' || clientStage === 'delivered')) ||
+              (stage === 'review'    && clientStage === 'delivered')
+            )
+            const isCurrent = stage === clientStage
+            return (
+              <div key={stage} className="flex items-center flex-1 min-w-0">
+                <div className="flex flex-col items-center flex-1 min-w-0">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold transition-colors ${
+                    isCompleted ? 'bg-primary-600 text-white'
+                    : isCurrent  ? 'bg-primary-100 border-2 border-primary-600 text-primary-700'
+                    : 'bg-gray-100 text-gray-400'
+                  }`}>
+                    {isCompleted ? (
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    ) : (
+                      <span>{i + 1}</span>
+                    )}
+                  </div>
+                  <p className={`text-[11px] mt-1.5 text-center leading-tight font-medium ${
+                    isCurrent ? 'text-primary-700' : isCompleted ? 'text-text-secondary' : 'text-text-tertiary'
+                  }`}>
+                    {STAGE_LABELS[stage]}
+                  </p>
+                </div>
+                {i < arr.length - 1 && (
+                  <div className={`h-0.5 w-full mb-5 ${isCompleted ? 'bg-primary-600' : 'bg-gray-200'}`} />
+                )}
+              </div>
+            )
+          })}
+        </div>
+        {/* 현재 단계 설명 */}
+        <p className="text-sm text-text-secondary leading-relaxed">
+          {STAGE_DESCRIPTIONS[clientStage]}
+          {clientStage === 'preparing' && (
+            <span className="ml-1 text-text-tertiary text-xs">
+              (현재: {CLIENT_STATUS_LABELS[status]})
+            </span>
+          )}
+        </p>
       </div>
 
       {/* 상세페이지 초안 */}
