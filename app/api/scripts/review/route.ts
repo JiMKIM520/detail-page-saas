@@ -9,7 +9,7 @@ export const maxDuration = 60
 export async function POST(request: Request) {
   const userSupabase = await createClient()
   const { data: { user } } = await userSupabase.auth.getUser()
-  if (!user || !['admin'].includes(user.user_metadata?.role)) {
+  if (!user || !['admin', 'planner'].includes(user.user_metadata?.role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -17,6 +17,15 @@ export async function POST(request: Request) {
   const supabase = createServiceClient()
 
   if (action === 'approve') {
+    // 재승인 가드: 스크립트 승인은 script_review 상태에서만 가능.
+    // 이미 진행된 프로젝트에서 호출하면 transitionStatus가 'Invalid transition'으로 throw해 500이 났음 → 409로 우아하게 처리.
+    const { data: proj } = await supabase.from('projects').select('status').eq('id', project_id).single()
+    if (!proj || proj.status !== 'script_review') {
+      return NextResponse.json(
+        { success: false, error: `승인 불가: 현재 상태(${proj?.status ?? 'unknown'})에서는 스크립트를 승인할 수 없습니다` },
+        { status: 409 },
+      )
+    }
     // v6: 승인 → script_approved 까지만. 디자인 기획은 별도 단계('디자인 기획 시작' 버튼)에서 진행.
     // (v5의 촬영 리스트 자동 생성 + photo_scheduled 전이는 제거 — script_approved→design_planning 흐름과 충돌해 전이가 실패했음)
     await supabase.from('scripts').update({ planner_status: 'approved', planner_notes: notes })

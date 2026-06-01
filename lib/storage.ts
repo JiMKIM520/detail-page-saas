@@ -188,11 +188,12 @@ export async function updateDesignUrls(
   }
   if (heroKey) updateData.preview_url = urls[heroKey]
   if (pdfKey) updateData.preview_pdf_url = urls[pdfKey]
-  if (htmlKey) updateData.edited_html_url = urls[htmlKey]
   if (sectionImages.length > 0) updateData.section_images = sectionImages
 
-  // output_urls에 ZIP 경로 저장 (JSON)
+  // output_urls에 ZIP/HTML 경로 저장 (JSON).
+  // 주의: designs 테이블에 edited_html_url 컬럼이 없어 과거 insert가 조용히 실패했음 → html은 output_url JSON에 보관.
   const outputUrls: Record<string, string> = {}
+  if (htmlKey) outputUrls.html = urls[htmlKey]
   if (mobileZip) outputUrls.mobile_zip = urls[mobileZip]
   if (pcZip) outputUrls.pc_zip = urls[pcZip]
   if (designerZip) outputUrls.designer_zip = urls[designerZip]
@@ -210,11 +211,13 @@ export async function updateDesignUrls(
     .single()
 
   if (existing) {
-    await supabase.from('designs').update(updateData).eq('id', existing.id)
+    const { error } = await supabase.from('designs').update(updateData).eq('id', existing.id)
+    if (error) throw new Error(`designs 업데이트 실패: ${error.message}`)
   } else {
-    await supabase.from('designs').insert({
+    const { error } = await supabase.from('designs').insert({
       project_id: projectId,
       ...updateData,
     })
+    if (error) throw new Error(`designs 생성 실패: ${error.message}`)
   }
 }
