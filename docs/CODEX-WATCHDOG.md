@@ -83,17 +83,24 @@
   - project status는 `design_review`로 전이됨.
   - Storage 업로드는 `38/39` 성공. `designer-figma.zip`은 74MB로 Storage 최대 크기 초과 실패.
   - Storage에는 `4_final/index.html`, `5_export/mobile.zip`, `5_export/pc.zip`, `5_export/designer.zip`, PC/mobile PNG 등이 존재.
-  - 그러나 Supabase `designs` row는 여전히 `0`.
-  - 웹앱 `/designer/[id]`는 `designs` row를 읽어 `DesignPreview`를 렌더링하므로, 현재 상태에서는 `design_review` 목록에 보여도 상세는 "디자인 생성 중..."으로 보일 가능성이 높다.
+  - 이후 Supabase `designs` row는 생성됐지만 값 연결이 아직 불완전하다.
+    - `preview_url`이 이미지가 아니라 `4_final/index.html` URL이다.
+    - 현재 `components/designer/DesignPreview.tsx`는 `preview_url`을 `<img src=...>`로 렌더링하므로 HTML URL이면 미리보기가 깨질 가능성이 높다.
+    - `output_url` JSON은 `{"html": ...}`만 있고, Storage에 존재하는 `mobile.zip`, `pc.zip`, `designer.zip` URL이 빠져 있다.
+    - 따라서 `design_review` 상태와 DB row 존재만으로 "웹앱에서 실제 확인 가능한 샘플"이라고 판단하면 안 된다.
   - 의심 원인: `lib/storage.ts`의 `updateDesignUrls()`가 `edited_html_url`을 쓰지만 실제 DB schema 조회 결과 `designs` 테이블에 `edited_html_url` 컬럼이 없다. insert/update 에러를 확인하지 않아 실패가 묻히고 상태만 전이된다.
   - 후속 코드 수정 확인: `lib/storage.ts`에서 `edited_html_url` 사용을 제거하고 HTML URL을 `output_url` JSON에 넣도록 변경됨. insert/update `error`도 throw하도록 추가됨.
-  - 단, 기존 `청정원 흑마늘진액` 샘플은 아직 backfill/rerun되지 않아 `design_review` 상태인데도 `designs` row가 `0`이다.
+  - 단, 기존 `청정원 흑마늘진액` 샘플은 아직 올바른 preview/output URL 형태로 backfill/rerun되지 않았다.
 - 실패 기준:
   - 로컬 파일 존재만으로 "웹앱에서 실제 확인 가능"이라고 판단하면 안 된다.
   - QA PASS만으로 샘플 완료로 간주하면 안 된다. DB와 웹앱 확인 화면까지 연결되어야 한다.
+  - HTML URL을 `preview_url`에 넣고 이미지 미리보기로 사용하면 안 된다.
+  - zip 산출물이 Storage에 있는데 `output_url`에 빠진 상태를 납품 가능으로 보면 안 된다.
 - 수용 기준:
   - QA가 pass이거나, 법정 표시/건강 주장 문제를 명시적으로 해소한 재검증 리포트가 있다.
-  - Supabase `designs` row가 생성되고 `preview_url` 또는 `output_url`이 웹앱에서 접근 가능하다.
+  - Supabase `designs` row가 생성되고 `preview_url`은 실제 이미지/PDF 미리보기로 렌더링 가능하다.
+  - `output_url`에는 최소 HTML과 납품 zip(`mobile_zip`, `pc_zip`, `designer_zip` 중 생성된 항목)이 포함된다.
+  - 웹앱 상세 화면에서 미리보기와 다운로드 링크가 실제 클릭 가능한 URL로 확인된다.
   - project status가 `design_review` 이상으로 전이되고 `project_logs`에 성공 전이가 기록된다.
   - `updateDesignUrls()`는 Supabase insert/update `error`를 반드시 검사하고 실패 시 상태 전이를 막거나 실패 상태로 롤백한다.
 
