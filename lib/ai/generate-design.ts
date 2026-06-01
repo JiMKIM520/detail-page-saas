@@ -70,6 +70,37 @@ async function fetchNukiCuts(supabase: ReturnType<typeof createServiceClient>, p
   return results
 }
 
+// 디자이너가 업로드한 스타일링샷(photos 테이블, photo_type='styling')을 Buffer 배열로 반환.
+// v6 의도: 스타일링샷은 시스템이 자동 생성하지 않고, 디자이너가 styling-final-prompts.json
+// 프롬프트로 별도 제작해 업로드한 결과물을 초안에 반영한다.
+async function fetchUploadedStylingShots(
+  supabase: ReturnType<typeof createServiceClient>,
+  projectId: string,
+): Promise<Buffer[]> {
+  const { data: photos } = await supabase
+    .from('photos')
+    .select('storage_path, retouched_path, is_retouched')
+    .eq('project_id', projectId)
+    .eq('photo_type', 'styling')
+    .order('created_at', { ascending: true })
+
+  if (!photos || photos.length === 0) return []
+
+  const results: Buffer[] = []
+  for (const photo of photos) {
+    const storagePath = photo.is_retouched && photo.retouched_path ? photo.retouched_path : photo.storage_path
+    if (!storagePath) continue
+    try {
+      const { data } = await supabase.storage.from('photos').download(storagePath)
+      if (!data) continue
+      results.push(Buffer.from(await data.arrayBuffer()))
+    } catch (err) {
+      console.warn('[generate-design] 업로드 스타일링샷 다운로드 실패:', storagePath, err)
+    }
+  }
+  return results
+}
+
 function extractColorHex(colorSuggestion: string | undefined): string {
   return colorSuggestion?.match(/#[0-9a-fA-F]{6}/)?.[0] ?? '#4f46e5'
 }
@@ -200,9 +231,18 @@ export async function generateDesignForProject(projectId: string) {
     const nukiCuts = await fetchNukiCuts(supabase, projectId)
     console.warn(`[generate-design] 누끼컷 ${nukiCuts.length}장 로드됨`)
 
-    // Phase A: 스타일링샷 생성 (Pro 모델)
-    console.warn('[generate-design] Phase A: 스타일링샷 생성 시작')
-    const stylingShots = await generateStylingShots(content, project, nukiCuts)
+    // Phase A: 스타일링샷 확보
+    // v6 우선순위: 디자이너가 업로드한 스타일링샷 사용. 없을 때만 Gemini 자동 생성으로 폴백.
+    console.warn('[generate-design] Phase A: 스타일링샷 확보')
+    const uploadedStylingShots = await fetchUploadedStylingShots(supabase, projectId)
+    let stylingShots: Buffer[]
+    if (uploadedStylingShots.length > 0) {
+      stylingShots = uploadedStylingShots
+      console.warn(`[generate-design] 디자이너 업로드 스타일링샷 ${stylingShots.length}장 사용 (자동 생성 건너뜀)`)
+    } else {
+      console.warn('[generate-design] 업로드된 스타일링샷 없음 → Gemini 자동 생성 폴백')
+      stylingShots = await generateStylingShots(content, project, nukiCuts)
+    }
     console.warn(`[generate-design] Phase A 완료: 스타일링샷 ${stylingShots.length}장`)
 
     // Phase B: 섹션별 이미지 생성 (NB2 모델)
