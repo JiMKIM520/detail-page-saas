@@ -355,14 +355,93 @@ function copyDirRecursive(src: string, dest: string): void {
   }
 }
 
+/**
+ * HTML 문자열에서 이미지 경로를 모두 추출한다.
+ * 대상: img[src], url('...') / url("...") CSS background
+ * 반환: { original: string (HTML에 박힌 그대로), resolved: string (절대경로) }[]
+ */
+function extractImageRefs(
+  html: string,
+  htmlDir: string
+): Array<{ original: string; resolved: string }> {
+  const refs: Array<{ original: string; resolved: string }> = []
+  const seen = new Set<string>()
+
+  const addRef = (original: string): void => {
+    if (!original || original.startsWith('data:') || original.startsWith('http://') || original.startsWith('https://')) return
+    if (seen.has(original)) return
+    seen.add(original)
+
+    // HTML 파일 위치 기준으로 절대경로 해석
+    const resolved = path.isAbsolute(original)
+      ? original
+      : path.resolve(htmlDir, original)
+
+    if (fs.existsSync(resolved)) {
+      refs.push({ original, resolved })
+    } else {
+      console.warn(`  ⚠️ 이미지 파일 없음 (스킵): ${original}`)
+    }
+  }
+
+  // img src=
+  const imgRegex = /<img\b[^>]+\bsrc\s*=\s*["']([^"']+)["']/gi
+  let m: RegExpExecArray | null
+  while ((m = imgRegex.exec(html)) !== null) addRef(m[1])
+
+  // CSS url(...)
+  const urlRegex = /url\(\s*["']?([^"')]+)["']?\s*\)/gi
+  while ((m = urlRegex.exec(html)) !== null) addRef(m[1])
+
+  return refs
+}
+
 function copyDesignerFiles(baseOutputDir: string, designerDir: string): void {
   const finalDir  = path.join(baseOutputDir, '4_final')
   const layersDir = path.join(baseOutputDir, '3_layers')
 
+  // ── index.html: 이미지 경로 재작성 후 복사 ──────────────────────
   const htmlSrc = path.join(finalDir, 'index.html')
   if (fs.existsSync(htmlSrc)) {
-    fs.copyFileSync(htmlSrc, path.join(designerDir, 'index.html'))
-    console.log('  ✅ index.html → designer/')
+    let html = fs.readFileSync(htmlSrc, 'utf8')
+
+    // HTML 내 모든 이미지 참조 추출
+    const imageRefs = extractImageRefs(html, finalDir)
+    const imagesDir = path.join(designerDir, 'images')
+    let copiedImages = 0
+
+    if (imageRefs.length > 0) {
+      fs.mkdirSync(imagesDir, { recursive: true })
+
+      for (const ref of imageRefs) {
+        // 충돌 방지: 동일 파일명이 여러 경로에 존재하면 순번 접미사 부여
+        let destName = path.basename(ref.resolved)
+        let destPath = path.join(imagesDir, destName)
+        let counter = 1
+        while (fs.existsSync(destPath) && fs.realpathSync(destPath) !== fs.realpathSync(ref.resolved)) {
+          const ext = path.extname(destName)
+          const base = path.basename(destName, ext)
+          destName = `${base}_${counter}${ext}`
+          destPath = path.join(imagesDir, destName)
+          counter++
+        }
+
+        // 복사 (이미 동일 파일이면 스킵)
+        if (!fs.existsSync(destPath)) {
+          fs.copyFileSync(ref.resolved, destPath)
+          copiedImages++
+        }
+
+        // HTML 내 원래 경로를 번들 상대경로로 치환 (전역)
+        const newSrc = `./images/${destName}`
+        // original 경로의 특수문자 이스케이프
+        const escapedOriginal = ref.original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        html = html.replace(new RegExp(escapedOriginal, 'g'), newSrc)
+      }
+    }
+
+    fs.writeFileSync(path.join(designerDir, 'index.html'), html, 'utf8')
+    console.log(`  ✅ index.html → designer/ (이미지 ${copiedImages}개 번들 복사, 경로 재작성)`)
   }
 
   const fontsSrc = path.join(finalDir, 'fonts')
