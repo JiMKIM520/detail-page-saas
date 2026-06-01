@@ -49,3 +49,19 @@ next-env.d.ts
 
 # Sensitive docs
 docs/test-accounts.md
+
+# 파이프라인 생성물 / 채점 리포트 / 템플릿 draft (배포 무관)
+output/
+templates/validation/
+agents/templates/*/*-draft.json
+
+# 데모 / 실험 자료 (로컬 참고용, 배포 무관)
+demo-v8/
+/build_final.js
+/fewshot_*.js
+/gen_*.js
+/prototype_*.html
+
+# 임시 테스트 스크립트 (운영 UI 테스트용 — 배포 후 정리)
+scripts/create-test-admin.ts
+scripts/test-login.ts

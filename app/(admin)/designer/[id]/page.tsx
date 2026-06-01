@@ -30,12 +30,24 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
         </p>
       </div>
 
+      <div className="mb-4">
+        <Link
+          href={`/designer/${id}/editor`}
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+          </svg>
+          HTML 에디터로 편집
+        </Link>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <DesignPreview design={design} />
         </div>
         <div>
-          <DeliveryPanel projectId={id} designId={design?.id} previewPdfUrl={design?.preview_pdf_url ?? null} />
+          <DeliveryPanel projectId={id} designId={design?.id} previewPdfUrl={design?.preview_pdf_url ?? null} hasEdited={!!(design as Record<string, unknown>)?.edited_copy} />
         </div>
       </div>
     </div>

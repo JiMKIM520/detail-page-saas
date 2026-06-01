@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-export function DeliveryPanel({ projectId, designId, previewPdfUrl }: { projectId: string; designId?: string; previewPdfUrl?: string | null }) {
+export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }: { projectId: string; designId?: string; previewPdfUrl?: string | null; hasEdited?: boolean }) {
   const [notes, setNotes] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
@@ -101,6 +101,33 @@ export function DeliveryPanel({ projectId, designId, previewPdfUrl }: { projectI
               이 PDF로 납품
             </button>
           </div>
+        </div>
+      )}
+
+      {hasEdited && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 space-y-2">
+          <p className="text-xs font-medium text-indigo-700">편집된 버전 있음</p>
+          <button onClick={async () => {
+            setLoading(true)
+            // 편집된 HTML로 Exporter 재실행 → ZIP 생성 → 납품
+            const saveRes = await fetch(`/api/designs/${projectId}/copy`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ regenerateHtml: true }),
+            })
+            if (!saveRes.ok) { alert('HTML 재생성 실패'); setLoading(false); return }
+            const res = await fetch('/api/designs/review', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ project_id: projectId, design_id: designId, action: 'approve', notes: notes || '편집된 버전 납품' }),
+            })
+            if (!res.ok) { alert('납품 실패'); setLoading(false); return }
+            setLoading(false)
+            router.push('/designer')
+          }} disabled={loading}
+            className="w-full text-xs bg-indigo-600 text-white rounded-lg py-2 hover:bg-indigo-700 disabled:opacity-50 transition-all font-medium">
+            편집된 버전으로 납품
+          </button>
         </div>
       )}
 

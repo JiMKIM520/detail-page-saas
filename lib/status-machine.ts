@@ -3,6 +3,9 @@ export type ProjectStatus =
   | 'script_generating'
   | 'script_review'
   | 'script_approved'
+  | 'design_planning'      // v6: 디자인 기획(style-guide) 생성 중
+  | 'design_plan_review'   // v6: 디자인 기획 검수 대기
+  | 'prompt_ready'         // v6: 스타일링샷 프롬프트 준비 — 운영자 이미지 추출 대기
   | 'photo_scheduled'
   | 'photo_uploaded'
   | 'design_generating'
@@ -15,6 +18,9 @@ export const STATUS_LABELS: Record<ProjectStatus, string> = {
   script_generating:  '스크립트 생성 중',
   script_review:      '스크립트 검수 대기',
   script_approved:    '스크립트 승인',
+  design_planning:    '디자인 기획 생성 중',
+  design_plan_review: '디자인 기획 검수 대기',
+  prompt_ready:       '스타일링샷 프롬프트 준비',
   photo_scheduled:    '촬영 예정',
   photo_uploaded:     '사진 업로드 완료',
   design_generating:  '디자인 생성 중',
@@ -29,6 +35,9 @@ export const CLIENT_STATUS_LABELS: Record<ProjectStatus, string> = {
   script_generating:  '담당자 검토 중',
   script_review:      '담당자 검토 중',
   script_approved:    '제작 준비 완료',
+  design_planning:    '제작 준비 중',
+  design_plan_review: '제작 준비 중',
+  prompt_ready:       '제작 중',
   photo_scheduled:    '촬영 예정',
   photo_uploaded:     '사진 접수 완료',
   design_generating:  '제작 중',
@@ -37,12 +46,16 @@ export const CLIENT_STATUS_LABELS: Record<ProjectStatus, string> = {
   delivered:          '납품 완료',
 }
 
+// v6 워크플로 전이 (2026-05): 스크립트 → 디자인기획 → 프롬프트 → 이미지추출 → 템플릿결합 → 검수전달
 const TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
   intake_submitted:  ['script_generating'],
   script_generating: ['script_review'],
   script_review:     ['script_approved', 'script_generating'],
-  script_approved:   ['photo_scheduled'],
-  photo_scheduled:   ['photo_uploaded'],
+  script_approved:   ['design_planning'],                       // v6: 스크립트 승인 → 디자인 기획
+  design_planning:   ['design_plan_review', 'script_approved'], // v6: 기획 완료 → 검수 / 실패 시 롤백
+  design_plan_review:['prompt_ready', 'design_planning'],       // v6: 기획 승인 → 프롬프트 / 반려 → 재생성
+  prompt_ready:      ['photo_uploaded'],                        // v6: 프롬프트 준비 → 운영자 이미지 추출·업로드
+  photo_scheduled:   ['photo_uploaded'],                        // 레거시 호환 유지
   photo_uploaded:    ['design_generating'],
   design_generating: ['design_review'],
   design_review:     ['design_approved', 'design_generating'],

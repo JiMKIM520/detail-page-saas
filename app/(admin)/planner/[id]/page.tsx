@@ -1,9 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ReviewPanel } from '@/components/planner/ReviewPanel'
+import { DesignPlanView } from '@/components/planner/DesignPlanView'
+import { StartPlanningButton } from '@/components/planner/StartPlanningButton'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
+import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { StyleGuide } from '@/agents/types'
+import { STATUS_LABELS } from '@/lib/status-machine'
+import type { ProjectStatus } from '@/lib/status-machine'
 
 export default async function PlannerReviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -39,6 +45,19 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
     .eq('role', 'client')
     .order('created_at', { ascending: false })
     .limit(5)
+
+  // 디자인 기획 스타일 가이드 다운로드 (없으면 null)
+  let styleGuide: StyleGuide | null = null
+  try {
+    const buffer = await downloadFromStorage(`projects/${id}/planning/style-guide.json`)
+    const parsed: unknown = JSON.parse(buffer.toString('utf-8'))
+    // 기본 구조 검증 후 캐스팅
+    if (parsed && typeof parsed === 'object' && 'colors' in parsed && 'typography' in parsed) {
+      styleGuide = parsed as StyleGuide
+    }
+  } catch {
+    // 아직 생성되지 않았거나 Storage 미존재 — null 유지
+  }
 
   const hasUrlFetchFailed = logs?.some(l => l.note?.includes('URL 컨텐츠 추출 실패'))
 
@@ -81,6 +100,30 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
               <p className="text-text-tertiary text-sm">스크립트 생성 중...</p>
             </div>
           )}
+          {/* 디자인 기획 섹션 */}
+          {project.status === 'script_approved' ? (
+            <div className="bg-surface rounded-xl border border-border p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-semibold bg-violet-100 text-violet-700 px-2 py-0.5 rounded-md uppercase tracking-wide">
+                  디자인 기획
+                </span>
+                <span className="text-xs text-text-tertiary">스크립트 승인 완료 — 기획을 시작할 수 있습니다</span>
+              </div>
+              <StartPlanningButton projectId={id} />
+            </div>
+          ) : (project.status as ProjectStatus) === 'design_planning' ||
+            (project.status as ProjectStatus) === 'design_plan_review' ||
+            styleGuide ? (
+            <DesignPlanView styleGuide={styleGuide} />
+          ) : (
+            <div className="bg-surface rounded-xl border border-border p-4">
+              <p className="text-xs text-text-tertiary text-center py-4">
+                현재 단계: <span className="font-medium text-text-secondary">{STATUS_LABELS[project.status as ProjectStatus] ?? project.status}</span>
+                {' — '}스크립트 승인 후 디자인 기획을 시작할 수 있습니다
+              </p>
+            </div>
+          )}
+
           {script?.ab_content && (
             <div className="bg-purple-50 border border-purple-200 rounded-xl p-5">
               <div className="flex items-center gap-2 mb-4">

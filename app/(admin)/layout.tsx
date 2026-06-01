@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!user) redirect('/login')
 
   const role = user.user_metadata?.role
-  if (!['planner', 'designer', 'admin'].includes(role)) redirect('/projects')
+  if (!['admin'].includes(role)) redirect('/projects')
 
   const roleLabel: Record<string, string> = { planner: '기획자', designer: '디자이너', admin: '관리자' }
 

@@ -4,7 +4,7 @@ export const foodPrompt: CategoryPrompt = {
   slug: 'food',
   name: '식품/농축수산물',
   legalRules:
-    '식품표시광고법 제8조. 원재료명·영양성분·알레르기 22종·소비기한·원산지 필수. 생산자 실명·사진, 배송 포장 상태 촬영.',
+    '식품표시광고법 제8조: 원재료명·영양성분·알레르기 22종·소비기한·원산지 표시 필수. 건강기능식품이 아닌 일반 식품은 질병 예방·치료 효능 표현 금지.',
   forbiddenExpressions: [
     { forbidden: '당뇨 치료에 탁월', allowed: '비타민C가 풍부한 과일' },
     { forbidden: '혈관 속 피를 맑게', allowed: '아삭한 식감과 높은 당도' },

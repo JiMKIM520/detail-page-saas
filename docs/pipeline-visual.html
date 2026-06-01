@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DetailAI — Pipeline Infographic</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0D0F17;
+  --surface: #161926;
+  --surface2: #1E2235;
+  --border: #252840;
+  --text: #E2E8F0;
+  --muted: #8892A4;
+  --dim: #3A4155;
+
+  --c-sonnet: #818CF8;
+  --bg-sonnet: #1E1B4B;
+  --bd-sonnet: #4F46E5;
+
+  --c-gemini: #34D399;
+  --bg-gemini: #064E3B;
+  --bd-gemini: #059669;
+
+  --c-haiku: #FBD38D;
+  --bg-haiku: #451A03;
+  --bd-haiku: #D97706;
+
+  --c-free: #9CA3AF;
+  --bg-free: #1F2937;
+  --bd-free: #4B5563;
+}
+
+body {
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Pretendard Variable', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 52px 48px;
+  min-width: 1100px;
+}
+
+/* ── HEADER ── */
+.hdr { text-align: center; margin-bottom: 52px; }
+.hdr-badge {
+  display: inline-block;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 20px; margin-bottom: 14px;
+}
+.hdr h1 {
+  font-size: 30px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px;
+  background: linear-gradient(130deg, #E2E8F0 0%, #818CF8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hdr p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ── OVERVIEW STRIP ── */
+.overview {
+  max-width: 980px; margin: 0 auto 48px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 24px;
+}
+.ov-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
+.ov-track {
+  display: flex; align-items: center; gap: 0;
+}
+.ov-step {
+  display: flex; flex-direction: column; align-items: center; flex: 1;
+}
+.ov-bubble {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.ov-step .ov-name {
+  font-size: 9.5px; font-weight: 600; color: var(--muted);
+  margin-top: 6px; text-align: center; line-height: 1.3;
+}
+.ov-arr { color: var(--dim); font-size: 14px; padding: 0 2px; flex-shrink: 0; padding-bottom: 14px; }
+
+.ov-par-group {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border: 1px dashed rgba(245,158,11,0.3); border-radius: 10px; padding: 8px 12px; flex: 1.8;
+}
+.ov-par-tag { font-size: 9px; font-weight: 700; color: #F59E0B; letter-spacing: 0.08em; text-transform: uppercase; }
+.ov-par-inner { display: flex; gap: 10px; }
+
+/* ── MAIN FLOW ── */
+.flow { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; }
+
+/* connector */
+.conn {
+  display: flex; justify-content: center;
+  width: 100%; height: 32px; position: relative;
+}
+.conn::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 2px; height: 24px; background: var(--dim);
+}
+.conn::after {
+  content: '▾'; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+  color: var(--dim); font-size: 12px;
+}
+
+/* user input block */
+.blk-input {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 16px;
+}
+.blk-icon { font-size: 24px; flex-shrink: 0; }
+.blk-input-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  font-size: 11px; font-weight: 500; padding: 3px 9px;
+  border-radius: 6px; background: var(--surface); color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* step row */
+.row {
+  display: grid;
+  grid-template-columns: 210px 24px 1fr 24px 220px;
+  gap: 0; align-items: center;
+}
+.row-arrow {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--dim); font-size: 16px;
+}
+
+/* io col */
+.io-col { display: flex; flex-direction: column; gap: 5px; }
+.io-col-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 2px;
+}
+.io {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 10px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.d-json { background: #818CF8; }
+.d-png  { background: #34D399; }
+.d-html { background: #F59E0B; }
+.d-pdf  { background: #F87171; }
+.d-data { background: #9CA3AF; }
+.io-name { font-size: 11px; font-weight: 600; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+.io-note { font-size: 10px; color: var(--muted); }
+
+/* agent node */
+.node {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--bd-free);
+  border-radius: 14px; padding: 16px 18px; margin: 0 4px;
+}
+.node.sonnet { border-left-color: var(--bd-sonnet); }
+.node.gemini { border-left-color: var(--bd-gemini); }
+.node.haiku  { border-left-color: var(--bd-haiku); }
+
+.node-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.nbadge {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.sonnet .nbadge { background: var(--bg-sonnet); color: var(--c-sonnet); }
+.gemini .nbadge { background: var(--bg-gemini); color: var(--c-gemini); }
+.haiku  .nbadge { background: var(--bg-haiku);  color: var(--c-haiku); }
+.free   .nbadge { background: var(--bg-free);   color: var(--c-free); }
+
+.nname { font-size: 14px; font-weight: 700; flex: 1; }
+.mtag {
+  font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 5px;
+  letter-spacing: 0.02em;
+}
+.sonnet .mtag { background: var(--bg-sonnet); color: var(--c-sonnet); }
+.gemini .mtag { background: var(--bg-gemini); color: var(--c-gemini); }
+.haiku  .mtag { background: var(--bg-haiku);  color: var(--c-haiku); }
+.free   .mtag { background: var(--bg-free);   color: var(--c-free); }
+
+.ndesc { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+.nbadge-pm {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 7px;
+  font-size: 10px; font-weight: 600; color: #A78BFA;
+  background: rgba(167,139,250,0.1); padding: 3px 8px; border-radius: 5px;
+}
+.nbadge-retry {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 7px;
+  font-size: 10px; font-weight: 600; color: #FBD38D;
+  background: rgba(251,211,141,0.1); padding: 3px 8px; border-radius: 5px;
+}
+
+/* cost tag */
+.ncost {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0;
+}
+.ncost-normal {
+  font-size: 12px; font-weight: 800; color: #E2E8F0;
+  white-space: nowrap;
+}
+.ncost-max {
+  font-size: 9.5px; font-weight: 600; color: #F87171;
+  white-space: nowrap;
+}
+.ncost-free {
+  font-size: 12px; font-weight: 800; color: #34D399;
+  white-space: nowrap;
+}
+
+/* parallel section */
+.par-wrap {
+  grid-column: 1 / -1;
+  border: 1px dashed rgba(245,158,11,0.25);
+  border-radius: 14px; background: rgba(245,158,11,0.02);
+  padding: 20px 20px 16px; position: relative; margin: 0;
+}
+.par-tag {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--bg); padding: 0 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #F59E0B;
+}
+.par-inner {
+  display: grid; grid-template-columns: 210px 24px 1fr 24px 220px 16px 210px 24px 1fr 24px 220px;
+  gap: 0; align-items: center;
+}
+.par-divider {
+  width: 1px; height: 100%; background: var(--border);
+  margin: 0 8px; align-self: stretch;
+}
+
+/* final output */
+.blk-out {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 24px;
+}
+.blk-out-title { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+.out-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.out-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px;
+}
+.out-card-icon { font-size: 22px; margin-bottom: 7px; }
+.out-card-name { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+.out-card-desc { font-size: 11px; color: var(--muted); line-height: 1.45; }
+
+/* footer */
+.footer {
+  max-width: 980px; margin: 36px auto 0;
+  border-top: 1px solid var(--border); padding-top: 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; color: var(--dim);
+}
+.legend { display: flex; gap: 18px; }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+.leg-dot { width: 8px; height: 8px; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-badge">DetailAI — Pipeline Architecture</div>
+  <h1>상세페이지 자동화 파이프라인</h1>
+  <p>9개 AI 에이전트의 역할 · 입출력 데이터 흐름 · 자동 검증 루프</p>
+  <p style="margin-top:8px;font-size:12px;color:#818CF8;">v2.2 · 2026.04.08 — Exporter 이중 출력 (Mobile·PC) · story-bg 수정 · PDF 단일 페이지 · 웹앱 개발 예정</p>
+</div>
+
+<!-- OVERVIEW STRIP -->
+<div class="overview">
+  <div class="ov-label">전체 실행 순서 (Step 1 → 10)</div>
+  <div class="ov-track">
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-free);color:var(--c-free)">1</div>
+      <div class="ov-name">프로젝트<br>브리프</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-sonnet);color:var(--c-sonnet)">2</div>
+      <div class="ov-name">Art<br>Director</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-sonnet);color:var(--c-sonnet)">3</div>
+      <div class="ov-name">Script<br>Writer</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-par-group">
+      <div class="ov-par-tag">⚡ 병렬</div>
+      <div class="ov-par-inner">
+        <div class="ov-step">
+          <div class="ov-bubble" style="background:var(--bg-gemini);color:var(--c-gemini)">4a</div>
+          <div class="ov-name">Styling<br>Shots</div>
+        </div>
+        <div class="ov-step">
+          <div class="ov-bubble" style="background:var(--bg-sonnet);color:var(--c-sonnet)">4b</div>
+          <div class="ov-name">Copy<br>Writer</div>
+        </div>
+      </div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-gemini);color:var(--c-gemini)">5</div>
+      <div class="ov-name">Layer<br>Image</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-free);color:var(--c-free)">6</div>
+      <div class="ov-name">Icon<br>Mapper</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-sonnet);color:var(--c-sonnet)">7</div>
+      <div class="ov-name">HTML<br>Builder</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-haiku);color:var(--c-haiku)">8</div>
+      <div class="ov-name">QA<br>검증</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-sonnet);color:var(--c-sonnet)">9</div>
+      <div class="ov-name">디자인<br>검증</div>
+    </div>
+    <div class="ov-arr">›</div>
+
+    <div class="ov-step">
+      <div class="ov-bubble" style="background:var(--bg-free);color:var(--c-free)">10</div>
+      <div class="ov-name">Exporter<br>이중 출력</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FLOW ═══ -->
+<div class="flow">
+
+  <!-- USER INPUT -->
+  <div class="blk-input">
+    <div class="blk-icon">📦</div>
+    <div>
+      <div class="blk-input-title">사용자 입력 (ProjectInput)</div>
+      <div class="chips">
+        <span class="chip">제품명</span>
+        <span class="chip">카테고리 (식품/뷰티/전자)</span>
+        <span class="chip">플랫폼 (스마트스토어/쿠팡)</span>
+        <span class="chip">누끼 이미지</span>
+        <span class="chip">레퍼런스 이미지</span>
+        <span class="chip">필수 문구</span>
+        <span class="chip">금지 표현</span>
+        <span class="chip">타겟 오디언스</span>
+      </div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 1 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-data"></div><span class="io-name">ProjectInput</span><span class="io-note">사용자 폼</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node free">
+      <div class="node-hdr">
+        <div class="nbadge">1</div>
+        <div class="nname">프로젝트 브리프 생성</div>
+        <span class="mtag">PM 로직</span>
+        <div class="ncost"><span class="ncost-free">무료</span></div>
+      </div>
+      <div class="ndesc">사용자 입력을 정규화·구조화. 필수 문구·금지 표현·브랜드 색상 등을 표준 형식(ProjectBrief)으로 변환. 이후 모든 에이전트가 공유하는 기준 문서.</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">project-brief.json</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 2 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">project-brief.json</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">레퍼런스 이미지</span><span class="io-note">선택</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node sonnet">
+      <div class="node-hdr">
+        <div class="nbadge">2</div>
+        <div class="nname">Art Director</div>
+        <span class="mtag">Claude Sonnet</span>
+        <div class="ncost"><span class="ncost-normal">≈ 84원</span><span class="ncost-max">최대 84원</span></div>
+      </div>
+      <div class="ndesc">카테고리별 30종 템플릿 카탈로그(식품·뷰티·전자 각 10종)에서 제품에 맞는 템플릿 선택 → selectedTemplateId 반환. 색상·폰트·아이콘·레이아웃 패턴 결정. HTML Builder가 패턴 우선순위로 사용.</div>
+      <div class="nbadge-pm">⚡ PM 자동 보정 — 재료 노출 지시 제거 / 금지 배경 감지</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span><span class="io-note">색상·폰트·패턴</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">styling-shots-prompts.json</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 3 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">project-brief.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node sonnet">
+      <div class="node-hdr">
+        <div class="nbadge">3</div>
+        <div class="nname">Script Writer</div>
+        <span class="mtag">Claude Sonnet</span>
+        <div class="ncost"><span class="ncost-normal">≈ 80원</span><span class="ncost-max">최대 240원 ×3</span></div>
+      </div>
+      <div class="ndesc">카테고리×플랫폼 맞춤 섹션 구조 설계. 히어로·스토리·스펙·제조과정·CTA 등 각 섹션의 키메시지·스펙 데이터 생성. Copy Writer의 원재료.</div>
+      <div class="nbadge-retry">↻ PM 검증 후 최대 2회 자동 재실행 — 필수 문구 누락 / 금지 표현 / 섹션 8개 미만</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">script.json</span><span class="io-note">섹션 구조·스펙</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 4: PARALLEL -->
+  <div class="par-wrap">
+    <div class="par-tag">⚡ STEP 4 — 병렬 실행</div>
+    <div class="par-inner">
+      <!-- 4a inputs -->
+      <div class="io-col">
+        <div class="io-col-label">4a 입력</div>
+        <div class="io"><div class="dot d-json"></div><span class="io-name">styling-shots-prompts.json</span></div>
+        <div class="io"><div class="dot d-png"></div><span class="io-name">누끼 이미지</span></div>
+      </div>
+      <div class="row-arrow">›</div>
+      <div class="node gemini" style="margin:0 4px;">
+        <div class="node-hdr">
+          <div class="nbadge">4a</div>
+          <div class="nname">Styling Shots</div>
+          <span class="mtag">Gemini Pro Image</span>
+          <div class="ncost"><span class="ncost-normal">≈ 224원</span><span class="ncost-max">최대 224원</span></div>
+        </div>
+        <div class="ndesc">스타일링 촬영 지시서 기반으로 제품 스타일링 사진 6장 생성. 누끼 합성. 이미지+텍스트 split 섹션 소재. Pro 모델 실패 시 Flash Fallback 자동 전환.</div>
+      </div>
+      <div class="row-arrow">›</div>
+      <div class="io-col">
+        <div class="io-col-label">4a 출력</div>
+        <div class="io"><div class="dot d-png"></div><span class="io-name">shot0.png ~ shot5.png</span><span class="io-note">6장</span></div>
+      </div>
+
+      <!-- divider -->
+      <div style="width:1px;background:var(--border);margin:0 12px;align-self:stretch;"></div>
+
+      <!-- 4b inputs -->
+      <div class="io-col">
+        <div class="io-col-label">4b 입력</div>
+        <div class="io"><div class="dot d-json"></div><span class="io-name">script.json</span></div>
+        <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span></div>
+        <div class="io"><div class="dot d-json"></div><span class="io-name">project-brief.json</span></div>
+      </div>
+      <div class="row-arrow">›</div>
+      <div class="node sonnet" style="margin:0 4px;">
+        <div class="node-hdr">
+          <div class="nbadge">4b</div>
+          <div class="nname">Copy Writer</div>
+          <span class="mtag">Claude Sonnet</span>
+          <div class="ncost"><span class="ncost-normal">≈ 88원</span><span class="ncost-max">최대 264원 ×3</span></div>
+        </div>
+        <div class="ndesc">Script 원고를 감성 카피로 정제. 브랜드 톤·키워드 반영. 각 섹션의 headline · subheadline · body 최종본 생성.</div>
+      </div>
+      <div class="row-arrow">›</div>
+      <div class="io-col">
+        <div class="io-col-label">4b 출력</div>
+        <div class="io"><div class="dot d-json"></div><span class="io-name">refined-copy.json</span><span class="io-note">감성 카피</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 5 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">script.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">shot0~3.png</span><span class="io-note">레퍼런스</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">누끼 이미지</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node gemini">
+      <div class="node-hdr">
+        <div class="nbadge">5</div>
+        <div class="nname">Layer Image</div>
+        <span class="mtag">Gemini Pro Image</span>
+        <div class="ncost"><span class="ncost-normal">≈ 224원</span><span class="ncost-max">최대 224원</span></div>
+      </div>
+      <div class="ndesc">히어로 배경 → 타이포 레이어 합성(B방식) → 비주얼 브레이크 → 컨셉샷 2장(script.json에서 지정) 순으로 총 5장 순차 생성. 컨셉샷은 섹션 이미지로 직접 배치. 전체 시간의 약 50%.</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">hero_background.png</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">hero_with_typo.png</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">break_image.png</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">{concept_shot}.jpg ×2</span><span class="io-note">섹션 배치</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 6 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">script.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span><span class="io-note">아이콘 스타일</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node free">
+      <div class="node-hdr">
+        <div class="nbadge">6</div>
+        <div class="nname">Icon Mapper</div>
+        <span class="mtag">규칙 기반 (무비용)</span>
+        <div class="ncost"><span class="ncost-free">무료</span></div>
+      </div>
+      <div class="ndesc">섹션 키워드 → Phosphor 아이콘 자동 매핑. 동기 실행으로 즉시 완료. style-guide의 아이콘 weight(duotone 등) 반영. API 호출 없음.</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">icon-mapping.json</span><span class="io-note">섹션별 아이콘</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 7 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">refined-copy.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">icon-mapping.json</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">레이어 이미지 4장</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">스타일링샷 4장</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node sonnet">
+      <div class="node-hdr">
+        <div class="nbadge">7</div>
+        <div class="nname">HTML Builder</div>
+        <span class="mtag">Claude Sonnet</span>
+        <div class="ncost"><span class="ncost-normal">≈ 210원</span><span class="ncost-max">최대 630원 ×3</span></div>
+      </div>
+      <div class="ndesc">selectedTemplateId → 30종 템플릿 patternOverrides 적용(우선순위 1위) → Art Director layoutPatterns → 기본값 순으로 레이아웃 결정. 8종 패턴 + Google Fonts 14종. CSS 변수 시스템. 모바일 퍼스트.</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-html"></div><span class="io-name">index.html</span><span class="io-note">완성 상세페이지</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 8 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">script.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">project-brief.json</span><span class="io-note">필수·금지 기준</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node haiku">
+      <div class="node-hdr">
+        <div class="nbadge">8</div>
+        <div class="nname">QA 법적 검증</div>
+        <span class="mtag">Claude Haiku</span>
+        <div class="ncost"><span class="ncost-normal">≈ 3원</span><span class="ncost-max">최대 9원 ×3</span></div>
+      </div>
+      <div class="ndesc">카테고리별 법적 금지표현(식품광고법 등) + 필수 문구 포함 여부 + 플랫폼 규정 + 클라이언트 제한사항 위반 검사. severity: CRITICAL / HIGH / MEDIUM.</div>
+      <div class="nbadge-retry">↻ FAIL 시 최대 3회 루프 — CRITICAL 원인: required_content/legal → Script Writer 재실행 | restriction → Copy Writer 재실행</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">compliance-report.json</span><span class="io-note">PASS / 이슈 목록</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 9 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">style-guide.json</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">refined-copy.json</span></div>
+      <div class="io"><div class="dot d-html"></div><span class="io-name">index.html</span><span class="io-note">CSS·아이콘·폰트</span></div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">project-brief.json</span><span class="io-note">제한사항 기준</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node sonnet">
+      <div class="node-hdr">
+        <div class="nbadge">9</div>
+        <div class="nname">Validator 디자인 검증</div>
+        <span class="mtag">Claude Sonnet</span>
+        <div class="ncost"><span class="ncost-normal">≈ 46원</span><span class="ncost-max">최대 138원 ×3</span></div>
+      </div>
+      <div class="ndesc">아이콘 일관성·색상 팔레트·타이포·섹션 리듬·이모지 없음·톤 일치 6개 항목 1-5점 채점. 필수 문구 포함 여부는 raw.includes() 결정론적 사전 검사 후 프롬프트 주입 — AI 판단 오류 방지.</div>
+      <div class="nbadge-retry">↻ FAIL 시 Copy Writer 재실행 → HTML 재빌드 → QA 재검증</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-json"></div><span class="io-name">validation-report.json</span><span class="io-note">6개 항목 점수</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- STEP 10 -->
+  <div class="row">
+    <div class="io-col">
+      <div class="io-col-label">입력</div>
+      <div class="io"><div class="dot d-html"></div><span class="io-name">index.html</span><span class="io-note">HTML 생성 시 항상 실행</span></div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="node free">
+      <div class="node-hdr">
+        <div class="nbadge">10</div>
+        <div class="nname">Exporter</div>
+        <span class="mtag">브라우저 자동화 (무비용)</span>
+        <div class="ncost"><span class="ncost-free">무료</span></div>
+      </div>
+      <div class="ndesc">Mobile(430px × 2x = 860px) + PC(860px × 1x) 이중 캡처. 각각 전체 PNG · 섹션별 PNG · 단일 페이지 PDF 생성. designer 패키지(HTML+fonts+style-guide+layers). QA 결과 무관 — HTML 존재 시 항상 실행.</div>
+    </div>
+    <div class="row-arrow">›</div>
+    <div class="io-col">
+      <div class="io-col-label">출력</div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">mobile.zip</span><span class="io-note">PNG·섹션·PDF</span></div>
+      <div class="io"><div class="dot d-png"></div><span class="io-name">pc.zip</span><span class="io-note">PNG·섹션·PDF</span></div>
+      <div class="io"><div class="dot d-html"></div><span class="io-name">designer.zip</span><span class="io-note">수정 가능 패키지</span></div>
+    </div>
+  </div>
+  <div class="conn"></div>
+
+  <!-- COST SUMMARY -->
+  <div class="blk-out" style="margin-bottom:16px;">
+    <div class="blk-out-title">💰 1회 실행 비용 <span style="font-size:11px;font-weight:500;color:var(--muted);">실측 기반 · 2026.04.07 · 3회 실행 / 30장 생성</span></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr) 2px repeat(2,1fr);gap:10px;align-items:start;">
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">Claude 에이전트</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr><td style="color:var(--muted);padding:3px 0;">Art Director</td><td style="text-align:right;font-weight:700;color:var(--text);">~100원</td></tr>
+          <tr><td style="color:var(--muted);padding:3px 0;">Script Writer</td><td style="text-align:right;font-weight:700;color:var(--text);">~95원</td></tr>
+          <tr><td style="color:var(--muted);padding:3px 0;">Copy Writer</td><td style="text-align:right;font-weight:700;color:var(--text);">~100원</td></tr>
+          <tr><td style="color:var(--muted);padding:3px 0;">HTML Builder</td><td style="text-align:right;font-weight:700;color:var(--text);">~245원</td></tr>
+          <tr><td style="color:var(--muted);padding:3px 0;">QA + Validator</td><td style="text-align:right;font-weight:700;color:var(--text);">~60원</td></tr>
+          <tr style="border-top:1px solid var(--border);">
+            <td style="color:var(--text);font-weight:700;padding-top:6px;">소계</td>
+            <td style="text-align:right;font-weight:800;color:var(--c-sonnet);padding-top:6px;">~600원</td>
+          </tr>
+        </table>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5;">실측 $2 / 3회 실행<br>(개발 세션 제외 추정)</div>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">Gemini 이미지</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr><td style="color:var(--muted);padding:3px 0;">Styling Shots<br><span style="font-size:10px;">6장 × 267원</span></td><td style="text-align:right;font-weight:700;color:var(--text);">1,602원</td></tr>
+          <tr><td style="color:var(--muted);padding:3px 0;">Layer Image<br><span style="font-size:10px;">5장 × 267원</span></td><td style="text-align:right;font-weight:700;color:var(--text);">1,335원</td></tr>
+          <tr style="border-top:1px solid var(--border);">
+            <td style="color:var(--text);font-weight:700;padding-top:6px;">소계</td>
+            <td style="text-align:right;font-weight:800;color:var(--c-gemini);padding-top:6px;">2,937원</td>
+          </tr>
+        </table>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5;">실측 8,000원 / 30장<br>= 267원/장 (레퍼런스 토큰 포함)</div>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">정상 실행</div>
+        <div style="font-size:32px;font-weight:900;color:var(--text);line-height:1;margin-bottom:4px;">3,537원</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">재실행 없이 1회 통과 시</div>
+        <div style="font-size:10px;color:var(--dim);line-height:1.6;">
+          Claude: ~600원<br>
+          Gemini: ~2,937원<br>
+          기타: 무료
+        </div>
+      </div>
+
+      <div style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.2);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:#F87171;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">최대 실행</div>
+        <div style="font-size:32px;font-weight:900;color:#F87171;line-height:1;margin-bottom:4px;">~6,274원</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">모든 루프 3회 발동 시</div>
+        <div style="font-size:10px;color:var(--dim);line-height:1.6;">
+          Script Writer ×3: 285원<br>
+          Copy Writer ×3: 300원<br>
+          HTML Builder ×3: 735원<br>
+          QA ×3: 9원<br>
+          Validator ×3: 171원<br>
+          Gemini 11장: 2,937원<br>
+          Art Director: 100원
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">비용 구조</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
+              <span style="color:var(--muted);">이미지 생성 (Gemini)</span><span style="color:var(--c-gemini);font-weight:700;">83%</span>
+            </div>
+            <div style="background:var(--border);border-radius:2px;height:5px;"><div style="background:var(--c-gemini);width:83%;height:100%;border-radius:2px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
+              <span style="color:var(--muted);">Claude 에이전트</span><span style="color:var(--c-sonnet);font-weight:700;">17%</span>
+            </div>
+            <div style="background:var(--border);border-radius:2px;height:5px;"><div style="background:var(--c-sonnet);width:17%;height:100%;border-radius:2px;"></div></div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--dim);line-height:1.5;">이미지 단가 실측치가<br>예상의 6.7배 높음<br>(레퍼런스 이미지 토큰 영향)</div>
+      </div>
+
+      <!-- divider -->
+      <div style="background:var(--border);width:1px;align-self:stretch;margin:0 4px;"></div>
+
+      <div style="background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px;grid-column:span 1;">
+        <div style="font-size:10px;font-weight:700;color:var(--c-gemini);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">200명 API 비용</div>
+        <div style="font-size:24px;font-weight:900;color:var(--text);line-height:1;margin-bottom:4px;">706,600원</div>
+        <div style="font-size:11px;color:var(--muted);">200회 × 3,533원</div>
+        <div style="height:1px;background:var(--border);margin:10px 0;"></div>
+        <div style="font-size:10px;color:var(--dim);line-height:1.6;">
+          Gemini: 587,400원<br>
+          Claude: 120,000원<br>
+          인프라 제외
+        </div>
+      </div>
+
+      <div style="background:rgba(129,140,248,0.05);border:1px solid rgba(129,140,248,0.2);border-radius:10px;padding:14px;grid-column:span 1;">
+        <div style="font-size:10px;font-weight:700;color:var(--c-sonnet);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">실측 단가 근거</div>
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <tr><td style="color:var(--muted);padding:2px 0;">Gemini 실측</td><td style="text-align:right;color:var(--c-gemini);font-weight:700;">267원/장</td></tr>
+          <tr><td style="color:var(--muted);padding:2px 0;">Claude 실측</td><td style="text-align:right;color:var(--c-sonnet);font-weight:700;">~600원/회</td></tr>
+          <tr><td style="color:var(--muted);padding:2px 0;">1회 합계</td><td style="text-align:right;color:var(--text);font-weight:700;">3,537원</td></tr>
+          <tr style="border-top:1px solid var(--border);"><td style="color:var(--muted);padding-top:4px;">샘플</td><td style="text-align:right;color:var(--dim);padding-top:4px;">3회 / 30장</td></tr>
+        </table>
+        <div style="font-size:10px;color:var(--dim);margin-top:8px;">환율 1$ = 1,300원 기준</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SAAS PROJECTION -->
+  <div class="blk-out" style="margin-bottom:16px;">
+    <div class="blk-out-title">📊 SaaS 수익성 — 폐쇄형 200명 · 2026.04 ~ 12월</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:12px;align-items:start;">
+
+      <!-- 비용 구성 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;">총 원가 (연말까지)</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr>
+            <td style="color:var(--muted);padding:4px 0;">API (200회)</td>
+            <td style="text-align:right;font-weight:700;color:var(--text);">706,600원</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);padding:4px 0;">인프라 $40 × 9개월<br><span style="font-size:10px;">(Vercel + Supabase + 도메인)</span></td>
+            <td style="text-align:right;font-weight:700;color:var(--text);">468,000원</td>
+          </tr>
+          <tr style="border-top:1px solid var(--border);">
+            <td style="color:var(--text);font-weight:700;padding-top:8px;">총 원가</td>
+            <td style="text-align:right;font-weight:900;color:#F87171;padding-top:8px;font-size:15px;">1,174,600원</td>
+          </tr>
+        </table>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;">
+            <span style="color:var(--muted);">API 비용</span><span style="color:var(--c-gemini);">60%</span>
+          </div>
+          <div style="background:var(--border);border-radius:2px;height:4px;margin-bottom:6px;"><div style="background:var(--c-gemini);width:60%;height:100%;border-radius:2px;"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;">
+            <span style="color:var(--muted);">인프라 비용</span><span style="color:var(--c-haiku);">40%</span>
+          </div>
+          <div style="background:var(--border);border-radius:2px;height:4px;"><div style="background:var(--c-haiku);width:40%;height:100%;border-radius:2px;"></div></div>
+        </div>
+      </div>
+
+      <!-- 인프라 명세 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;">인프라 명세</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr><td style="color:var(--muted);padding:4px 0;">Vercel Pro</td><td style="text-align:right;color:var(--text);">$20/월</td></tr>
+          <tr><td style="color:var(--muted);padding:4px 0;">Supabase Pro</td><td style="text-align:right;color:var(--text);">$25/월</td></tr>
+          <tr><td style="color:var(--muted);padding:4px 0;">도메인</td><td style="text-align:right;color:var(--text);">~$5/월</td></tr>
+          <tr style="border-top:1px solid var(--border);">
+            <td style="color:var(--text);font-weight:700;padding-top:6px;">합계</td>
+            <td style="text-align:right;font-weight:800;color:var(--c-haiku);padding-top:6px;">~$40/월</td>
+          </tr>
+        </table>
+        <div style="margin-top:12px;padding:8px;background:rgba(251,211,141,0.06);border:1px solid rgba(251,211,141,0.15);border-radius:7px;">
+          <div style="font-size:10px;color:var(--muted);line-height:1.6;">
+            운영 기간: 9개월<br>
+            2026.04 ~ 2026.12<br>
+            $40 × 9 × 1,300원 = <span style="color:var(--c-haiku);font-weight:700;">468,000원</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 수익 시나리오 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;">
+        <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;">판매가 시나리오 (200명 × 1회)</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">판매가</div>
+            <div style="font-size:20px;font-weight:900;color:var(--text);">3만원</div>
+            <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;">매출</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">6,000,000원</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;">순이익</div>
+            <div style="font-size:15px;font-weight:900;color:var(--c-gemini);">4,825,400원</div>
+            <div style="margin-top:6px;background:rgba(52,211,153,0.1);border-radius:4px;padding:3px 6px;">
+              <span style="font-size:11px;font-weight:800;color:var(--c-gemini);">마진 80%</span>
+            </div>
+          </div>
+
+          <div style="background:var(--surface);border:2px solid rgba(129,140,248,0.4);border-radius:8px;padding:12px;text-align:center;position:relative;">
+            <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#4F46E5;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;">추천</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">판매가</div>
+            <div style="font-size:20px;font-weight:900;color:var(--c-sonnet);">5만원</div>
+            <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;">매출</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">10,000,000원</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;">순이익</div>
+            <div style="font-size:15px;font-weight:900;color:var(--c-gemini);">8,825,400원</div>
+            <div style="margin-top:6px;background:rgba(129,140,248,0.1);border-radius:4px;padding:3px 6px;">
+              <span style="font-size:11px;font-weight:800;color:var(--c-sonnet);">마진 88%</span>
+            </div>
+          </div>
+
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">판매가</div>
+            <div style="font-size:20px;font-weight:900;color:var(--text);">10만원</div>
+            <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;">매출</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">20,000,000원</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;">순이익</div>
+            <div style="font-size:15px;font-weight:900;color:var(--c-gemini);">18,825,400원</div>
+            <div style="margin-top:6px;background:rgba(52,211,153,0.1);border-radius:4px;padding:3px 6px;">
+              <span style="font-size:11px;font-weight:800;color:var(--c-gemini);">마진 94%</span>
+            </div>
+          </div>
+
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.12);border-radius:7px;font-size:10px;color:var(--dim);line-height:1.6;">
+          총 원가 1,174,600원 기준 · API $6.15 + 인프라 $360 = 총 $366.15 · 환율 1,300원/$
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FINAL OUTPUT -->
+  <div class="blk-out">
+    <div class="blk-out-title">🎉 최종 산출물 (5_export/)</div>
+    <div class="out-grid">
+      <div class="out-card">
+        <div class="out-card-icon">🌐</div>
+        <div class="out-card-name">index.html</div>
+        <div class="out-card-desc">반응형 상세페이지 HTML (수정 가능)</div>
+      </div>
+      <div class="out-card">
+        <div class="out-card-icon">📱</div>
+        <div class="out-card-name">mobile.zip</div>
+        <div class="out-card-desc">Mobile PNG(860px) · 섹션별 PNG · 단일 PDF — 430px×2x 캡처</div>
+      </div>
+      <div class="out-card">
+        <div class="out-card-icon">🖥</div>
+        <div class="out-card-name">pc.zip</div>
+        <div class="out-card-desc">PC PNG(860px) · 섹션별 PNG · 단일 PDF — 860px×1x 캡처</div>
+      </div>
+      <div class="out-card">
+        <div class="out-card-icon">🎨</div>
+        <div class="out-card-name">designer.zip</div>
+        <div class="out-card-desc">HTML + fonts + style-guide.json + layers/ (수정 가능 패키지)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CHANGELOG -->
+<div class="blk-out" style="margin-top:16px;margin-bottom:16px;">
+  <div class="blk-out-title">📋 변경 이력 <span style="font-size:11px;font-weight:500;color:var(--muted);">2026.04.08 — v2.2</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+    <div style="background:var(--surface2);border:1px solid rgba(52,211,153,0.3);border-radius:10px;padding:14px;">
+      <div style="font-size:10px;font-weight:700;color:var(--c-gemini);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">v2.2 — 2026.04.08 · Exporter · PDF</div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.7;">
+        <div style="margin-bottom:4px;">✅ <strong style="color:var(--text);">Exporter 에이전트</strong> — Mobile+PC 이중 캡처, designer 패키지, ZIP 3개</div>
+        <div style="margin-bottom:4px;">✅ <strong style="color:var(--text);">PDF 단일 페이지</strong> — CSS 픽셀 기준(dpr 미적용), +60px 버퍼</div>
+        <div style="margin-bottom:4px;">✅ <strong style="color:var(--text);">story-bg 수정</strong> — min-height:auto 인라인 (html-builder) + CSS 주입 (레거시)</div>
+        <div>✅ <strong style="color:var(--text);">PM 통합</strong> — QA 결과 무관 HTML 존재 시 항상 실행</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+      <div style="font-size:10px;font-weight:700;color:var(--dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">v2.1 — 2026.04.07 · 이전 변경</div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.7;opacity:0.7;">
+        <div style="margin-bottom:4px;">✅ 템플릿 시스템 30종 (식품·뷰티·전자 각 10종)</div>
+        <div style="margin-bottom:4px;">✅ Validator 결정론 — raw.includes() 사전 검사</div>
+        <div style="margin-bottom:4px;">✅ 이미지 8000px 오류 수정</div>
+        <div style="margin-bottom:4px;">✅ Styling Shots 4장 → 6장</div>
+        <div>✅ Layer Image 컨셉샷 2장 추가 (총 5장)</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- PENDING TASKS -->
+<div class="blk-out" style="margin-bottom:16px;">
+  <div class="blk-out-title">🚧 다음 작업 <span style="font-size:11px;font-weight:500;color:var(--muted);">계획 수립 완료 · 미구현</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+
+    <!-- P0: 웹앱 개발 -->
+    <div style="background:var(--surface2);border:2px solid rgba(248,113,113,0.4);border-radius:10px;padding:14px;position:relative;">
+      <div style="position:absolute;top:-9px;left:14px;background:#dc2626;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;">P0 · 최우선</div>
+      <div style="font-size:10px;font-weight:700;color:#F87171;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">웹앱 개발 (기업 + 관리자)</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">
+        <div style="margin-bottom:3px;color:var(--text);font-weight:600;">기업 웹앱</div>
+        <div style="margin-bottom:3px;">• 폐쇄형 로그인 (초대 코드)</div>
+        <div style="margin-bottom:3px;">• 정보 입력 폼 + 이미지 업로드</div>
+        <div style="margin-bottom:3px;">• 파이프라인 실행 + 진행 상태</div>
+        <div style="margin-bottom:6px;">• 결과물 미리보기 + 다운로드</div>
+        <div style="margin-bottom:3px;color:var(--text);font-weight:600;">관리자 웹앱</div>
+        <div style="margin-bottom:3px;">• 기업 목록 + 사용 현황</div>
+        <div>• 결과물 검수 + 재생성 트리거</div>
+      </div>
+    </div>
+
+    <!-- P1: 영상제작 -->
+    <div style="background:var(--surface2);border:1px solid rgba(52,211,153,0.3);border-radius:10px;padding:14px;position:relative;">
+      <div style="position:absolute;top:-9px;left:14px;background:#059669;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;">P1 · 보류 중</div>
+      <div style="font-size:10px;font-weight:700;color:var(--c-gemini);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">영상제작 추가 (Veo)</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">
+        <div style="margin-bottom:3px;">• Veo 2/3 API 기반 제품 영상</div>
+        <div style="margin-bottom:3px;">• 스타일링샷·레이어 이미지 소스</div>
+        <div style="margin-bottom:3px;">• 15~30초 MP4 출력</div>
+        <div style="margin-bottom:3px;">• decisions.md D-보류 상태</div>
+        <div>• 웹앱 완성 후 추가 예정</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid rgba(251,211,141,0.25);border-radius:10px;padding:14px;">
+      <div style="font-size:10px;font-weight:700;color:var(--c-haiku);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">S. 한글 폰트 확장</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">
+        <div style="margin-bottom:3px;">• Google Fonts 13종 → 27종</div>
+        <div style="margin-bottom:3px;">• Gothic A1 (9단계), Sunflower, Song Myung, Stylish 등</div>
+        <div style="margin-bottom:3px;">• 손글씨·디스플레이 10종 추가</div>
+        <div style="margin-bottom:3px;">• 자체 호스팅 지원 (파일 제공 시)</div>
+        <div>• Art Director 폰트 그룹별 다양성 규칙</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid rgba(129,140,248,0.25);border-radius:10px;padding:14px;">
+      <div style="font-size:10px;font-weight:700;color:var(--c-sonnet);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">A~J. 모바일 CSS 개선</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">
+        <div style="margin-bottom:3px;">• body 18px+, h2 32px+, h3 22px+</div>
+        <div style="margin-bottom:3px;">• light/dark 텍스트 대비 강제</div>
+        <div style="margin-bottom:3px;">• Split 모바일 세로 스택</div>
+        <div style="margin-bottom:3px;">• Grid 카드 480px 이하 1열</div>
+        <div style="margin-bottom:3px;">• Steps 세로 배치 (최대 4단계)</div>
+        <div>• CTA 주문버튼 제거</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:14px;">
+      <div style="font-size:10px;font-weight:700;color:var(--c-gemini);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">P. 레이아웃 패턴 확장</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.65;">
+        <div style="margin-bottom:3px;">• 8종 → 16종 패턴</div>
+        <div style="margin-bottom:3px;">• masonry-gallery, split-text-heavy</div>
+        <div style="margin-bottom:3px;">• centered-statement, icon-feature-row</div>
+        <div style="margin-bottom:3px;">• comparison-table, timeline-vertical</div>
+        <div style="margin-bottom:3px;">• full-bleed-video-still</div>
+        <div>• testimonial-quote</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--bd-sonnet)"></div>Claude Sonnet</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--bd-gemini)"></div>Gemini Pro Image</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--bd-haiku)"></div>Claude Haiku</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--bd-free)"></div>규칙 기반 (무비용)</div>
+  </div>
+  <div>DetailAI Pipeline v2.2 · 에이전트 10개 · 이미지 11장 · 템플릿 30종 · 자동 검증 루프 최대 3회 · 1회 단가 ~3,537원 (실측) · 2026.04.08</div>
+</div>
+
+</body>
+</html>

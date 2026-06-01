@@ -1,8 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { ShootingList } from '@/components/photography/ShootingList'
-import { GenerateStylingButton } from '@/components/photography/GenerateStylingButton'
+import { StylingPromptPanel } from '@/components/photography/StylingPromptPanel'
+import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { StylingPromptsOutput } from '@/agents/styling-shots'
 
 export default async function PhotographyPage({
   params,
@@ -26,6 +28,15 @@ export default async function PhotographyPage({
     .eq('project_id', id)
     .order('photo_type')
 
+  // 스타일링샷 프롬프트 JSON 로드 — 없으면 null (try/catch로 안전 처리)
+  let stylingPrompts: StylingPromptsOutput | null = null
+  try {
+    const buffer = await downloadFromStorage(`projects/${id}/planning/styling-final-prompts.json`)
+    stylingPrompts = JSON.parse(buffer.toString('utf8')) as StylingPromptsOutput
+  } catch {
+    // 파일 미존재 or 다운로드 실패 시 null 유지 — 패널이 "준비 중" 안내 표시
+  }
+
   return (
     <div>
       <Link href="/photography" className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
@@ -35,14 +46,16 @@ export default async function PhotographyPage({
         촬영 관리 목록
       </Link>
 
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
-          <p className="text-sm text-text-tertiary mt-1">
-            {(project.platforms as any)?.name} · {project.category} · 촬영 리스트 및 사진 업로드
-          </p>
-        </div>
-        <GenerateStylingButton projectId={id} />
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
+        <p className="text-sm text-text-tertiary mt-1">
+          {(project.platforms as any)?.name} · {project.category} · 촬영 리스트 및 사진 업로드
+        </p>
+      </div>
+
+      {/* 스타일링샷 프롬프트 패널 (운영자가 외부 모델에 복사) */}
+      <div className="mb-6">
+        <StylingPromptPanel data={stylingPrompts} />
       </div>
 
       <div className="bg-surface rounded-xl border border-border p-6">

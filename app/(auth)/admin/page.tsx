@@ -1,12 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { adminLogin } from '@/app/actions/admin-login'
 import { useRouter } from 'next/navigation'
-
-// 관리자 ID → Supabase 이메일 매핑
-const ADMIN_ID_MAP: Record<string, string> = {
-  admin: 'admin@kompa.kr',
-}
 
 export default function AdminLoginPage() {
   const [adminId, setAdminId] = useState('')
@@ -20,30 +15,17 @@ export default function AdminLoginPage() {
     setLoading(true)
     setError('')
 
-    const email = ADMIN_ID_MAP[adminId.trim().toLowerCase()]
-    if (!email) {
-      setError('등록되지 않은 관리자 ID입니다.')
-      setLoading(false)
-      return
-    }
-
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    const result = await adminLogin(adminId, password)
     setLoading(false)
 
-    if (error) {
-      setError('아이디 또는 비밀번호가 올바르지 않습니다.')
+    if (result.error) {
+      setError(result.error)
       return
     }
 
-    const role = data.user?.user_metadata?.role ?? 'client'
-    if (role === 'client') {
-      await supabase.auth.signOut()
-      setError('관리자 계정이 아닙니다.')
-      return
+    if (result.redirectTo) {
+      router.push(result.redirectTo)
     }
-
-    router.push('/planner')
   }
 
   return (

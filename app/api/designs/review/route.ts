@@ -1,8 +1,19 @@
+import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { transitionStatus } from '@/lib/status-machine'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
+  // 인증 + 디자이너/관리자 권한 검증
+  const authClient = await createClient()
+  const { data: { user } } = await authClient.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const role = user.user_metadata?.role as string | undefined
+  if (!role || !['designer', 'admin'].includes(role)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const { project_id, design_id, action, notes, output_url } = await request.json()
   const supabase = createServiceClient()
 

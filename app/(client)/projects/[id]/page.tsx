@@ -52,7 +52,7 @@ export default async function ClientProjectDetailPage({
   const status = project.status as ProjectStatus
   const showDesign = statusIndex(status) >= statusIndex('design_review')
 
-  let design = null
+  let design: { id: string; preview_url: string | null; output_url: string | null } | null = null
   if (showDesign) {
     const { data } = await service
       .from('designs')
@@ -63,6 +63,13 @@ export default async function ClientProjectDetailPage({
       .single()
     design = data
   }
+
+  // output_url JSON 파싱 (mobile_zip, pc_zip, designer_zip)
+  let downloadUrls: { mobile_zip?: string; pc_zip?: string; designer_zip?: string } = {}
+  if (design?.output_url) {
+    try { downloadUrls = JSON.parse(design.output_url) } catch { /* not JSON, legacy URL */ }
+  }
+  const hasDownloads = statusIndex(status) >= statusIndex('design_approved') && Object.keys(downloadUrls).length > 0
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const platformName = (project.platforms as any)?.name ?? '-'
@@ -121,6 +128,45 @@ export default async function ClientProjectDetailPage({
               <p className="text-text-tertiary text-sm">담당자가 제작 중입니다. 잠시만 기다려주세요.</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* 다운로드 */}
+      {hasDownloads && (
+        <div className="bg-surface rounded-xl border border-border p-6">
+          <h2 className="text-sm font-semibold text-text-secondary mb-4">결과물 다운로드</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {downloadUrls.mobile_zip && (
+              <a href={downloadUrls.mobile_zip} download
+                className="flex items-center gap-3 px-4 py-3 bg-primary-50 border border-primary-200 rounded-xl hover:bg-primary-100 transition-colors">
+                <span className="text-xl">📱</span>
+                <div>
+                  <div className="text-sm font-semibold text-text-primary">모바일용</div>
+                  <div className="text-xs text-text-tertiary">PNG + PDF (mobile.zip)</div>
+                </div>
+              </a>
+            )}
+            {downloadUrls.pc_zip && (
+              <a href={downloadUrls.pc_zip} download
+                className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 transition-colors">
+                <span className="text-xl">🖥</span>
+                <div>
+                  <div className="text-sm font-semibold text-text-primary">PC용</div>
+                  <div className="text-xs text-text-tertiary">PNG + PDF (pc.zip)</div>
+                </div>
+              </a>
+            )}
+            {downloadUrls.designer_zip && (
+              <a href={downloadUrls.designer_zip} download
+                className="flex items-center gap-3 px-4 py-3 bg-violet-50 border border-violet-200 rounded-xl hover:bg-violet-100 transition-colors">
+                <span className="text-xl">🎨</span>
+                <div>
+                  <div className="text-sm font-semibold text-text-primary">수정용</div>
+                  <div className="text-xs text-text-tertiary">HTML + 폰트 (designer.zip)</div>
+                </div>
+              </a>
+            )}
+          </div>
         </div>
       )}
 
