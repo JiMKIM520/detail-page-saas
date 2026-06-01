@@ -55,9 +55,9 @@ async function processProject(pid: string, name: string, keywords: RegExp): Prom
   log('  초안 생성 중(Gemini, 수 분)...')
   await generateDesignForProject(pid)
   const { data: proj2 } = await s.from('projects').select('status').eq('id', pid).single()
-  const { data: d } = await s.from('designs').select('id,preview_url,preview_pdf_url,section_images')
+  const { data: d } = await (s.from('designs') as any).select('id,preview_url,preview_pdf_url,section_images')
     .eq('project_id', pid).order('created_at', { ascending: false }).limit(1).single()
-  const si = (d?.section_images as unknown[]) ?? []
+  const si = ((d as any)?.section_images as unknown[]) ?? []
   log(`  초안: status=${proj2?.status} 섹션이미지=${si.length}장 PDF=${d?.preview_pdf_url ? 'O' : 'X'}`)
 
   if (proj2?.status === 'design_review' && si.length > 0) {

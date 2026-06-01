@@ -15,6 +15,21 @@ import type { StylingPromptsJson, StylingShot, AgentResult } from './types'
 import * as fs from 'fs'
 import * as path from 'path'
 
+/**
+ * buildShotPrompt에 전달하는 프로젝트 메타.
+ * 모두 optional — 미전달 시 해당 강화 요소만 생략.
+ */
+export interface ShotMeta {
+  /** 카테고리 슬러그. 예: "food", "beauty" */
+  category?: string
+  /** 플랫폼 슬러그. 예: "smartstore", "coupang" */
+  platform?: string
+  /** style-guide의 primary brand color HEX. 예: "#C8A96E" */
+  brandColorHex?: string
+  /** 출력 비율. 기본값: "3:4" */
+  aspectRatio?: string
+}
+
 // 항상 적용되는 비제품-특화 기본 보존 규칙
 const BASE_PRESERVATION_RULES = [
   'DO NOT redraw, reimagine, or reinterpret the product in any way. Treat it as a fixed object placed into a new scene.',
@@ -37,16 +52,56 @@ function buildPreservationPrefix(rules: string[]): string {
   return '[ABSOLUTE RULES]\n' + allRules.join('\n') + '\n\n'
 }
 
-export function buildShotPrompt(shot: StylingShot, rules: string[]): string {
-  return `${buildPreservationPrefix(rules)}
+// 카테고리별 역할 선언 (영문 — 이미지 모델용)
+const CATEGORY_ROLE: Record<string, string> = {
+  food: 'professional Korean e-commerce food photographer',
+  'health-food': 'professional Korean e-commerce health supplement photographer',
+  beauty: 'professional Korean e-commerce beauty product photographer',
+  fashion: 'professional Korean e-commerce fashion photographer',
+  living: 'professional Korean e-commerce lifestyle photographer',
+  electronics: 'professional Korean e-commerce electronics photographer',
+  pet: 'professional Korean e-commerce pet product photographer',
+}
+
+export function buildShotPrompt(shot: StylingShot, rules: string[], meta?: ShotMeta): string {
+  const role = (meta?.category ? CATEGORY_ROLE[meta.category] : undefined)
+    ?? 'professional Korean e-commerce product photographer'
+  const aspectRatio = meta?.aspectRatio ?? '3:4'
+
+  // P1: 브랜드 컬러 힌트 (선택적 — HEX 있을 때만)
+  const brandColorLine = meta?.brandColorHex
+    ? `Brand color reference (use as tonal accent, not forced): ${meta.brandColorHex}.`
+    : ''
+
+  // P2: 색온도
+  const colorTempLine = 'Color temperature: 3200–4500K warm natural light.'
+
+  const positiveBody = `${buildPreservationPrefix(rules)}
+[ROLE] You are a ${role}.
+
+[OUTPUT SPECS]
+Output aspect ratio: ${aspectRatio} (portrait), do not crop subject.
+Leave 30% of top OR bottom edge as clean negative space for text overlay.
+${brandColorLine}
+
 [Composition: ${shot.composition}]
+Rule of thirds: place subject at one of the four intersection points.
+Props: maximum 3 items (odd number), each no larger than 1/3 of product size, brand-relevant.
+Actual props used: ${shot.props.join(', ')}.
+
+[Scene]
 ${shot.surface}.
-Props: ${shot.props.join(', ')}.
 Lighting: ${shot.lighting}.
+${colorTempLine}
 Camera: ${shot.camera}.
 Mood: ${shot.mood}.
-Studio background only — NO real location (no cafe, no kitchen, no outdoor).
-FORBIDDEN words in rendering: "perfect", "clean", "symmetrical", "4K", "hyperrealistic".`
+Studio background only — NO real location (no cafe, no kitchen, no outdoor).`
+
+  const negativeBlock = `
+[NEGATIVE]
+text, watermark, logo, brand name, busy background, symmetrical composition, artificial flash, 3D render, CGI, hyperrealistic, perfect, clean, 4K, overexposed, deep-fried colors, plastic look, staged symmetry, kitchen, cafe, outdoor, extra limbs, duplicate product.`
+
+  return positiveBody + negativeBlock
 }
 
 /** 운영자 admin 화면에서 읽는 프롬프트 출력 구조. */
@@ -72,12 +127,14 @@ export interface StylingPromptsOutput {
  * Art Director가 만든 shot 메타데이터 → 완성 프롬프트로 조립 → JSON 저장.
  *
  * @param nukkiPaths 운영자가 외부 모델에 첨부할 누끼컷 (이미지 생성 안 하지만 가이드로 기록)
+ * @param meta 프로젝트 메타 — 비율·여백·역할 강화에 사용 (optional)
  * @returns 이미지 경로는 빈 배열 (운영자가 외부 모델로 직접 추출)
  */
 export async function runStylingShots(
   stylingPrompts: StylingPromptsJson,
   nukkiPaths: string[],
-  outputDir: string
+  outputDir: string,
+  meta?: ShotMeta
 ): Promise<AgentResult<string[]>> {
   const elapsed = timer()
   console.log(`[Styling Shots] 프롬프트 출력 모드 — ${stylingPrompts.shots.length}개 (API 호출 없음)`)
@@ -87,7 +144,7 @@ export async function runStylingShots(
       name: shot.name,
       filename: shot.filename,
       composition: shot.composition,
-      finalPrompt: buildShotPrompt(shot, stylingPrompts.productPreservationRules),
+      finalPrompt: buildShotPrompt(shot, stylingPrompts.productPreservationRules, meta),
     }))
 
     const output: StylingPromptsOutput = {

@@ -412,7 +412,11 @@ export async function runPipeline(input: ProjectInput): Promise<PipelineResult> 
   // ── Step 4: 병렬 — Styling Shots + Copy Writer ──
   console.log('\n[PM] Step 4: 병렬 실행 (Styling Shots + Copy Writer)')
   const [stylingResult, copyResult] = await Promise.all([
-    runStylingShots(stylingPrompts, input.nukkiPaths, dirs.stylingShots),
+    runStylingShots(stylingPrompts, input.nukkiPaths, dirs.stylingShots, {
+      category: brief.category,
+      platform: brief.platform,
+      brandColorHex: styleGuide.colors.primary,
+    }),
     runCopyWriter(script, styleGuide, dirs.base, brief),
   ])
   stages.stylingShots = { success: stylingResult.success, durationMs: stylingResult.durationMs, error: stylingResult.error }
@@ -463,6 +467,25 @@ export async function runPipeline(input: ProjectInput): Promise<PipelineResult> 
   stylingFiles.forEach((shotPath, i) => {
     allImagePaths[`shot${i}`] = shotPath
   })
+  // v6 fallback: 스타일링샷이 없을 때(외부 모델 워크플로) 누끼컷을 shot0~N 으로 채운다.
+  // hero 섹션은 heroWithTypo 키를 우선 사용하므로 shot0을 heroWithTypo 로도 매핑.
+  // 실제 스타일링샷이 업로드된 뒤 재빌드하면 덮어써지므로 부작용 없음.
+  if (stylingFiles.length === 0 && input.nukkiPaths.length > 0) {
+    console.log(`[PM] v6 이미지 fallback: 누끼컷 ${input.nukkiPaths.length}장 → shot0~N + heroWithTypo`)
+    input.nukkiPaths.forEach((p, i) => {
+      allImagePaths[`shot${i}`] = p
+    })
+    if (!allImagePaths.heroWithTypo) {
+      allImagePaths.heroWithTypo = input.nukkiPaths[0]
+    }
+    if (!allImagePaths.heroBg) {
+      allImagePaths.heroBg = input.nukkiPaths[0]
+      allImagePaths.heroBackground = input.nukkiPaths[0]
+    }
+    if (!allImagePaths.breakImage && input.nukkiPaths.length > 1) {
+      allImagePaths.breakImage = input.nukkiPaths[1]
+    }
+  }
 
   let htmlPath: string | undefined
   if (iconResult.data && refinedCopy) {
@@ -755,7 +778,11 @@ export async function runPlanningPipeline(input: ProjectInput): Promise<Planning
 
   // ── Step 5: Styling Shots (프롬프트 출력 — Gemini 호출 없음) ──
   console.log('\n[PM/기획] Step 5: 스타일링샷 프롬프트 출력')
-  const stylingResult = await runStylingShots(stylingPrompts, input.nukkiPaths, dirs.stylingShots)
+  const stylingResult = await runStylingShots(stylingPrompts, input.nukkiPaths, dirs.stylingShots, {
+    category: brief.category,
+    platform: brief.platform,
+    brandColorHex: styleGuide.colors.primary,
+  })
   stages.stylingShots = { success: stylingResult.success, durationMs: stylingResult.durationMs, error: stylingResult.error }
   if (stylingResult.success) {
     artifacts.stylingPrompts = `${dirs.stylingShots}/styling-final-prompts.json`

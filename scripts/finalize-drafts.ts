@@ -23,9 +23,9 @@ async function main(): Promise<void> {
       log('  초안 생성 중(Gemini, 수 분)...')
       await generateDesignForProject(t.id)
       const { data: p } = await s.from('projects').select('status').eq('id', t.id).single()
-      const { data: d } = await s.from('designs').select('preview_url,preview_pdf_url,section_images')
+      const { data: d } = await (s.from('designs') as any).select('preview_url,preview_pdf_url,section_images')
         .eq('project_id', t.id).order('created_at', { ascending: false }).limit(1).single()
-      const si = (d?.section_images as unknown[]) ?? []
+      const si = ((d as any)?.section_images as unknown[]) ?? []
       const r = p?.status === 'design_review' && si.length > 0
         ? `${t.name}: ✅ design_review, 섹션 ${si.length}장${d?.preview_pdf_url ? '+PDF' : ''}`
         : `${t.name}: ⚠️ status=${p?.status}, 섹션 ${si.length}`

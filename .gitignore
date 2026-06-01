@@ -65,3 +65,7 @@ demo-v8/
 # 임시 테스트 스크립트 (운영 UI 테스트용 — 배포 후 정리)
 scripts/create-test-admin.ts
 scripts/test-login.ts
+
+# 파이프라인 임시 누끼
+tmp_nukki/
+tmp_nukki_planning/
