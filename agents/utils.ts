@@ -90,12 +90,14 @@ export async function loadImageAsBase64(
   width = 1200,
   format: 'jpeg' | 'png' = 'jpeg'
 ): Promise<string> {
-  // Claude API 최대 허용 해상도: 8000px — width/height 양방향 제한
-  const maxHeight = 4000
+  // Claude many-image 요청은 각 이미지의 모든 차원이 ≤2000px여야 함 (초과 시 400 invalid_request_error).
+  // 권장 최대는 1568px(그 이상은 Claude가 자동 축소 → 토큰만 낭비)이므로 가로·세로 모두 1568로 cap.
+  const cap = 1568
+  const w = Math.min(width, cap)
   if (format === 'png') {
-    return (await sharp(imagePath).resize(width, maxHeight, { fit: 'inside' }).png().toBuffer()).toString('base64')
+    return (await sharp(imagePath).resize(w, cap, { fit: 'inside' }).png().toBuffer()).toString('base64')
   }
-  return (await sharp(imagePath).resize(width, maxHeight, { fit: 'inside' }).jpeg({ quality: 90 }).toBuffer()).toString('base64')
+  return (await sharp(imagePath).resize(w, cap, { fit: 'inside' }).jpeg({ quality: 90 }).toBuffer()).toString('base64')
 }
 
 export async function loadImagesAsBase64(

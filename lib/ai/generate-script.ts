@@ -1,3 +1,4 @@
+import sharp from 'sharp'
 import { createServiceClient } from '@/lib/supabase/service'
 import type { Json } from '@/lib/supabase/types'
 import { generateScript, generateScriptWithImages, type ImageInput } from './claude'
@@ -21,6 +22,23 @@ async function fetchUrlContent(url: string): Promise<string | null> {
 
 const IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
 
+// Claude Vision 전송 전 이미지 정규화 설정.
+// 원본 인테이크 이미지(예: 6016×4016 PNG 10MB+)를 그대로 base64로 보내면
+// 요청 크기 한도(~32MB)를 초과해 413 request_too_large가 발생한다.
+// 1568px는 Anthropic 권장 비전 해상도(이 이상은 다운샘플되어 토큰만 낭비).
+const MAX_VISION_DIMENSION = 1568
+const MAX_VISION_IMAGES = 15
+
+// 인테이크 이미지를 1568px 이내 JPEG로 리사이즈/재압축하여 base64 반환.
+async function compressForVision(buffer: Buffer): Promise<string> {
+  const out = await sharp(buffer)
+    .rotate() // EXIF 방향 보정
+    .resize(MAX_VISION_DIMENSION, MAX_VISION_DIMENSION, { fit: 'inside', withoutEnlargement: true })
+    .jpeg({ quality: 80 })
+    .toBuffer()
+  return out.toString('base64')
+}
+
 const FILE_TYPE_LABELS: Record<string, string> = {
   product_photo: '제품 사진',
   brochure: '제품 소개서/카탈로그',
@@ -42,6 +60,7 @@ async function fetchIntakeImages(supabase: ReturnType<typeof createServiceClient
   for (const file of files) {
     // PDF는 스킵 (이미지만 Vision에 전달)
     if (!file.mime_type || !IMAGE_MIME_TYPES.has(file.mime_type)) continue
+    if (images.length >= MAX_VISION_IMAGES) break
 
     const { data } = await supabase.storage
       .from('intake-files')
@@ -50,11 +69,20 @@ async function fetchIntakeImages(supabase: ReturnType<typeof createServiceClient
     if (!data) continue
 
     const buffer = Buffer.from(await data.arrayBuffer())
-    const base64 = buffer.toString('base64')
+
+    // 항상 1568px 이내 JPEG로 정규화 (원본 직송 시 413 발생).
+    // 압축 실패 시 해당 이미지는 건너뛴다(거대한 원본을 그대로 보내지 않음).
+    let base64: string
+    try {
+      base64 = await compressForVision(buffer)
+    } catch (err) {
+      console.warn(`[generate-script] 이미지 압축 실패, 건너뜀: ${file.file_name}`, err)
+      continue
+    }
 
     images.push({
       type: 'base64',
-      media_type: file.mime_type as ImageInput['media_type'],
+      media_type: 'image/jpeg',
       data: base64,
       label: `${FILE_TYPE_LABELS[file.file_type] || file.file_type} - ${file.file_name}`,
     })

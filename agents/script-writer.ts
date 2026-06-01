@@ -171,12 +171,15 @@ export async function runScriptWriter(
 
     const message = await anthropicClient.messages.create({
       model: MODELS.CLAUDE_SONNET,
-      max_tokens: 4096,
+      max_tokens: 16384,   // 4096은 한글 다섹션 스크립트에 부족 → 응답 잘림(Unterminated JSON) 유발
       system: systemPrompt,
       messages: [{ role: 'user', content: buildUserPrompt(brief, styleGuide, validationFeedback) }],
     })
 
     const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    if (message.stop_reason === 'max_tokens') {
+      console.warn('[Script Writer] ⚠️ 응답이 max_tokens로 잘림 — JSON 불완전 가능, max_tokens 추가 상향 필요')
+    }
     const script = parseJsonResponse<Script>(text)
 
     // JSON 저장

@@ -3,6 +3,8 @@ import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ReviewPanel } from '@/components/planner/ReviewPanel'
 import { DesignPlanView } from '@/components/planner/DesignPlanView'
 import { StartPlanningButton } from '@/components/planner/StartPlanningButton'
+import { ApprovePlanButton } from '@/components/planner/ApprovePlanButton'
+import { AssignPanel } from '@/components/admin/AssignPanel'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
@@ -114,7 +116,12 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
           ) : (project.status as ProjectStatus) === 'design_planning' ||
             (project.status as ProjectStatus) === 'design_plan_review' ||
             styleGuide ? (
-            <DesignPlanView styleGuide={styleGuide} />
+            <div className="space-y-4">
+              <DesignPlanView styleGuide={styleGuide} />
+              {(project.status as ProjectStatus) === 'design_plan_review' && (
+                <ApprovePlanButton projectId={id} />
+              )}
+            </div>
           ) : (
             <div className="bg-surface rounded-xl border border-border p-4">
               <p className="text-xs text-text-tertiary text-center py-4">
@@ -151,6 +158,7 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
           )}
         </div>
         <div className="space-y-4">
+          <AssignPanel projectId={id} plannerId={project.planner_id} designerId={project.designer_id} />
           <ReviewPanel projectId={id} scriptId={script?.id} />
 
           {clientComments && clientComments.length > 0 && (

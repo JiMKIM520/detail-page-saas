@@ -11,33 +11,55 @@ export function ReviewPanel({ projectId, scriptId }: ReviewPanelProps) {
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
   const [activeAction, setActiveAction] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   async function handleAction(action: 'approve' | 'regenerate') {
     setLoading(true)
     setActiveAction(action)
-    await fetch('/api/scripts/review', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ project_id: projectId, script_id: scriptId, action, notes }),
-    })
-    setLoading(false)
-    setActiveAction(null)
-    router.push('/planner')
+    setError(null)
+    try {
+      const res = await fetch('/api/scripts/review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project_id: projectId, script_id: scriptId, action, notes }),
+      })
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string }
+        throw new Error(data.error || `요청 실패 (${res.status})`)
+      }
+      // 승인 시 같은 화면에 '디자인 기획 시작' 버튼이 나타나도록 새로고침 (목록 이동 X)
+      router.refresh()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '처리 중 오류가 발생했습니다')
+    } finally {
+      setLoading(false)
+      setActiveAction(null)
+    }
   }
 
   async function handleAbTest() {
     if (!scriptId) return
     setLoading(true)
     setActiveAction('ab_test')
-    await fetch('/api/scripts/ab-test', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ project_id: projectId, script_id: scriptId }),
-    })
-    setLoading(false)
-    setActiveAction(null)
-    router.refresh()
+    setError(null)
+    try {
+      const res = await fetch('/api/scripts/ab-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project_id: projectId, script_id: scriptId }),
+      })
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string }
+        throw new Error(data.error || `요청 실패 (${res.status})`)
+      }
+      router.refresh()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '처리 중 오류가 발생했습니다')
+    } finally {
+      setLoading(false)
+      setActiveAction(null)
+    }
   }
 
   return (
@@ -55,13 +77,18 @@ export function ReviewPanel({ projectId, scriptId }: ReviewPanelProps) {
           className="w-full border border-border rounded-xl px-3 py-2.5 text-sm resize-none bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
         />
       </div>
+      {error && (
+        <div role="alert" className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-700">
+          {error}
+        </div>
+      )}
       <div className="space-y-2.5">
         <button onClick={() => handleAction('approve')} disabled={loading}
           className="w-full bg-emerald-600 text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-emerald-700 disabled:opacity-50 shadow-sm transition-all flex items-center justify-center gap-2">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
-          {activeAction === 'approve' ? '승인 처리 중...' : '승인 — 촬영 단계로 이동'}
+          {activeAction === 'approve' ? '승인 처리 중...' : '승인 — 디자인 기획으로'}
         </button>
         <button onClick={() => handleAction('regenerate')} disabled={loading}
           className="w-full bg-surface-active text-text-secondary rounded-xl py-2.5 text-sm font-semibold hover:bg-gray-200 disabled:opacity-50 transition-all flex items-center justify-center gap-2">

@@ -3,32 +3,35 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import type { ProjectStatus } from '@/lib/status-machine'
 import Link from 'next/link'
 
-export default async function PhotographyListPage() {
+export default async function StylingListPage() {
   const supabase = await createClient()
+  // v6: 디자인 기획 승인(prompt_ready) → 운영자가 스타일링샷 프롬프트로 이미지 추출 → photo_uploaded
   const { data: projects } = await supabase
     .from('projects')
     .select('*, platforms(name)')
-    .in('status', ['script_approved', 'photo_scheduled'])
+    .in('status', ['prompt_ready', 'photo_uploaded'])
     .order('created_at', { ascending: true })
 
-  const approvedCount = projects?.filter(p => p.status === 'script_approved').length ?? 0
-  const scheduledCount = projects?.filter(p => p.status === 'photo_scheduled').length ?? 0
+  const readyCount = projects?.filter(p => p.status === 'prompt_ready').length ?? 0
+  const uploadedCount = projects?.filter(p => p.status === 'photo_uploaded').length ?? 0
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-text-primary">촬영 관리</h1>
-        <p className="text-sm text-text-tertiary mt-1">승인된 스크립트의 촬영 일정을 관리하세요</p>
+        <h1 className="text-2xl font-bold text-text-primary">스타일링샷 제작</h1>
+        <p className="text-sm text-text-tertiary mt-1">
+          기획안에 맞춘 스타일링샷 프롬프트를 확인하고, 외부 모델로 추출한 이미지를 업로드하세요
+        </p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-surface rounded-xl border border-border p-4">
-          <p className="text-sm text-text-tertiary">촬영 대기</p>
-          <p className="text-2xl font-bold text-emerald-600 mt-1">{approvedCount}</p>
+          <p className="text-sm text-text-tertiary">프롬프트 준비</p>
+          <p className="text-2xl font-bold text-emerald-600 mt-1">{readyCount}</p>
         </div>
         <div className="bg-surface rounded-xl border border-border p-4">
-          <p className="text-sm text-text-tertiary">촬영 예정</p>
-          <p className="text-2xl font-bold text-blue-500 mt-1">{scheduledCount}</p>
+          <p className="text-sm text-text-tertiary">이미지 업로드 완료</p>
+          <p className="text-2xl font-bold text-blue-500 mt-1">{uploadedCount}</p>
         </div>
         <div className="bg-surface rounded-xl border border-border p-4">
           <p className="text-sm text-text-tertiary">전체</p>
@@ -61,11 +64,11 @@ export default async function PhotographyListPage() {
           <div className="text-center py-20 bg-surface rounded-2xl border border-border border-dashed">
             <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
               <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
               </svg>
             </div>
-            <p className="text-text-tertiary">촬영 대기 없음</p>
+            <p className="text-text-tertiary">스타일링샷 제작 대기 없음</p>
+            <p className="text-xs text-text-tertiary mt-1">디자인 기획이 승인되면 여기에 표시됩니다</p>
           </div>
         )}
       </div>

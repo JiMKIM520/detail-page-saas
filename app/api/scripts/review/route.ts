@@ -17,31 +17,11 @@ export async function POST(request: Request) {
   const supabase = createServiceClient()
 
   if (action === 'approve') {
+    // v6: 승인 → script_approved 까지만. 디자인 기획은 별도 단계('디자인 기획 시작' 버튼)에서 진행.
+    // (v5의 촬영 리스트 자동 생성 + photo_scheduled 전이는 제거 — script_approved→design_planning 흐름과 충돌해 전이가 실패했음)
     await supabase.from('scripts').update({ planner_status: 'approved', planner_notes: notes })
       .eq('id', script_id)
     await transitionStatus(supabase, project_id, 'script_approved', { note: '기획자 승인' })
-
-    // 촬영 리스트 자동 생성
-    const { data: script } = await supabase
-      .from('scripts').select('content')
-      .eq('id', script_id).single()
-
-    if (script) {
-      const content = script.content as any
-      const reqs = content.shooting_requirements
-      if (reqs?.nukki_shots && reqs?.styling_shots) {
-        const photoItems = [
-          ...reqs.nukki_shots.map((shot: string) => ({
-            project_id, photo_type: 'nukki', shooting_list_item: shot, storage_path: '',
-          })),
-          ...reqs.styling_shots.map((shot: string) => ({
-            project_id, photo_type: 'styling', shooting_list_item: shot, storage_path: '',
-          })),
-        ]
-        await supabase.from('photos').insert(photoItems)
-        await transitionStatus(supabase, project_id, 'photo_scheduled', { note: '촬영 리스트 자동 생성' })
-      }
-    }
   } else if (action === 'regenerate') {
     await supabase.from('scripts').update({ planner_notes: notes }).eq('id', script_id)
 
@@ -54,7 +34,8 @@ export async function POST(request: Request) {
       .limit(3)
 
     const clientFeedback = clientComments?.map(c => c.content).join('\n---\n') || undefined
-    generateScriptForProject(project_id, clientFeedback)
+    // await 필수: fire-and-forget 시 Vercel 서버리스가 응답 후 함수를 종료해 재생성이 중단됨
+    await generateScriptForProject(project_id, clientFeedback)
   } else if (action === 'edit') {
     // 기획자 직접 편집
     await supabase.from('scripts').update({

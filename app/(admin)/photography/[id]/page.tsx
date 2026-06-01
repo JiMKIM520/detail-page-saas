@@ -43,13 +43,13 @@ export default async function PhotographyPage({
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
-        촬영 관리 목록
+        스타일링샷 제작 목록
       </Link>
 
       <div className="mb-6">
         <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
         <p className="text-sm text-text-tertiary mt-1">
-          {(project.platforms as any)?.name} · {project.category} · 촬영 리스트 및 사진 업로드
+          {(project.platforms as any)?.name} · {project.category} · 스타일링샷 프롬프트 · 이미지 업로드
         </p>
       </div>
 

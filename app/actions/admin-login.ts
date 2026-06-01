@@ -13,7 +13,9 @@ export async function adminLogin(adminId: string, password: string): Promise<{
   error?: string
   redirectTo?: string
 }> {
-  const email = ADMIN_ID_MAP[adminId.trim().toLowerCase()]
+  // 'admin' 아이디는 매핑으로, 그 외 이메일 형태면 직접 사용 (기획자/디자이너 등 운영팀 계정).
+  const mapped = ADMIN_ID_MAP[adminId.trim().toLowerCase()]
+  const email = mapped ?? (adminId.includes('@') ? adminId.trim().toLowerCase() : undefined)
   if (!email) {
     return { error: '등록되지 않은 관리자 ID입니다.' }
   }

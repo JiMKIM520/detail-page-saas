@@ -682,25 +682,12 @@ export async function runPlanningPipeline(input: ProjectInput): Promise<Planning
   saveJson(brief, `${dirs.base}/project-brief.json`)
   console.log('[PM/기획] Step 1: 프로젝트 브리프 생성 완료')
 
-  // ── Step 2: Design Researcher (레퍼런스 수집) ──
-  console.log('\n[PM/기획] Step 2: 디자인 레퍼런스 수집')
-  let designRefs = { categoryRefs: [] as string[], webRefs: [] as string[], sectionRefs: [] as { section: string; paths: string[] }[] }
-  try {
-    const { collectReferences } = await import('./design-researcher')
-    designRefs = await collectReferences(input.category, input.toneKeywords ?? [], dirs.base, {
-      perSectionRefs: 3,
-      countPerWebSource: 4,
-      webScrape: true,
-    })
-  } catch (err: unknown) {
-    console.warn('[PM/기획] Design Researcher 실패 — 빈 ref로 진행:', err instanceof Error ? err.message.substring(0, 80) : String(err))
-  }
-  const allReferenceImages = [
-    ...designRefs.categoryRefs,
-    ...designRefs.webRefs,
-    ...(input.referenceImagePaths ?? []),
-  ]
-  const sectionRefs = designRefs.sectionRefs
+  // ── Step 2: (제거됨) v6 — 디자인 레퍼런스 이미지 비전 폐기 ──
+  // 웹/섹션 레퍼런스 비전 분석은 v5 layer-image 자동 생성용 잔재.
+  // v6는 템플릿(코드화 DetailTemplate) 기반이라 불필요 + Opus many-image라 느리고 비쌈(실측 2.3분).
+  // → Art Director에는 제품 누끼컷만 전달 (제품 색·형태 파악용). design-researcher 호출 제거.
+  const allReferenceImages = input.nukkiPaths ?? []
+  const sectionRefs: { section: string; paths: string[] }[] = []
 
   // ── Step 3: Art Director (디자인기획 = style-guide + 스타일링샷 프롬프트) ──
   console.log('\n[PM/기획] Step 3: Art Director 실행 (디자인 기획)')
