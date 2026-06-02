@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
-import { useState, useRef } from 'react'
+import { useState, useId } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 const schema = z.object({
@@ -72,7 +72,7 @@ function FileUploadArea({
   label: string; description: string; accept: string; required?: boolean; multiple?: boolean; maxFiles?: number
   files: File[]; onAdd: (files: File[]) => void; onRemove: (index: number) => void
 }) {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputId = useId()
   const atMax = maxFiles !== undefined && files.length >= maxFiles
 
   function formatSize(bytes: number) {
@@ -83,29 +83,30 @@ function FileUploadArea({
   return (
     <div className="border border-border rounded-xl p-4 bg-white">
       <div className="flex items-center justify-between mb-2">
-        <label className="text-sm font-semibold text-text-primary">
+        <span className="text-sm font-semibold text-text-primary">
           {label} {required && <span className="text-red-500">*</span>}
           {maxFiles && <span className="text-xs text-text-tertiary ml-1">(최대 {maxFiles}개)</span>}
-        </label>
+        </span>
         {!atMax && (
-          <button type="button" onClick={() => inputRef.current?.click()}
-            className="text-sm text-primary-600 hover:text-primary-700 font-semibold min-h-[44px]">
+          <label htmlFor={inputId}
+            className="text-sm text-primary-600 hover:text-primary-700 font-semibold min-h-[44px] flex items-center cursor-pointer">
             + 파일 추가
-          </button>
+          </label>
         )}
       </div>
       <p className="text-xs text-text-tertiary mb-3">{description}</p>
-      <input ref={inputRef} type="file" multiple={multiple} accept={accept} className="hidden"
+      {/* 네이티브 파일 선택 — label[htmlFor]로 열어 모든 브라우저(Safari 포함)에서 동작 */}
+      <input id={inputId} type="file" multiple={multiple} accept={accept} className="sr-only"
         onChange={e => { onAdd(Array.from(e.target.files || [])); e.target.value = '' }} />
 
       {files.length === 0 ? (
-        <div onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-all">
+        <label htmlFor={inputId}
+          className="block border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-all">
           <svg className="w-7 h-7 text-text-tertiary mx-auto mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
           </svg>
           <p className="text-sm text-text-tertiary">클릭하여 파일을 선택하세요</p>
-        </div>
+        </label>
       ) : (
         <div className="space-y-2">
           {files.map((file, i) => (
@@ -126,10 +127,10 @@ function FileUploadArea({
             </div>
           ))}
           {!atMax && (
-            <button type="button" onClick={() => inputRef.current?.click()}
-              className="w-full text-sm text-text-tertiary hover:text-primary-600 py-2 rounded-lg border border-dashed border-border hover:border-primary-300 transition-colors">
+            <label htmlFor={inputId}
+              className="block text-center w-full text-sm text-text-tertiary hover:text-primary-600 py-2 rounded-lg border border-dashed border-border hover:border-primary-300 transition-colors cursor-pointer">
               + 추가
-            </button>
+            </label>
           )}
         </div>
       )}
