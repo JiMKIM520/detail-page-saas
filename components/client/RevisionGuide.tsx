@@ -1,4 +1,5 @@
-export function RevisionGuide() {
+export function RevisionGuide({ used = 0 }: { used?: number }) {
+  const rounds = [1, 2]
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
       <div className="flex items-start gap-3">
@@ -7,13 +8,34 @@ export function RevisionGuide() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
           </svg>
         </div>
-        <div>
+        <div className="flex-1">
           <p className="text-sm font-semibold text-blue-800 mb-1">수정 안내</p>
           <ul className="text-sm text-blue-700 space-y-1">
             <li>초안 확인 후 아래 코멘트로 수정 요청이 가능합니다.</li>
-            <li>수정은 <span className="font-semibold">최대 2회</span>까지 가능합니다.</li>
+            <li>수정은 <span className="font-semibold">1차 · 2차 총 2회</span>까지 가능합니다.</li>
             <li>레이아웃 전면 수정은 불가하며 <span className="font-semibold">문구·색상 조정 수준</span>으로 진행됩니다.</li>
           </ul>
+          {/* 1차 / 2차 수정 상태 */}
+          <div className="flex items-center gap-2 mt-3">
+            {rounds.map((r) => {
+              const done = used >= r
+              const next = used + 1 === r
+              return (
+                <span
+                  key={r}
+                  className={`text-xs font-medium rounded-full px-3 py-1 border ${
+                    done
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : next
+                      ? 'bg-white text-blue-700 border-blue-400'
+                      : 'bg-white text-blue-300 border-blue-200'
+                  }`}
+                >
+                  {r}차 수정 {done ? '완료' : next ? '가능' : '대기'}
+                </span>
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>

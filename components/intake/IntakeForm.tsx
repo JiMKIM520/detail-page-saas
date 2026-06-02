@@ -1,11 +1,10 @@
 'use client'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { getCompatibility, getCompatibilityLabel, isBlocked, isWarning } from '@/lib/ai/prompts/compatibility'
 
 const schema = z.object({
   // Step 1 — 기업 & 브랜드 정보
@@ -13,7 +12,7 @@ const schema = z.object({
   product_highlights: z.string().min(10, '사업 소개를 10자 이상 입력하세요'),
   brand_name: z.string().optional(),
   // Step 2 — 상품 정보
-  platform_id: z.string().uuid('플랫폼을 선택하세요'),
+  platform_id: z.string().optional(),
   category_id: z.string().uuid('카테고리를 선택하세요'),
   // Step 3 — 디자인 선호도
   design_preference: z.string().optional(),
@@ -139,7 +138,7 @@ function FileUploadArea({
 }
 
 export function IntakeForm({ platforms, categories }: { platforms: Platform[]; categories: Category[] }) {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, control, trigger, watch } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, trigger } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { consent: undefined as unknown as true },
   })
@@ -174,23 +173,13 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     setTargetAudience(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val])
   }
 
-  const selectedCategoryId = useWatch({ control, name: 'category_id' })
-  const selectedPlatformId = useWatch({ control, name: 'platform_id' })
-
-  const compatibility = useMemo(() => {
-    const cat = categories.find(c => c.id === selectedCategoryId)
-    const plat = platforms.find(p => p.id === selectedPlatformId)
-    if (!cat || !plat) return null
-    const compat = getCompatibility(cat.slug, plat.slug)
-    const label = getCompatibilityLabel(compat)
-    const blocked = isBlocked(cat.slug, plat.slug)
-    const warning = isWarning(cat.slug, plat.slug)
-    return { compat, label, blocked, warning }
-  }, [selectedCategoryId, selectedPlatformId, categories, platforms])
+  // 판매 플랫폼은 의뢰 단계에서 받지 않고 11번가로 고정 (2026-06-02 회의 결정). 없으면 첫 플랫폼.
+  const defaultPlatformId =
+    platforms.find(p => (p as { slug?: string }).slug === '11st')?.id ?? platforms[0]?.id ?? ''
 
   const STEP_FIELDS: Record<number, (keyof FormData)[]> = {
     1: ['company_name', 'product_highlights'],
-    2: ['platform_id', 'category_id'],
+    2: ['category_id'],
     3: ['consent', 'homepage_url', 'detail_page_url'],
   }
 
@@ -198,11 +187,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     const valid = await trigger(STEP_FIELDS[currentStep])
     if (currentStep === 2) {
       if (!valid) {
-        setFileError('판매 플랫폼과 카테고리를 모두 선택해주세요.')
-        return
-      }
-      if (compatibility?.blocked) {
-        setFileError('선택하신 플랫폼·카테고리 조합은 현재 지원되지 않습니다. 다른 조합을 선택해주세요.')
+        setFileError('카테고리를 선택해주세요.')
         return
       }
       if (fileGroups.product_photo.length === 0) {
@@ -236,10 +221,6 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   }
 
   async function onSubmit(data: FormData) {
-    if (compatibility?.blocked) {
-      setApiError('선택한 카테고리와 플랫폼 조합은 지원되지 않습니다.')
-      return
-    }
     setApiError('')
 
     // target_audience를 reference_notes에 append
@@ -250,7 +231,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       company_name: data.company_name,
       product_highlights: data.product_highlights,
       brand_name: data.brand_name || null,
-      platform_id: data.platform_id,
+      platform_id: data.platform_id || defaultPlatformId,
       category_id: data.category_id,
       design_preference: data.design_preference || null,
       homepage_url: data.homepage_url || null,
@@ -367,40 +348,14 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         {/* ── Step 2: 상품 정보 ── */}
         {currentStep === 2 && (
           <div className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1.5">판매 플랫폼 *</label>
-                <select {...register('platform_id')} className={inputCls}>
-                  <option value="">선택하세요</option>
-                  {platforms.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                </select>
-                {errors.platform_id && <p className="text-red-500 text-sm mt-1.5">{errors.platform_id.message}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1.5">카테고리 *</label>
-                <select {...register('category_id')} className={inputCls}>
-                  <option value="">선택하세요</option>
-                  {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
-                {errors.category_id && <p className="text-red-500 text-sm mt-1.5">{errors.category_id.message}</p>}
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">카테고리 *</label>
+              <select {...register('category_id')} className={inputCls}>
+                <option value="">선택하세요</option>
+                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              {errors.category_id && <p className="text-red-500 text-sm mt-1.5">{errors.category_id.message}</p>}
             </div>
-
-            {compatibility && (
-              <div className={`rounded-xl px-4 py-3 text-sm ${
-                compatibility.blocked
-                  ? 'bg-red-50 border border-red-200 text-red-700'
-                  : compatibility.warning
-                    ? 'bg-amber-50 border border-amber-200 text-amber-700'
-                    : 'bg-green-50 border border-green-200 text-green-700'
-              }`}>
-                <span className="font-semibold">{compatibility.label.emoji} {compatibility.label.label}</span>
-                <span className="ml-2">{compatibility.label.description}</span>
-                {compatibility.blocked && (
-                  <p className="mt-1 font-medium">이 조합으로는 의뢰할 수 없습니다. 다른 플랫폼을 선택해주세요.</p>
-                )}
-              </div>
-            )}
 
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-2">타겟 고객층</label>

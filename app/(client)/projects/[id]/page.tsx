@@ -71,17 +71,21 @@ export default async function ClientProjectDetailPage({
   const clientStage = getClientStage(status)
   const showDesign = DESIGN_SHOW_STATUSES.includes(status)
 
-  let design: { id: string; preview_url: string | null; output_url: string | null } | null = null
+  let design: { id: string; preview_url: string | null; output_url: string | null; version: number | null } | null = null
   if (showDesign) {
     const { data } = await service
       .from('designs')
-      .select('id, preview_url, output_url')
+      .select('id, preview_url, output_url, version')
       .eq('project_id', id)
       .order('created_at', { ascending: false })
       .limit(1)
       .single()
     design = data
   }
+
+  // 수정 회차: design version 1 = 초안, 2 = 1차 수정본, 3 = 2차 수정본 (최대 2회)
+  const revisionUsed = Math.min(Math.max((design?.version ?? 1) - 1, 0), 2)
+  const reviewLabel = revisionUsed === 0 ? '초안 확인 요청' : `${revisionUsed}차 수정본 확인`
 
   // output_url JSON 파싱 (mobile_zip, pc_zip, designer_zip)
   let downloadUrls: { mobile_zip?: string; pc_zip?: string; designer_zip?: string } = {}
@@ -120,21 +124,37 @@ export default async function ClientProjectDetailPage({
 
       {/* 진행 상황 — 기업에게는 3구간 요약만 노출 */}
       <div className="bg-surface rounded-xl border border-border p-5">
-        <p className="text-xs font-medium text-text-tertiary mb-3">진행 상황</p>
-        {/* 3단계 스텝 바 */}
-        <div className="flex items-center gap-0 mb-4">
-          {(['preparing', 'review', 'delivered'] as ClientStage[]).map((stage, i, arr) => {
-            const isCompleted = (
-              (stage === 'preparing' && (clientStage === 'review' || clientStage === 'delivered')) ||
-              (stage === 'review'    && clientStage === 'delivered')
-            )
-            const isCurrent = stage === clientStage
-            return (
-              <div key={stage} className="flex items-center flex-1 min-w-0">
-                <div className="flex flex-col items-center flex-1 min-w-0">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold transition-colors ${
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-xs font-medium text-text-tertiary">진행 상황</p>
+          {clientStage === 'review' && (
+            <span className="text-xs font-medium text-primary-700 bg-primary-50 rounded-full px-2.5 py-0.5">
+              수정 {revisionUsed}/2회 사용
+            </span>
+          )}
+        </div>
+
+        {/* 3단계 스텝 바 (라인 트랙 위에 원형 노드) */}
+        <div className="relative pt-2 pb-8">
+          {/* 배경 라인 */}
+          <div className="absolute left-[16.66%] right-[16.66%] top-[22px] h-0.5 bg-gray-200" />
+          {/* 진행 라인 */}
+          <div
+            className="absolute left-[16.66%] top-[22px] h-0.5 bg-primary-600 transition-all"
+            style={{ width: clientStage === 'delivered' ? '66.66%' : clientStage === 'review' ? '33.33%' : '0%' }}
+          />
+          <div className="relative flex">
+            {(['preparing', 'review', 'delivered'] as ClientStage[]).map((stage, i) => {
+              const isCompleted = (
+                (stage === 'preparing' && (clientStage === 'review' || clientStage === 'delivered')) ||
+                (stage === 'review' && clientStage === 'delivered')
+              )
+              const isCurrent = stage === clientStage
+              const label = stage === 'review' ? reviewLabel : STAGE_LABELS[stage]
+              return (
+                <div key={stage} className="flex flex-col items-center" style={{ width: '33.33%' }}>
+                  <div className={`relative z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
                     isCompleted ? 'bg-primary-600 text-white'
-                    : isCurrent  ? 'bg-primary-100 border-2 border-primary-600 text-primary-700'
+                    : isCurrent ? 'bg-primary-100 border-2 border-primary-600 text-primary-700'
                     : 'bg-gray-100 text-gray-400'
                   }`}>
                     {isCompleted ? (
@@ -145,22 +165,22 @@ export default async function ClientProjectDetailPage({
                       <span>{i + 1}</span>
                     )}
                   </div>
-                  <p className={`text-[11px] mt-1.5 text-center leading-tight font-medium ${
+                  <p className={`absolute top-9 whitespace-nowrap text-[11px] font-medium ${
                     isCurrent ? 'text-primary-700' : isCompleted ? 'text-text-secondary' : 'text-text-tertiary'
                   }`}>
-                    {STAGE_LABELS[stage]}
+                    {label}
                   </p>
                 </div>
-                {i < arr.length - 1 && (
-                  <div className={`h-0.5 w-full mb-5 ${isCompleted ? 'bg-primary-600' : 'bg-gray-200'}`} />
-                )}
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
+
         {/* 현재 단계 설명 */}
         <p className="text-sm text-text-secondary leading-relaxed">
-          {STAGE_DESCRIPTIONS[clientStage]}
+          {clientStage === 'review' && revisionUsed > 0
+            ? `${revisionUsed}차 수정본이 완성되었습니다. 확인 후 의견을 남겨주세요.${revisionUsed >= 2 ? ' (수정 2회를 모두 사용하셨습니다.)' : ''}`
+            : STAGE_DESCRIPTIONS[clientStage]}
           {clientStage === 'preparing' && (
             <span className="ml-1 text-text-tertiary text-xs">
               (현재: {CLIENT_STATUS_LABELS[status]})
@@ -173,7 +193,7 @@ export default async function ClientProjectDetailPage({
       {showDesign && (
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-text-primary">상세페이지 초안</h2>
-          <RevisionGuide />
+          <RevisionGuide used={revisionUsed} />
           {design?.preview_url ? (
             <div className="bg-surface rounded-xl border border-border overflow-hidden shadow-card">
               <ProtectedImage
