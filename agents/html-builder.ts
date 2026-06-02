@@ -811,10 +811,13 @@ function v5SectionWrap(
     ? `background-image:url('${bgUrl}');background-size:cover;background-position:center;background-repeat:no-repeat;`
     : (bgFallback && bgFallback !== 'image' ? `background:${bgFallback};` : '')
   const sectionClass = `v5-section ${isDark ? 'dark-section' : ''} ${alignClass}`.trim()
+  // 다크 섹션 스크림: 실제 DOM 요소로 둠(가상요소 ::after 대신) → html.to.design 등 HTML→Figma 변환 시 레이어로 보존되어 흰 텍스트 가독성 유지
+  const scrim = isDark ? '<div class="v5-scrim" aria-hidden="true"></div>' : ''
   // frame/accent overlays는 tryV5Render의 injectV5Overlays에서 후주입.
   return `
   <!-- v5: ${cardClass} -->
   <section class="${sectionClass}" style="${bgStyle}">
+    ${scrim}
     <div class="v5-section-inner">
       ${innerHtml}
     </div>
@@ -1883,7 +1886,21 @@ body { color: var(--color-text-dark, #1a1a1a); }
   background: inherit;
   z-index: -1;
 }
-.v5-section.dark-section { color: #f5f1ea; }
+.v5-section.dark-section {
+  color: #f5f1ea;
+  /* 다크 베이스: 배경 이미지가 투명(누끼)·누락이어도 흰 텍스트가 묻히지 않도록 */
+  background-color: var(--color-text-dark, #211610);
+}
+/* 다크 섹션 스크림: 실제 DOM 요소(.v5-scrim)로 배경 위에 어두운 그라데이션 → 흰 텍스트 가독성 보장.
+   가상요소가 아니라 실제 요소라 html.to.design 등 HTML→Figma 변환에서 레이어로 보존됨.
+   z-index 0 = 배경 위, frame(1)/accent(2)/콘텐츠(3) 아래 */
+.v5-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18,11,6,0.40) 0%, rgba(18,11,6,0.68) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
 
 .v5-section-inner {
   max-width: 760px;

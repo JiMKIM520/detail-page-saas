@@ -1,8 +1,16 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { createClient } from '@/lib/supabase/server'
 import { transitionStatus } from '@/lib/status-machine'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
+  const userSupabase = await createClient()
+  const { data: { user } } = await userSupabase.auth.getUser()
+  const role = user?.user_metadata?.role as string | undefined
+  if (!user || !['admin', 'planner', 'designer'].includes(role ?? '')) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const supabase = createServiceClient()
   const { project_id } = await request.json()
 

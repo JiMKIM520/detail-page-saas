@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { clientPassword } from '@/lib/auth/client-credentials'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
-  const [businessNumber, setBusinessNumber] = useState('')
+  const [phoneLast4, setPhoneLast4] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -16,20 +17,24 @@ export default function LoginPage() {
     setError('')
 
     const supabase = createClient()
-    const normalizedBN = businessNumber.replace(/-/g, '')
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password: normalizedBN,
+      password: clientPassword(phoneLast4),
     })
     setLoading(false)
 
     if (error) {
-      setError('이메일 또는 사업자등록번호가 올바르지 않습니다.')
+      setError('이메일 또는 전화번호 뒷 4자리가 올바르지 않습니다.')
       return
     }
 
     const role = data.user?.user_metadata?.role ?? 'client'
-    router.push(role === 'client' ? '/projects' : '/planner')
+    const dest =
+      role === 'designer' ? '/designer'
+      : role === 'planner' ? '/planner'
+      : role === 'admin' ? '/dashboard'
+      : '/projects'
+    router.push(dest)
   }
 
   return (
@@ -48,7 +53,7 @@ export default function LoginPage() {
         <div className="bg-surface rounded-2xl border border-border p-8 shadow-card space-y-6">
           <div>
             <h2 className="text-lg font-semibold text-text-primary">로그인</h2>
-            <p className="text-sm text-text-tertiary mt-0.5">사전 안내받은 이메일과 사업자등록번호로 로그인하세요</p>
+            <p className="text-sm text-text-tertiary mt-0.5">사전 안내받은 이메일과 전화번호 뒷 4자리로 로그인하세요</p>
           </div>
 
           {error && (
@@ -67,12 +72,15 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">사업자등록번호</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">전화번호 뒷 4자리</label>
               <input
-                type="text" value={businessNumber} onChange={e => setBusinessNumber(e.target.value)}
-                placeholder="000-00-00000" required
-                className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
+                type="text" inputMode="numeric" maxLength={4}
+                value={phoneLast4}
+                onChange={e => setPhoneLast4(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                placeholder="0000" required
+                className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary tracking-widest"
               />
+              <p className="text-xs text-text-tertiary mt-1.5">가입 시 등록한 연락처의 마지막 4자리 숫자</p>
             </div>
             <button type="submit" disabled={loading}
               className="w-full bg-primary-600 text-white rounded-xl py-2.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm transition-all">

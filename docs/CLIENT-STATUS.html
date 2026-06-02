@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DetailAI — 프로젝트 현황 보고</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --ink:#1F1A17; --ink-2:#4A413B; --ink-3:#8A7F76;
+    --bg:#FFFFFF; --warm:#F8F3EC; --line:#ECE3D8; --line2:#E0D5C7;
+    --accent:#A8682E; --accent-soft:#F4E9DA; --gold:#C9A45C;
+    --green:#3E7C5A; --amber:#B6821F; --red:#C0503A;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{ font-family:'Pretendard',-apple-system,sans-serif; color:var(--ink); background:var(--warm);
+    line-height:1.7; letter-spacing:-0.01em; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:880px; margin:0 auto; background:var(--bg); }
+  /* Header */
+  .hd{ background:linear-gradient(135deg,#241C16 0%,#3A2A1B 100%); color:#fff; padding:54px 56px 46px; }
+  .hd__brand{ font-size:14px; font-weight:700; letter-spacing:0.22em; color:var(--gold); text-transform:uppercase; }
+  .hd__title{ font-size:34px; font-weight:800; margin-top:14px; letter-spacing:-0.03em; }
+  .hd__sub{ font-size:16px; color:rgba(255,255,255,0.78); margin-top:14px; line-height:1.7; max-width:620px; }
+  .hd__meta{ margin-top:24px; font-size:13px; color:rgba(255,255,255,0.6); display:flex; gap:20px; flex-wrap:wrap; }
+  /* Section */
+  .sec{ padding:48px 56px; border-bottom:1px solid var(--line); }
+  .sec__no{ font-size:13px; font-weight:800; color:var(--accent); letter-spacing:0.1em; }
+  .sec__h{ font-size:25px; font-weight:800; margin-top:8px; letter-spacing:-0.025em; }
+  .sec__lead{ font-size:15px; color:var(--ink-2); margin-top:12px; line-height:1.85; }
+  /* 한 줄 요약 카드 */
+  .pitch{ background:var(--accent-soft); border:1px solid var(--line2); border-radius:16px; padding:26px 30px; margin:0 56px 0; transform:translateY(-26px); box-shadow:0 18px 40px -28px rgba(33,24,16,0.45); }
+  .pitch__t{ font-size:13px; font-weight:700; color:var(--accent); letter-spacing:0.06em; margin-bottom:8px; }
+  .pitch__d{ font-size:16px; color:var(--ink); font-weight:600; line-height:1.7; }
+  /* 진행 항목 */
+  .items{ margin-top:24px; display:grid; gap:14px; }
+  .item{ border:1px solid var(--line); border-radius:14px; padding:22px 24px; background:var(--bg); }
+  .item__top{ display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+  .badge{ font-size:11.5px; font-weight:700; padding:4px 11px; border-radius:999px; letter-spacing:0.02em; }
+  .b-done{ background:#E6F2EC; color:var(--green); }
+  .b-prog{ background:#FBF1DC; color:var(--amber); }
+  .b-plan{ background:#F1ECE5; color:var(--ink-3); }
+  .item__t{ font-size:16.5px; font-weight:700; }
+  .item__d{ font-size:14px; color:var(--ink-2); line-height:1.75; }
+  .item__d b{ color:var(--ink); }
+  /* 한계 리스트 */
+  .lim{ display:grid; gap:13px; margin-top:22px; }
+  .lim__row{ display:grid; grid-template-columns:118px 1fr; gap:16px; padding:18px 20px; border:1px solid var(--line); border-radius:12px; background:var(--bg); align-items:start; }
+  .lim__tag{ font-size:13px; font-weight:700; color:var(--red); }
+  .lim__txt{ font-size:14px; color:var(--ink-2); line-height:1.7; }
+  .lim__txt b{ color:var(--ink); }
+  /* 로드맵 */
+  .road{ margin-top:24px; display:grid; gap:0; }
+  .road__row{ display:grid; grid-template-columns:130px 1fr; gap:18px; padding:20px 0; border-bottom:1px dashed var(--line2); }
+  .road__when{ font-size:14px; font-weight:800; color:var(--accent); }
+  .road__what{ font-size:14.5px; color:var(--ink-2); line-height:1.8; }
+  .road__what b{ color:var(--ink); }
+  /* footer */
+  .ft{ padding:34px 56px; background:var(--warm); font-size:12.5px; color:var(--ink-3); line-height:1.8; }
+  .ft b{ color:var(--ink-2); }
+  @media print{ body{background:#fff;} .pitch{box-shadow:none;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div class="hd__brand">DetailAI · Project Status</div>
+    <div class="hd__title">상세페이지 자동 제작 플랫폼<br>현황 보고</div>
+    <div class="hd__sub">사업자가 제품 정보만 입력하면, AI가 기획·카피·스타일링을 거쳐 상세페이지 초안을 만들고, 디자이너가 Figma에서 마감해 납품하는 폐쇄형 제작 SaaS입니다.</div>
+    <div class="hd__meta"><span>보고일 · 2026.06.02</span><span>대상 · 식품 카테고리 (소금빵 샘플)</span><span>상태 · MVP 데모</span></div>
+  </div>
+
+  <div class="pitch">
+    <div class="pitch__t">한 줄 요약</div>
+    <div class="pitch__d">상세페이지 1건 제작에 드는 외주 비용·시간을, 사업자 셀프 의뢰 + AI 초안 + 디자이너 마감 구조로 대폭 줄이는 것이 목표입니다. 현재 핵심 흐름과 결과물 품질을 검증한 MVP 단계입니다.</div>
+  </div>
+
+  <!-- 1. 진행 상황 -->
+  <div class="sec">
+    <div class="sec__no">01 — PROGRESS</div>
+    <div class="sec__h">진행 상황 · 무엇이 완성됐나</div>
+    <div class="sec__lead">아래 항목은 실제 데이터로 동작을 확인한 내용입니다.</div>
+    <div class="items">
+      <div class="item">
+        <div class="item__top"><span class="badge b-done">동작 확인</span><span class="item__t">운영 웹앱 — 4역할 시스템</span></div>
+        <div class="item__d"><b>관리자</b> 작업관리 대시보드(200건 동시 진행 전제 · 검색/단계/담당자/지연 필터 · 배정), <b>기획자</b> 스크립트 검수, <b>디자이너</b> 초안 검수·납품, <b>사업자</b> 전용 뷰(계정당 1건 제한 · 진행상황 · 초안 확인 · 코멘트). 4역할 로그인부터 전 흐름까지 동작 검증.</div>
+      </div>
+      <div class="item">
+        <div class="item__top"><span class="badge b-done">동작 확인</span><span class="item__t">AI 제작 파이프라인</span></div>
+        <div class="item__d">제품 정보 + 사진 → <b>AI 카피·스크립트</b> → <b>디자인 기획(스타일 가이드)</b> → <b>스타일링샷 프롬프트</b> → <b>상세페이지 생성</b>. 각 단계를 실제 제품 데이터로 검증.</div>
+      </div>
+      <div class="item">
+        <div class="item__top"><span class="badge b-done">완성</span><span class="item__t">상세페이지 결과물 — 실사용급 템플릿</span></div>
+        <div class="item__d">히어로 · 핵심가치 · 브랜드 스토리 · <b>단면 컷</b> · 가격/구성 · <b>구매 후기</b> · 상세 스펙 · 먹는 법 · 배송/교환 · CTA로 구성된 프리미엄 식품 상세페이지. <b>AI 스타일링샷 5종</b>(외관·단면·플레이팅) 적용. 소금빵 샘플 완성.</div>
+      </div>
+      <div class="item">
+        <div class="item__top"><span class="badge b-done">완성</span><span class="item__t">Figma 편집 가능 구조</span></div>
+        <div class="item__d">상세페이지를 이미지가 아닌 <b>편집 가능한 HTML/CSS</b>로 제작 → 디자이너가 html.to.design으로 Figma에 가져와 자유롭게 마감. <b>모든 텍스트가 정확</b>(이미지에 글자를 굽지 않음).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 한계점 -->
+  <div class="sec">
+    <div class="sec__no">02 — LIMITATIONS</div>
+    <div class="sec__h">한계점 · 솔직하게</div>
+    <div class="sec__lead">과장 없이, 현재 시점에서 부족하거나 보완이 필요한 부분입니다.</div>
+    <div class="lim">
+      <div class="lim__row"><div class="lim__tag">배포</div><div class="lim__txt"><b>현재 데모는 로컬 환경에서 구동</b>합니다. 클라우드 배포 시 일부 화면 로딩 이슈가 확인되어, 배포 안정화 작업 후 외부 공개 예정입니다.</div></div>
+      <div class="lim__row"><div class="lim__tag">자동화 범위</div><div class="lim__txt">상세페이지는 <b>AI 초안 + 디자이너 마감</b>의 반자동 구조입니다(완전 자동 아님). 또한 새 프리미엄 템플릿은 현재 <b>샘플(소금빵)에 적용</b>됐고, 전 프로젝트 자동 적용은 통합 작업이 남아 있습니다.</div></div>
+      <div class="lim__row"><div class="lim__tag">카테고리</div><div class="lim__txt">현재 <b>식품 카테고리 템플릿 1종</b>을 실사용급으로 완성했습니다. 뷰티·전자 등 다른 카테고리 템플릿은 확장 예정입니다.</div></div>
+      <div class="lim__row"><div class="lim__tag">데이터</div><div class="lim__txt">가격·구매 후기 등 일부는 <b>샘플 데이터</b>입니다. 실운영 시 실제 판매 데이터·리뷰와 연동됩니다.</div></div>
+    </div>
+  </div>
+
+  <!-- 3. 개선 계획 -->
+  <div class="sec">
+    <div class="sec__no">03 — ROADMAP</div>
+    <div class="sec__h">개선 계획 · 다음 단계</div>
+    <div class="road">
+      <div class="road__row"><div class="road__when">1~2주</div><div class="road__what"><b>배포 안정화</b> + <b>템플릿 파이프라인 통합</b>(새 프리미엄 템플릿을 전 프로젝트에 자동 적용). 식품 외 <b>뷰티·전자 카테고리 템플릿</b> 추가 착수.</div></div>
+      <div class="road__row"><div class="road__when">3~4주</div><div class="road__what"><b>구매 후기·리뷰 실연동</b>, <b>사업자 온보딩</b>(최대 200), 상세페이지 품질 자동 검수(가독성·필수요소 체크) 고도화.</div></div>
+      <div class="road__row"><div class="road__when">중장기</div><div class="road__what">카테고리 × 플랫폼(스마트스토어·쿠팡·11번가) 조합별 템플릿 다양화, <b>전환율 데이터 기반</b> 디자인 개선 루프 구축.</div></div>
+    </div>
+  </div>
+
+  <div class="ft">
+    <b>DetailAI</b> — 폐쇄형 상세페이지 제작 SaaS · 본 문서는 MVP 데모 시점의 현황 보고이며, 일정·범위는 진행에 따라 조정될 수 있습니다.<br>
+    데모 문의 시 관리자/사업자 계정으로 실제 화면을 확인하실 수 있습니다.
+  </div>
+
+</div>
+</body>
+</html>

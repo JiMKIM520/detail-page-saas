@@ -197,11 +197,16 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   async function goNext() {
     const valid = await trigger(STEP_FIELDS[currentStep])
     if (currentStep === 2) {
-      if (fileGroups.product_photo.length === 0) {
-        setFileError('제품 사진을 최소 1장 업로드해주세요.')
+      if (!valid) {
+        setFileError('판매 플랫폼과 카테고리를 모두 선택해주세요.')
         return
       }
       if (compatibility?.blocked) {
+        setFileError('선택하신 플랫폼·카테고리 조합은 현재 지원되지 않습니다. 다른 조합을 선택해주세요.')
+        return
+      }
+      if (fileGroups.product_photo.length === 0) {
+        setFileError('제품 사진을 최소 1장 업로드해주세요. (필수)')
         return
       }
     }
@@ -209,6 +214,8 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       setFileError('')
       setCurrentStep(s => s + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      setFileError('입력하지 않은 필수 항목이 있습니다. 표시된 항목을 확인해주세요.')
     }
   }
 
@@ -501,6 +508,11 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             </label>
             {errors.consent && <p className="text-red-500 text-sm -mt-3">{errors.consent.message}</p>}
           </div>
+        )}
+
+        {/* 진행 차단 안내 (다음 버튼 바로 위에 표시) */}
+        {fileError && (
+          <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3">{fileError}</p>
         )}
 
         {/* 네비게이션 버튼 */}

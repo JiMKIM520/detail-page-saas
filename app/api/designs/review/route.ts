@@ -15,6 +15,10 @@ export async function POST(request: Request) {
   }
 
   const { project_id, design_id, action, notes, output_url } = await request.json()
+  if (!project_id || !design_id) {
+    return NextResponse.json({ error: 'project_id and design_id are required' }, { status: 400 })
+  }
+
   const supabase = createServiceClient()
 
   if (action !== 'approve') {

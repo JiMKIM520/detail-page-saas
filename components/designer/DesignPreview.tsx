@@ -5,6 +5,34 @@ interface Design {
   output_url: string | null
 }
 
+const OUTPUT_LABELS: Record<string, string> = {
+  html: 'HTML 파일',
+  mobile_zip: '모바일용 ZIP',
+  pc_zip: 'PC용 ZIP',
+  designer_zip: '디자이너 ZIP (Figma용)',
+}
+
+/**
+ * output_url은 두 형태일 수 있다:
+ *  - JSON 객체 문자열 `{"html":..,"mobile_zip":..,"pc_zip":..,"designer_zip":..}` (파이프라인 산출)
+ *  - 단일 URL 문자열 (PDF 납품 등 레거시)
+ * 둘 다 안전하게 다운로드 링크 목록으로 변환한다.
+ */
+function parseOutputUrls(raw: string): { key: string; label: string; url: string }[] {
+  const trimmed = raw.trim()
+  if (trimmed.startsWith('{')) {
+    try {
+      const obj = JSON.parse(trimmed) as Record<string, unknown>
+      return Object.entries(obj)
+        .filter(([, v]) => typeof v === 'string' && v)
+        .map(([key, v]) => ({ key, label: OUTPUT_LABELS[key] ?? key, url: v as string }))
+    } catch {
+      /* JSON 파싱 실패 → 단일 URL로 처리 */
+    }
+  }
+  return [{ key: 'file', label: '최종 파일 다운로드', url: trimmed }]
+}
+
 export function DesignPreview({ design }: { design: Design | null }) {
   if (!design) {
     return (
@@ -36,13 +64,17 @@ export function DesignPreview({ design }: { design: Design | null }) {
         </a>
       )}
       {design.output_url && (
-        <a href={design.output_url} download
-          className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 text-sm font-semibold bg-primary-50 px-4 py-2 rounded-lg hover:bg-primary-100 transition-colors">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-          </svg>
-          최종 파일 다운로드
-        </a>
+        <div className="flex flex-wrap gap-2">
+          {parseOutputUrls(design.output_url).map(({ key, label, url }) => (
+            <a key={key} href={url} download target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 text-sm font-semibold bg-primary-50 px-4 py-2 rounded-lg hover:bg-primary-100 transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              {label}
+            </a>
+          ))}
+        </div>
       )}
     </div>
   )

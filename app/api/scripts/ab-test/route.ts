@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'project_id and script_id required' }, { status: 400 })
   }
 
-  generateAbVariant(project_id, script_id) // fire-and-forget
+  // await 필수: fire-and-forget 시 Vercel 서버리스가 응답 후 함수를 종료해 생성이 중단됨
+  await generateAbVariant(project_id, script_id)
   return NextResponse.json({ success: true })
 }
