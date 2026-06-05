@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
-import { useState, useId } from 'react'
+import { useState, useId, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 const schema = z.object({
@@ -14,11 +14,12 @@ const schema = z.object({
   // Step 2 — 상품 정보
   platform_id: z.string().optional(),
   category_id: z.string().uuid('카테고리를 선택하세요'),
-  // Step 3 — 디자인 선호도
+  // Step 3 — 디자인 선호도 (칩 선택 → join 후 저장)
   design_preference: z.string().optional(),
   homepage_url: z.string().url('올바른 URL을 입력하세요').optional().or(z.literal('')),
   detail_page_url: z.string().url('올바른 URL을 입력하세요').optional().or(z.literal('')),
   reference_notes: z.string().optional(),
+  // Step 4 — 동의 (리뷰 단계에서 수집)
   consent: z.literal(true, { error: '동의가 필요합니다' }),
 })
 
@@ -30,7 +31,32 @@ interface Category { id: string; name: string; slug: string }
 const AGE_OPTIONS = ['20대', '30대', '40대', '50대', '60대 이상']
 const GENDER_OPTIONS = ['남성', '여성', '무관']
 
-const STEP_LABELS = ['기업 & 브랜드 정보', '상품 정보', '디자인 선호도']
+const DESIGN_STYLE_OPTIONS = [
+  '심플한', '고급스러운', '감성적인', '자연스러운', '친환경적인',
+  '친근한', '트렌디한', '깔끔한', '시원시원한', '가독성이 좋은',
+  '차분한', '활기찬', '아기자기한', '화려한', '강렬한',
+  '비비드한', '파스텔톤', '뉴트럴', '모노톤', '컬러풀한', '아날로그',
+]
+
+const DRAFT_KEY = 'detailai_intake_draft'
+
+const STEP_LABELS = ['기업 & 브랜드 정보', '상품 정보', '디자인 선호도', '입력 내용 확인']
+
+const TOTAL_STEPS = 4
+
+// ── localStorage draft 타입 ──
+interface DraftData {
+  company_name?: string
+  product_highlights?: string
+  brand_name?: string
+  hasBrand?: boolean | null
+  category_id?: string
+  designStyles?: string[]
+  targetAudience?: string[]
+  homepage_url?: string
+  detail_page_url?: string
+  reference_notes?: string
+}
 
 function StepIndicator({ current }: { current: number }) {
   return (
@@ -138,8 +164,18 @@ function FileUploadArea({
   )
 }
 
+// ── 리뷰 단계용 항목 표시 컴포넌트 ──
+function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 py-3 border-b border-border last:border-0">
+      <span className="text-sm font-medium text-text-tertiary sm:w-36 flex-shrink-0">{label}</span>
+      <span className="text-sm text-text-primary flex-1">{value || <span className="text-text-tertiary italic">미입력</span>}</span>
+    </div>
+  )
+}
+
 export function IntakeForm({ platforms, categories }: { platforms: Platform[]; categories: Category[] }) {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, trigger } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, trigger, getValues, setValue } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { consent: undefined as unknown as true },
   })
@@ -149,6 +185,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const [currentStep, setCurrentStep] = useState(1)
   const [hasBrand, setHasBrand] = useState<boolean | null>(null)
   const [targetAudience, setTargetAudience] = useState<string[]>([])
+  const [designStyles, setDesignStyles] = useState<string[]>([])
 
   const [fileGroups, setFileGroups] = useState<Record<string, File[]>>({
     product_photo: [],
@@ -162,6 +199,70 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const [uploadProgress, setUploadProgress] = useState('')
   const [apiError, setApiError] = useState('')
 
+  // ── 임시저장 상태 ──
+  const [draftBanner, setDraftBanner] = useState<'idle' | 'present' | 'dismissed'>('idle')
+  const [saveMsg, setSaveMsg] = useState('')
+
+  // 마운트 시 draft 확인
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY)
+      if (raw) setDraftBanner('present')
+    } catch {
+      // localStorage 접근 불가 환경 무시
+    }
+  }, [])
+
+  function loadDraft() {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY)
+      if (!raw) return
+      const draft: DraftData = JSON.parse(raw)
+      if (draft.company_name) setValue('company_name', draft.company_name)
+      if (draft.product_highlights) setValue('product_highlights', draft.product_highlights)
+      if (draft.brand_name) setValue('brand_name', draft.brand_name)
+      if (draft.hasBrand !== undefined) setHasBrand(draft.hasBrand ?? null)
+      if (draft.category_id) setValue('category_id', draft.category_id)
+      if (draft.designStyles) setDesignStyles(draft.designStyles)
+      if (draft.targetAudience) setTargetAudience(draft.targetAudience)
+      if (draft.homepage_url) setValue('homepage_url', draft.homepage_url)
+      if (draft.detail_page_url) setValue('detail_page_url', draft.detail_page_url)
+      if (draft.reference_notes) setValue('reference_notes', draft.reference_notes)
+      setDraftBanner('dismissed')
+    } catch {
+      setDraftBanner('dismissed')
+    }
+  }
+
+  function discardDraft() {
+    try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
+    setDraftBanner('dismissed')
+  }
+
+  function saveDraft() {
+    try {
+      const vals = getValues()
+      const draft: DraftData = {
+        company_name: vals.company_name,
+        product_highlights: vals.product_highlights,
+        brand_name: vals.brand_name,
+        hasBrand,
+        category_id: vals.category_id,
+        designStyles,
+        targetAudience,
+        homepage_url: vals.homepage_url,
+        detail_page_url: vals.detail_page_url,
+        reference_notes: vals.reference_notes,
+      }
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+      setSaveMsg('임시저장되었습니다')
+      setTimeout(() => setSaveMsg(''), 2500)
+    } catch {
+      setSaveMsg('저장에 실패했습니다')
+      setTimeout(() => setSaveMsg(''), 2500)
+    }
+  }
+
   function addFiles(type: string, newFiles: File[]) {
     setFileGroups(prev => ({ ...prev, [type]: [...prev[type], ...newFiles] }))
     setFileError('')
@@ -174,6 +275,14 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     setTargetAudience(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val])
   }
 
+  function toggleDesignStyle(val: string) {
+    setDesignStyles(prev => {
+      if (prev.includes(val)) return prev.filter(v => v !== val)
+      if (prev.length >= 3) return prev // 3개 초과 선택 불가
+      return [...prev, val]
+    })
+  }
+
   // 판매 플랫폼은 의뢰 단계에서 받지 않고 11번가로 고정 (2026-06-02 회의 결정). 없으면 첫 플랫폼.
   const defaultPlatformId =
     platforms.find(p => (p as { slug?: string }).slug === '11st')?.id ?? platforms[0]?.id ?? ''
@@ -181,7 +290,8 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const STEP_FIELDS: Record<number, (keyof FormData)[]> = {
     1: ['company_name', 'product_highlights'],
     2: ['category_id'],
-    3: ['consent', 'homepage_url', 'detail_page_url'],
+    3: ['homepage_url', 'detail_page_url'],
+    4: ['consent'],
   }
 
   async function goNext() {
@@ -234,7 +344,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       brand_name: data.brand_name || null,
       platform_id: data.platform_id || defaultPlatformId,
       category_id: data.category_id,
-      design_preference: data.design_preference || null,
+      design_preference: designStyles.length > 0 ? designStyles.join(', ') : null,
       homepage_url: data.homepage_url || null,
       detail_page_url: data.detail_page_url || null,
       reference_notes: finalNotes || null,
@@ -265,6 +375,9 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         if (!fileRes.ok) throw new Error('파일 정보 저장 실패')
       }
 
+      // 최종 제출 성공 시 draft 삭제
+      try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
+
       setUploadProgress('')
       router.push('/projects')
     } catch (err) {
@@ -276,9 +389,44 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const inputCls = "w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
   const textareaCls = `${inputCls} resize-none`
 
+  // 리뷰 단계용 — 선택된 카테고리명 조회
+  const selectedCategory = categories.find(c => c.id === getValues('category_id'))
+
+  // 파일 업로드 요약 (타입별 개수)
+  const fileSummary = Object.entries(fileGroups)
+    .filter(([, files]) => files.length > 0)
+    .map(([type, files]) => {
+      const typeLabel: Record<string, string> = {
+        product_photo: '제품사진',
+        brochure: '소개서',
+        detail_capture: '상세페이지캡처',
+        brand_logo: '브랜드로고',
+        reference_design: '레퍼런스',
+      }
+      return `${typeLabel[type] ?? type} ${files.length}개`
+    })
+    .join(', ')
+
   return (
     <div>
       <StepIndicator current={currentStep} />
+
+      {/* ── 임시저장 배너 ── */}
+      {draftBanner === 'present' && (
+        <div className="mb-5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <p className="text-amber-800 text-sm flex-1">임시저장된 내용이 있습니다.</p>
+          <div className="flex gap-2">
+            <button type="button" onClick={loadDraft}
+              className="text-sm font-semibold text-primary-700 hover:text-primary-800 px-3 py-1.5 rounded-lg border border-primary-200 hover:bg-primary-50 transition-all">
+              불러오기
+            </button>
+            <button type="button" onClick={discardDraft}
+              className="text-sm font-semibold text-text-tertiary hover:text-text-secondary px-3 py-1.5 rounded-lg border border-border hover:bg-surface-active transition-all">
+              새로 작성
+            </button>
+          </div>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {apiError && (
@@ -395,7 +543,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
               onAdd={f => addFiles('product_photo', f)}
               onRemove={i => removeFile('product_photo', i)}
             />
-            {fileError && <p className="text-red-500 text-sm -mt-2">{fileError}</p>}
+            {fileError && currentStep === 2 && <p className="text-red-500 text-sm -mt-2">{fileError}</p>}
 
             <FileUploadArea
               label="기존 상세페이지 캡처" description="현재 사용 중인 상세페이지 스크린샷 (선택)"
@@ -411,9 +559,35 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         {currentStep === 3 && (
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">선호 색상 / 디자인 느낌</label>
-              <textarea {...register('design_preference')} rows={3} className={textareaCls}
-                placeholder="예: 깔끔하고 모던한 느낌, 민트+화이트 계열, 고급스러운 분위기" />
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-medium text-text-secondary">디자인 스타일 선택</label>
+                <span className="text-xs text-text-tertiary font-medium">
+                  {designStyles.length}/3 선택
+                </span>
+              </div>
+              <p className="text-xs text-text-tertiary mb-3">원하는 느낌을 최대 3개 선택해주세요.</p>
+              <div className="flex flex-wrap gap-2">
+                {DESIGN_STYLE_OPTIONS.map(style => {
+                  const selected = designStyles.includes(style)
+                  const disabled = !selected && designStyles.length >= 3
+                  return (
+                    <button
+                      key={style}
+                      type="button"
+                      onClick={() => toggleDesignStyle(style)}
+                      disabled={disabled}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
+                        selected
+                          ? 'bg-primary-600 text-white border-primary-600'
+                          : disabled
+                            ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                            : 'bg-white text-text-secondary border-border hover:border-primary-300'
+                      }`}>
+                      {style}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
             <FileUploadArea
@@ -445,6 +619,52 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
               <textarea {...register('reference_notes')} rows={3} className={textareaCls}
                 placeholder="그 외 전달할 내용이 있다면 입력하세요." />
             </div>
+          </div>
+        )}
+
+        {/* ── Step 4: 입력 내용 확인 ── */}
+        {currentStep === 4 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="text-base font-semibold text-text-primary mb-1">입력하신 내용을 확인해주세요</h2>
+              <p className="text-xs text-text-tertiary mb-4">내용을 수정하려면 ← 이전 버튼으로 해당 단계로 돌아가세요.</p>
+
+              <div className="bg-white border border-border rounded-xl px-5 divide-y divide-border">
+                <ReviewRow label="기업명" value={getValues('company_name')} />
+                <ReviewRow label="사업 소개" value={getValues('product_highlights')} />
+                <ReviewRow
+                  label="브랜드"
+                  value={
+                    hasBrand === null
+                      ? undefined
+                      : hasBrand
+                        ? `있음${getValues('brand_name') ? ` (${getValues('brand_name')})` : ''}`
+                        : '없음 (상호명 사용)'
+                  }
+                />
+                <ReviewRow label="카테고리" value={selectedCategory?.name} />
+                <ReviewRow
+                  label="타겟 고객층"
+                  value={targetAudience.length > 0 ? targetAudience.join(', ') : undefined}
+                />
+                <ReviewRow
+                  label="디자인 스타일"
+                  value={designStyles.length > 0 ? designStyles.join(', ') : undefined}
+                />
+                <ReviewRow
+                  label="업로드 파일"
+                  value={fileSummary || undefined}
+                />
+                <ReviewRow label="홈페이지 URL" value={getValues('homepage_url')} />
+                <ReviewRow label="참조 URL" value={getValues('detail_page_url')} />
+                <ReviewRow label="추가 요청사항" value={getValues('reference_notes')} />
+              </div>
+            </div>
+
+            {/* 이미지 임시저장 안내 */}
+            <p className="text-xs text-text-tertiary">
+              * 이미지 파일은 임시저장되지 않습니다. 제출 전 창을 닫으면 이미지는 다시 업로드해야 합니다.
+            </p>
 
             <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
               <p className="text-amber-800 text-sm font-medium mb-1">제출 전 확인사항</p>
@@ -467,29 +687,44 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         )}
 
         {/* 진행 차단 안내 (다음 버튼 바로 위에 표시) */}
-        {fileError && (
+        {fileError && currentStep !== 2 && (
           <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3">{fileError}</p>
         )}
 
         {/* 네비게이션 버튼 */}
-        <div className={`flex gap-3 pt-2 ${currentStep > 1 ? 'justify-between' : 'justify-end'}`}>
-          {currentStep > 1 && (
-            <button type="button" onClick={() => { setCurrentStep(s => s - 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-              className="px-6 py-3 rounded-xl border border-border text-sm font-semibold text-text-secondary hover:bg-surface-active transition-all min-h-[44px]">
-              ← 이전
+        <div className="pt-2 space-y-3">
+          {/* 임시저장 버튼 + 피드백 메시지 */}
+          <div className="flex items-center justify-end gap-3">
+            {saveMsg && (
+              <span className="text-xs text-primary-700 font-medium">{saveMsg}</span>
+            )}
+            <button
+              type="button"
+              onClick={saveDraft}
+              className="text-sm text-text-tertiary hover:text-text-secondary font-medium px-3 py-1.5 rounded-lg border border-border hover:bg-surface-active transition-all">
+              임시저장
             </button>
-          )}
-          {currentStep < 3 ? (
-            <button type="button" onClick={goNext}
-              className="flex-1 sm:flex-none sm:px-8 bg-primary-600 text-white rounded-xl py-3 font-semibold hover:bg-primary-700 shadow-sm transition-all text-sm min-h-[44px]">
-              다음 →
-            </button>
-          ) : (
-            <button type="submit" disabled={isSubmitting || !!uploadProgress}
-              className="flex-1 bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm hover:shadow-md transition-all text-base min-h-[44px]">
-              {uploadProgress || (isSubmitting ? '제출 중...' : '작업 의뢰하기')}
-            </button>
-          )}
+          </div>
+
+          <div className={`flex gap-3 ${currentStep > 1 ? 'justify-between' : 'justify-end'}`}>
+            {currentStep > 1 && (
+              <button type="button" onClick={() => { setCurrentStep(s => s - 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                className="px-6 py-3 rounded-xl border border-border text-sm font-semibold text-text-secondary hover:bg-surface-active transition-all min-h-[44px]">
+                ← 이전
+              </button>
+            )}
+            {currentStep < TOTAL_STEPS ? (
+              <button type="button" onClick={goNext}
+                className="flex-1 sm:flex-none sm:px-8 bg-primary-600 text-white rounded-xl py-3 font-semibold hover:bg-primary-700 shadow-sm transition-all text-sm min-h-[44px]">
+                다음 →
+              </button>
+            ) : (
+              <button type="submit" disabled={isSubmitting || !!uploadProgress}
+                className="flex-1 bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm hover:shadow-md transition-all text-base min-h-[44px]">
+                {uploadProgress || (isSubmitting ? '제출 중...' : '최종 제출')}
+              </button>
+            )}
+          </div>
         </div>
       </form>
     </div>
