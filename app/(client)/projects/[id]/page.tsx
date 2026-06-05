@@ -8,6 +8,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { ProtectedImage } from '@/components/client/ProtectedImage'
 import { CommentSection } from '@/components/client/CommentSection'
 import { RevisionGuide } from '@/components/client/RevisionGuide'
+import { SubmittedIntake, type IntakeFileView } from '@/components/client/SubmittedIntake'
 
 // 기업에게 노출되는 3구간 진행 단계
 type ClientStage = 'preparing' | 'review' | 'delivered'
@@ -96,6 +97,27 @@ export default async function ClientProjectDetailPage({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const platformName = (project.platforms as any)?.name ?? '-'
+
+  // 사업자가 제출한 첨부파일 — 이미지엔 1시간 signed URL 부여 (intake-files 버킷 RLS 보호)
+  const { data: intakeFiles } = await service
+    .from('intake_files')
+    .select('id, file_type, storage_path, file_name, mime_type')
+    .eq('project_id', id)
+    .order('created_at', { ascending: true })
+
+  const submittedFiles: IntakeFileView[] = await Promise.all(
+    (intakeFiles ?? []).map(async (f) => {
+      const isImage = (f.mime_type ?? '').startsWith('image/')
+      let url: string | null = null
+      if (isImage) {
+        const { data: signed } = await service.storage
+          .from('intake-files')
+          .createSignedUrl(f.storage_path, 60 * 60)
+        url = signed?.signedUrl ?? null
+      }
+      return { id: f.id, file_type: f.file_type, file_name: f.file_name, isImage, url }
+    })
+  )
 
   return (
     <div className="space-y-8">
@@ -188,6 +210,22 @@ export default async function ClientProjectDetailPage({
           )}
         </p>
       </div>
+
+      {/* 내가 제출한 내용 — 제출 후에도 항상 확인 가능 */}
+      <SubmittedIntake
+        companyName={project.company_name}
+        brandName={project.brand_name ?? null}
+        category={project.category ?? null}
+        platformName={platformName}
+        productHighlights={project.product_highlights ?? null}
+        designPreference={project.design_preference ?? null}
+        targetAudience={(project.target_audience as string[] | string | null) ?? null}
+        homepageUrl={project.homepage_url ?? null}
+        detailPageUrl={project.detail_page_url ?? null}
+        referenceNotes={project.reference_notes ?? null}
+        files={submittedFiles}
+        createdAt={project.created_at}
+      />
 
       {/* 상세페이지 초안 */}
       {showDesign && (
