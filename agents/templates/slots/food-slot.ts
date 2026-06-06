@@ -126,6 +126,26 @@ const DEFAULT_TOKENS: FoodTokens = {
 
 const esc = (s: string): string => (s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
+/**
+ * 제한 화이트리스트(<br>, <span class="em">)만 허용하고 나머지는 이스케이프.
+ * intro/cta headline은 줄바꿈·강조를 위해 제한 HTML을 쓰므로 raw 출력 대신 이걸 사용(XSS 차단).
+ */
+function richSafe(s: string): string {
+  let out = esc(s ?? '')
+  out = out.replace(/&lt;br\s*\/?&gt;/g, '<br>')
+  out = out.replace(/&lt;span class="em"&gt;/g, '<span class="em">').replace(/&lt;\/span&gt;/g, '</span>')
+  return out
+}
+
+/** hex를 블랙 쪽으로 t(0~1)만큼 어둡게 — 히어로 그라데이션 deep을 브랜드 색조로 */
+function darken(hex: string, t: number): string {
+  const m = /^#?([0-9a-fA-F]{6})$/.exec((hex ?? '').trim())
+  if (!m) return '#1B1512'
+  const n = parseInt(m[1], 16)
+  const c = (v: number): string => Math.round(v * (1 - t)).toString(16).padStart(2, '0')
+  return `#${c((n >> 16) & 255)}${c((n >> 8) & 255)}${c(n & 255)}`
+}
+
 function head(t: FoodTokens, title: string): string {
   return `<!DOCTYPE html><html lang="ko"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -135,7 +155,7 @@ function head(t: FoodTokens, title: string): string {
   :root{
     --primary:${t.primary}; --accent:${t.accent}; --cream:${t.cream}; --ink:${t.ink};
     --ink-2:#4A413B; --ink-3:#8A7F76; --line:#ECE3D8; --line2:#E0D5C7;
-    --deep:#1B1512; --gold:#C9A45C; --soft:#F4E9DA;
+    --deep:${darken(t.primary, 0.74)}; --gold:#C9A45C; --soft:#F4E9DA;
     --maxw:860px; --pad:48px;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -258,7 +278,7 @@ export function renderFoodDetail(d: FoodDetailData): string {
   const intro = `
   <section class="sec intro">
     <span class="eyebrow">Why ${P(d.brand)}</span>
-    <p class="intro__big">${d.intro.headline}</p>
+    <p class="intro__big">${richSafe(d.intro.headline)}</p>
     <p class="intro__p">${P(d.intro.body)}</p>
   </section>`
 
@@ -338,7 +358,7 @@ export function renderFoodDetail(d: FoodDetailData): string {
   const cta = `
   <section class="cta">
     ${d.cta.eyebrow ? `<span class="cta__eyebrow">${P(d.cta.eyebrow)}</span>` : ''}
-    <p class="cta__t">${d.cta.headline}</p>
+    <p class="cta__t">${richSafe(d.cta.headline)}</p>
     ${d.cta.sub ? `<p class="cta__p">${P(d.cta.sub)}</p>` : ''}
     <div class="cta__btn">${P(d.cta.button)}</div>
     ${d.cta.note ? `<p class="cta__note">${P(d.cta.note)}</p>` : ''}
