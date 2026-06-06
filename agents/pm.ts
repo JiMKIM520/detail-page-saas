@@ -37,7 +37,7 @@ const MAX_RETRY = 3
  */
 const SKIP_IMAGE_GENERATION = process.env.SKIP_IMAGE_GENERATION !== 'false'
 
-function buildProjectBrief(input: ProjectInput, projectId: string): ProjectBrief {
+export function buildProjectBrief(input: ProjectInput, projectId: string): ProjectBrief {
   return {
     projectId,
     productName: input.productName,

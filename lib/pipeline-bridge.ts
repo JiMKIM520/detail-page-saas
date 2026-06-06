@@ -80,9 +80,25 @@ export async function runPipelineForProject(projectId: string): Promise<{
       nukkiPaths,
     }
 
-    // 4. 파이프라인 실행
-    const { runPipeline } = await import('@/agents/pm')
-    const result = await runPipeline(input)
+    // 4. 파이프라인 실행 — 식품은 슬롯템플릿 경로, 그 외는 기존 제너릭 경로
+    const isFood = input.category === 'food'
+    let result
+    if (isFood) {
+      // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)
+      let heroImageUrl: string | undefined
+      if (files && files[0]) {
+        const { data: signed } = await supabase.storage
+          .from('intake-files')
+          .createSignedUrl(files[0].storage_path, 60 * 60 * 24 * 7)
+        heroImageUrl = signed?.signedUrl ?? undefined
+      }
+      console.log('[pipeline-bridge] 식품 → 슬롯템플릿 경로')
+      const { runSlotPipeline } = await import('@/agents/slot-pipeline')
+      result = await runSlotPipeline(input, { heroImageUrl })
+    } else {
+      const { runPipeline } = await import('@/agents/pm')
+      result = await runPipeline(input)
+    }
 
     // 5. 결과물 Storage 업로드
     const uploadResult = await uploadPipelineOutput(projectId, result.outputDir)
