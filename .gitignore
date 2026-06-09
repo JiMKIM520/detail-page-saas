@@ -69,3 +69,10 @@ scripts/test-login.ts
 # 파이프라인 임시 누끼
 tmp_nukki/
 tmp_nukki_planning/
+
+# 로컬 런타임 로그 / 실험 산출물 (배포·커밋 무관)
+.watchdog/
+assets/blocks-demo/
+assets/spike_3blocks.png
+assets/spike_3blocks.html
+assets/SCR-20260609-jwaf.jpeg

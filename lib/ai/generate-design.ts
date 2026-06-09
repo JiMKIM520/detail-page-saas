@@ -3,6 +3,7 @@ import { generateDesignImage } from './gemini-image'
 import { buildStylingPrompt, buildSectionDesignPrompt } from './design-prompt-builder'
 import { buildImageStackHtml } from './html-template'
 import { transitionStatus } from '@/lib/status-machine'
+import { composeProductContext } from '@/lib/ai/project-brief'
 
 const CHROMIUM_PACK_URL =
   process.env.CHROMIUM_PACK_URL ??
@@ -128,7 +129,7 @@ async function generateStylingShots(
         category: project.category ?? 'food',
         platform: project.platforms?.slug ?? 'smartstore',
         companyName: project.company_name,
-        productHighlights: project.product_highlights ?? '',
+        productHighlights: composeProductContext(project),
         colorHex,
         tone: content.tone ?? '',
       })

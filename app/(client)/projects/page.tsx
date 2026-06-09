@@ -42,7 +42,7 @@ export default async function ClientProjectsPage() {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            의뢰 시작하기
+            디자인 의뢰 시작하기
           </Link>
         )}
       </div>
@@ -55,7 +55,6 @@ export default async function ClientProjectsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-text-primary mb-1">아직 의뢰가 없습니다</h3>
           <p className="text-sm text-text-tertiary mb-6">상세페이지 제작을 의뢰해보세요</p>
           {!usageExhausted && (
             <Link href="/intake"
@@ -63,7 +62,7 @@ export default async function ClientProjectsPage() {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-              첫 의뢰 시작하기
+              디자인 의뢰 시작하기
             </Link>
           )}
         </div>

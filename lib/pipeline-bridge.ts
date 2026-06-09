@@ -9,6 +9,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { uploadPipelineOutput, updateDesignUrls, uploadToStorage } from '@/lib/storage'
 import { transitionStatus } from '@/lib/status-machine'
 import type { ProjectInput } from '@/agents/types'
+import { composeProductContext } from '@/lib/ai/project-brief'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -75,7 +76,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
       productName: project.company_name,
       category: project.category ?? 'food',
       platform: (project.platforms as { slug?: string })?.slug ?? 'smartstore',
-      productHighlights: project.product_highlights ?? '',
+      productHighlights: composeProductContext(project),
       targetAudience: '일반 소비자',
       nukkiPaths,
     }
@@ -207,7 +208,7 @@ export async function runPlanningForProject(projectId: string): Promise<{
       productName: project.company_name,
       category: project.category ?? 'food',
       platform: (project.platforms as { slug?: string })?.slug ?? 'smartstore',
-      productHighlights: project.product_highlights ?? '',
+      productHighlights: composeProductContext(project),
       targetAudience: '일반 소비자',
       nukkiPaths,
     }

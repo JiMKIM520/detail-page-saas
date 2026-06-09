@@ -218,6 +218,9 @@ export default async function ClientProjectDetailPage({
         category={project.category ?? null}
         platformName={platformName}
         productHighlights={project.product_highlights ?? null}
+        productName={project.product_name ?? null}
+        productDescription={project.product_description ?? null}
+        sellingPoints={(project.selling_points as string[] | string | null) ?? null}
         designPreference={project.design_preference ?? null}
         targetAudience={(project.target_audience as string[] | string | null) ?? null}
         homepageUrl={project.homepage_url ?? null}

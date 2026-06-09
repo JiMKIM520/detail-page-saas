@@ -4,6 +4,7 @@ import type { Json } from '@/lib/supabase/types'
 import { generateScript, generateScriptWithImages, type ImageInput } from './claude'
 import { SCRIPT_SYSTEM_PROMPT, buildUserPrompt } from './prompts/script-base'
 import { buildDifferentiatedSystemPrompt, buildEnhancedUserPrompt } from './prompts/builder'
+import { composeProductContext } from '@/lib/ai/project-brief'
 import { transitionStatus } from '@/lib/status-machine'
 
 async function fetchUrlContent(url: string): Promise<string | null> {
@@ -151,7 +152,7 @@ export async function generateScriptForProject(projectId: string, clientFeedback
           company_name: project.company_name,
           homepage_url: project.homepage_url,
           detail_page_url: project.detail_page_url,
-          product_highlights: project.product_highlights ?? '',
+          product_highlights: composeProductContext(project),
           reference_notes: project.reference_notes,
           category_name: categoryName,
           platform_name: platformName,
@@ -164,7 +165,7 @@ export async function generateScriptForProject(projectId: string, clientFeedback
           company_name: project.company_name,
           homepage_url: project.homepage_url,
           detail_page_url: project.detail_page_url,
-          product_highlights: project.product_highlights ?? '',
+          product_highlights: composeProductContext(project),
           reference_notes: project.reference_notes,
           category: project.category ?? '',
           platform_style_guide: platformStyleGuide,
@@ -248,7 +249,7 @@ export async function generateAbVariant(projectId: string, scriptId: string) {
         company_name: project.company_name,
         homepage_url: project.homepage_url,
         detail_page_url: project.detail_page_url,
-        product_highlights: project.product_highlights ?? '',
+        product_highlights: composeProductContext(project),
         reference_notes: project.reference_notes,
         category_name: categoryName,
         platform_name: platformName,
@@ -261,7 +262,7 @@ export async function generateAbVariant(projectId: string, scriptId: string) {
         company_name: project.company_name,
         homepage_url: project.homepage_url,
         detail_page_url: project.detail_page_url,
-        product_highlights: project.product_highlights ?? '',
+        product_highlights: composeProductContext(project),
         reference_notes: project.reference_notes,
         category: project.category ?? '',
         platform_style_guide: platformStyleGuide,

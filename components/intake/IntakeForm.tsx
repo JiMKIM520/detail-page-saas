@@ -9,9 +9,11 @@ import { createClient } from '@/lib/supabase/client'
 const schema = z.object({
   // Step 1 — 기업 & 브랜드 정보
   company_name: z.string().min(1, '기업명을 입력하세요'),
-  product_highlights: z.string().min(10, '사업 소개를 10자 이상 입력하세요'),
+  product_highlights: z.string().min(10, '회사 소개를 10자 이상 입력하세요'),
   brand_name: z.string().optional(),
   // Step 2 — 상품 정보
+  product_name: z.string().min(1, '제품명을 입력하세요'),
+  product_description: z.string().min(1, '제품 소개를 입력하세요'),
   platform_id: z.string().optional(),
   category_id: z.string().uuid('카테고리를 선택하세요'),
   // Step 3 — 디자인 선호도 (칩 선택 → join 후 저장)
@@ -36,6 +38,7 @@ const DESIGN_STYLE_OPTIONS = [
   '친근한', '트렌디한', '깔끔한', '시원시원한', '가독성이 좋은',
   '차분한', '활기찬', '아기자기한', '화려한', '강렬한',
   '비비드한', '파스텔톤', '뉴트럴', '모노톤', '컬러풀한', '아날로그',
+  '귀여운', '밝은', '따뜻한', '편안한', '부드러운',
 ]
 
 const DRAFT_KEY = 'detailai_intake_draft'
@@ -48,6 +51,9 @@ const TOTAL_STEPS = 4
 interface DraftData {
   company_name?: string
   product_highlights?: string
+  product_name?: string
+  product_description?: string
+  sellingPoints?: string[]
   brand_name?: string
   hasBrand?: boolean | null
   category_id?: string
@@ -164,16 +170,6 @@ function FileUploadArea({
   )
 }
 
-// ── 리뷰 단계용 항목 표시 컴포넌트 ──
-function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 py-3 border-b border-border last:border-0">
-      <span className="text-sm font-medium text-text-tertiary sm:w-36 flex-shrink-0">{label}</span>
-      <span className="text-sm text-text-primary flex-1">{value || <span className="text-text-tertiary italic">미입력</span>}</span>
-    </div>
-  )
-}
-
 export function IntakeForm({ platforms, categories }: { platforms: Platform[]; categories: Category[] }) {
   const { register, handleSubmit, formState: { errors, isSubmitting }, trigger, getValues, setValue } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -186,6 +182,10 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const [hasBrand, setHasBrand] = useState<boolean | null>(null)
   const [targetAudience, setTargetAudience] = useState<string[]>([])
   const [designStyles, setDesignStyles] = useState<string[]>([])
+  // Step 4 안내사항 확인 — 3개 모두 체크해야 최종 제출 가능
+  const [acks, setAcks] = useState({ address: false, shipping: false, duration: false })
+  // Step 2 셀링 포인트 — 5칸, 최소 3개 입력 필수
+  const [sellingPoints, setSellingPoints] = useState<string[]>(['', '', '', '', ''])
 
   const [fileGroups, setFileGroups] = useState<Record<string, File[]>>({
     product_photo: [],
@@ -220,6 +220,9 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       const draft: DraftData = JSON.parse(raw)
       if (draft.company_name) setValue('company_name', draft.company_name)
       if (draft.product_highlights) setValue('product_highlights', draft.product_highlights)
+      if (draft.product_name) setValue('product_name', draft.product_name)
+      if (draft.product_description) setValue('product_description', draft.product_description)
+      if (Array.isArray(draft.sellingPoints)) setSellingPoints([...draft.sellingPoints, '', '', '', '', ''].slice(0, 5))
       if (draft.brand_name) setValue('brand_name', draft.brand_name)
       if (draft.hasBrand !== undefined) setHasBrand(draft.hasBrand ?? null)
       if (draft.category_id) setValue('category_id', draft.category_id)
@@ -245,6 +248,9 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       const draft: DraftData = {
         company_name: vals.company_name,
         product_highlights: vals.product_highlights,
+        product_name: vals.product_name,
+        product_description: vals.product_description,
+        sellingPoints,
         brand_name: vals.brand_name,
         hasBrand,
         category_id: vals.category_id,
@@ -289,7 +295,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
 
   const STEP_FIELDS: Record<number, (keyof FormData)[]> = {
     1: ['company_name', 'product_highlights'],
-    2: ['category_id'],
+    2: ['product_name', 'product_description', 'category_id'],
     3: ['homepage_url', 'detail_page_url'],
     4: ['consent'],
   }
@@ -298,7 +304,11 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     const valid = await trigger(STEP_FIELDS[currentStep])
     if (currentStep === 2) {
       if (!valid) {
-        setFileError('카테고리를 선택해주세요.')
+        setFileError('제품명·제품 소개·카테고리를 모두 입력해주세요.')
+        return
+      }
+      if (sellingPoints.filter(p => p.trim()).length < 3) {
+        setFileError('셀링 포인트를 최소 3개 입력해주세요.')
         return
       }
       if (fileGroups.product_photo.length === 0) {
@@ -341,6 +351,9 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     const payload = {
       company_name: data.company_name,
       product_highlights: data.product_highlights,
+      product_name: data.product_name,
+      product_description: data.product_description,
+      selling_points: sellingPoints.map(p => p.trim()).filter(Boolean),
       brand_name: data.brand_name || null,
       platform_id: data.platform_id || defaultPlatformId,
       category_id: data.category_id,
@@ -389,24 +402,6 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const inputCls = "w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
   const textareaCls = `${inputCls} resize-none`
 
-  // 리뷰 단계용 — 선택된 카테고리명 조회
-  const selectedCategory = categories.find(c => c.id === getValues('category_id'))
-
-  // 파일 업로드 요약 (타입별 개수)
-  const fileSummary = Object.entries(fileGroups)
-    .filter(([, files]) => files.length > 0)
-    .map(([type, files]) => {
-      const typeLabel: Record<string, string> = {
-        product_photo: '제품사진',
-        brochure: '소개서',
-        detail_capture: '상세페이지캡처',
-        brand_logo: '브랜드로고',
-        reference_design: '레퍼런스',
-      }
-      return `${typeLabel[type] ?? type} ${files.length}개`
-    })
-    .join(', ')
-
   return (
     <div>
       <StepIndicator current={currentStep} />
@@ -445,7 +440,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">사업 소개 *</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">회사 소개 *</label>
               <textarea {...register('product_highlights')} rows={4} className={textareaCls}
                 placeholder="어떤 사업을 하시나요? 주력 제품, 핵심 강점, 고객에게 전달하고 싶은 가치를 입력하세요." />
               {errors.product_highlights && <p className="text-red-500 text-sm mt-1.5">{errors.product_highlights.message}</p>}
@@ -454,7 +449,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-2">브랜드 유무 *</label>
               <div className="flex gap-3">
-                {[{ val: true, label: '브랜드 있음' }, { val: false, label: '브랜드 없음 (상호명 사용)' }].map(opt => (
+                {[{ val: true, label: '브랜드 있음 (로고 BI 업로드)' }, { val: false, label: '브랜드 없음 (상호명 사용)' }].map(opt => (
                   <button key={String(opt.val)} type="button"
                     onClick={() => setHasBrand(opt.val)}
                     className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all ${
@@ -485,7 +480,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             )}
 
             <FileUploadArea
-              label="기업 소개서 / 카탈로그" description="PDF 또는 이미지 (제품 스펙, USP 등 포함)"
+              label="기업 소개서 / 상품 카탈로그 (있을 시 업로드)" description="PDF 또는 이미지 (제품 스펙, USP 등 포함)"
               accept="image/*,.pdf" required={false}
               files={fileGroups.brochure}
               onAdd={f => addFiles('brochure', f)}
@@ -497,6 +492,38 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         {/* ── Step 2: 상품 정보 ── */}
         {currentStep === 2 && (
           <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">제품명 *</label>
+              <input {...register('product_name')} className={inputCls} placeholder="예: 제주 감귤청" />
+              {errors.product_name && <p className="text-red-500 text-sm mt-1.5">{errors.product_name.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">제품 소개 *</label>
+              <textarea {...register('product_description')} rows={4} className={textareaCls}
+                placeholder="제품의 특징, 구성, 사용법 등 상세페이지에 담고 싶은 내용을 입력하세요." />
+              {errors.product_description && <p className="text-red-500 text-sm mt-1.5">{errors.product_description.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                셀링 포인트 <span className="text-text-tertiary font-normal">(제품의 강점을 3개 이상 작성해주세요)</span> *
+              </label>
+              <div className="space-y-2">
+                {sellingPoints.map((point, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-text-tertiary w-5 flex-shrink-0 text-right">{i + 1}.</span>
+                    <input
+                      value={point}
+                      onChange={e => setSellingPoints(prev => prev.map((p, idx) => (idx === i ? e.target.value : p)))}
+                      className={inputCls}
+                      placeholder={i < 3 ? '필수 입력' : '선택 입력'}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1.5">카테고리 *</label>
               <select {...register('category_id')} className={inputCls}>
@@ -537,7 +564,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             </div>
 
             <FileUploadArea
-              label="제품 사진" description="제품 정면, 측면, 디테일 등 3~5장 권장"
+              label="제품 사진" description="상세페이지 제작을 의뢰하는 제품 사진 1~2장"
               accept="image/*" required
               files={fileGroups.product_photo}
               onAdd={f => addFiles('product_photo', f)}
@@ -603,13 +630,13 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1.5">홈페이지 URL</label>
-                <input {...register('homepage_url')} className={inputCls} placeholder="https://example.com" />
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">자사 홈페이지(스마트스토어) URL</label>
+                <input {...register('homepage_url')} className={inputCls} placeholder="https://smartstore.naver.com/..." />
                 {errors.homepage_url && <p className="text-red-500 text-sm mt-1.5">{errors.homepage_url.message}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1.5">참조 상세페이지 URL</label>
-                <input {...register('detail_page_url')} className={inputCls} placeholder="https://smartstore.naver.com/..." />
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">경쟁사 또는 참조용 상세페이지 URL</label>
+                <input {...register('detail_page_url')} className={inputCls} placeholder="https://example.com" />
                 {errors.detail_page_url && <p className="text-red-500 text-sm mt-1.5">{errors.detail_page_url.message}</p>}
               </div>
             </div>
@@ -627,38 +654,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
           <div className="space-y-5">
             <div>
               <h2 className="text-base font-semibold text-text-primary mb-1">입력하신 내용을 확인해주세요</h2>
-              <p className="text-xs text-text-tertiary mb-4">내용을 수정하려면 ← 이전 버튼으로 해당 단계로 돌아가세요.</p>
-
-              <div className="bg-white border border-border rounded-xl px-5 divide-y divide-border">
-                <ReviewRow label="기업명" value={getValues('company_name')} />
-                <ReviewRow label="사업 소개" value={getValues('product_highlights')} />
-                <ReviewRow
-                  label="브랜드"
-                  value={
-                    hasBrand === null
-                      ? undefined
-                      : hasBrand
-                        ? `있음${getValues('brand_name') ? ` (${getValues('brand_name')})` : ''}`
-                        : '없음 (상호명 사용)'
-                  }
-                />
-                <ReviewRow label="카테고리" value={selectedCategory?.name} />
-                <ReviewRow
-                  label="타겟 고객층"
-                  value={targetAudience.length > 0 ? targetAudience.join(', ') : undefined}
-                />
-                <ReviewRow
-                  label="디자인 스타일"
-                  value={designStyles.length > 0 ? designStyles.join(', ') : undefined}
-                />
-                <ReviewRow
-                  label="업로드 파일"
-                  value={fileSummary || undefined}
-                />
-                <ReviewRow label="홈페이지 URL" value={getValues('homepage_url')} />
-                <ReviewRow label="참조 URL" value={getValues('detail_page_url')} />
-                <ReviewRow label="추가 요청사항" value={getValues('reference_notes')} />
-              </div>
+              <p className="text-xs text-text-tertiary">내용 수정을 원하는 경우 [← 이전] 버튼을 클릭하여 이전 단계로 이동할 수 있습니다.</p>
             </div>
 
             {/* 이미지 임시저장 안내 */}
@@ -666,12 +662,42 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
               * 이미지 파일은 임시저장되지 않습니다. 제출 전 창을 닫으면 이미지는 다시 업로드해야 합니다.
             </p>
 
+            {/* 상세페이지 제작 안내사항 — 3개 모두 체크해야 최종 제출 가능 */}
+            <div className="bg-white border border-border rounded-xl p-4">
+              <p className="text-sm font-semibold text-red-600 mb-1">상세페이지 제작을 위한 안내사항을 확인해주세요.</p>
+              <p className="text-xs text-text-tertiary mb-3">(내용을 숙지하셨다면 체크박스를 클릭해주세요)</p>
+              <div className="space-y-3">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" checked={acks.address}
+                    onChange={e => setAcks(a => ({ ...a, address: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-border text-primary-600 focus:ring-primary-500 cursor-pointer flex-shrink-0" />
+                  <span className="text-sm text-text-secondary leading-relaxed">
+                    상세페이지 제작을 위한 제품 촬영을 위해 보낼 주소는 아래와 같습니다.<br />
+                    주소 : 서울시 영등포구 영중로10길 6, 델리타운 4층 9호 (하나파워온스토어 소상공인 지원사업단 앞)<br />
+                    전화번호 : (확보예정)
+                  </span>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" checked={acks.shipping}
+                    onChange={e => setAcks(a => ({ ...a, shipping: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-border text-primary-600 focus:ring-primary-500 cursor-pointer flex-shrink-0" />
+                  <span className="text-sm text-text-secondary leading-relaxed">제품 도착 후 사진 촬영 및 디자인 작업 등이 이어질 예정이니, 빠른 배송 부탁드립니다.</span>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" checked={acks.duration}
+                    onChange={e => setAcks(a => ({ ...a, duration: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-border text-primary-600 focus:ring-primary-500 cursor-pointer flex-shrink-0" />
+                  <span className="text-sm text-text-secondary leading-relaxed">디자인 작업 기간은 제품 도착 확인 후 3주 정도 소요됩니다.</span>
+                </label>
+              </div>
+            </div>
+
             <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
               <p className="text-amber-800 text-sm font-medium mb-1">제출 전 확인사항</p>
               <ul className="text-amber-700 text-sm space-y-0.5 list-disc list-inside">
                 <li>기업당 1건의 상세페이지 제작이 제공됩니다</li>
                 <li>초안 확인 후 수정 요청은 최대 2회 가능합니다</li>
-                <li>레이아웃 전면 수정은 불가하며 문구/색상 조정 수준으로 진행됩니다</li>
+                <li>디자인의 전체적인 구성은 유지한 상태에서, 문구 변경 및 색상 조정 등 범위 내에서 수정 가능합니다</li>
               </ul>
             </div>
 
@@ -719,8 +745,8 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
                 다음 →
               </button>
             ) : (
-              <button type="submit" disabled={isSubmitting || !!uploadProgress}
-                className="flex-1 bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm hover:shadow-md transition-all text-base min-h-[44px]">
+              <button type="submit" disabled={isSubmitting || !!uploadProgress || !(acks.address && acks.shipping && acks.duration)}
+                className="flex-1 bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all text-base min-h-[44px]">
                 {uploadProgress || (isSubmitting ? '제출 중...' : '최종 제출')}
               </button>
             )}

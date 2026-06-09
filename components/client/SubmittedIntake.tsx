@@ -12,6 +12,10 @@ interface SubmittedIntakeProps {
   category: string | null
   platformName: string
   productHighlights: string | null
+  productName: string | null
+  productDescription: string | null
+  // jsonb 컬럼 — 레거시 데이터는 배열/문자열/null 혼재 가능
+  sellingPoints: string[] | string | null
   designPreference: string | null
   // jsonb 컬럼 — 레거시 데이터는 배열/문자열 혼재 가능
   targetAudience: string[] | string | null
@@ -71,6 +75,9 @@ export function SubmittedIntake({
   category,
   platformName,
   productHighlights,
+  productName,
+  productDescription,
+  sellingPoints,
   designPreference,
   targetAudience,
   homepageUrl,
@@ -90,6 +97,12 @@ export function SubmittedIntake({
       ? targetAudience.split(',').map(s => s.trim()).filter(Boolean)
       : []
   const notes = cleanNotes(referenceNotes)
+  // 셀링 포인트 — 배열/문자열/null 모두 안전하게 정규화
+  const points: string[] = Array.isArray(sellingPoints)
+    ? sellingPoints.filter(Boolean)
+    : typeof sellingPoints === 'string' && sellingPoints.trim()
+      ? sellingPoints.split('\n').map(s => s.trim()).filter(Boolean)
+      : []
 
   // 파일 타입별 그룹화 (표시 순서 고정)
   const TYPE_ORDER = ['product_photo', 'brand_logo', 'detail_capture', 'brochure', 'reference_design', 'other']
@@ -128,8 +141,21 @@ export function SubmittedIntake({
           <Row label="카테고리 / 플랫폼">
             {(category ?? '-')} · {platformName}
           </Row>
+          {productName && <Row label="제품명">{productName}</Row>}
+          {productDescription && (
+            <Row label="제품 소개">
+              <p className="whitespace-pre-wrap">{productDescription}</p>
+            </Row>
+          )}
+          {points.length > 0 && (
+            <Row label="셀링 포인트">
+              <ul className="list-disc list-inside space-y-0.5">
+                {points.map((p, i) => <li key={i}>{p}</li>)}
+              </ul>
+            </Row>
+          )}
           {productHighlights && (
-            <Row label="상품 강조점">
+            <Row label="회사 소개">
               <p className="whitespace-pre-wrap">{productHighlights}</p>
             </Row>
           )}

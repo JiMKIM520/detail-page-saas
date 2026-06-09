@@ -13,7 +13,7 @@ export function RevisionGuide({ used = 0 }: { used?: number }) {
           <ul className="text-sm text-blue-700 space-y-1">
             <li>초안 확인 후 아래 코멘트로 수정 요청이 가능합니다.</li>
             <li>수정은 <span className="font-semibold">1차 · 2차 총 2회</span>까지 가능합니다.</li>
-            <li>레이아웃 전면 수정은 불가하며 <span className="font-semibold">문구·색상 조정 수준</span>으로 진행됩니다.</li>
+            <li>디자인의 <span className="font-semibold">전체적인 구성은 유지</span>한 상태에서, 문구 변경 및 색상 조정 등 범위 내에서 수정 가능합니다.</li>
           </ul>
           {/* 1차 / 2차 수정 상태 */}
           <div className="flex items-center gap-2 mt-3">
