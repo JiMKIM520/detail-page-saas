@@ -1,0 +1,55 @@
+/**
+ * 조합형 블록 시스템 공개 API.
+ *
+ * 사용:
+ *   import { renderPage, deriveTokens } from '@/agents/templates/blocks'
+ *   const { html } = renderPage({ meta, tokens, blocks })
+ *
+ * 변형 추가(피그마 인제스천): variants/<archetype>.ts 에 defineBlock 추가 → 아래 registerBlocks 배열에 등록.
+ */
+import { registerBlocks } from './registry'
+import { heroCentered, heroEditorial } from './variants/hero'
+import { checkpointRows, checkpointGrid } from './variants/checkpoint'
+import { pointBubble, featureFullbleed } from './variants/point'
+import { calloutBanner, statementSerif } from './variants/callout'
+import { compareCooking } from './variants/compare'
+import { specTable } from './variants/spec'
+import { closingMood, closingLight } from './variants/closing'
+import { recommendDark } from './variants/recommend'
+import { checklistChecks } from './variants/checklist'
+import { stripBand } from './variants/strip'
+import { reasonQuestion } from './variants/reason'
+import { featureSeal } from './variants/seal'
+import { equationVisual } from './variants/equation'
+import { storyPair } from './variants/story'
+import { certRosette } from './variants/cert'
+
+registerBlocks([
+  heroCentered,
+  heroEditorial,
+  checkpointRows,
+  checkpointGrid,
+  pointBubble,
+  featureFullbleed,
+  calloutBanner,
+  statementSerif,
+  compareCooking,
+  specTable,
+  closingMood,
+  closingLight,
+  // 식품 라이브러리 완성 변형 (스타일 A 8종)
+  recommendDark,
+  checklistChecks,
+  stripBand,
+  reasonQuestion,
+  featureSeal,
+  equationVisual,
+  storyPair,
+  certRosette,
+])
+
+export { renderPage, pageSpecSchema } from './composer'
+export type { RenderResult } from './composer'
+export { getVariant, listVariants, catalog } from './registry'
+export { deriveTokens, TOKEN_PRESETS, warmPlayful, modernEditorial } from './tokens'
+export type { BlockArchetype, BlockVariant, PageSpec, PageBlock, Tokens, RenderCtx } from './types'

@@ -1,0 +1,181 @@
+/**
+ * Blocks Composer (AI) — brief + 이미지 → 조합형 블록 PageSpec.
+ *
+ * 역할: 등록된 블록 변형 카탈로그에서 제품/카테고리/스타일에 맞는 12~18개를 골라
+ *       순서·카피·이미지·토큰을 채운 PageSpec을 생성한다. (레이아웃/CSS는 변형이 소유)
+ *
+ * 검증: AI 출력(composerOutputSchema) → assemblePageSpec → renderPage(블록별 슬롯 zod 검증).
+ *       실패 시 오류를 피드백해 1회 재시도. 토큰은 AI가 손으로 쓰지 않고 presetKey+브랜드색에서 도출.
+ *
+ * 정직성: brief에 없는 인증/후기/수치를 지어내지 않는다.
+ */
+import { z } from 'zod'
+import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import type { AgentResult, ProjectBrief } from './types'
+import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
+
+// ── AI 출력 계약 ────────────────────────────────────────────────
+const composerOutputSchema = z.object({
+  meta: z.object({
+    product: z.string().min(1),
+    category: z.string().min(1),
+    styleDirection: z.string().optional(),
+  }),
+  presetKey: z.enum(['warm-playful', 'modern-editorial']),
+  blocks: z
+    .array(z.object({ variantId: z.string().min(1), data: z.unknown() }))
+    .min(10)
+    .max(20)
+    .refine((b) => Boolean(b[0]?.variantId?.startsWith('hero-')), { message: '첫 블록은 hero 변형이어야 함' })
+    .refine((b) => Boolean(b[b.length - 1]?.variantId?.startsWith('closing-')), { message: '마지막 블록은 closing 변형이어야 함' }),
+})
+export type ComposerOutput = z.infer<typeof composerOutputSchema>
+
+/** AI 출력 + 브랜드색 → 검증 가능한 PageSpec (토큰은 여기서 결정론적으로 도출). 순수 함수(테스트 가능). */
+export function assemblePageSpec(out: ComposerOutput, brandColors?: string[]): PageSpec {
+  const tokens = deriveTokens(out.presetKey, brandColors, { tintBackground: false })
+  return { meta: out.meta, tokens, blocks: out.blocks }
+}
+
+export interface BlocksComposerInput {
+  brief: ProjectBrief
+  images?: { hero?: string; lifestyle?: string[]; cutout?: string; section?: string[] }
+  brandColors?: string[]
+  outputDir: string
+}
+
+export interface BlocksComposerResult {
+  spec: PageSpec
+  html: string
+  usedVariants: string[]
+}
+
+// ── 변형 데이터 계약 (AI가 각 블록 슬롯을 정확히 채우게 하는 레퍼런스) ──
+// em = 인라인 강조 <span class="em">…</span> 허용, br = <br> 허용, (url) = 제공된 이미지 URL
+const DATA_CONTRACTS = `
+hero-centered { badge?, title(em), sub?(em), heroImage?(url), bubble?, caption?, brand }
+hero-editorial { kicker?, title(em,br), lead?, heroImage?(url), figNo? }
+recommend-dark { floatImage?(url), title(em), en?, image?(url), ribbon? }
+checklist-checks { title(em), items:[{ text(em), star?:bool }] (2~6) }
+strip-band { text }
+checkpoint-rows { title(em), pill?, items:[{ icon, text(em) }] (3~6), photo?(url) }   // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star
+checkpoint-grid { kicker?, title, items:[{ no, title, desc }] (2~6) }
+point-bubble { label?, title(em), image?(url), bubbleTop?, bubbleBottom?, lead?(em,br) }
+feature-fullbleed { image?(url), kicker?, title }
+feature-seal { image?(url), sealMain?, sealSub? }
+reason-question { question(em,br) }
+equation-visual { a:{ image?(url), label }, b:{ image?(url), label }, c:{ image?(url), label }, quote?(em) }   // label은 a/b/c 모두 필수
+callout-banner { big(em,br), small? }
+statement-serif { quote(em,br), by? }
+story-pair { label?, title(em), images:[url] (1~3), lead?(em,br) }
+cert-rosette { title(em), desc?(em,br), rosetteLine1?, rosetteLine2?, rosetteSub?, image?(url) }
+compare-cooking { label?, title(em), left:{ tag?, icon, name, steps:[{ text(em) }] (1~4) }, right:{ tag?, icon, name, steps:[{ text(em) }] (1~4) }, note?(em) }   // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star
+spec-table { kicker?, title, rows:[{ k, v(em) }] (2~10) }
+closing-mood { bgImage?(url), title(em), sub?(em) }
+closing-light { kicker?, title(em), sub?, cta? }
+`.trim()
+
+const SYSTEM_PROMPT = `You are a senior Korean e-commerce art director composing a long detail page from a fixed library of premium "section blocks".
+You DO NOT write layout or CSS. You select blocks, order them, and fill each block's content slots with Korean copy + map provided image URLs.
+
+OUTPUT: pure JSON, no markdown. Shape:
+{ "meta": { "product": string, "category": string, "styleDirection": string? },
+  "presetKey": "warm-playful" | "modern-editorial",
+  "blocks": [ { "variantId": string, "data": { …block-specific slots… } } ] }
+
+RULES
+- Use ONLY variantId values from the catalog. Fill data EXACTLY per the block's data contract.
+- Compose 12~18 blocks. FIRST block must be a hero (hero-centered or hero-editorial). LAST block must be a closing (closing-mood or closing-light).
+- Order for a real detail page: hero → recommend/checklist → trust/checkpoint → point/feature sections (alternate text+photo) → reason/equation/callout → story → cert → compare/spec → closing.
+- Pick presetKey by feel: warm-playful (친근한 식품/생활) vs modern-editorial (프리미엄/미니멀). Match the product.
+- Do NOT repeat the same variantId more than twice. Use strip-band at most once. Vary blocks for richness.
+- Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
+- Map provided image URLs into (url) slots. Reuse the few available images sensibly across blocks. If no suitable image, omit that field.
+- FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
+- HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
+- Do not output tokens/colors — only presetKey. The system derives the palette.`
+
+function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): string {
+  const { brief, images } = input
+  const imgLines: string[] = []
+  if (images?.hero) imgLines.push(`- hero(메인): ${images.hero}`)
+  if (images?.cutout) imgLines.push(`- cutout(누끼/단면): ${images.cutout}`)
+  ;(images?.lifestyle ?? []).forEach((u, i) => imgLines.push(`- lifestyle${i + 1}(연출): ${u}`))
+  ;(images?.section ?? []).forEach((u, i) => imgLines.push(`- section${i + 1}: ${u}`))
+  const imageBlock = imgLines.length ? imgLines.join('\n') : '(제공 이미지 없음 — 이미지 슬롯은 생략)'
+
+  const required =
+    brief.requiredContent?.phrases?.length
+      ? `\nREQUIRED PHRASES (verbatim 등장):\n${brief.requiredContent.phrases.map((p) => `- "${p}"`).join('\n')}`
+      : ''
+  const certs =
+    brief.requiredContent?.certifications?.length
+      ? `\nCERTIFICATIONS (cert/spec 근거로만 사용):\n${brief.requiredContent.certifications.map((c) => `- "${c}"`).join('\n')}`
+      : '\nCERTIFICATIONS: (없음) → 인증/수치 지어내지 말 것'
+  const forbidden = brief.restrictions?.words?.length
+    ? `\nFORBIDDEN WORDS: ${brief.restrictions.words.map((w) => `"${w}"`).join(', ')}`
+    : ''
+
+  const repair = repairNote
+    ? `\n\n⚠️ 직전 출력이 검증 실패. 아래 오류를 정확히 고쳐 다시 유효 JSON만 출력:\n${repairNote}`
+    : ''
+
+  return `제품명: ${brief.productName}
+카테고리: ${brief.category}
+플랫폼: ${brief.platform}
+타겟: ${brief.targetAudience}
+핵심 강조점: ${(brief.keyHighlights ?? []).join(' | ')}
+톤: ${(brief.toneKeywords ?? []).join(', ')} / 방향: ${brief.styleDirection ?? ''}${required}${certs}${forbidden}
+
+사용 가능한 이미지:
+${imageBlock}
+
+블록 카탈로그(variantId · archetype · imageSlots · 설명):
+${catalog()
+  .map((c) => `- ${c.id} · ${c.archetype} · img${c.imageSlots} · ${c.describe}`)
+  .join('\n')}
+
+각 블록 데이터 계약:
+${DATA_CONTRACTS}
+
+위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
+}
+
+async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
+  const message = await anthropicClient.messages.create({
+    model: MODELS.CLAUDE_SONNET,
+    max_tokens: 16384,
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
+  })
+  const text = message.content[0]?.type === 'text' ? message.content[0].text : ''
+  const raw = parseJsonResponse<unknown>(text)
+  const out = composerOutputSchema.parse(raw)
+  const spec = assemblePageSpec(out, input.brandColors)
+  const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
+  return { spec, html: rendered.html, usedVariants: rendered.usedVariants }
+}
+
+export async function runBlocksComposer(input: BlocksComposerInput): Promise<AgentResult<BlocksComposerResult>> {
+  const elapsed = timer()
+  console.log('[Blocks Composer] 시작')
+  try {
+    let result: BlocksComposerResult
+    try {
+      result = await callOnce(input)
+    } catch (firstErr: unknown) {
+      const issues = firstErr instanceof Error ? firstErr.message.slice(0, 900) : String(firstErr)
+      console.warn('[Blocks Composer] 1차 검증 실패 → 1회 재시도:', issues.slice(0, 160))
+      result = await callOnce(input, issues)
+    }
+    saveJson(result.spec, `${input.outputDir}/page-spec.json`)
+    const ms = elapsed()
+    console.log(`[Blocks Composer] 완료 (${ms}ms) — ${result.usedVariants.length} blocks`)
+    return { success: true, data: result, durationMs: ms }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    const ms = elapsed()
+    console.error('[Blocks Composer] 실패:', msg.slice(0, 200))
+    return { success: false, error: msg, durationMs: ms }
+  }
+}
