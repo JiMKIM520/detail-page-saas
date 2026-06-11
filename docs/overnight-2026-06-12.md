@@ -84,3 +84,41 @@
   - LOW: closing-mood sub `.min(1).optional()`(빈 DOM 방지).
 - 재검증: 격리 tsc 클린, 결정론 테스트 8/8, 14블록 재렌더 + cert/seal 시각 확인. 풀 빌드 그린.
 
+### Phase 5 — 블록 시스템 로컬 커밋 ✅
+- 26파일(코어 6 + 변형 15 + 컴포저 + 스크립트 3 + 로그) 명시적 스테이징. codex-watchdog/데모에셋 제외.
+- **커밋 d91662b** (로컬 main). **미푸시**(승인 필요 + prod 무관). → 077b648(intake) 위에 쌓임.
+
+### Phase 6 — 문서/메모리/보고 ✅
+- `docs/blocks-system.md` 아키텍처+확장 가이드 작성.
+- 메모리 project_detailai_block_system 갱신(20변형·컴포저·커밋).
+- 아래 아침 보고.
+
+---
+
+## 4. 아침 보고 (사용자 확인용)
+
+### 오늘밤 한 일 (전부 검증 완료)
+| | 결과 |
+|---|---|
+| **배포 의뢰폼 라이브 E2E** | 4단계 전부 PDF 스펙대로 동작 확인(스크린샷 /tmp/e2e/). 안내사항 체크 게이팅 OK. |
+| **식품 블록 라이브러리 완성** | 8블록 추가 → **20변형**, 14블록 조립 렌더 검증 |
+| **AI 컴포저 구현** | brief→PageSpec, 결정론 테스트 8/8 |
+| **적대적 리뷰 + 수정** | 7건(HIGH 3·MED 3·LOW 1) 전부 수정·재검증 |
+| **로컬 커밋** | 블록시스템 d91662b (intake는 어제 077b648) |
+| **빌드** | npm run build 그린 (전 구간) |
+
+### 사용자 확인/결정 필요 (내가 임의로 안 한 것)
+1. **GitHub 푸시** — 로컬 커밋 2개(077b648 intake, d91662b blocks) 미푸시. 푸시 원하시면 진행. (intake는 이미 prod 배포됨 — 푸시는 레포 동기화용)
+2. **Step4 입력요약표 제거** — PDF "내용 삭제" 지시대로 제거함. 유지 원하시면 되돌림.
+3. **블록 시스템 파이프라인 배선** — 현재 dormant. 라이브 식품 경로에 연결할지(다음 큰 단계). 무회귀 위해 오늘밤은 미배선.
+4. **AI 컴포저 실 LLM 호출** — 코드 완성·결정론 검증했으나 실제 Claude 호출은 미실행(키/토큰). 원하면 1회 테스트.
+5. **기술부채(내 작업 아님, 손 안 댐)** — lint 에러 95개는 전부 `scripts/upload-ssal-rerender.ts`(any 2곳) + 루트 `test_hero_*.js`/`test_typo_*.js`(require import). codex-watchdog.ts 하드코딩 prod UUID 4개. 정리 여부 결정 필요.
+
+### 라이브 테스트 계정 (의뢰폼 직접 확인용)
+- https://detail-page-saas.vercel.app/login · 이메일 `client@test.com` · 전화뒷4 `0000` · usage 0/1(새 의뢰 가능)
+
+### 산출물 위치
+- 블록 시스템: agents/templates/blocks/ + agents/blocks-composer.ts · 문서 docs/blocks-system.md
+- 데모: /tmp/spike/full15.html(14블록), assets/blocks-demo/ · E2E 스크린샷 /tmp/e2e/
+- 이 로그: docs/overnight-2026-06-12.md
+
