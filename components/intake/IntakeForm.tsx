@@ -97,15 +97,55 @@ function StepIndicator({ current }: { current: number }) {
   )
 }
 
+// 업로드 제한 — 버킷 file_size_limit(20MiB) 및 allowed_mime_types와 동기화
+const MAX_FILE_MB = 20
+
+/** accept 문자열('image/*' | 'image/*,.pdf')에 파일 형식이 맞는지 (드래그/우회 방어) */
+function matchesAccept(file: File, accept: string): boolean {
+  const tokens = accept.split(',').map((s) => s.trim().toLowerCase())
+  const name = file.name.toLowerCase()
+  const type = file.type.toLowerCase()
+  return tokens.some((tok) => {
+    if (tok.endsWith('/*')) return type.startsWith(tok.slice(0, tok.indexOf('/') + 1))
+    if (tok.startsWith('.')) return name.endsWith(tok)
+    return type === tok
+  })
+}
+
 function FileUploadArea({
-  label, description, accept, required, multiple = true, maxFiles,
+  label, description, accept, required, multiple = true, maxFiles, maxSizeMB = MAX_FILE_MB,
   files, onAdd, onRemove,
 }: {
-  label: string; description: string; accept: string; required?: boolean; multiple?: boolean; maxFiles?: number
+  label: string; description: string; accept: string; required?: boolean; multiple?: boolean; maxFiles?: number; maxSizeMB?: number
   files: File[]; onAdd: (files: File[]) => void; onRemove: (index: number) => void
 }) {
   const inputId = useId()
+  const [error, setError] = useState('')
   const atMax = maxFiles !== undefined && files.length >= maxFiles
+  const fmtLabel = /\.?pdf/i.test(accept) ? '이미지·PDF' : '이미지'
+
+  // 선택/추가 시 형식·크기·개수 검증 (초과/허용외 파일은 거부 + 친절한 안내)
+  function handleSelect(selected: File[]) {
+    const errs: string[] = []
+    const ok: File[] = []
+    for (const f of selected) {
+      if (maxFiles !== undefined && files.length + ok.length >= maxFiles) {
+        errs.push(`최대 ${maxFiles}개까지 첨부할 수 있습니다.`)
+        break
+      }
+      if (!matchesAccept(f, accept)) {
+        errs.push(`'${f.name}'은(는) 허용되지 않는 형식입니다.`)
+        continue
+      }
+      if (f.size > maxSizeMB * 1024 * 1024) {
+        errs.push(`'${f.name}'이(가) ${maxSizeMB}MB를 초과합니다.`)
+        continue
+      }
+      ok.push(f)
+    }
+    if (ok.length) onAdd(ok)
+    setError(errs.join(' '))
+  }
 
   function formatSize(bytes: number) {
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)}KB`
@@ -126,10 +166,12 @@ function FileUploadArea({
           </label>
         )}
       </div>
-      <p className="text-xs text-text-tertiary mb-3">{description}</p>
+      <p className="text-xs text-text-tertiary mb-1">{description}</p>
+      <p className="text-[11px] text-text-tertiary mb-2">허용: {fmtLabel} · 장당 최대 {maxSizeMB}MB{maxFiles ? ` · 최대 ${maxFiles}장` : ''}</p>
+      {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
       {/* 네이티브 파일 선택 — label[htmlFor]로 열어 모든 브라우저(Safari 포함)에서 동작 */}
       <input id={inputId} type="file" multiple={multiple} accept={accept} className="sr-only"
-        onChange={e => { onAdd(Array.from(e.target.files || [])); e.target.value = '' }} />
+        onChange={e => { handleSelect(Array.from(e.target.files || [])); e.target.value = '' }} />
 
       {files.length === 0 ? (
         <label htmlFor={inputId}
@@ -471,7 +513,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
                 </div>
                 <FileUploadArea
                   label="브랜드 로고" description="로고 이미지 파일 (PNG, SVG 권장)"
-                  accept="image/*" required={false}
+                  accept="image/*" required={false} maxFiles={2}
                   files={fileGroups.brand_logo}
                   onAdd={f => addFiles('brand_logo', f)}
                   onRemove={i => removeFile('brand_logo', i)}
@@ -481,7 +523,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
 
             <FileUploadArea
               label="기업 소개서 / 상품 카탈로그 (있을 시 업로드)" description="PDF 또는 이미지 (제품 스펙, USP 등 포함)"
-              accept="image/*,.pdf" required={false}
+              accept="image/*,.pdf" required={false} maxFiles={3}
               files={fileGroups.brochure}
               onAdd={f => addFiles('brochure', f)}
               onRemove={i => removeFile('brochure', i)}
@@ -564,8 +606,8 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             </div>
 
             <FileUploadArea
-              label="제품 사진" description="상세페이지 제작을 의뢰하는 제품 사진 1~2장"
-              accept="image/*" required
+              label="제품 사진" description="상세페이지 제작을 의뢰하는 제품 사진 1~2장 (권장)"
+              accept="image/*" required maxFiles={5}
               files={fileGroups.product_photo}
               onAdd={f => addFiles('product_photo', f)}
               onRemove={i => removeFile('product_photo', i)}
@@ -574,7 +616,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
 
             <FileUploadArea
               label="기존 상세페이지 캡처" description="현재 사용 중인 상세페이지 스크린샷 (선택)"
-              accept="image/*" required={false}
+              accept="image/*" required={false} maxFiles={5}
               files={fileGroups.detail_capture}
               onAdd={f => addFiles('detail_capture', f)}
               onRemove={i => removeFile('detail_capture', i)}
