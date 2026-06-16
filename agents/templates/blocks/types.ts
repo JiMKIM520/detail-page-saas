@@ -25,6 +25,7 @@ export type BlockArchetype =
   | 'callout' // 강조 배너/인용
   | 'story' // 브랜드 스토리 (사진 + 카피)
   | 'cert' // 인증/품질 씰
+  | 'review' // 고객 리뷰/사회적 증거
   | 'compare' // 2단 비교 (조리법 등)
   | 'spec' // 제품 상세 정보 테이블
   | 'closing' // 마무리 히어로/CTA

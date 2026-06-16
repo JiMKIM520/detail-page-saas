@@ -23,6 +23,7 @@ import { featureSeal } from './variants/seal'
 import { equationVisual } from './variants/equation'
 import { storyPair } from './variants/story'
 import { certRosette } from './variants/cert'
+import { reviewBubbles, reviewCards } from './variants/review'
 
 registerBlocks([
   heroCentered,
@@ -46,6 +47,9 @@ registerBlocks([
   equationVisual,
   storyPair,
   certRosette,
+  // review 아키타입 (Figma 200섹션 인제스천 파일럿)
+  reviewBubbles,
+  reviewCards,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
