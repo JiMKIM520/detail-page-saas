@@ -82,6 +82,7 @@ shipping-info { label?, image?(url), rows:[{ title, desc(em,br) }] (1~5), schedu
 stats-highlight { image?(url), label?, headline(em), items:[{ icon, label, value(em) }] (2~4) }   // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star|heart|gift|truck|shield|leaf|trophy|thumb|fire; 수치는 brief 근거만
 gallery-options { eyebrow?, items:[{ label, caption?, image?(url) }] (1~6) }
 banner-event { eyebrow?, title(em,br), subtitle?, bgImage?(url) }
+feature-editorial { title, subtitle?, items:[{ heading(em), desc?(em,br), image?(url) }] (2~4) }   // 특장점 에디토리얼(대형 숫자+풀폭 밴드). cobalt-premium 프리셋과 잘 맞음
 `.trim()
 
 /** DATA_CONTRACTS에 슬롯 계약이 정의된 variantId 집합 (각 줄 맨 앞 `<id> {` 파싱).

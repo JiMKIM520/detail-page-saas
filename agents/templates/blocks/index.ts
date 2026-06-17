@@ -29,6 +29,7 @@ import { shippingInfo } from './variants/shipping'
 import { statsHighlight } from './variants/stats'
 import { galleryOptions } from './variants/gallery'
 import { bannerEvent } from './variants/banner'
+import { featureEditorial } from './variants/feature-editorial'
 
 registerBlocks([
   heroCentered,
@@ -63,6 +64,8 @@ registerBlocks([
   statsHighlight,
   galleryOptions,
   bannerEvent,
+  // 템플릿 충실 재현(와디즈 200섹션 03_특장점)
+  featureEditorial,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

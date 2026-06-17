@@ -218,6 +218,15 @@ const VARIANT_DATA: Record<string, any> = {
   'banner-event': {
     title: '이벤트 제목',
   },
+
+  // ── feature-editorial (템플릿 충실 재현) ────────────────────────────────────
+  'feature-editorial': {
+    title: '제품 특장점',
+    items: [
+      { heading: '첫 번째 특장점', desc: '설명입니다' },
+      { heading: '두 번째 특장점', desc: '설명입니다' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

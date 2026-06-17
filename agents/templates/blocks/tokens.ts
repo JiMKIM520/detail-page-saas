@@ -38,7 +38,8 @@ export const modernEditorial: Tokens = {
   fontHand: "'Gaegu', cursive",
 }
 
-/** 스타일 C — 코발트 프리미엄 (Black Han Sans 펀치 + 코발트블루/딥플럼). 모던 커머스. */
+/** 스타일 C — 코발트 프리미엄 (와디즈 200섹션 템플릿 시그니처: Paperlogy + Cafe24 + 코발트/딥플럼).
+ *  fontDisplay=Paperlogy(제목, 800), fontSerif=Cafe24 ClassicType(대형 숫자), fontHand=Cafe24 Dangdanghae(둥근 카피). */
 export const cobaltPremium: Tokens = {
   bg: '#F3F5FF',
   paper: '#FFFFFF',
@@ -49,10 +50,10 @@ export const cobaltPremium: Tokens = {
   accentDark: '#3E57BE',
   brand: '#271633',
   line: '#DDE4FF',
-  fontDisplay: "'Black Han Sans', sans-serif",
+  fontDisplay: "'Paperlogy', sans-serif",
   fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Gowun Batang', serif",
-  fontHand: "'Gaegu', cursive",
+  fontSerif: "'Cafe24 ClassicType', serif",
+  fontHand: "'Cafe24 Dangdanghae', sans-serif",
 }
 
 /** 스타일 D — 샌드 럭셔리 (명조 + 카멜/베이지). 따뜻한 뉴트럴 고급. */

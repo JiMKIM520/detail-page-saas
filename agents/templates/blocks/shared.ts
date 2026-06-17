@@ -75,6 +75,15 @@ export const FONT_LINKS: string = [
   '<link rel="preconnect" href="https://fonts.googleapis.com">',
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
   '<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gaegu:wght@700&family=Gowun+Batang:wght@400;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">',
+  // 와디즈 200섹션 템플릿 시그니처 폰트 (Paperlogy / Cafe24 ClassicType / Cafe24 Dangdanghae)
+  `<style>
+@font-face{font-family:'Paperlogy';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-4Regular.woff2') format('woff2')}
+@font-face{font-family:'Paperlogy';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-5Medium.woff2') format('woff2')}
+@font-face{font-family:'Paperlogy';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-7Bold.woff2') format('woff2')}
+@font-face{font-family:'Paperlogy';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-8ExtraBold.woff2') format('woff2')}
+@font-face{font-family:'Cafe24 ClassicType';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24ClassicType/Cafe24ClassicType.woff2') format('woff2')}
+@font-face{font-family:'Cafe24 Dangdanghae';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24Dangdanghae/Cafe24Dangdanghae.woff2') format('woff2')}
+</style>`,
 ].join('\n')
 
 /** 음식 라인아트 워터마크 (은은한 배경). stroke 색은 고정(어두운 잉크). */
