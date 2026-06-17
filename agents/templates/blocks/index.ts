@@ -32,6 +32,7 @@ import { bannerEvent } from './variants/banner'
 import { featureEditorial, featureCards, featureDark } from './variants/feature-editorial'
 import { ingredientAccent, ingredientGrid } from './variants/ingredient'
 import { compareBeforeAfter } from './variants/compare-beforeafter'
+import { reviewList } from './variants/review-list'
 
 registerBlocks([
   heroCentered,
@@ -75,6 +76,8 @@ registerBlocks([
   ingredientGrid,
   // 템플릿 충실 재현(07_차별화 비교)
   compareBeforeAfter,
+  // 템플릿 충실 재현(06_고객리뷰)
+  reviewList,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

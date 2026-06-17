@@ -266,6 +266,15 @@ const VARIANT_DATA: Record<string, any> = {
       { before: '사용 전 설명', after: '사용 후 효과' },
     ],
   },
+
+  // ── review-list (템플릿 충실 재현) ───────────────────────────────────────────
+  'review-list': {
+    title: '고객들의 극찬!',
+    reviews: [
+      { text: '정말 만족스러워요', author: '구매자A' },
+      { text: '재구매 의사 있어요', author: '구매자B' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────
