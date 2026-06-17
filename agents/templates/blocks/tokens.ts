@@ -56,21 +56,22 @@ export const cobaltPremium: Tokens = {
   fontHand: "'Cafe24 Dangdanghae', sans-serif",
 }
 
-/** 스타일 D — 샌드 럭셔리 (명조 + 카멜/베이지). 따뜻한 뉴트럴 고급. */
+/** 스타일 D — 샌드 럭셔리 (와디즈 템플릿 시그니처 폰트 + 따뜻한 캐러멜/크림 팔레트).
+ *  cobalt-premium과 동일한 레이아웃/폰트지만 컬러만 웜톤 → 식품(빵/디저트 등) 스타일링샷과 조화. */
 export const sandLuxury: Tokens = {
-  bg: '#F3EDE3',
+  bg: '#F7F1E8',
   paper: '#FFFFFF',
-  ink: '#2A2218',
-  ink2: '#473B2C',
-  muted: '#9A8B76',
-  accent: '#A6794B',
-  accentDark: '#835B33',
-  brand: '#2A2218',
-  line: '#DCCDBB',
-  fontDisplay: "'Gowun Batang', serif",
+  ink: '#2A1E13',
+  ink2: '#5C4A37',
+  muted: '#9C8A72',
+  accent: '#B47B3C',
+  accentDark: '#8C5C28',
+  brand: '#2A1E13',
+  line: '#E8DECB',
+  fontDisplay: "'Paperlogy', sans-serif",
   fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Gowun Batang', serif",
-  fontHand: "'Gaegu', cursive",
+  fontSerif: "'Cafe24 ClassicType', serif",
+  fontHand: "'Cafe24 Dangdanghae', sans-serif",
 }
 
 export const TOKEN_PRESETS: Record<string, Tokens> = {

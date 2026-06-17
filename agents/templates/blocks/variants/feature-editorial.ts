@@ -97,10 +97,10 @@ export const featureCards = defineBlock<CardsData>({
 .fc-title{font-family:var(--font-hand);font-size:54px;color:var(--accent);line-height:1.1}
 .fc-sub{margin-top:12px;font-size:17px;font-weight:600;color:var(--ink-2)}
 .fc-fig{position:relative;margin:34px auto 30px;width:380px;height:460px}
-.fc-orb{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);width:620px;height:560px;border-radius:50%;background:linear-gradient(180deg,rgba(88,116,215,0) 30%,rgba(88,116,215,.9) 100%);z-index:0}
+.fc-orb{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);width:620px;height:560px;border-radius:50%;background:linear-gradient(180deg,transparent 30%,var(--accent) 100%);opacity:.92;z-index:0}
 .fc-media{position:relative;z-index:1;width:380px;height:460px;object-fit:cover;border-radius:14px}
 .fc-cards{position:relative;z-index:1;display:flex;flex-direction:column;gap:18px}
-.fc-card{background:linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(180deg,var(--accent) 0%,#8795F8 100%) border-box;border:3px solid transparent;border-radius:30px;padding:34px 40px}
+.fc-card{background:linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(180deg,var(--accent) 0%,color-mix(in srgb,var(--accent) 45%,#ffffff) 100%) border-box;border:3px solid transparent;border-radius:30px;padding:34px 40px}
 .fc-ch{font-family:var(--font-hand);font-size:30px;color:var(--accent);line-height:1.2}
 .fc-cd{margin-top:10px;font-size:15px;color:var(--ink-2);line-height:1.7}
 .fc-closer{margin-top:42px;font-family:var(--font-hand);font-size:38px;color:var(--ink);line-height:1.4}
@@ -147,9 +147,9 @@ export const featureDark = defineBlock<DarkData>({
     '특장점 블랙 에디토리얼. 홀로그램 오브 + 인트로 + 코발트 대제목, 풀폭 이미지 밴드 아래 코발트 소제목/설명 반복, 마무리 카피. 다크 럭셔리.',
   schema: darkSchema,
   css: `
-.fd{background:#120D1E;padding:56px 0 60px;color:#fff}
+.fd{background:var(--ink);padding:56px 0 60px;color:#fff}
 .fd-hd{text-align:center;padding:0 56px;margin-bottom:42px}
-.fd-orb{width:118px;height:118px;margin:0 auto 26px;border-radius:50%;background:linear-gradient(135deg,#DDE4FF 0%,#8795F8 45%,#5874D7 100%);box-shadow:0 14px 40px -10px rgba(88,116,215,.7)}
+.fd-orb{width:118px;height:118px;margin:0 auto 26px;border-radius:50%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 35%,#ffffff) 0%,var(--accent) 55%,var(--accent-d) 100%);box-shadow:0 14px 40px -10px rgba(0,0,0,.45)}
 .fd-intro{font-size:16px;color:rgba(255,255,255,.62)}
 .fd-title{margin-top:10px;font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.02em;line-height:1.12}
 .fd-item + .fd-item{margin-top:44px}
