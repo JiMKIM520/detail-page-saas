@@ -22,7 +22,7 @@ type AccentData = z.infer<typeof accentSchema>
 
 export const ingredientAccent = defineBlock<AccentData>({
   id: 'ingredient-accent',
-  archetype: 'reason',
+  archetype: 'ingredient',
   styleTags: ['premium', 'cobalt', 'template', 'colorblock'],
   imageSlots: 6,
   describe:
@@ -82,7 +82,7 @@ type GridData = z.infer<typeof gridSchema>
 
 export const ingredientGrid = defineBlock<GridData>({
   id: 'ingredient-grid',
-  archetype: 'reason',
+  archetype: 'ingredient',
   styleTags: ['premium', 'dark', 'template'],
   imageSlots: 6,
   describe:

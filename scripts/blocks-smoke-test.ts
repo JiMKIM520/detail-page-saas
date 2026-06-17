@@ -275,6 +275,14 @@ const VARIANT_DATA: Record<string, any> = {
       { text: '재구매 의사 있어요', author: '구매자B' },
     ],
   },
+
+  // ── usage-steps (템플릿 충실 재현) ───────────────────────────────────────────
+  'usage-steps': {
+    steps: [
+      { icon: 'clock', text: '첫 번째 단계 설명' },
+      { icon: 'check', text: '두 번째 단계 설명' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

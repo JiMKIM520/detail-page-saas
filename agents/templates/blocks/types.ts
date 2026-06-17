@@ -21,6 +21,8 @@ export type BlockArchetype =
   | 'point' // 포인트 헤더 + 강조 사진
   | 'feature' // 단일 강조 비주얼 (풀블리드/씰)
   | 'reason' // 질문/이유 제시
+  | 'ingredient' // 원료/성분 소개
+  | 'usage' // 사용법/스텝 가이드
   | 'equation' // 비주얼 등식 (A + B = C)
   | 'callout' // 강조 배너/인용
   | 'story' // 브랜드 스토리 (사진 + 카피)

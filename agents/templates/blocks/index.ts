@@ -33,6 +33,7 @@ import { featureEditorial, featureCards, featureDark } from './variants/feature-
 import { ingredientAccent, ingredientGrid } from './variants/ingredient'
 import { compareBeforeAfter } from './variants/compare-beforeafter'
 import { reviewList } from './variants/review-list'
+import { usageSteps } from './variants/usage-steps'
 
 registerBlocks([
   heroCentered,
@@ -78,6 +79,8 @@ registerBlocks([
   compareBeforeAfter,
   // 템플릿 충실 재현(06_고객리뷰)
   reviewList,
+  // 템플릿 충실 재현(05_사용법)
+  usageSteps,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
