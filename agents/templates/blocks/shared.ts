@@ -41,6 +41,22 @@ const ICONS: Record<string, string> = {
   oven:
     '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="40" rx="6"/><path d="M10 24h44"/><circle cx="18" cy="18" r="1.6" fill="currentColor"/><circle cx="26" cy="18" r="1.6" fill="currentColor"/><rect x="18" y="30" width="28" height="16" rx="3"/></svg>',
   star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z"/></svg>',
+  heart:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20C12 20 4 15 4 9a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z"/></svg>',
+  gift:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="11" width="15" height="9" rx="1"/><path d="M3.5 8.5h17v2.5h-17z"/><path d="M12 8.5V20"/><path d="M12 8.5C10.5 8.5 8 8 8 6.3 8 5.2 9 4.7 9.8 5.2c1 .6 2.2 2.2 2.2 3.3zM12 8.5c1.5 0 4-.5 4-2.2 0-1.1-1-1.6-1.8-1.1-1 .6-2.2 2.2-2.2 3.3z"/></svg>',
+  truck:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h3.5l3 3v3H14z"/><circle cx="7" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg>',
+  shield:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  leaf:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 6-14 15-14 0 9-6 15-15 14z"/><path d="M5 19C9 13 13 11 17 9"/></svg>',
+  trophy:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/><path d="M12 14v3M8.5 20h7M9.5 20c0-1.5.8-2.5 2.5-2.5s2.5 1 2.5 2.5"/></svg>',
+  thumb:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v10H4V10z"/><path d="M7 10l4.5-6.5c1.2 0 2.2 1 2.2 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.2 6A2 2 0 0 1 17 19H7"/></svg>',
+  fire:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 3.5 5 6 5 9.5A5 5 0 0 1 7 12.5c0-1.5.6-2.8 1.5-4 .3 1 1 1.7 1.8 1.5C11 9.5 10 6.5 12 3z"/></svg>',
 }
 
 export function getIcon(name: string): string {
@@ -48,7 +64,10 @@ export function getIcon(name: string): string {
 }
 
 /** 사용 가능한 아이콘 이름 — 변형 스키마 z.enum 검증의 단일 출처(미검증 문자열 → getIcon silent fallback 방지). */
-export const ICON_NAMES = ['wheat', 'drop', 'clock', 'badge', 'snow', 'check', 'fryer', 'oven', 'star'] as const
+export const ICON_NAMES = [
+  'wheat', 'drop', 'clock', 'badge', 'snow', 'check', 'fryer', 'oven', 'star',
+  'heart', 'gift', 'truck', 'shield', 'leaf', 'trophy', 'thumb', 'fire',
+] as const
 
 /** <head>에 로드할 웹폰트 링크. 모든 변형이 이 폰트들을 쓸 수 있다. */
 export const FONT_LINKS: string = [
