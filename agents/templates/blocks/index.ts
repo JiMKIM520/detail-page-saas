@@ -8,7 +8,7 @@
  * 변형 추가(피그마 인제스천): variants/<archetype>.ts 에 defineBlock 추가 → 아래 registerBlocks 배열에 등록.
  */
 import { registerBlocks } from './registry'
-import { heroCentered, heroEditorial } from './variants/hero'
+import { heroCentered, heroEditorial, heroPoints, heroArch } from './variants/hero'
 import { checkpointRows, checkpointGrid } from './variants/checkpoint'
 import { pointBubble, featureFullbleed } from './variants/point'
 import { calloutBanner, statementSerif } from './variants/callout'
@@ -33,6 +33,8 @@ import { bannerEvent } from './variants/banner'
 registerBlocks([
   heroCentered,
   heroEditorial,
+  heroPoints,
+  heroArch,
   checkpointRows,
   checkpointGrid,
   pointBubble,
@@ -66,5 +68,5 @@ registerBlocks([
 export { renderPage, pageSpecSchema } from './composer'
 export type { RenderResult } from './composer'
 export { getVariant, listVariants, catalog } from './registry'
-export { deriveTokens, TOKEN_PRESETS, warmPlayful, modernEditorial } from './tokens'
+export { deriveTokens, TOKEN_PRESETS, warmPlayful, modernEditorial, cobaltPremium, sandLuxury } from './tokens'
 export type { BlockArchetype, BlockVariant, PageSpec, PageBlock, Tokens, RenderCtx } from './types'

@@ -38,9 +38,45 @@ export const modernEditorial: Tokens = {
   fontHand: "'Gaegu', cursive",
 }
 
+/** 스타일 C — 코발트 프리미엄 (Black Han Sans 펀치 + 코발트블루/딥플럼). 모던 커머스. */
+export const cobaltPremium: Tokens = {
+  bg: '#F3F5FF',
+  paper: '#FFFFFF',
+  ink: '#1B1B2E',
+  ink2: '#33344F',
+  muted: '#8488A6',
+  accent: '#5874D7',
+  accentDark: '#3E57BE',
+  brand: '#271633',
+  line: '#DDE4FF',
+  fontDisplay: "'Black Han Sans', sans-serif",
+  fontBody: "'Pretendard', sans-serif",
+  fontSerif: "'Gowun Batang', serif",
+  fontHand: "'Gaegu', cursive",
+}
+
+/** 스타일 D — 샌드 럭셔리 (명조 + 카멜/베이지). 따뜻한 뉴트럴 고급. */
+export const sandLuxury: Tokens = {
+  bg: '#F3EDE3',
+  paper: '#FFFFFF',
+  ink: '#2A2218',
+  ink2: '#473B2C',
+  muted: '#9A8B76',
+  accent: '#A6794B',
+  accentDark: '#835B33',
+  brand: '#2A2218',
+  line: '#DCCDBB',
+  fontDisplay: "'Gowun Batang', serif",
+  fontBody: "'Pretendard', sans-serif",
+  fontSerif: "'Gowun Batang', serif",
+  fontHand: "'Gaegu', cursive",
+}
+
 export const TOKEN_PRESETS: Record<string, Tokens> = {
   'warm-playful': warmPlayful,
   'modern-editorial': modernEditorial,
+  'cobalt-premium': cobaltPremium,
+  'sand-luxury': sandLuxury,
 }
 
 const HEX_RE = /^#?([0-9a-fA-F]{6})$/

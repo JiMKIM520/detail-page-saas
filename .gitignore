@@ -55,6 +55,10 @@ output/
 templates/validation/
 agents/templates/*/*-draft.json
 
+# Figma 원본 템플릿 (라이선스: 사용만 가능·재배포 불가 → 레포에 커밋 금지, 패턴만 차용)
+*.fig
+assets/template.fig
+
 # 데모 / 실험 자료 (로컬 참고용, 배포 무관)
 demo-v8/
 /build_final.js

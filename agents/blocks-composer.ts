@@ -21,7 +21,7 @@ const composerOutputSchema = z.object({
     category: z.string().min(1),
     styleDirection: z.string().optional(),
   }),
-  presetKey: z.enum(['warm-playful', 'modern-editorial']),
+  presetKey: z.enum(['warm-playful', 'modern-editorial', 'cobalt-premium', 'sand-luxury']),
   blocks: z
     .array(z.object({ variantId: z.string().min(1), data: z.unknown() }))
     .min(10)
@@ -55,6 +55,8 @@ export interface BlocksComposerResult {
 const DATA_CONTRACTS = `
 hero-centered { badge?, title(em), sub?(em), heroImage?(url), bubble?, caption?, brand }
 hero-editorial { kicker?, title(em,br), lead?, heroImage?(url), figNo? }
+hero-points { brand, sub?(em), title(em), heroImage?(url), points:[{ icon, label, desc(em) }] (2~4) }   // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star
+hero-arch { brand, title(em), sub?(em), en?, heroImage?(url), points:[{ icon, label, desc(em) }] (2~4) }   // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star
 recommend-dark { floatImage?(url), title(em), en?, image?(url), ribbon? }
 checklist-checks { title(em), items:[{ text(em), star?:bool }] (2~6) }
 strip-band { text }
@@ -80,14 +82,14 @@ You DO NOT write layout or CSS. You select blocks, order them, and fill each blo
 
 OUTPUT: pure JSON, no markdown. Shape:
 { "meta": { "product": string, "category": string, "styleDirection": string? },
-  "presetKey": "warm-playful" | "modern-editorial",
+  "presetKey": "warm-playful" | "modern-editorial" | "cobalt-premium" | "sand-luxury",
   "blocks": [ { "variantId": string, "data": { …block-specific slots… } } ] }
 
 RULES
 - Use ONLY variantId values from the catalog. Fill data EXACTLY per the block's data contract.
-- Compose 12~18 blocks. FIRST block must be a hero (hero-centered or hero-editorial). LAST block must be a closing (closing-mood or closing-light).
+- Compose 12~18 blocks. FIRST block must be a hero (hero-centered, hero-editorial, hero-points, or hero-arch). LAST block must be a closing (closing-mood or closing-light).
 - Order for a real detail page: hero → recommend/checklist → trust/checkpoint → point/feature sections (alternate text+photo) → reason/equation/callout → story → cert → compare/spec → closing.
-- Pick presetKey by feel: warm-playful (친근한 식품/생활) vs modern-editorial (프리미엄/미니멀). Match the product.
+- Pick presetKey by feel: warm-playful (친근한 식품/생활), modern-editorial (프리미엄/미니멀 명조), cobalt-premium (모던 커머스/전자·뷰티, 코발트블루), sand-luxury (따뜻한 뉴트럴 고급, 카멜/베이지). Match the product.
 - Do NOT repeat the same variantId more than twice. Use strip-band at most once. Vary blocks for richness.
 - Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
 - Map provided image URLs into (url) slots. Reuse the few available images sensibly across blocks. If no suitable image, omit that field.

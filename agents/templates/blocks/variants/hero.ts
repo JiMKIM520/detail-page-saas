@@ -1,7 +1,7 @@
-/** HERO 아키타입 변형: hero-centered(따뜻한 플레이풀), hero-editorial(모던 명조). */
+/** HERO 아키타입 변형: hero-centered(따뜻한 플레이풀), hero-editorial(모던 명조), hero-points(그라데이션+포인트), hero-arch(아치 프레임+포인트). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, ICON_NAMES } from '../shared'
 
 // ── hero-centered ─────────────────────────────────────────────
 const heroCenteredSchema = z.object({
@@ -92,5 +92,120 @@ export const heroEditorial = defineBlock<HeroEditorialData>({
     ${d.figNo ? `<span class="he-no">${esc(d.figNo)}</span>` : ''}
     ${media(d.heroImage, 'he-media', '히어로 이미지')}
   </figure>
+</section>`,
+})
+
+// ── hero-points ───────────────────────────────────────────────
+const heroPointsSchema = z.object({
+  brand: z.string().min(1),
+  sub: z.string().optional(),
+  title: z.string().min(1), // em 허용
+  heroImage: z.string().optional(),
+  points: z
+    .array(z.object({ icon: z.enum(ICON_NAMES), label: z.string().min(1), desc: z.string().min(1) }))
+    .min(2)
+    .max(4),
+})
+type HeroPointsData = z.infer<typeof heroPointsSchema>
+
+export const heroPoints = defineBlock<HeroPointsData>({
+  id: 'hero-points',
+  archetype: 'hero',
+  styleTags: ['modern', 'premium', 'commerce'],
+  imageSlots: 1,
+  describe: '그라데이션 히어로 + 핵심 포인트. 상단 브랜드로고 + 2톤 대제목 + 풀폭 사진 + 원형 아이콘 3~4포인트 행. 모던 커머스.',
+  schema: heroPointsSchema,
+  css: `
+.hp{position:relative;padding:54px 52px 60px;text-align:center;background:var(--bg);overflow:hidden}
+.hp::before{content:"";position:absolute;inset:0 0 auto;height:64%;background:linear-gradient(180deg,var(--accent),transparent);opacity:.13;pointer-events:none}
+.hp-in{position:relative}
+.hp-brand{font-size:15px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+.hp-sub{margin-top:18px;font-size:20px;font-weight:700;color:var(--ink-2)}
+.hp-title{margin-top:6px;font-size:58px}
+.hp-title .em{color:var(--accent)}
+.hp-fig{margin:34px auto 0;width:100%}
+.hp-media{width:100%;height:420px;object-fit:cover;border-radius:24px;box-shadow:0 22px 44px -20px rgba(0,0,0,.32)}
+.hp-points{margin-top:46px;display:flex;justify-content:center;gap:16px}
+.hp-pt{flex:1 1 0;max-width:200px;text-align:center}
+.hp-ic{width:84px;height:84px;margin:0 auto;border-radius:50%;background:var(--paper);box-shadow:0 10px 24px rgba(0,0,0,.09);display:grid;place-items:center;color:var(--accent)}
+.hp-ic svg{width:38px;height:38px}
+.hp-pl{margin-top:16px;font-size:18px;font-weight:800;color:var(--accent)}
+.hp-pd{margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink-2)}
+`,
+  render: (d, { esc, richSafe, icon }) => `
+<section class="hp">
+  <div class="wm"></div>
+  <div class="hp-in">
+    <p class="hp-brand">${esc(d.brand)}</p>
+    ${d.sub ? `<p class="hp-sub">${richSafe(d.sub)}</p>` : ''}
+    <h1 class="disp hp-title">${richSafe(d.title)}</h1>
+    <figure class="hp-fig">${media(d.heroImage, 'hp-media', '히어로 이미지')}</figure>
+    <div class="hp-points">
+      ${d.points
+        .map(
+          (p) =>
+            `<div class="hp-pt"><span class="hp-ic">${icon(p.icon)}</span><div class="hp-pl">${esc(p.label)}</div><div class="hp-pd">${richSafe(p.desc)}</div></div>`,
+        )
+        .join('')}
+    </div>
+  </div>
+</section>`,
+})
+
+// ── hero-arch ─────────────────────────────────────────────────
+const heroArchSchema = z.object({
+  brand: z.string().min(1),
+  title: z.string().min(1), // em 허용
+  sub: z.string().optional(),
+  en: z.string().optional(), // 아치 상단 영문 라벨
+  heroImage: z.string().optional(),
+  points: z
+    .array(z.object({ icon: z.enum(ICON_NAMES), label: z.string().min(1), desc: z.string().min(1) }))
+    .min(2)
+    .max(4),
+})
+type HeroArchData = z.infer<typeof heroArchSchema>
+
+export const heroArch = defineBlock<HeroArchData>({
+  id: 'hero-arch',
+  archetype: 'hero',
+  styleTags: ['premium', 'editorial', 'commerce'],
+  imageSlots: 1,
+  describe: '아치 프레임 히어로 + 포인트. 브랜드로고 + 대제목 + 영문라벨이 박힌 아치형 컬러 패널 안 사진 + 세로 구분선 3~4포인트. 고급 커머스.',
+  schema: heroArchSchema,
+  css: `
+.ha{padding:56px 52px 58px;text-align:center;background:var(--bg)}
+.ha-brand{font-size:14px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+.ha-title{margin-top:12px;font-size:54px}
+.ha-title .em{color:var(--accent)}
+.ha-sub{margin-top:12px;font-size:18px;font-weight:600;color:var(--ink-2)}
+.ha-arch{position:relative;margin:42px auto 0;width:74%;background:var(--accent);border-radius:170px 170px 22px 22px;padding:36px 26px 0}
+.ha-en{font-family:var(--font-lat);font-size:24px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.94)}
+.ha-media{width:100%;height:360px;object-fit:cover;border-radius:12px;margin-top:18px;display:block}
+.ha-points{margin-top:42px;display:flex;justify-content:center}
+.ha-pt{flex:1 1 0;max-width:180px;padding:0 14px;text-align:center;border-right:1px solid var(--line)}
+.ha-pt:last-child{border-right:none}
+.ha-ic{width:54px;height:54px;margin:0 auto;display:grid;place-items:center;color:var(--accent)}
+.ha-ic svg{width:34px;height:34px}
+.ha-pl{margin-top:12px;font-size:17px;font-weight:800;color:var(--accent)}
+.ha-pd{margin-top:8px;font-size:13px;line-height:1.6;color:var(--ink-2)}
+`,
+  render: (d, { esc, richSafe, icon }) => `
+<section class="ha">
+  <p class="ha-brand">${esc(d.brand)}</p>
+  <h1 class="disp ha-title">${richSafe(d.title)}</h1>
+  ${d.sub ? `<p class="ha-sub">${richSafe(d.sub)}</p>` : ''}
+  <div class="ha-arch">
+    ${d.en ? `<div class="ha-en">${esc(d.en)}</div>` : ''}
+    ${media(d.heroImage, 'ha-media', '히어로 이미지')}
+  </div>
+  <div class="ha-points">
+    ${d.points
+      .map(
+        (p) =>
+          `<div class="ha-pt"><span class="ha-ic">${icon(p.icon)}</span><div class="ha-pl">${esc(p.label)}</div><div class="ha-pd">${richSafe(p.desc)}</div></div>`,
+      )
+      .join('')}
+  </div>
 </section>`,
 })
