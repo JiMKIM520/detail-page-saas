@@ -241,6 +241,22 @@ const VARIANT_DATA: Record<string, any> = {
       { heading: '두 번째 특장점', desc: '설명입니다' },
     ],
   },
+
+  // ── ingredient-accent / grid (템플릿 충실 재현) ──────────────────────────────
+  'ingredient-accent': {
+    title: '제품 원료',
+    items: [
+      { label: '첫 번째 원료', desc: '설명입니다' },
+      { label: '두 번째 원료', desc: '설명입니다' },
+    ],
+  },
+  'ingredient-grid': {
+    title: '제품 원료',
+    items: [
+      { label: '첫 번째 원료', desc: '설명입니다' },
+      { label: '두 번째 원료', desc: '설명입니다' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────
