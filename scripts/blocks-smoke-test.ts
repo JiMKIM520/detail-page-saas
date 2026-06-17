@@ -283,6 +283,14 @@ const VARIANT_DATA: Record<string, any> = {
       { icon: 'check', text: '두 번째 단계 설명' },
     ],
   },
+
+  // ── package-list (템플릿 충실 재현) ──────────────────────────────────────────
+  'package-list': {
+    packages: [
+      { name: '기본 패키지', desc: '구성 설명', price: '19,000원' },
+      { name: '선물 패키지', desc: '구성 설명', price: '29,000원' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

@@ -23,6 +23,7 @@ export type BlockArchetype =
   | 'reason' // 질문/이유 제시
   | 'ingredient' // 원료/성분 소개
   | 'usage' // 사용법/스텝 가이드
+  | 'lineup' // 상품 구성/패키지(가격)
   | 'equation' // 비주얼 등식 (A + B = C)
   | 'callout' // 강조 배너/인용
   | 'story' // 브랜드 스토리 (사진 + 카피)

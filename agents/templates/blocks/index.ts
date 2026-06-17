@@ -34,6 +34,7 @@ import { ingredientAccent, ingredientGrid } from './variants/ingredient'
 import { compareBeforeAfter } from './variants/compare-beforeafter'
 import { reviewList } from './variants/review-list'
 import { usageSteps } from './variants/usage-steps'
+import { packageList } from './variants/package-list'
 
 registerBlocks([
   heroCentered,
@@ -81,6 +82,8 @@ registerBlocks([
   reviewList,
   // 템플릿 충실 재현(05_사용법)
   usageSteps,
+  // 템플릿 충실 재현(08_상품 구성)
+  packageList,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
