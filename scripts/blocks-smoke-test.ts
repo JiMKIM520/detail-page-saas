@@ -257,6 +257,15 @@ const VARIANT_DATA: Record<string, any> = {
       { label: '두 번째 원료', desc: '설명입니다' },
     ],
   },
+
+  // ── compare-beforeafter (템플릿 충실 재현) ───────────────────────────────────
+  'compare-beforeafter': {
+    title: '왜 특별할까요?',
+    rows: [
+      { before: '사용 전 설명', after: '사용 후 효과' },
+      { before: '사용 전 설명', after: '사용 후 효과' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

@@ -31,6 +31,7 @@ import { galleryOptions } from './variants/gallery'
 import { bannerEvent } from './variants/banner'
 import { featureEditorial, featureCards, featureDark } from './variants/feature-editorial'
 import { ingredientAccent, ingredientGrid } from './variants/ingredient'
+import { compareBeforeAfter } from './variants/compare-beforeafter'
 
 registerBlocks([
   heroCentered,
@@ -72,6 +73,8 @@ registerBlocks([
   // 템플릿 충실 재현(와디즈 200섹션 04_원료 소개)
   ingredientAccent,
   ingredientGrid,
+  // 템플릿 충실 재현(07_차별화 비교)
+  compareBeforeAfter,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
