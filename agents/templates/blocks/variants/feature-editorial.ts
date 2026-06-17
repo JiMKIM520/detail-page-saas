@@ -41,7 +41,7 @@ export const featureEditorial = defineBlock<Data>({
 .fen-div{width:64px;height:3px;border-radius:2px;background:var(--accent);margin:22px auto 0}
 .fen-item + .fen-item{margin-top:10px}
 .fen-txt{position:relative;padding:34px 56px 22px;min-height:120px}
-.fen-no{position:absolute;left:42px;top:2px;font-family:var(--font-serif);font-size:132px;line-height:1;color:var(--accent);opacity:.20}
+.fen-no{position:absolute;left:42px;top:2px;font-family:'Cafe24 ClassicType',serif;font-size:132px;line-height:1;color:var(--accent);opacity:.20}
 .fen-h{position:relative;padding-left:106px;padding-top:30px;font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.25}
 .fen-h .em{color:var(--accent)}
 .fen-d{position:relative;padding-left:106px;margin-top:10px;font-size:15px;color:var(--ink-2);line-height:1.65}
@@ -147,9 +147,9 @@ export const featureDark = defineBlock<DarkData>({
     '특장점 블랙 에디토리얼. 홀로그램 오브 + 인트로 + 코발트 대제목, 풀폭 이미지 밴드 아래 코발트 소제목/설명 반복, 마무리 카피. 다크 럭셔리.',
   schema: darkSchema,
   css: `
-.fd{background:var(--ink);padding:56px 0 60px;color:#fff}
+.fd{background:var(--ink);padding:62px 0 60px;color:#fff}
 .fd-hd{text-align:center;padding:0 56px;margin-bottom:42px}
-.fd-orb{width:118px;height:118px;margin:0 auto 26px;border-radius:50%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 35%,#ffffff) 0%,var(--accent) 55%,var(--accent-d) 100%);box-shadow:0 14px 40px -10px rgba(0,0,0,.45)}
+.fd-eyebrow{width:46px;height:3px;border-radius:2px;background:var(--accent);margin:0 auto 22px}
 .fd-intro{font-size:16px;color:rgba(255,255,255,.62)}
 .fd-title{margin-top:10px;font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.02em;line-height:1.12}
 .fd-item + .fd-item{margin-top:44px}
@@ -162,7 +162,7 @@ export const featureDark = defineBlock<DarkData>({
   render: (d, { esc, richSafe }) => `
 <section class="fd">
   <div class="fd-hd">
-    <div class="fd-orb"></div>
+    <div class="fd-eyebrow"></div>
     ${d.intro ? `<p class="fd-intro">${esc(d.intro)}</p>` : ''}
     <h2 class="fd-title">${richSafe(d.title)}</h2>
   </div>

@@ -22,7 +22,7 @@ export const shippingInfo = defineBlock<Data>({
   css: `
 .sh{position:relative;padding:56px 56px 60px;background:var(--bg)}
 .sh-lab{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:16px;padding:8px 22px;border-radius:999px}
-.sh-media{display:block;width:100%;max-width:420px;height:200px;object-fit:contain;margin:18px auto 8px}
+.sh-media{display:block;width:100%;height:260px;object-fit:cover;border-radius:16px;margin:18px 0 8px}
 .sh-rows{margin-top:18px;display:flex;flex-direction:column;gap:22px}
 .sh-row{border-left:4px solid var(--accent);padding:4px 0 4px 20px}
 .sh-rt{font-size:21px;font-weight:800;color:var(--ink);margin-bottom:6px}

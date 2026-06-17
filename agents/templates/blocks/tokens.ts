@@ -52,7 +52,7 @@ export const cobaltPremium: Tokens = {
   line: '#DDE4FF',
   fontDisplay: "'Paperlogy', sans-serif",
   fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Cafe24 ClassicType', serif",
+  fontSerif: "'Paperlogy', sans-serif",
   fontHand: "'Cafe24 Dangdanghae', sans-serif",
 }
 
@@ -70,7 +70,7 @@ export const sandLuxury: Tokens = {
   line: '#E8DECB',
   fontDisplay: "'Paperlogy', sans-serif",
   fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Cafe24 ClassicType', serif",
+  fontSerif: "'Paperlogy', sans-serif",
   fontHand: "'Cafe24 Dangdanghae', sans-serif",
 }
 

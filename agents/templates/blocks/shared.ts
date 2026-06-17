@@ -86,10 +86,6 @@ export const FONT_LINKS: string = [
 </style>`,
 ].join('\n')
 
-/** 음식 라인아트 워터마크 (은은한 배경). stroke 색은 고정(어두운 잉크). */
-const WATERMARK_BG =
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><g fill='none' stroke='%232A2118' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M44 96 q34 -40 86 -26 q-10 30 -38 38 q22 4 40 -2 q-18 26 -52 20 q12 18 4 36 q-30 -10 -36 -42 q-26 6 -42 -10 q26 -18 56 -16 q-24 -16 -18 -34 Z'/><path d='M214 54 l0 72 M214 70 q-16 -8 -22 2 q14 6 22 -2 M214 70 q16 -8 22 2 q-14 6 -22 -2 M214 92 q-16 -8 -22 2 q14 6 22 -2 M214 92 q16 -8 22 2 q-14 6 -22 -2'/><path d='M70 224 q34 -26 84 0 q-4 40 -42 44 q-38 -4 -42 -44 Z'/><path d='M92 224 l8 -14 M118 224 l8 -14 M144 224 l8 -14'/><path d='M236 214 q24 -22 48 0 q24 22 0 44 q-24 22 -48 0 q-24 -22 0 -44 Z'/><path d='M250 230 l0 28 M270 230 l0 28'/></g></svg>\")"
-
 /** 토큰 → :root CSS 변수 + 리셋 + 페이지 + 공유 유틸리티(워터마크/라벨/디스플레이). composer가 1회 주입. */
 export function baseCss(tokens: Tokens, width: number): string {
   const t = { ...tokens }
@@ -113,8 +109,8 @@ body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);backg
 .hand{font-family:var(--font-hand)}
 .acc,.em{color:var(--accent)}
 .ph{display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.035);border:2px dashed var(--line);color:var(--muted);font-size:13px;letter-spacing:.02em;box-shadow:none!important}
-.wm{position:absolute;inset:0;pointer-events:none;opacity:.05;background-image:${WATERMARK_BG};background-size:320px 320px}
-.wm.light{opacity:.07;filter:invert(1)}
+.wm{display:none}
+.wm.light{display:none}
 .lab{display:inline-block;background:var(--brand);color:#F5ECDF;font-weight:800;font-size:17px;padding:8px 26px;border-radius:999px;letter-spacing:.04em}
 `.trim()
 }
