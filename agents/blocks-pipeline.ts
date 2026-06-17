@@ -1,0 +1,106 @@
+/**
+ * Blocks Pipeline — 조합형 블록 + AI 컴포저 기반 생성 경로 (실험·additive).
+ *
+ * runSlotPipeline(식품)/runPipeline(제너릭)과 동일한 PipelineResult 계약(outputDir/htmlPath/stages)을
+ * 지키므로, pipeline-bridge는 USE_BLOCKS_COMPOSER 플래그일 때 이 함수로 분기만 하면 된다.
+ *   brief → runBlocksComposer(블록 카탈로그 조합 → PageSpec → HTML) → exporter(HTML → PNG/ZIP)
+ *
+ * 이미지: hero/lifestyle 슬롯에는 반드시 Supabase 서명URL을 넣는다(로컬 경로 금지 — 컴포저가
+ * URL을 AI 프롬프트와 HTML <img src>에 그대로 삽입하므로). 서명URL 만료 전 exporter가 PNG로
+ * 구워 영구 보존한다.
+ */
+import * as fs from 'fs'
+import * as path from 'path'
+import { ensureOutputDirs, timer } from './utils'
+import { buildProjectBrief, type PipelineResult } from './pm'
+import { runBlocksComposer } from './blocks-composer'
+import { runExporter } from './exporter'
+import type { ProjectInput } from './types'
+
+export interface BlocksPipelineOptions {
+  /** 히어로 이미지 URL — 첫 누끼컷 서명URL. 없으면 컴포저가 이미지 슬롯 생략 */
+  heroImageUrl?: string
+  /** 전체 이미지 URL들(서명URL). [0]=hero, [1..]=lifestyle/섹션 */
+  imageUrls?: string[]
+}
+
+export async function runBlocksPipeline(
+  input: ProjectInput,
+  opts: BlocksPipelineOptions = {},
+): Promise<PipelineResult> {
+  const elapsed = timer()
+  const projectId = crypto.randomUUID().slice(0, 8)
+  const dirs = ensureOutputDirs(projectId)
+  const stages: PipelineResult['stages'] = {}
+
+  console.log(`\n${'='.repeat(60)}`)
+  console.log(`[Blocks PM] 블록 파이프라인 시작 — projectId: ${projectId}`)
+  console.log(`[Blocks PM] 제품: ${input.productName} | 카테고리: ${input.category}`)
+  console.log(`${'='.repeat(60)}\n`)
+
+  const fail = (): PipelineResult => ({
+    projectId,
+    success: false,
+    outputDir: dirs.base,
+    stages,
+    retryCount: 0,
+    totalDurationMs: elapsed(),
+  })
+
+  // ── Step 1: 브리프 ──
+  const brief = buildProjectBrief(input, projectId)
+  console.log('[Blocks PM] Step 1: 브리프 생성')
+
+  // ── Step 2: 블록 컴포저 (카탈로그 조합 → PageSpec → HTML, 내부 슬롯 zod 검증) ──
+  const composer = await runBlocksComposer({
+    brief,
+    images: {
+      hero: opts.heroImageUrl,
+      lifestyle:
+        opts.imageUrls && opts.imageUrls.length > 1 ? opts.imageUrls.slice(1) : undefined,
+    },
+    brandColors: input.brandColors,
+    outputDir: dirs.base,
+  })
+  stages.blocksComposer = {
+    success: composer.success,
+    durationMs: composer.durationMs,
+    error: composer.error,
+  }
+  if (!composer.success || !composer.data) {
+    console.error('[Blocks PM] 컴포저 실패:', composer.error)
+    return fail()
+  }
+
+  // ── Step 3: HTML 기록 (기존 업로드 패턴 4_final/index.html 재사용) ──
+  const htmlPath = path.join(dirs.final, 'index.html')
+  fs.writeFileSync(htmlPath, composer.data.html, 'utf8')
+  const sizeKb = Math.round(fs.statSync(htmlPath).size / 1024)
+  console.log(
+    `[Blocks PM] Step 3: 렌더 완료 — index.html (${sizeKb}KB), ${composer.data.usedVariants.length} blocks`,
+  )
+
+  // ── Step 4: Exporter (HTML → PNG/ZIP, 비치명) ──
+  let exportDir: string | undefined
+  try {
+    const exportResult = await runExporter(htmlPath, dirs.base)
+    stages.exporter = { success: exportResult.success }
+    exportDir = path.join(dirs.base, '5_export')
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn('[Blocks PM] Exporter 실패(비치명):', msg.slice(0, 160))
+    stages.exporter = { success: false, error: msg }
+  }
+
+  console.log(`[Blocks PM] 완료 (${elapsed()}ms)`)
+  return {
+    projectId,
+    success: true,
+    outputDir: dirs.base,
+    htmlPath,
+    exportDir,
+    stages,
+    retryCount: 0,
+    totalDurationMs: elapsed(),
+  }
+}

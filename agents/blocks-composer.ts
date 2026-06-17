@@ -75,7 +75,33 @@ compare-cooking { label?, title(em), left:{ tag?, icon, name, steps:[{ text(em) 
 spec-table { kicker?, title, rows:[{ k, v(em) }] (2~10) }
 closing-mood { bgImage?(url), title(em), sub?(em) }
 closing-light { kicker?, title(em), sub?, cta? }
+review-bubbles { title(em), subtitle?, reviews:[{ text(em), author? }] (2~6), stat?(em,br) }   // 후기는 brief 근거 있을 때만, 지어내지 말 것
+review-cards { kicker?, title(em), summary?:{ score, count?, stars?:1~5 }, reviews:[{ author, text(em), rating?:1~5, tag? }] (2~6) }   // 후기/평점은 brief 근거 있을 때만
+faq-chat { title?, subtitle?, items:[{ q, a(em,br) }] (2~8) }
+shipping-info { label?, image?(url), rows:[{ title, desc(em,br) }] (1~5), schedule?:[{ when, detail(em) }] (max4), note?(em,br) }
+stats-highlight { image?(url), label?, headline(em), items:[{ icon, label, value(em) }] (2~4) }   // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star; 수치는 brief 근거만
+gallery-options { eyebrow?, items:[{ label, caption?, image?(url) }] (1~6) }
+banner-event { eyebrow?, title(em,br), subtitle?, bgImage?(url) }
 `.trim()
+
+/** DATA_CONTRACTS에 슬롯 계약이 정의된 variantId 집합 (각 줄 맨 앞 `<id> {` 파싱).
+ *  catalog()에는 있으나 계약이 없는 변형은 AI에게 제시하지 않는다 → 계약/카탈로그 드리프트로 인한
+ *  Zod 검증 실패를 원천 차단(correct-by-construction). */
+const CONTRACTED_IDS: ReadonlySet<string> = new Set(
+  DATA_CONTRACTS.split('\n')
+    .map((line) => line.trim().match(/^([a-z0-9-]+)\s*\{/i)?.[1])
+    .filter((id): id is string => Boolean(id)),
+)
+
+// 계약/카탈로그 드리프트 가시화 — 등록됐지만 계약 없는 변형은 제외되며 1회 경고.
+const UNCONTRACTED_IDS = catalog()
+  .filter((c) => !CONTRACTED_IDS.has(c.id))
+  .map((c) => c.id)
+if (UNCONTRACTED_IDS.length > 0) {
+  console.warn(
+    `[Blocks Composer] DATA_CONTRACTS 미정의로 AI 카탈로그에서 제외: ${UNCONTRACTED_IDS.join(', ')}`,
+  )
+}
 
 const SYSTEM_PROMPT = `You are a senior Korean e-commerce art director composing a long detail page from a fixed library of premium "section blocks".
 You DO NOT write layout or CSS. You select blocks, order them, and fill each block's content slots with Korean copy + map provided image URLs.
@@ -134,6 +160,7 @@ ${imageBlock}
 
 블록 카탈로그(variantId · archetype · imageSlots · 설명):
 ${catalog()
+  .filter((c) => CONTRACTED_IDS.has(c.id))
   .map((c) => `- ${c.id} · ${c.archetype} · img${c.imageSlots} · ${c.describe}`)
   .join('\n')}
 

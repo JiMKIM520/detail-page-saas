@@ -81,10 +81,26 @@ export async function runPipelineForProject(projectId: string): Promise<{
       nukkiPaths,
     }
 
-    // 4. 파이프라인 실행 — 식품은 슬롯템플릿 경로, 그 외는 기존 제너릭 경로
+    // 4. 파이프라인 실행 — USE_BLOCKS_COMPOSER 플래그면 블록 컴포저 경로(실험·additive),
+    //    아니면 기존 경로(식품=슬롯템플릿 / 그 외=제너릭). 플래그 미설정 시 동작 불변.
+    const useBlocks = process.env.USE_BLOCKS_COMPOSER === 'true'
     const isFood = input.category === 'food'
     let result
-    if (isFood) {
+    if (useBlocks) {
+      // 모든 누끼컷 → 서명URL (컴포저가 AI 프롬프트/HTML <img>에 원격 URL 삽입; 로컬 경로는 접근 불가)
+      const signedUrls: string[] = []
+      if (files) {
+        for (const file of files) {
+          const { data: signed } = await supabase.storage
+            .from('intake-files')
+            .createSignedUrl(file.storage_path, 60 * 60 * 24 * 7)
+          if (signed?.signedUrl) signedUrls.push(signed.signedUrl)
+        }
+      }
+      console.log(`[pipeline-bridge] USE_BLOCKS_COMPOSER → 블록 컴포저 경로 (이미지 ${signedUrls.length})`)
+      const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
+      result = await runBlocksPipeline(input, { heroImageUrl: signedUrls[0], imageUrls: signedUrls })
+    } else if (isFood) {
       // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)
       let heroImageUrl: string | undefined
       if (files && files[0]) {
