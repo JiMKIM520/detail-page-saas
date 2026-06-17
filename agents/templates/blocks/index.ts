@@ -24,6 +24,11 @@ import { equationVisual } from './variants/equation'
 import { storyPair } from './variants/story'
 import { certRosette } from './variants/cert'
 import { reviewBubbles, reviewCards } from './variants/review'
+import { faqChat } from './variants/faq'
+import { shippingInfo } from './variants/shipping'
+import { statsHighlight } from './variants/stats'
+import { galleryOptions } from './variants/gallery'
+import { bannerEvent } from './variants/banner'
 
 registerBlocks([
   heroCentered,
@@ -50,6 +55,12 @@ registerBlocks([
   // review 아키타입 (Figma 200섹션 인제스천 파일럿)
   reviewBubbles,
   reviewCards,
+  // Figma 200섹션 신규 아키타입 배치 (faq/shipping/stats/gallery/banner)
+  faqChat,
+  shippingInfo,
+  statsHighlight,
+  galleryOptions,
+  bannerEvent,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
