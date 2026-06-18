@@ -21,6 +21,15 @@ assets/fonts/*
 !assets/fonts/Pretendard-Bold.otf
 !assets/fonts/Pretendard-ExtraBold.otf
 
+# Figma 원본(380MB·재배포 금지)·블록 데모·스크래치 이미지 — 배포 불필요(함수 번들 비대화 방지)
+# (gitignore엔 이미 제외돼 있어 git-integration 배포엔 없지만, CLI 배포는 로컬 파일을 올리므로 명시)
+assets/template.fig
+*.fig
+assets/blocks-demo/
+assets/spike_3blocks.png
+assets/spike_3blocks.html
+assets/SCR-20260609-jwaf.jpeg
+
 # 빌드 캐시 / 의존성
 .next/
 node_modules/
