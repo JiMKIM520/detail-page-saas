@@ -12,9 +12,10 @@ const bodySchema = z.object({
   product_name: z.string().min(1),
   product_description: z.string().min(1),
   selling_points: z.array(z.string().min(1)).min(3),
-  homepage_url: z.string().url().optional().or(z.literal('')),
-  detail_page_url: z.string().url().optional().or(z.literal('')),
-  reference_notes: z.string().optional(),
+  // 빈 입력은 클라이언트가 null로 보냄 → null/''/undefined 모두 허용(nullish)
+  homepage_url: z.string().url().or(z.literal('')).nullish(),
+  detail_page_url: z.string().url().or(z.literal('')).nullish(),
+  reference_notes: z.string().nullish(),
   brand_name: z.string().optional().nullable(),
   target_audience: z.array(z.string()).optional().nullable(),
   design_preference: z.string().optional().nullable(),
