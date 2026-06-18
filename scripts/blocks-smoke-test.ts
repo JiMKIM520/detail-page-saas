@@ -291,6 +291,13 @@ const VARIANT_DATA: Record<string, any> = {
       { name: '선물 패키지', desc: '구성 설명', price: '29,000원' },
     ],
   },
+
+  // ── cert-frame (템플릿 충실 재현) ────────────────────────────────────────────
+  'cert-frame': {
+    certs: [
+      { label: '적합성 테스트 완료', caption: '시험기관 및 내용' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

@@ -35,6 +35,7 @@ import { compareBeforeAfter } from './variants/compare-beforeafter'
 import { reviewList } from './variants/review-list'
 import { usageSteps } from './variants/usage-steps'
 import { packageList } from './variants/package-list'
+import { certFrame } from './variants/cert-frame'
 
 registerBlocks([
   heroCentered,
@@ -84,6 +85,8 @@ registerBlocks([
   usageSteps,
   // 템플릿 충실 재현(08_상품 구성)
   packageList,
+  // 템플릿 충실 재현(14_인증)
+  certFrame,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
