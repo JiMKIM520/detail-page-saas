@@ -36,6 +36,12 @@ import { reviewList } from './variants/review-list'
 import { usageSteps } from './variants/usage-steps'
 import { packageList } from './variants/package-list'
 import { certFrame } from './variants/cert-frame'
+import { galleryGrid } from './variants/gallery-grid'
+import { eventPromo } from './variants/event-promo'
+import { discountDeal } from './variants/discount-deal'
+import { detailShowcase } from './variants/detail-showcase'
+import { storyBrand } from './variants/story-brand'
+import { bannerSeasonal } from './variants/banner-seasonal'
 
 registerBlocks([
   heroCentered,
@@ -87,6 +93,18 @@ registerBlocks([
   packageList,
   // 템플릿 충실 재현(14_인증)
   certFrame,
+  // 템플릿 충실 재현(12_갤러리 — 사진 중심 룩북 그리드)
+  galleryGrid,
+  // 템플릿 충실 재현(13_이벤트 — 다크 쿠폰 프로모)
+  eventPromo,
+  // 템플릿 충실 재현(15_할인 — 임팩트형 빨강 세일)
+  discountDeal,
+  // 템플릿 충실 재현(17_제품설명 — 에디토리얼 서술형)
+  detailShowcase,
+  // 템플릿 충실 재현(09_브랜드스토리 — 풀블리드 에디토리얼)
+  storyBrand,
+  // 템플릿 충실 재현(18_시즈널 배너 — 자족형 시즌 무드)
+  bannerSeasonal,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

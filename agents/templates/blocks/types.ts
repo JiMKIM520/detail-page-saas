@@ -34,6 +34,9 @@ export type BlockArchetype =
   | 'stats' // 수치/성과 강조
   | 'gallery' // 옵션/갤러리 쇼케이스
   | 'banner' // 시즈널/이벤트 배너
+  | 'event' // 이벤트/쿠폰 프로모션
+  | 'discount' // 할인/특가 임팩트
+  | 'detail' // 제품 상세 서술(에디토리얼)
   | 'compare' // 2단 비교 (조리법 등)
   | 'spec' // 제품 상세 정보 테이블
   | 'closing' // 마무리 히어로/CTA

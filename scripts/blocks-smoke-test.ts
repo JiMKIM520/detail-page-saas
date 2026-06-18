@@ -298,6 +298,60 @@ const VARIANT_DATA: Record<string, any> = {
       { label: '적합성 테스트 완료', caption: '시험기관 및 내용' },
     ],
   },
+
+  // ── gallery-grid (템플릿 충실 재현) ──────────────────────────────────────────
+  'gallery-grid': {
+    title: 'DETAIL SHOT',
+    shots: [
+      { label: '01 전체 컷' },
+      { label: '02 클로즈업' },
+    ],
+  },
+
+  // ── event-promo (템플릿 충실 재현) ───────────────────────────────────────────
+  'event-promo': {
+    title: 'REVIEW EVENT',
+    benefit: '5,000원 쿠폰 증정!',
+    points: [
+      { text: '텍스트 리뷰만 작성해도 OK!' },
+      { text: '작성 즉시 쿠폰 자동 지급' },
+    ],
+  },
+
+  // ── discount-deal (템플릿 충실 재현) ─────────────────────────────────────────
+  'discount-deal': {
+    headline: '지금만 반값!',
+    discountRate: '50%',
+    ctaText: '지금 신청하면 100% 할인',
+  },
+
+  // ── detail-showcase (템플릿 충실 재현) ───────────────────────────────────────
+  'detail-showcase': {
+    title: '제품 상세 설명',
+    specs: [
+      { label: '소재', value: '프리미엄 알루미늄' },
+      { label: '무게', value: '258g' },
+    ],
+    scenes: [
+      { caption: '일상에서 사용할 때' },
+      { caption: '외출 시 휴대할 때' },
+    ],
+  },
+
+  // ── story-brand (템플릿 충실 재현) ───────────────────────────────────────────
+  'story-brand': {
+    label: 'OUR BRAND STORY',
+    titleBold: '브랜드 스토리',
+    paragraphs: ['우리 브랜드의 이야기를 담아주세요.'],
+  },
+
+  // ── banner-seasonal (템플릿 충실 재현) ───────────────────────────────────────
+  'banner-seasonal': {
+    eyebrow: 'SPRING EVENT',
+    titleLine1: '봄맞이',
+    titleLine2: '이벤트',
+    period: '4.1일(화) - 4.15일(화)',
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────
