@@ -57,6 +57,42 @@ const ICONS: Record<string, string> = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v10H4V10z"/><path d="M7 10l4.5-6.5c1.2 0 2.2 1 2.2 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.2 6A2 2 0 0 1 17 19H7"/></svg>',
   fire:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 3.5 5 6 5 9.5A5 5 0 0 1 7 12.5c0-1.5.6-2.8 1.5-4 .3 1 1 1.7 1.8 1.5C11 9.5 10 6.5 12 3z"/></svg>',
+  person:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.8"/><path d="M5 20c0-3.9 3.1-6.6 7-6.6s7 2.7 7 6.6"/></svg>',
+  search:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4.2-4.2"/></svg>',
+  pin:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+  box:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>',
+  calendar:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>',
+  card:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>',
+  won:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M7.3 9l1.9 6 2.8-6 2.8 6 1.9-6"/><path d="M6.5 11.4h11M6.5 13.6h11"/></svg>',
+  bulb:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3"/><path d="M12 3a6 6 0 0 0-3.8 10.6c.7.6 1.1 1.4 1.2 2.4h5.2c.1-1 .5-1.8 1.2-2.4A6 6 0 0 0 12 3z"/></svg>',
+  gear:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1l-2.1 2.1M7.2 16.8l-2.1 2.1"/></svg>',
+  camera:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.4"/><path d="M8.5 7l1.3-2.5h4.4L15.5 7"/></svg>',
+  phone:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg>',
+  bolt:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L5 13.5h5.5L9 22l9-12h-6z"/></svg>',
+  thermometer:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V6a2 2 0 1 0-4 0v8.8a4 4 0 1 0 4 0z"/><path d="M12 9v5.6"/></svg>',
+  target:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>',
+  store:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9l1.4-4.5h14.2L20.5 9M4.5 9.5V20h15V9.5M4 9.5h16"/><path d="M9.5 20v-5.5h5V20"/></svg>',
+  doc:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3h7l4.5 4.5V21H6.5z"/><path d="M13 3v5h5M9.5 12.5h6M9.5 16h6"/></svg>',
+  sprout:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-7.5"/><path d="M12 13.5C12 10.5 9.8 8.3 6.8 8.3c0 3 2.2 5.2 5.2 5.2z"/><path d="M12 13.5c0-3 2.2-5.2 5.2-5.2 0 3-2.2 5.2-5.2 5.2z"/></svg>',
+  bell:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.5h12l-1.6-2.2V10a4.4 4.4 0 0 0-8.8 0v4.3z"/><path d="M10.2 19.2a2 2 0 0 0 3.6 0"/></svg>',
 }
 
 export function getIcon(name: string): string {
@@ -67,6 +103,9 @@ export function getIcon(name: string): string {
 export const ICON_NAMES = [
   'wheat', 'drop', 'clock', 'badge', 'snow', 'check', 'fryer', 'oven', 'star',
   'heart', 'gift', 'truck', 'shield', 'leaf', 'trophy', 'thumb', 'fire',
+  // 와디즈 아이콘팩(라인) 큐레이션 흡수 (자체 SVG)
+  'person', 'search', 'pin', 'box', 'calendar', 'card', 'won', 'bulb', 'gear',
+  'camera', 'phone', 'bolt', 'thermometer', 'target', 'store', 'doc', 'sprout', 'bell',
 ] as const
 
 /** <head>에 로드할 웹폰트 링크. 모든 변형이 이 폰트들을 쓸 수 있다. */
