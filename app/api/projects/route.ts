@@ -18,6 +18,18 @@ const bodySchema = z.object({
   brand_name: z.string().optional().nullable(),
   target_audience: z.array(z.string()).optional().nullable(),
   design_preference: z.string().optional().nullable(),
+  // 클라이언트가 먼저 스토리지에 업로드한 첨부파일의 메타데이터(있으면 프로젝트에 연결)
+  files: z
+    .array(
+      z.object({
+        file_type: z.string().min(1),
+        storage_path: z.string().min(1),
+        file_name: z.string().min(1),
+        mime_type: z.string().optional(),
+        file_size: z.number().optional(),
+      }),
+    )
+    .optional(),
 })
 
 export async function POST(request: Request) {
@@ -78,7 +90,26 @@ export async function POST(request: Request) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+  if (error) {
+    // 보상: 프로젝트 생성 실패 시 위에서 증가시킨 사용 횟수를 롤백(quota 소모 방지)
+    await service.rpc('decrement_usage', { uid: user.id })
+    return NextResponse.json({ error: error.message }, { status: 400 })
+  }
+
+  // 첨부파일 메타데이터 연결 (파일은 클라이언트가 이미 스토리지에 업로드함)
+  // 메타 저장 실패는 비치명: 프로젝트/사용량은 유효하고 파일은 스토리지에 존재(추후 복구 가능).
+  if (body.files && body.files.length > 0) {
+    const rows = body.files.map((f) => ({
+      project_id: data.id,
+      file_type: f.file_type,
+      storage_path: f.storage_path,
+      file_name: f.file_name,
+      mime_type: f.mime_type ?? null,
+      file_size: f.file_size ?? null,
+    }))
+    const { error: fErr } = await service.from('intake_files').insert(rows)
+    if (fErr) console.error(`[projects] intake_files 저장 실패 (project ${data.id}): ${fErr.message}`)
+  }
 
   // fire-and-forget async script generation
   generateScriptForProject(data.id)

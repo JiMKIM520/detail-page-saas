@@ -367,13 +367,14 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     }
   }
 
-  async function uploadFiles(projectId: string) {
+  async function uploadFiles(userId: string, uploadId: string) {
     const results: { file_type: string; storage_path: string; file_name: string; mime_type: string; file_size: number }[] = []
     for (const [fileType, files] of Object.entries(fileGroups)) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
         const ext = file.name.split('.').pop() || 'bin'
-        const path = `${projectId}/${fileType}/${Date.now()}_${i}.${ext}`
+        // 경로 규약: {userId}/{uploadId}/{fileType}/... — storage RLS는 첫 폴더가 본인 uid일 때만 쓰기 허용
+        const path = `${userId}/${uploadId}/${fileType}/${Date.now()}_${i}.${ext}`
         setUploadProgress(`파일 업로드 중... (${fileType})`)
         const { error } = await supabase.storage.from('intake-files').upload(path, file)
         if (error) throw new Error(`파일 업로드 실패: ${file.name} - ${error.message}`)
@@ -407,34 +408,38 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     }
 
     try {
+      // 1) 파일을 먼저 업로드한다.
+      //    유일한 실패 지점(스토리지 업로드)을 서버 변경(사용량 증가·프로젝트 생성)보다 앞에 둬서,
+      //    업로드가 실패하면 사용 횟수도 소모되지 않고 고아 프로젝트도 생기지 않게 한다.
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('로그인이 필요합니다. 다시 로그인해주세요.')
+
+      let uploadedFiles: { file_type: string; storage_path: string; file_name: string; mime_type: string; file_size: number }[] = []
+      const hasFiles = Object.values(fileGroups).some((arr) => arr.length > 0)
+      if (hasFiles) {
+        setUploadProgress('파일 업로드 중...')
+        uploadedFiles = await uploadFiles(user.id, crypto.randomUUID())
+      }
+
+      // 2) 프로젝트 생성 + 사용량 소모 + 파일 메타 연결을 서버에서 한 번에 처리한다.
+      setUploadProgress('제출 중...')
       const res = await fetch('/api/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, files: uploadedFiles }),
       })
       if (!res.ok) {
         const err = await res.json()
         throw new Error(err.error || '프로젝트 생성 실패')
       }
-      const project = await res.json()
-
-      setUploadProgress('파일 업로드 중...')
-      const uploadedFiles = await uploadFiles(project.id)
-
-      if (uploadedFiles.length > 0) {
-        const fileRes = await fetch(`/api/projects/${project.id}/files`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ files: uploadedFiles }),
-        })
-        if (!fileRes.ok) throw new Error('파일 정보 저장 실패')
-      }
+      await res.json()
 
       // 최종 제출 성공 시 draft 삭제
       try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
 
       setUploadProgress('')
       router.push('/projects')
+      router.refresh() // 레이아웃(헤더) 사용량 표시 갱신 — App Router 레이아웃은 클라 내비게이션 시 재렌더되지 않아 stale 방지
     } catch (err) {
       setUploadProgress('')
       setApiError(err instanceof Error ? err.message : '제출 중 오류가 발생했습니다.')

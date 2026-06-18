@@ -75,6 +75,10 @@ export interface Database {
         Args: { uid: string }
         Returns: boolean
       }
+      decrement_usage: {
+        Args: { uid: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
