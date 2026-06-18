@@ -42,6 +42,11 @@ import { discountDeal } from './variants/discount-deal'
 import { detailShowcase } from './variants/detail-showcase'
 import { storyBrand } from './variants/story-brand'
 import { bannerSeasonal } from './variants/banner-seasonal'
+import { introCover } from './variants/intro-cover'
+import { statsFigures } from './variants/stats-figures'
+import { faqList } from './variants/faq-list'
+import { heroPhoto } from './variants/hero-photo'
+import { shippingNotice } from './variants/shipping-notice'
 
 registerBlocks([
   heroCentered,
@@ -105,6 +110,16 @@ registerBlocks([
   storyBrand,
   // 템플릿 충실 재현(18_시즈널 배너 — 자족형 시즌 무드)
   bannerSeasonal,
+  // 템플릿 충실 재현(01_인트로 — 2존 커버)
+  introCover,
+  // 템플릿 충실 재현(02_수치강조 — 대형 숫자 임팩트)
+  statsFigures,
+  // 템플릿 충실 재현(10_FAQ — 정돈된 카드 리스트)
+  faqList,
+  // 템플릿 충실 재현(11_인트로 사진중심 — 풀블리드 컬러블록)
+  heroPhoto,
+  // 템플릿 충실 재현(16_배송 — NOTICE 카드형)
+  shippingNotice,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

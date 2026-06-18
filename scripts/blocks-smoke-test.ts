@@ -352,6 +352,46 @@ const VARIANT_DATA: Record<string, any> = {
     titleLine2: '이벤트',
     period: '4.1일(화) - 4.15일(화)',
   },
+
+  // ── intro-cover (템플릿 충실 재현) ───────────────────────────────────────────
+  'intro-cover': {
+    brand: 'VITALAB',
+    title: '제품명을 써주세요',
+    points: [
+      { icon: 'bolt', label: 'Point 01', desc: '차별화 포인트를 써주세요' },
+      { icon: 'heart', label: 'Point 02', desc: '차별화 포인트를 써주세요' },
+    ],
+  },
+
+  // ── stats-figures (템플릿 충실 재현) ─────────────────────────────────────────
+  'stats-figures': {
+    headline: '10,000건!',
+    rows: [
+      { label: '누적 판매량', value: '10,000건' },
+    ],
+  },
+
+  // ── faq-list (템플릿 충실 재현) ──────────────────────────────────────────────
+  'faq-list': {
+    items: [
+      { q: '배송은 얼마나 걸리나요?', a: '주문 확인 후 1~2 영업일 내 출고됩니다.' },
+      { q: '교환 및 환불은 어떻게 하나요?', a: '수령 후 7일 이내 고객센터로 연락 주시면 처리해 드립니다.' },
+    ],
+  },
+
+  // ── hero-photo (템플릿 충실 재현) ────────────────────────────────────────────
+  'hero-photo': {
+    brand: 'LUMIÈRE',
+    productName: 'PEAU VELOURS',
+    story: '최고급 원료만을 엄선해 만든 바디 세럼.',
+  },
+
+  // ── shipping-notice (템플릿 충실 재현) ───────────────────────────────────────
+  'shipping-notice': {
+    rows: [
+      { text: '영업일 기준 약 10~15일 소요됩니다.' },
+    ],
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

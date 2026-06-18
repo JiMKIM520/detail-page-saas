@@ -98,6 +98,11 @@ discount-deal { saleLabel?, eyebrow?, headline(em), discountRate, urgencyBadge?,
 detail-showcase { eyebrow?, title, productImage?(url), specs:[{ label, value }] (2~6), quote?(em,br), headline?(em,br), scenes:[{ image?(url), caption }] (2) }   // 제품설명(17) 에디토리얼 서술형 — 대제목→풀폭 이미지→스펙 미니표→인용 카피→헤드라인→2열 씬
 story-brand { index?, slogan?, year?, label, titlePre?, titleBold, titlePost?, paragraphs:[str] (1~4), image?(url) }   // 브랜드스토리(09) 풀블리드 — 메타바+에디토리얼 대형 혼합굵기 제목+본문 카피
 banner-seasonal { eyebrow, titleLine1, titleLine2?, period?, image?(url), decoImage?(url), bgFrom?, bgTo? }   // 시즈널배너(18) 봄·여름·가을·겨울 범용 — 양쪽 라인 눈썹+Cafe24 Dangdanghae 대형 2줄 타이틀+기간 pill
+intro-cover { brand, sub?, title(em), heroImage?(url), points:[{ icon, label, desc }] (2~3) }   // 인트로(01) 2존 커버 — 그라디언트 헤더+풀폭 이미지존+하단 원형아이콘 포인트 패널 // icon ∈ wheat|drop|clock|badge|snow|check|fryer|oven|star|heart|gift|truck|shield|leaf|trophy|thumb|fire|person|search|pin|box|calendar|card|won|bulb|gear|camera|phone|bolt|thermometer|target|store|doc|sprout|bell
+stats-figures { eyebrow?, headline(em), symbolImage?(url), stars?(0~5), rows:[{ label, value, sub? }] (1~4) }   // 수치강조(02) 대형 숫자 임팩트 — 다크 배경+별+Cafe24 ClassicType 황금 헤드라인+황금뱃지 수치행. 수치는 brief 근거만
+faq-list { title?, subtitle?, items:[{ q, a(em,br) }] (2~8) }   // FAQ(10) 정돈된 카드 리스트(Q 라벤더헤더+A 흰행). faq-chat 말풍선형과 차별화
+hero-photo { brand, productName, story(em,br), eyebrow?, heroImage?(url), sectionLabel? }   // 사진인트로(11) 풀블리드 제품사진+오버레이 제품명+수직구분선+하단 컬러패널 스토리. 사진이 주인공
+shipping-notice { noticeLabel?, title?, subtitle?, rows:[{ text(em,br), accent?:bool, sub? }] (1~6), customerLabel?, phone?, hours?:[str](max4), hoursNote?, contactIcon?, qaTitle?, qaDesc?, channelLabel?, channelDesc? }   // 배송(16) NOTICE 라벨+체크 카드+고객센터(전화/시간/Q&A/카카오) 카드. shipping-info와 차별화. icon ∈ ...(contactIcon, 위 아이콘셋)
 `.trim()
 
 /** DATA_CONTRACTS에 슬롯 계약이 정의된 variantId 집합 (각 줄 맨 앞 `<id> {` 파싱).
