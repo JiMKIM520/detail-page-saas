@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 /** 인증 없이 접근 가능한 경로 (prefix 매칭) */
-const PUBLIC_PREFIXES = ['/login', '/signup', '/api/auth/', '/salt-bread']
+const PUBLIC_PREFIXES = ['/login', '/signup', '/api/auth/', '/salt-bread', '/samples']
 
 /** 인증 없이 접근 가능한 정확 경로 (하위 경로는 공개 아님) */
 const PUBLIC_EXACT = ['/admin']

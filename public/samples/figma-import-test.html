@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=872">
+<title>쌀과밀 소금빵</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gaegu:wght@700&family=Gowun+Batang:wght@400;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Paperlogy';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-4Regular.woff2') format('woff2')}
+@font-face{font-family:'Paperlogy';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-5Medium.woff2') format('woff2')}
+@font-face{font-family:'Paperlogy';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-7Bold.woff2') format('woff2')}
+@font-face{font-family:'Paperlogy';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-8ExtraBold.woff2') format('woff2')}
+@font-face{font-family:'Cafe24 ClassicType';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24ClassicType/Cafe24ClassicType.woff2') format('woff2')}
+@font-face{font-family:'Cafe24 Dangdanghae';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24Dangdanghae/Cafe24Dangdanghae.woff2') format('woff2')}
+</style>
+<style>
+:root{
+  --bg:#F7F1E8; --paper:#FFFFFF; --ink:#2A1E13; --ink-2:#5C4A37;
+  --muted:#9C8A72; --accent:#B47B3C; --accent-d:#8C5C28;
+  --brand:#2A1E13; --line:#E8DECB;
+  --font-display:'Paperlogy', sans-serif; --font-body:'Pretendard', sans-serif;
+  --font-serif:'Paperlogy', sans-serif; --font-hand:'Cafe24 Dangdanghae', sans-serif;
+  --font-lat:'Cormorant Garamond',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);background:#cfc6ba;-webkit-font-smoothing:antialiased}
+.dpg{width:872px;margin:0 auto;background:var(--bg);overflow:hidden}
+.dpg img{display:block}
+.disp{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;line-height:1.14}
+.serif{font-family:var(--font-serif)}
+.lat{font-family:var(--font-lat)}
+.hand{font-family:var(--font-hand)}
+.acc,.em{color:var(--accent)}
+.ph{display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.035);border:2px dashed var(--line);color:var(--muted);font-size:13px;letter-spacing:.02em;box-shadow:none!important}
+.wm{display:none}
+.wm.light{display:none}
+.lab{display:inline-block;background:var(--brand);color:#F5ECDF;font-weight:800;font-size:17px;padding:8px 26px;border-radius:999px;letter-spacing:.04em}
+
+.hc{position:relative;padding:64px 56px 56px;text-align:center;background:radial-gradient(120% 80% at 50% -10%,#FFFDF9 0%,var(--bg) 55%)}
+.hc-badge{display:inline-flex;align-items:center;gap:7px;background:var(--brand);color:#F5ECDF;font-size:18px;font-weight:800;padding:9px 22px;border-radius:999px;box-shadow:0 6px 16px rgba(42,33,24,.18)}
+.hc-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.hc-title{margin-top:22px;font-size:62px}
+.hc-sub{margin-top:14px;font-size:21px;font-weight:700;color:var(--ink-2)}
+.hc-fig{position:relative;margin:38px auto 0;width:600px}
+.hc-media{width:100%;height:430px;object-fit:cover;border-radius:26px;box-shadow:0 26px 50px -18px rgba(42,33,24,.45)}
+.hc-bubble{position:absolute;top:30px;right:-12px;background:#fff;border:2.5px solid var(--brand);border-radius:22px;padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700;transform:rotate(-4deg)}
+.hc-bubble::after{content:"";position:absolute;left:28px;bottom:-14px;width:24px;height:17px;background:#fff;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:rotate(40deg)}
+.hc-cap{margin-top:14px;font-size:13px;color:var(--muted)}
+.hc-brand{margin-top:30px;display:inline-flex;align-items:center;gap:10px}
+.hc-mk{width:34px;height:34px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.hc-mk svg{width:20px;height:20px}
+.hc-nm{font-weight:700;font-size:20px;color:var(--brand);letter-spacing:.03em}
+
+
+.cl{position:relative;background:var(--bg);padding:60px 70px 64px}
+.cl-h{text-align:center;font-size:34px;margin-bottom:34px}
+.cl-item{display:flex;align-items:center;gap:18px;padding:20px 0}
+.cl-item + .cl-item{border-top:1.5px dashed var(--line)}
+.cl-ck{flex:0 0 40px;width:40px;height:40px;border-radius:50%;background:var(--accent);display:grid;place-items:center;box-shadow:0 6px 14px rgba(0,0,0,.12);color:#fff}
+.cl-ck svg{width:22px;height:22px}
+.cl-item p{font-size:22px;font-weight:700;color:var(--ink-2)}
+.cl-star{margin-left:6px;color:var(--accent);font-size:20px}
+
+
+.cpr{position:relative;padding:70px 56px 64px;background:var(--bg)}
+.cpr-head{text-align:center}
+.cpr-h{font-size:38px}
+.cpr-pill{display:inline-block;margin-top:20px;background:var(--accent);color:#fff;font-weight:800;font-size:20px;padding:11px 34px;border-radius:999px;letter-spacing:.06em;box-shadow:0 8px 18px rgba(232,128,31,.35)}
+.cpr-card{margin-top:30px;background:var(--paper);border:1.5px solid var(--line);border-radius:24px;padding:14px 36px;box-shadow:0 18px 40px -22px rgba(42,33,24,.35)}
+.cpr-row{display:flex;align-items:center;gap:22px;padding:24px 4px}
+.cpr-row + .cpr-row{border-top:2px dashed var(--line)}
+.cpr-ico{flex:0 0 60px;width:60px;height:60px;border-radius:50%;border:2.5px solid var(--accent);display:grid;place-items:center;background:#FFF8F0;color:var(--accent)}
+.cpr-ico svg{width:32px;height:32px}
+.cpr-row p{font-size:21px;font-weight:600;color:var(--ink-2)}
+.cpr-row p .em{font-weight:800}
+.cpr-photo{margin-top:30px;width:100%;height:330px;object-fit:cover;border-radius:22px;box-shadow:0 18px 38px -20px rgba(42,33,24,.4)}
+
+
+.rs{position:relative;padding:66px 56px 56px;background:var(--bg);text-align:center}
+.rs-q{position:relative;display:inline-block}
+.rs-q::before{content:"?";position:absolute;right:-46px;top:-30px;font-family:var(--font-display);font-size:120px;color:var(--accent);opacity:.16;line-height:1}
+.rs-h{font-size:32px;color:var(--brand);font-weight:800;line-height:1.4}
+.rs-h .em{color:var(--accent)}
+.rs-dots{margin:26px auto 0;display:flex;flex-direction:column;gap:9px;align-items:center}
+.rs-dots i{width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.55}
+
+
+.pb{position:relative;padding:72px 56px 56px;text-align:center;background:var(--bg)}
+.pb-h{margin-top:18px;font-size:40px}
+.pb-fig{position:relative;width:560px;margin:40px auto 0}
+.pb-media{width:100%;height:380px;object-fit:cover;border-radius:24px;box-shadow:0 22px 44px -20px rgba(42,33,24,.45)}
+.pb-bub{position:absolute;background:#fff;border:2.5px solid var(--brand);border-radius:22px;padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700}
+.pb-bub.t{top:24px;right:-14px;transform:rotate(-4deg)}
+.pb-bub.b{bottom:30px;left:-16px;transform:rotate(3deg)}
+.pb-bub::after{content:"";position:absolute;width:24px;height:17px;background:#fff;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand)}
+.pb-bub.t::after{left:28px;bottom:-14px;transform:rotate(40deg)}
+.pb-bub.b::after{right:28px;top:-14px;transform:rotate(220deg)}
+.pb-lead{max-width:600px;margin:34px auto 0;font-size:20px;font-weight:600;line-height:1.6;color:var(--ink-2)}
+
+
+.ff{position:relative}
+.ff-media{width:100%;height:520px;object-fit:cover}
+.ff-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(20,15,10,.72))}
+.ff-cap{position:absolute;left:0;right:0;bottom:46px;text-align:center;color:#fff;padding:0 60px}
+.ff-k{font-size:12px;letter-spacing:.4em;text-transform:uppercase;opacity:.85}
+.ff-t{font-family:var(--font-serif);font-weight:700;font-size:40px;margin-top:14px;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+
+
+.sy{position:relative;padding:70px 56px 60px;background:var(--bg);text-align:center}
+.sy-h{margin-top:18px;font-size:38px}
+.sy-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:38px 0 0}
+.sy-media{width:100%;height:240px;object-fit:cover;border-radius:20px;box-shadow:0 16px 32px -18px rgba(42,33,24,.4)}
+.sy-media.full{grid-column:1/-1;height:300px}
+.sy-lead{max-width:600px;margin:34px auto 0;font-size:20px;font-weight:600;line-height:1.6;color:var(--ink-2)}
+.sy-lead .em{color:var(--accent);font-weight:800}
+
+
+.eq{position:relative;padding:46px 56px 60px;background:var(--bg);text-align:center}
+.eq-row{display:flex;align-items:center;justify-content:center;gap:26px}
+.eq-item{text-align:center}
+.eq-media{width:150px;height:150px;border-radius:50%;object-fit:cover;box-shadow:0 14px 28px -12px rgba(42,33,24,.4);border:4px solid #fff}
+.eq-label{display:block;margin-top:12px;font-size:16px;font-weight:700;color:var(--ink-2)}
+.eq-op{font-family:var(--font-display);font-size:46px;color:var(--accent)}
+.eq-quote{margin-top:34px;font-family:var(--font-hand);font-size:30px;font-weight:700;color:var(--brand)}
+.eq-quote .em{color:var(--accent)}
+
+
+.cb{background:var(--bg);padding:20px 56px 64px;text-align:center}
+.cb-box{position:relative;background:var(--brand);color:#F3E9DA;border-radius:30px;padding:38px 40px;box-shadow:0 20px 40px -22px rgba(42,33,24,.6)}
+.cb-box::before{content:"• •";position:absolute;top:14px;left:50%;transform:translateX(-50%);color:var(--accent);letter-spacing:4px;font-size:14px}
+.cb-big{font-size:28px;font-weight:800;line-height:1.45}
+.cb-small{margin-top:8px;font-size:17px;color:#CBB79C;font-weight:600}
+
+
+.cc{position:relative;padding:72px 48px 76px;background:var(--bg);text-align:center}
+.cc-h{margin-top:20px;font-size:38px}
+.cc-h .em{display:block}
+.cc-cols{position:relative;margin-top:46px;display:grid;grid-template-columns:1fr 1fr}
+.cc-cols::before{content:"";position:absolute;top:8px;bottom:8px;left:50%;border-left:2px dashed var(--line)}
+.cc-col{padding:0 22px}
+.cc-tag{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-hand);font-weight:700;font-size:20px;padding:5px 16px;border-radius:14px;transform:rotate(-3deg);position:relative;z-index:1}
+.cc-big{height:120px;display:grid;place-items:center;margin:10px 0 6px;color:var(--brand)}
+.cc-big svg{width:104px;height:104px}
+.cc-nm{font-family:var(--font-display);font-size:24px;color:var(--brand);margin-bottom:22px}
+.cc-step{display:flex;align-items:flex-start;gap:14px;text-align:left;margin-top:18px}
+.cc-num{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:16px;display:grid;place-items:center;margin-top:2px}
+.cc-tx{font-size:16.5px;font-weight:600;color:var(--ink-2);line-height:1.5;word-break:keep-all}
+.cc-tx .em{font-weight:800}
+.cc-note{margin-top:42px;font-size:18px;font-weight:700;color:var(--brand)}
+
+
+.fs{position:relative;padding:24px 56px 60px;background:var(--bg);text-align:center}
+.fs-fig{position:relative;width:480px;margin:0 auto}
+.fs-media{width:100%;height:360px;object-fit:cover;border-radius:24px;box-shadow:0 20px 40px -20px rgba(42,33,24,.4)}
+.fs-stamp{position:absolute;right:-22px;bottom:-22px;width:120px;height:120px;transform:rotate(-12deg)}
+
+
+.ss{padding:96px 90px;text-align:center;background:var(--paper)}
+.ss-q{font-family:var(--font-serif);font-weight:700;font-size:33px;line-height:1.6}
+.ss-q .em{color:var(--accent)}
+.ss-by{margin-top:30px;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+
+
+.st{padding:84px 64px}
+.st-head{margin-bottom:36px}
+.st-kick{font-size:13px;font-weight:700;letter-spacing:.42em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.st-h{font-family:var(--font-serif);font-weight:700;font-size:34px}
+.st-row{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:22px 4px;border-top:1px solid var(--line);align-items:baseline}
+.st-row:last-child{border-bottom:1px solid var(--line)}
+.st-k{font-size:14px;letter-spacing:.04em;color:var(--muted);font-weight:600}
+.st-v{font-size:18px;color:var(--ink);font-weight:500}
+.st-v .em{color:var(--accent);font-weight:700}
+
+
+.fq{position:relative;padding:60px 56px 64px;background:var(--bg)}
+.fq-head{margin-bottom:30px}
+.fq-title{font-size:64px;color:var(--accent)}
+.fq-sub{margin-top:6px;font-size:20px;font-weight:700;color:var(--ink-2)}
+.fq-item + .fq-item{margin-top:22px}
+.fq-q{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:19px;border-radius:18px 18px 18px 4px;padding:16px 26px}
+.fq-a{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:4px 18px 18px 18px;padding:22px 26px;font-size:16.5px;color:var(--ink-2);line-height:1.7}
+.fq-a .em{color:var(--accent);font-weight:700}
+
+
+/* ── shipping-notice: sn prefix ── */
+.sn{background:var(--bg);padding:0 0 8px}
+
+/* ─ 배송 안내 섹션 ─ */
+.sn-top{padding:54px 64px 60px;display:flex;flex-direction:column;align-items:center}
+.sn-oval{display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--ink);border-radius:999px;padding:8px 28px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+.sn-vline{width:1px;height:42px;background:var(--ink);margin:18px 0}
+.sn-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:var(--ink);letter-spacing:-.02em;line-height:1.1;text-align:center}
+.sn-sub{margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-align:center}
+.sn-card{margin-top:32px;width:100%;background:var(--paper);border-radius:14px;padding:38px 44px;display:flex;flex-direction:column;gap:26px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.sn-row{display:flex;align-items:flex-start;gap:14px;font-size:16px;color:var(--ink);line-height:1.65}
+.sn-check{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;margin-top:2px}
+.sn-check svg{width:12px;height:12px;color:#fff}
+.sn-row.ac .sn-check{background:var(--accent)}
+.sn-row.ac .sn-rtxt{color:var(--accent);font-weight:700}
+.sn-rtxt{flex:1}
+.sn-rtxt .em{color:var(--accent);font-weight:700}
+.sn-rsub{font-size:12px;color:var(--muted);margin-top:4px;display:block}
+
+/* ─ 고객센터 섹션 ─ */
+.sn-bot{padding:52px 64px 60px;display:flex;flex-direction:column;align-items:center;border-top:1px solid var(--line)}
+.sn-phone{font-family:var(--font-display);font-weight:800;font-size:44px;color:var(--ink);letter-spacing:-.02em;text-align:center;margin-top:18px}
+.sn-hours{margin-top:24px;width:100%;background:var(--brand);border-radius:12px;padding:28px 36px;display:flex;align-items:center;gap:28px}
+.sn-hicon{flex-shrink:0;width:44px;height:44px;color:rgba(255,255,255,.7)}
+.sn-hicon svg{width:100%;height:100%}
+.sn-hlist{flex:1;display:flex;flex-direction:column;gap:6px}
+.sn-hrow{font-size:14px;color:rgba(255,255,255,.85);line-height:1.5}
+.sn-hnote{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.sn-qa{margin-top:24px;width:100%;display:flex;gap:20px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--line)}
+.sn-qat{font-size:15px;font-weight:700;color:var(--ink);flex:0 0 auto;min-width:140px;line-height:1.5}
+.sn-qad{font-size:14px;color:var(--ink-2);line-height:1.65;flex:1}
+.sn-ch{margin-top:20px;width:100%;display:flex;gap:20px;align-items:flex-start;padding-bottom:8px}
+.sn-chbadge{flex-shrink:0;width:46px;height:46px;border-radius:50%;background:#F7E300;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#2A2A2A;letter-spacing:-.01em}
+.sn-chdesc{flex:1;font-size:14px;color:var(--ink-2);line-height:1.7}
+.sn-chdesc .em{color:var(--accent);font-weight:700}
+
+
+.gg{background:var(--bg);padding:0 0 64px}
+/* ── 헤더 ── */
+.gg-hd{padding:52px 56px 0;text-align:center}
+.gg-eye{font-family:var(--font-display);font-weight:800;font-size:14px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:14px}
+.gg-title{font-family:'Cafe24 ClassicType',serif;font-size:88px;line-height:1;color:var(--ink);letter-spacing:-.03em}
+.gg-sub{margin-top:14px;font-size:16px;font-weight:500;color:var(--ink-2);letter-spacing:.01em}
+/* 헤더 구분선 */
+.gg-rule{width:56px;height:3px;border-radius:2px;background:var(--accent);margin:22px auto 0}
+/* ── 히어로 밴드 ── */
+.gg-hero{width:100%;height:480px;object-fit:cover;display:block;margin-top:44px}
+/* ── 그리드 ── */
+.gg-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:0}
+/* 첫 번째 아이템은 풀폭 단독; 나머지 orphan은 JS 인라인 스타일로 처리 */
+.gg-item{position:relative;background:var(--paper)}
+.gg-item:first-child{grid-column:1/-1}
+.gg-item--full{grid-column:1/-1}
+.gg-frame{position:relative;margin:40px 40px 0;background:#fff;box-shadow:0 19px 41px -8px rgba(0,0,0,.10),0 4px 12px -2px rgba(0,0,0,.06)}
+.gg-frame--full{margin:40px 56px 0}
+.gg-img{width:100%;height:420px;object-fit:cover;display:block}
+.gg-img--full{width:100%;height:560px;object-fit:cover;display:block}
+/* 인덱스 오버레이 */
+.gg-idx{position:absolute;top:-18px;left:28px;font-family:'Cafe24 ClassicType',serif;font-size:68px;line-height:1;color:var(--accent);opacity:.18;pointer-events:none;user-select:none}
+.gg-frame--full .gg-idx{font-size:96px;top:-24px}
+/* 캡션 영역 */
+.gg-cap{padding:16px 40px 0}
+.gg-cap--full{padding:16px 56px 0}
+.gg-lbl{font-family:var(--font-display);font-weight:800;font-size:18px;color:var(--ink);letter-spacing:.04em}
+.gg-desc{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.6}
+
+
+.cll{padding:104px 64px 110px;text-align:center;background:var(--bg)}
+.cll-kick{font-size:13px;font-weight:700;letter-spacing:.42em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.cll-h{font-family:var(--font-serif);font-weight:700;font-size:50px;line-height:1.2}
+.cll-h .em{color:var(--accent)}
+.cll-sub{margin-top:20px;font-size:16px;color:var(--ink-2);letter-spacing:.02em}
+.cll-cta{display:inline-block;margin-top:40px;border:1.5px solid var(--ink);padding:15px 44px;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);font-weight:700}
+
+</style>
+</head>
+<body>
+<div class="dpg">
+
+<section class="hc">
+  <div class="wm"></div>
+  <span class="hc-badge">국내산 쌀가루 블렌딩</span>
+  <h1 class="disp hc-title">겉은 <span class="em">바삭</span>,<br>속은 <span class="em">촉촉</span>한 소금빵</h1>
+  <p class="hc-sub">고메 버터의 진한 풍미를 매일 갓 구워 담았습니다</p>
+  <figure class="hc-fig">
+    <img class="hc-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/hero.png" alt="히어로 이미지">
+    <span class="hc-bubble hand">오늘 구운 빵, 오늘 배송</span>
+  </figure>
+  
+  <div class="hc-brand">
+    <span class="hc-mk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14c0-4 3-7 7-7s7 3 7 7"/><path d="M4 14h16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg></span>
+    <span class="hc-nm serif">쌀과밀</span>
+  </div>
+</section>
+
+<section class="cl">
+  <div class="wm"></div>
+  <h2 class="disp cl-h">이런 분께 <span class="em">딱 맞는</span> 소금빵입니다</h2>
+  <div class="cl-item"><span class="cl-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><p>베이커리 수준의 빵을 <span class="em">집에서</span> 즐기고 싶은 분</p></div><div class="cl-item"><span class="cl-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><p>아이에게 <span class="em">인공첨가물 없는</span> 간식을 주고 싶은 분</p></div><div class="cl-item"><span class="cl-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><p><span class="em">쌀가루 특유의 가벼운 식감</span>을 좋아하는 분</p></div><div class="cl-item"><span class="cl-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><p>고메 버터의 <span class="em">깊고 진한 풍미</span>를 원하는 분</p></div><div class="cl-item"><span class="cl-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><p>선물용으로 <span class="em">신선한 당일 생산 빵</span>을 찾는 분<span class="cl-star">✦</span></p></div>
+</section>
+
+<section class="cpr">
+  <div class="wm"></div>
+  <div class="cpr-head">
+    <h2 class="disp cpr-h">쌀과밀 소금빵이 <span class="em">다른 이유</span></h2>
+    <span class="cpr-pill">4가지 약속</span>
+  </div>
+  <div class="cpr-card">
+    <div class="cpr-row"><span class="cpr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M12 7c-2-2-5-1-5-1s0 3 2 4M12 7c2-2 5-1 5-1s0 3-2 4M12 12c-2-2-5-1-5-1s0 3 2 4M12 12c2-2 5-1 5-1s0 3-2 4"/></svg></span><p><span class="em">국내산 쌀가루</span> 블렌딩 — 가볍고 소화 편한 식감</p></div><div class="cpr-row"><span class="cpr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-4 4-6 7-6 10a6 6 0 0 0 12 0c0-3-2-6-6-10z"/></svg></span><p><span class="em">고메 버터</span> 사용 — 겹겹이 스며드는 풍부한 향</p></div><div class="cpr-row"><span class="cpr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><p><span class="em">매일 당일 생산</span> — 이틀 묵은 빵은 팔지 않습니다</p></div><div class="cpr-row"><span class="cpr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 6-14 15-14 0 9-6 15-15 14z"/><path d="M5 19C9 13 13 11 17 9"/></svg></span><p><span class="em">인공첨가물 무첨가</span> — 원재료 그대로의 맛</p></div><div class="cpr-row"><span class="cpr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h3.5l3 3v3H14z"/><circle cx="7" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg></span><p><span class="em">신선 냉동 배송</span> — 구운 그 상태를 그대로 전달</p></div>
+  </div>
+  <img class="cpr-photo" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/plated.png" alt="연출 사진">
+</section>
+
+<section class="rs">
+  <div class="wm"></div>
+  <div class="rs-q"><h3 class="rs-h">소금빵인데<br>왜 <span class="em">쌀가루</span>를 넣었을까요?</h3></div>
+  <div class="rs-dots"><i></i><i></i><i></i></div>
+</section>
+
+<section class="pb">
+  <div class="wm"></div>
+  <span class="lab">식감의 비밀</span>
+  <h2 class="disp pb-h"><span class="em">쌀가루 블렌딩</span>이 만드는<br>겹겹의 식감</h2>
+  <figure class="pb-fig">
+    <img class="pb-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/cross.png" alt="강조 사진">
+    <span class="pb-bub t hand">겉껍질: 얇고 바삭한 크러스트</span>
+    <span class="pb-bub b hand">속살: 쫀득하고 촉촉한 크럼</span>
+  </figure>
+  <p class="pb-lead">밀가루에 <span class="em">국내산 쌀가루를 블렌딩</span>하면<br>글루텐 조직이 섬세해져 얇은 크러스트와<br>촉촉한 내부 식감이 동시에 완성됩니다.</p>
+</section>
+
+<section class="ff">
+  <img class="ff-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/butter.png" alt="풀블리드 이미지">
+  <div class="ff-ov"></div>
+  <div class="ff-cap">
+    <p class="ff-k">GOURMET BUTTER</p>
+    <h2 class="ff-t">버터가 녹아드는 순간, 향이 달라집니다</h2>
+  </div>
+</section>
+
+<section class="sy">
+  <div class="wm"></div>
+  <span class="lab">원료 이야기</span>
+  <h2 class="disp sy-h">좋은 버터가<br><span class="em">소금빵의 전부</span>입니다</h2>
+  <div class="sy-pair">
+    <img class="sy-media full" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/overhead.png" alt="스토리 이미지"><img class="sy-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/butter.png" alt="스토리 이미지"><img class="sy-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/cross.png" alt="스토리 이미지">
+  </div>
+  <p class="sy-lead">고메 버터는 일반 버터보다 <span class="em">유지방 함량이 높아</span><br>구울 때 겉면에 깊은 광택과 고소함을 더합니다.<br>한 입 베어물면 퍼지는 진한 버터 향이<br>쌀과밀 소금빵의 시그니처입니다.</p>
+</section>
+
+<section class="eq">
+  <div class="eq-row"><div class="eq-item"><img class="eq-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/overhead.png" alt="국내산 쌀가루"><span class="eq-label">국내산 쌀가루</span></div><div class="eq-op">+</div><div class="eq-item"><img class="eq-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/butter.png" alt="고메 버터"><span class="eq-label">고메 버터</span></div><div class="eq-op">=</div><div class="eq-item"><img class="eq-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/cross.png" alt="쌀과밀 소금빵"><span class="eq-label">쌀과밀 소금빵</span></div></div>
+  <p class="eq-quote"><span class="em">단순한 재료, 정직한 맛</span></p>
+</section>
+
+<section class="cb">
+  <div class="cb-box">
+    <p class="cb-big"><span class="em">매일 아침 굽고</span>,<br>바로 그날 보냅니다</p>
+    <p class="cb-small">전날 생산한 빵은 절대 발송하지 않습니다 — 당일 생산 원칙</p>
+  </div>
+</section>
+
+<section class="cc">
+  <div class="wm"></div>
+  <span class="lab">맛있게 즐기는 방법</span>
+  <h2 class="disp cc-h">에어프라이어 vs <span class="em">오븐</span> 데우기</h2>
+  <div class="cc-cols">
+    <div class="cc-col">
+      <span class="cc-tag">간편 추천</span>
+      <div class="cc-big"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="40" rx="9"/><circle cx="32" cy="26" r="9"/><path d="M28 26h8"/><rect x="20" y="50" width="24" height="6" rx="3"/></svg></div>
+      <div class="cc-nm">에어프라이어</div>
+      <div class="cc-step"><span class="cc-num">1</span><span class="cc-tx"><span class="em">160°C</span> 예열</span></div><div class="cc-step"><span class="cc-num">2</span><span class="cc-tx"><span class="em">3~4분</span> 가열</span></div><div class="cc-step"><span class="cc-num">3</span><span class="cc-tx">겉면 바삭함 살아남</span></div>
+    </div>
+    <div class="cc-col">
+      <span class="cc-tag">정석</span>
+      <div class="cc-big"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="40" rx="6"/><path d="M10 24h44"/><circle cx="18" cy="18" r="1.6" fill="currentColor"/><circle cx="26" cy="18" r="1.6" fill="currentColor"/><rect x="18" y="30" width="28" height="16" rx="3"/></svg></div>
+      <div class="cc-nm">오븐</div>
+      <div class="cc-step"><span class="cc-num">1</span><span class="cc-tx"><span class="em">170°C</span> 예열</span></div><div class="cc-step"><span class="cc-num">2</span><span class="cc-tx"><span class="em">5~6분</span> 가열</span></div><div class="cc-step"><span class="cc-num">3</span><span class="cc-tx">속까지 고르게 데워짐</span></div>
+    </div></div>
+  <p class="cc-note"><span class="em">냉동 보관 후</span>에도 데우면 갓 구운 식감이 돌아옵니다</p>
+</section>
+
+<section class="fs">
+  <figure class="fs-fig">
+    <img class="fs-media" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/plated.png" alt="강조 컷">
+    <svg class="fs-stamp" viewBox="0 0 120 120">
+      <g fill="none" stroke="#C0392B" stroke-width="2.4"><circle cx="60" cy="60" r="54"/><circle cx="60" cy="60" r="44"/></g>
+      <path id="bk-sealarc-e03oc" d="M60 22 a38 38 0 1 1 -0.1 0" fill="none"/>
+      <text font-family="'Black Han Sans', sans-serif" font-size="11.5" fill="#C0392B" letter-spacing="3"><textPath href="#bk-sealarc-e03oc" startOffset="2%">★ PREMIUM QUALITY ★ HANDMADE</textPath></text>
+      <text x="60" y="58" text-anchor="middle" font-family="'Black Han Sans', sans-serif" font-size="22" fill="#C0392B">無첨가</text>
+      <text x="60" y="76" text-anchor="middle" font-family="'Pretendard', sans-serif" font-weight="800" font-size="10" fill="#C0392B" letter-spacing="2">인공첨가물 불사용</text>
+    </svg>
+  </figure>
+</section>
+
+<section class="ss">
+  <p class="ss-q"><span class="em">빵은 단순할수록</span><br>재료의 진심이 보입니다</p>
+  <p class="ss-by">쌀과밀 베이커리</p>
+</section>
+
+<section class="st">
+  <div class="st-head">
+    <p class="st-kick">제품 정보</p>
+    <h2 class="st-h">쌀과밀 소금빵 상세 정보</h2>
+  </div>
+  <dl>
+    <div class="st-row"><dt class="st-k">제품명</dt><dd class="st-v"><span class="em">쌀과밀 소금빵</span></dd></div><div class="st-row"><dt class="st-k">주원료</dt><dd class="st-v"><span class="em">국내산 쌀가루, 밀가루, 고메 버터, 천일염</span></dd></div><div class="st-row"><dt class="st-k">첨가물</dt><dd class="st-v"><span class="em">인공첨가물 무첨가</span></dd></div><div class="st-row"><dt class="st-k">생산 방식</dt><dd class="st-v"><span class="em">매일 당일 생산</span></dd></div><div class="st-row"><dt class="st-k">보관 방법</dt><dd class="st-v"><span class="em">냉동 보관</span> (제조일로부터 30일)</dd></div><div class="st-row"><dt class="st-k">해동 방법</dt><dd class="st-v">에어프라이어 <span class="em">160°C 3~4분</span> 또는 오븐 <span class="em">170°C 5~6분</span></dd></div>
+  </dl>
+</section>
+
+<section class="fq">
+  <div class="wm"></div>
+  <div class="fq-head">
+    <h2 class="disp fq-title">자주 묻는 질문</h2>
+    <p class="fq-sub">궁금한 점을 모았습니다</p>
+  </div>
+  <div class="fq-item"><div class="fq-q">Q. 냉동으로 오나요? 신선도는 괜찮나요?</div><div class="fq-a">A. 네, <span class="em">당일 생산 후 급속 냉동하여 발송</span>합니다.<br>갓 구운 상태를 그대로 냉동하기 때문에 데우면 처음 식감이 돌아옵니다.</div></div><div class="fq-item"><div class="fq-q">Q. 쌀가루가 들어가면 식감이 떡처럼 되지 않나요?</div><div class="fq-a">A. 밀가루와 <span class="em">적정 비율로 블렌딩</span>하여 떡처럼 무거운 식감은 없습니다.<br>오히려 크러스트가 더 얇고 바삭해지며 속은 가볍고 촉촉합니다.</div></div><div class="fq-item"><div class="fq-q">Q. 인공첨가물 무첨가라면 유통기한이 짧나요?</div><div class="fq-a">A. <span class="em">냉동 보관 시 제조일로부터 30일</span>입니다.<br>냉동 상태를 유지하시면 안심하고 드실 수 있습니다.</div></div><div class="fq-item"><div class="fq-q">Q. 선물 포장이 가능한가요?</div><div class="fq-a">A. 현재 <span class="em">기본 위생 포장</span>으로 발송됩니다.<br>별도 선물 포장 옵션은 상품 옵션란에서 확인해 주세요.</div></div>
+</section>
+
+<section class="sn">
+  <div class="sn-top">
+    <span class="sn-oval">배송 안내</span>
+    <div class="sn-vline"></div>
+    <h2 class="sn-title">당일 생산, 신선 배송</h2>
+    <p class="sn-sub">fresh daily baked &amp; shipped</p>
+    <div class="sn-card">
+      
+    <div class="sn-row ac">
+      <span class="sn-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+      <span class="sn-rtxt">
+        <span class="em">매일 오전 생산</span> 후 당일 오후 출고
+        
+      </span>
+    </div>
+    <div class="sn-row">
+      <span class="sn-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+      <span class="sn-rtxt">
+        오후 <span class="em">2시 이전 주문</span> 시 당일 출고 (주말·공휴일 제외)
+        
+      </span>
+    </div>
+    <div class="sn-row">
+      <span class="sn-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+      <span class="sn-rtxt">
+        냉동 택배로 발송 — <span class="em">보냉재 동봉</span>
+        
+      </span>
+    </div>
+    <div class="sn-row">
+      <span class="sn-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+      <span class="sn-rtxt">
+        수령 후 즉시 냉동 보관 권장
+        <span class="sn-rsub">냉동 보관 시 30일, 실온 해동 후 당일 소비</span>
+      </span>
+    </div>
+    </div>
+  </div>
+  <div class="sn-bot">
+          <span class="sn-oval">CUSTOMER CENTER</span>
+          
+          
+          <div class="sn-qa">
+          <span class="sn-qat">배송 관련 문의</span>
+          <span class="sn-qad">스마트스토어 채팅 또는 Q&amp;A 게시판을 이용해 주세요</span>
+        </div>
+          <div class="sn-ch">
+          <span class="sn-chbadge">카카오톡 채널</span>
+          <span class="sn-chdesc">쌀과밀 공식 채널에서 빠르게 답변드립니다</span>
+        </div>
+        </div>
+</section>
+
+<section class="gg">
+  <div class="gg-hd">
+    <div class="gg-eye">PRODUCT DETAIL</div>
+    <h2 class="gg-title">쌀과밀 소금빵</h2>
+    <p class="gg-sub">직접 확인하세요</p>
+    <div class="gg-rule"></div>
+  </div>
+  <img class="gg-hero" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/hero.png" alt="히어로 갤러리">
+  <div class="gg-grid">
+    
+    <div class="gg-item gg-item--full">
+      <div class="gg-frame gg-frame--full">
+        <span class="gg-idx">01</span>
+        <img class="gg-img gg-img--full" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/plated.png" alt="연출컷">
+      </div>
+      <div class="gg-cap gg-cap--full">
+        <div class="gg-lbl">플레이팅</div>
+        <p class="gg-desc">접시 위에서도 빛나는 황금빛 크러스트</p>
+      </div>
+    </div>
+    <div class="gg-item">
+      <div class="gg-frame">
+        <span class="gg-idx">02</span>
+        <img class="gg-img" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/overhead.png" alt="연출컷">
+      </div>
+      <div class="gg-cap">
+        <div class="gg-lbl">오버헤드</div>
+        <p class="gg-desc">균일하게 구워진 형태</p>
+      </div>
+    </div>
+    <div class="gg-item">
+      <div class="gg-frame">
+        <span class="gg-idx">03</span>
+        <img class="gg-img" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/cross.png" alt="연출컷">
+      </div>
+      <div class="gg-cap">
+        <div class="gg-lbl">단면</div>
+        <p class="gg-desc">촉촉한 속살과 얇은 크러스트</p>
+      </div>
+    </div>
+    <div class="gg-item gg-item--full">
+      <div class="gg-frame gg-frame--full">
+        <span class="gg-idx">04</span>
+        <img class="gg-img gg-img--full" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/samples/shots/butter.png" alt="연출컷">
+      </div>
+      <div class="gg-cap gg-cap--full">
+        <div class="gg-lbl">버터 디테일</div>
+        <p class="gg-desc">고메 버터가 스며든 결</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cll">
+  <p class="cll-kick">매일, 정직하게</p>
+  <h2 class="cll-h"><span class="em">오늘 구운 빵</span>을<br>오늘 받아보세요</h2>
+  <p class="cll-sub">국내산 쌀가루 블렌딩 · 고메 버터 · 인공첨가물 무첨가 · 당일 생산 배송</p>
+  <span class="cll-cta">지금 주문하기</span>
+</section>
+</div>
+</body>
+</html>
