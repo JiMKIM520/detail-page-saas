@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 /**
@@ -17,23 +16,18 @@ export function SendDraftPanel({
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState<{ emailed: boolean; emailError?: string } | null>(null)
   const router = useRouter()
-  const supabase = createClient()
 
   async function send() {
     if (!file) { alert('전달할 초안 이미지를 선택하세요.'); return }
     if (!designId) { alert('초안(design)이 아직 없습니다. 먼저 초안을 생성하세요.'); return }
     setLoading(true)
     try {
-      const path = `projects/${projectId}/client_draft/${Date.now()}_${file.name}`
-      const { error: upErr } = await supabase.storage.from('designs').upload(path, file, { upsert: true })
-      if (upErr) { alert(`업로드 실패: ${upErr.message}`); return }
-      const { data } = supabase.storage.from('designs').getPublicUrl(path)
-
-      const res = await fetch('/api/designs/send-draft', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ project_id: projectId, design_id: designId, preview_url: data.publicUrl, notes }),
-      })
+      const fd = new FormData()
+      fd.append('project_id', projectId)
+      fd.append('design_id', designId)
+      fd.append('notes', notes)
+      fd.append('file', file)
+      const res = await fetch('/api/designs/send-draft', { method: 'POST', body: fd })
       const json = await res.json().catch(() => null)
       if (!res.ok) { alert(`전달 실패: ${json?.error ?? res.statusText}`); return }
       setDone({ emailed: json?.emailed ?? false, emailError: json?.emailError })

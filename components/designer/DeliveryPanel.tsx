@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 /**
@@ -16,7 +15,6 @@ export function DeliveryPanel({ projectId, designId }: { projectId: string; desi
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   async function handleApprove() {
     if (!file) {
@@ -25,26 +23,14 @@ export function DeliveryPanel({ projectId, designId }: { projectId: string; desi
     }
     setLoading(true)
 
-    const path = `projects/${projectId}/final_${Date.now()}_${file.name}`
-    const { error: upErr } = await supabase.storage.from('designs').upload(path, file, { upsert: true })
-    if (upErr) {
-      alert(`파일 업로드 실패: ${upErr.message}`)
-      setLoading(false)
-      return
-    }
-    const { data } = supabase.storage.from('designs').getPublicUrl(path)
+    const fd = new FormData()
+    fd.append('project_id', projectId)
+    if (designId) fd.append('design_id', designId)
+    fd.append('action', 'approve')
+    fd.append('notes', notes)
+    fd.append('file', file)
 
-    const res = await fetch('/api/designs/review', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        project_id: projectId,
-        design_id: designId,
-        action: 'approve',
-        notes,
-        output_url: data.publicUrl,
-      }),
-    })
+    const res = await fetch('/api/designs/review', { method: 'POST', body: fd })
     if (!res.ok) {
       const body = await res.json().catch(() => null)
       alert(`납품 처리 실패: ${body?.error ?? res.statusText}`)
