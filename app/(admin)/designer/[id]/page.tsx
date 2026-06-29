@@ -13,6 +13,9 @@ import type { ProjectStatus } from '@/lib/status-machine'
 export default async function DesignerReviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const isAdmin = user?.user_metadata?.role === 'admin'
+
   const { data: project } = await supabase.from('projects').select('*, platforms(name)').eq('id', id).single()
   if (!project) notFound()
 
@@ -20,7 +23,10 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
     .from('designs').select('*').eq('project_id', id)
     .order('version', { ascending: false }).limit(1).single()
 
-  // AI 스타일링샷(styling_real/) — 디자이너 다운로드용
+  const designerStatus = (design as { designer_status?: string } | null)?.designer_status
+  const finalSubmitted = designerStatus === 'final_submitted'
+
+  // AI 스타일링샷(styling_real/) — 디자이너 Figma 작업용
   const svc = createServiceClient()
   const PUB = process.env.NEXT_PUBLIC_SUPABASE_URL + '/storage/v1/object/public/designs'
   const { data: shotFiles } = await svc.storage
@@ -36,7 +42,7 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
-        초안 제작 목록
+        {isAdmin ? '초안 검수 목록' : '초안 제작 목록'}
       </Link>
 
       <div className="mb-5 flex items-start justify-between gap-4">
@@ -57,20 +63,37 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
         <div className="lg:col-span-2 space-y-6">
           <DesignPreview design={design} projectId={id} />
 
-          {/* 스타일링샷 다운로드 (Figma 리터치에 활용) */}
-          <div className="rounded-xl border border-border bg-surface p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-text-primary">스타일링샷 (Figma 작업용)</h3>
-              <Link href={`/photography/${id}`} className="text-xs font-medium text-primary-600 hover:text-primary-700">
-                생성·재생성 →
-              </Link>
+          {/* 스타일링샷 다운로드 — 디자이너 Figma 작업용 */}
+          {!isAdmin && (
+            <div className="rounded-xl border border-border bg-surface p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-text-primary">스타일링샷 (Figma 작업용)</h3>
+                <Link href={`/photography/${id}`} className="text-xs font-medium text-primary-600 hover:text-primary-700">
+                  생성·재생성 →
+                </Link>
+              </div>
+              <StylingShotDownloads shots={stylingShots} />
             </div>
-            <StylingShotDownloads shots={stylingShots} />
-          </div>
+          )}
         </div>
+
         <div className="space-y-6">
-          <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
-          <DeliveryPanel projectId={id} designId={design?.id} />
+          {isAdmin ? (
+            /* 관리자: 초안 체크 + 최종 발송 */
+            <DeliveryPanel
+              projectId={id}
+              designId={design?.id}
+              mode="admin"
+              finalUrl={(design as { output_url?: string | null } | null)?.output_url ?? null}
+              finalSubmitted={finalSubmitted}
+            />
+          ) : (
+            /* 디자이너: 사업자 초안 전달 + 최종본 제출(관리자 검수요청) */
+            <>
+              <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
+              <DeliveryPanel projectId={id} designId={design?.id} mode="designer" finalSubmitted={finalSubmitted} />
+            </>
+          )}
         </div>
       </div>
     </div>
