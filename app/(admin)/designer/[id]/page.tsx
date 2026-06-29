@@ -44,7 +44,7 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <DesignPreview design={design} />
+          <DesignPreview design={design} projectId={id} />
         </div>
         <div>
           <DeliveryPanel projectId={id} designId={design?.id} previewPdfUrl={design?.preview_pdf_url ?? null} hasEdited={!!(design as Record<string, unknown>)?.edited_copy} />

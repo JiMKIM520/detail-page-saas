@@ -5,6 +5,8 @@ interface Design {
   output_url: string | null
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://detail-page-saas.vercel.app'
+
 const OUTPUT_LABELS: Record<string, string> = {
   html: 'HTML 파일',
   mobile_zip: '모바일용 ZIP',
@@ -13,10 +15,7 @@ const OUTPUT_LABELS: Record<string, string> = {
 }
 
 /**
- * output_url은 두 형태일 수 있다:
- *  - JSON 객체 문자열 `{"html":..,"mobile_zip":..,"pc_zip":..,"designer_zip":..}` (파이프라인 산출)
- *  - 단일 URL 문자열 (PDF 납품 등 레거시)
- * 둘 다 안전하게 다운로드 링크 목록으로 변환한다.
+ * output_url은 JSON 객체 문자열 또는 단일 URL 문자열일 수 있다. 둘 다 다운로드 링크로 변환.
  */
 function parseOutputUrls(raw: string): { key: string; label: string; url: string }[] {
   const trimmed = raw.trim()
@@ -27,41 +26,60 @@ function parseOutputUrls(raw: string): { key: string; label: string; url: string
         .filter(([, v]) => typeof v === 'string' && v)
         .map(([key, v]) => ({ key, label: OUTPUT_LABELS[key] ?? key, url: v as string }))
     } catch {
-      /* JSON 파싱 실패 → 단일 URL로 처리 */
+      /* 단일 URL로 처리 */
     }
   }
   return [{ key: 'file', label: '최종 파일 다운로드', url: trimmed }]
 }
 
-export function DesignPreview({ design }: { design: Design | null }) {
+export function DesignPreview({ design, projectId }: { design: Design | null; projectId: string }) {
   if (!design) {
     return (
       <div className="flex flex-col items-center justify-center py-20 bg-surface rounded-xl border border-border border-dashed">
         <div className="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mb-3">
-          <svg className="w-6 h-6 text-violet-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <svg className="w-6 h-6 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
           </svg>
         </div>
-        <p className="text-text-tertiary text-sm">디자인 생성 중...</p>
+        <p className="text-text-tertiary text-sm">아직 생성된 디자인 초안이 없습니다. ‘디자인 생성’을 눌러주세요.</p>
       </div>
     )
   }
 
+  const draftPath = `/draft/${projectId}`
+  const draftUrl = `${SITE_URL}${draftPath}`
+
   return (
     <div className="space-y-4">
+      {/* AI 1차 초안 미리보기 (HTML) */}
+      <div className="rounded-xl border border-border overflow-hidden shadow-card bg-white">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-surface">
+          <span className="text-sm font-semibold text-text-primary">AI 1차 초안 미리보기</span>
+          <a href={draftPath} target="_blank" rel="noopener noreferrer"
+            className="text-xs font-medium text-primary-600 hover:text-primary-700">새 탭에서 크게 보기 ↗</a>
+        </div>
+        <iframe src={draftPath} title="AI 초안 미리보기" className="w-full h-[600px] bg-white" />
+      </div>
+
+      {/* Figma 임포트 안내 */}
+      <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 space-y-2">
+        <p className="text-sm font-semibold text-indigo-800">Figma로 가져와 리터치하기</p>
+        <p className="text-xs text-indigo-700 leading-relaxed">
+          Figma에서 <b>html.to.design</b> 플러그인을 실행하고 아래 URL을 붙여넣어 임포트하세요. 편집 가능한 레이어로 들어옵니다.
+        </p>
+        <input
+          readOnly
+          value={draftUrl}
+          onFocus={(e) => e.currentTarget.select()}
+          className="w-full text-xs font-mono bg-white border border-indigo-200 rounded-lg px-3 py-2 text-indigo-900 select-all"
+        />
+      </div>
+
+      {/* 레거시: PNG 미리보기 / PDF / 다운로드 (있을 때만) */}
       {design.preview_url && (
         <div className="rounded-xl border border-border overflow-hidden shadow-card">
           <img src={design.preview_url} alt="디자인 미리보기" className="w-full" />
         </div>
-      )}
-      {design.preview_pdf_url && (
-        <a href={design.preview_pdf_url} target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-violet-600 hover:text-violet-700 text-sm font-semibold bg-violet-50 px-4 py-2 rounded-lg hover:bg-violet-100 transition-colors">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-          </svg>
-          AI 기획안 PDF 다운로드 (리터치용)
-        </a>
       )}
       {design.output_url && (
         <div className="flex flex-wrap gap-2">
