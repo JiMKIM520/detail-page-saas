@@ -4,7 +4,14 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }: { projectId: string; designId?: string; previewPdfUrl?: string | null; hasEdited?: boolean }) {
+/**
+ * 디자이너 최종 납품 패널 (Figma 플로우).
+ * - 디자인 재생성(AI 초안 다시 뽑기)
+ * - 최종 파일 업로드 + 승인 → 납품 완료(사업자에게 최종 메일은 designs/review에서 발송)
+ *
+ * 레거시(인앱 HTML 에디터·자동 PDF 굽기)는 Figma 리터치 플로우로 대체되어 제거됨.
+ */
+export function DeliveryPanel({ projectId, designId }: { projectId: string; designId?: string }) {
   const [notes, setNotes] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
@@ -12,20 +19,20 @@ export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }:
   const supabase = createClient()
 
   async function handleApprove() {
-    setLoading(true)
-    let outputUrl = null
-
-    if (file) {
-      const path = `projects/${projectId}/final_${file.name}`
-      const { error } = await supabase.storage.from('designs').upload(path, file)
-      if (error) {
-        alert(`파일 업로드 실패: ${error.message}`)
-        setLoading(false)
-        return
-      }
-      const { data } = supabase.storage.from('designs').getPublicUrl(path)
-      outputUrl = data.publicUrl
+    if (!file) {
+      alert('최종 납품 파일을 먼저 선택하세요.')
+      return
     }
+    setLoading(true)
+
+    const path = `projects/${projectId}/final_${Date.now()}_${file.name}`
+    const { error: upErr } = await supabase.storage.from('designs').upload(path, file, { upsert: true })
+    if (upErr) {
+      alert(`파일 업로드 실패: ${upErr.message}`)
+      setLoading(false)
+      return
+    }
+    const { data } = supabase.storage.from('designs').getPublicUrl(path)
 
     const res = await fetch('/api/designs/review', {
       method: 'POST',
@@ -35,26 +42,8 @@ export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }:
         design_id: designId,
         action: 'approve',
         notes,
-        output_url: outputUrl,
+        output_url: data.publicUrl,
       }),
-    })
-    if (!res.ok) {
-      const body = await res.json().catch(() => null)
-      alert(`승인 처리 실패: ${body?.error ?? res.statusText}`)
-      setLoading(false)
-      return
-    }
-    setLoading(false)
-    router.push('/designer')
-  }
-
-  async function handleUseAiPdf() {
-    if (!previewPdfUrl) return
-    setLoading(true)
-    const res = await fetch('/api/designs/review', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ project_id: projectId, design_id: designId, action: 'approve', notes, output_url: previewPdfUrl }),
     })
     if (!res.ok) {
       const body = await res.json().catch(() => null)
@@ -84,52 +73,9 @@ export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }:
   return (
     <div className="bg-surface rounded-xl border border-border p-5 sticky top-24 space-y-5">
       <div>
-        <h3 className="font-semibold text-text-primary">디자이너 검수</h3>
-        <p className="text-xs text-text-tertiary mt-0.5">디자인을 확인하고 납품을 완료하세요</p>
+        <h3 className="font-semibold text-text-primary">최종 납품</h3>
+        <p className="text-xs text-text-tertiary mt-0.5">Figma에서 완성한 최종 파일을 업로드하고 납품을 완료하세요</p>
       </div>
-
-      {previewPdfUrl && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 space-y-2">
-          <p className="text-xs font-medium text-blue-700">AI 생성 PDF 준비됨</p>
-          <div className="flex gap-2">
-            <a href={previewPdfUrl} target="_blank" rel="noreferrer"
-              className="flex-1 text-center text-xs border border-blue-300 text-blue-700 rounded-lg py-2 hover:bg-blue-100 transition-all">
-              미리보기
-            </a>
-            <button onClick={handleUseAiPdf} disabled={loading}
-              className="flex-1 text-xs bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-700 disabled:opacity-50 transition-all font-medium">
-              이 PDF로 납품
-            </button>
-          </div>
-        </div>
-      )}
-
-      {hasEdited && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3 space-y-2">
-          <p className="text-xs font-medium text-indigo-700">편집된 버전 있음</p>
-          <button onClick={async () => {
-            setLoading(true)
-            // 편집된 HTML로 Exporter 재실행 → ZIP 생성 → 납품
-            const saveRes = await fetch(`/api/designs/${projectId}/copy`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ regenerateHtml: true }),
-            })
-            if (!saveRes.ok) { alert('HTML 재생성 실패'); setLoading(false); return }
-            const res = await fetch('/api/designs/review', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ project_id: projectId, design_id: designId, action: 'approve', notes: notes || '편집된 버전 납품' }),
-            })
-            if (!res.ok) { alert('납품 실패'); setLoading(false); return }
-            setLoading(false)
-            router.push('/designer')
-          }} disabled={loading}
-            className="w-full text-xs bg-indigo-600 text-white rounded-lg py-2 hover:bg-indigo-700 disabled:opacity-50 transition-all font-medium">
-            편집된 버전으로 납품
-          </button>
-        </div>
-      )}
 
       <div>
         <label className="block text-sm font-medium text-text-secondary mb-1.5">최종 납품 파일</label>
@@ -138,7 +84,7 @@ export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }:
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
           </svg>
           <span className="text-sm text-text-tertiary">
-            {file ? file.name : '파일을 선택하세요'}
+            {file ? file.name : '파일을 선택하세요 (PNG/JPG/ZIP/PDF)'}
           </span>
           <input type="file" onChange={e => setFile(e.target.files?.[0] ?? null)} className="hidden" />
         </label>
@@ -159,14 +105,14 @@ export function DeliveryPanel({ projectId, designId, previewPdfUrl, hasEdited }:
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
-          승인 + 납품 완료
+          {loading ? '처리 중…' : '최종 승인 + 납품 완료'}
         </button>
         <button onClick={handleRegenerate} disabled={loading}
           className="w-full bg-surface-active text-text-secondary rounded-xl py-2.5 text-sm font-semibold hover:bg-gray-200 disabled:opacity-50 transition-all flex items-center justify-center gap-2">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
           </svg>
-          디자인 재생성
+          AI 초안 재생성
         </button>
       </div>
     </div>
