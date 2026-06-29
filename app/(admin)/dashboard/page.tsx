@@ -292,7 +292,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               {/* 카드 스크롤 영역 — 최대 높이 고정, 내부 스크롤 */}
               <div className="overflow-y-auto px-3 pb-3 space-y-2" style={{ maxHeight: '70vh' }}>
                 {items.map((p) => {
-                  const assigned = p.planner_id || p.designer_id
+                  const assigned = p.designer_id
                   const days = daysSince(p.created_at)
                   const isAging = days >= 7
                   return (
@@ -316,14 +316,9 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                         </span>
                       </div>
                       <div className="mt-1.5 flex flex-wrap gap-1">
-                        {p.planner_id && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-50 text-violet-700">
-                            기획 {nameOf.get(p.planner_id) || '?'}
-                          </span>
-                        )}
                         {p.designer_id && (
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">
-                            디자인 {nameOf.get(p.designer_id) || '?'}
+                            담당 {nameOf.get(p.designer_id) || '?'}
                           </span>
                         )}
                         {!assigned && (

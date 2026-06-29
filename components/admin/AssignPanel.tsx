@@ -6,17 +6,18 @@ interface Staff { id: string; name: string | null; role: string }
 
 interface AssignPanelProps {
   projectId: string
-  plannerId: string | null
   designerId: string | null
 }
 
 const selectCls =
   'w-full border border-border rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent'
 
-export function AssignPanel({ projectId, plannerId, designerId }: AssignPanelProps) {
-  const [planners, setPlanners] = useState<Staff[]>([])
+/**
+ * 담당 디자이너 배정 (역할 통합 후 단일 담당자).
+ * 기획자/디자이너 분리는 폐기 — 관리자가 담당 디자이너 1명만 배정한다.
+ */
+export function AssignPanel({ projectId, designerId }: AssignPanelProps) {
   const [designers, setDesigners] = useState<Staff[]>([])
-  const [planner, setPlanner] = useState(plannerId ?? '')
   const [designer, setDesigner] = useState(designerId ?? '')
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -29,8 +30,10 @@ export function AssignPanel({ projectId, plannerId, designerId }: AssignPanelPro
       .then((r) => r.json())
       .then((d: { planners?: Staff[]; designers?: Staff[] }) => {
         if (!active) return
-        setPlanners(d.planners ?? [])
-        setDesigners(d.designers ?? [])
+        // 역할 통합: planners/designers 합쳐 중복 제거 후 전원 후보로
+        const merged = [...(d.designers ?? []), ...(d.planners ?? [])]
+        const seen = new Set<string>()
+        setDesigners(merged.filter((s) => (seen.has(s.id) ? false : (seen.add(s.id), true))))
       })
       .catch(() => {})
     return () => { active = false }
@@ -44,7 +47,7 @@ export function AssignPanel({ projectId, plannerId, designerId }: AssignPanelPro
       const res = await fetch(`/api/projects/${projectId}/assign`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planner_id: planner || null, designer_id: designer || null }),
+        body: JSON.stringify({ planner_id: null, designer_id: designer || null }),
       })
       if (!res.ok) {
         const d = (await res.json().catch(() => ({}))) as { error?: string }
@@ -61,18 +64,9 @@ export function AssignPanel({ projectId, plannerId, designerId }: AssignPanelPro
 
   return (
     <div className="bg-surface rounded-xl border border-border p-5 space-y-3">
-      <h3 className="font-semibold text-text-primary text-sm">담당자 배정</h3>
+      <h3 className="font-semibold text-text-primary text-sm">담당 디자이너 배정</h3>
       <div>
-        <label className="block text-xs font-medium text-text-secondary mb-1">기획자</label>
-        <select value={planner} onChange={(e) => { setPlanner(e.target.value); setSaved(false) }} className={selectCls}>
-          <option value="">미배정</option>
-          {planners.map((p) => (
-            <option key={p.id} value={p.id}>{p.name ?? p.id.slice(0, 8)}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className="block text-xs font-medium text-text-secondary mb-1">디자이너</label>
+        <label className="block text-xs font-medium text-text-secondary mb-1">담당 디자이너</label>
         <select value={designer} onChange={(e) => { setDesigner(e.target.value); setSaved(false) }} className={selectCls}>
           <option value="">미배정</option>
           {designers.map((d) => (

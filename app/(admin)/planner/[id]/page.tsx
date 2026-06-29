@@ -130,35 +130,9 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
               </p>
             </div>
           )}
-
-          {script?.ab_content && (
-            <div className="bg-purple-50 border border-purple-200 rounded-xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xs font-semibold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">B 버전</span>
-                <h3 className="text-sm font-semibold text-purple-800">디자인 가이드 제외 버전</h3>
-              </div>
-              <div className="space-y-3">
-                {((script.ab_content as any)?.sections ?? []).map((section: any, i: number) => (
-                  <div key={i} className="bg-white rounded-lg p-3 border border-purple-100">
-                    <p className="text-xs font-medium text-purple-600 uppercase tracking-wide mb-1">{section.type}</p>
-                    {section.title && <p className="text-sm font-semibold text-text-primary">{section.title}</p>}
-                    {section.subtitle && <p className="text-xs text-text-secondary mt-0.5">{section.subtitle}</p>}
-                    {section.text && <p className="text-xs text-text-secondary mt-0.5">{section.text}</p>}
-                    {section.urgency && <p className="text-xs text-orange-600 mt-0.5">{section.urgency}</p>}
-                  </div>
-                ))}
-                {(script.ab_content as any)?.key_insights && (
-                  <div className="bg-white rounded-lg p-3 border border-purple-100">
-                    <p className="text-xs font-medium text-purple-600 uppercase tracking-wide mb-1">핵심 인사이트</p>
-                    <p className="text-xs text-text-secondary">{(script.ab_content as any).key_insights}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
         <div className="space-y-4">
-          <AssignPanel projectId={id} plannerId={project.planner_id} designerId={project.designer_id} />
+          <AssignPanel projectId={id} designerId={project.designer_id} />
           <ReviewPanel projectId={id} scriptId={script?.id} />
 
           {clientComments && clientComments.length > 0 && (
