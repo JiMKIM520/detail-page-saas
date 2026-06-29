@@ -31,16 +31,24 @@ const composerOutputSchema = z.object({
 })
 export type ComposerOutput = z.infer<typeof composerOutputSchema>
 
-/** AI 출력 + 브랜드색 → 검증 가능한 PageSpec (토큰은 여기서 결정론적으로 도출). 순수 함수(테스트 가능). */
-export function assemblePageSpec(out: ComposerOutput, brandColors?: string[]): PageSpec {
-  const tokens = deriveTokens(out.presetKey, brandColors, { tintBackground: false })
-  return { meta: out.meta, tokens, blocks: out.blocks }
+/**
+ * AI 출력 + 브랜드색 → 검증 가능한 PageSpec (토큰은 여기서 결정론적으로 도출). 순수 함수(테스트 가능).
+ * presetOverride가 있으면 AI가 고른 presetKey 대신 강제(카테고리별 프리미엄 프리셋 노출용).
+ * 브랜드색이 있으면 배경도 옅게 틴트해 업체별로 분위기가 달라지게 한다.
+ */
+export function assemblePageSpec(out: ComposerOutput, brandColors?: string[], presetOverride?: string): PageSpec {
+  const presetKey = presetOverride ?? out.presetKey
+  const hasBrand = (brandColors ?? []).length > 0
+  const tokens = deriveTokens(presetKey, brandColors, { tintBackground: hasBrand })
+  return { meta: { ...out.meta }, tokens, blocks: out.blocks }
 }
 
 export interface BlocksComposerInput {
   brief: ProjectBrief
   images?: { hero?: string; lifestyle?: string[]; cutout?: string; section?: string[] }
   brandColors?: string[]
+  /** 카테고리에서 도출한 강제 프리셋(있으면 AI presetKey 대체). */
+  preferredPreset?: string
   outputDir: string
 }
 
@@ -201,7 +209,7 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const text = message.content[0]?.type === 'text' ? message.content[0].text : ''
   const raw = parseJsonResponse<unknown>(text)
   const out = composerOutputSchema.parse(raw)
-  const spec = assemblePageSpec(out, input.brandColors)
+  const spec = assemblePageSpec(out, input.brandColors, input.preferredPreset)
   const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
   return { spec, html: rendered.html, usedVariants: rendered.usedVariants }
 }

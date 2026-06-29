@@ -81,6 +81,27 @@ export const TOKEN_PRESETS: Record<string, Tokens> = {
   'sand-luxury': sandLuxury,
 }
 
+export type PresetKey = 'warm-playful' | 'modern-editorial' | 'cobalt-premium' | 'sand-luxury'
+
+/**
+ * 카테고리 → 프리미엄 프리셋 매핑.
+ * AI는 식품류에 warm-playful(소금빵 데모와 동일)을 고르는 편향이 있어, 카테고리별로
+ * 와디즈 200섹션 시그니처 프리셋(Paperlogy/Cafe24, cobalt/sand)을 기본값으로 강제해
+ * "프리미엄 템플릿"이 실제로 노출되게 한다. 색조는 brandColors가 다시 덮어쓴다.
+ */
+export function presetForCategory(category?: string): PresetKey {
+  const c = (category ?? '').toLowerCase()
+  // 한글/영문 키워드 모두 매칭
+  if (/(beauty|뷰티|화장품|코스메틱)/.test(c)) return 'cobalt-premium'
+  if (/(electronic|전자|가전|디지털|테크|tech)/.test(c)) return 'cobalt-premium'
+  if (/(fashion|패션|의류|잡화|액세서리)/.test(c)) return 'modern-editorial'
+  if (/(health|건강|영양|supplement|헬스)/.test(c)) return 'cobalt-premium'
+  if (/(food|식품|음식|먹|디저트|베이커리|빵)/.test(c)) return 'sand-luxury'
+  if (/(pet|반려|강아지|고양이|애완)/.test(c)) return 'sand-luxury'
+  if (/(living|생활|리빙|홈|인테리어)/.test(c)) return 'sand-luxury'
+  return 'cobalt-premium'
+}
+
 const HEX_RE = /^#?([0-9a-fA-F]{6})$/
 
 function parseHex(hex: string): { r: number; g: number; b: number } | null {

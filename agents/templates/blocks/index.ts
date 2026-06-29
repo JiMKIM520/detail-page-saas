@@ -125,5 +125,6 @@ registerBlocks([
 export { renderPage, pageSpecSchema } from './composer'
 export type { RenderResult } from './composer'
 export { getVariant, listVariants, catalog } from './registry'
-export { deriveTokens, TOKEN_PRESETS, warmPlayful, modernEditorial, cobaltPremium, sandLuxury } from './tokens'
+export { deriveTokens, TOKEN_PRESETS, warmPlayful, modernEditorial, cobaltPremium, sandLuxury, presetForCategory } from './tokens'
+export type { PresetKey } from './tokens'
 export type { BlockArchetype, BlockVariant, PageSpec, PageBlock, Tokens, RenderCtx } from './types'

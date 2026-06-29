@@ -10,8 +10,38 @@ import { uploadPipelineOutput, updateDesignUrls, uploadToStorage } from '@/lib/s
 import { transitionStatus } from '@/lib/status-machine'
 import type { ProjectInput } from '@/agents/types'
 import { composeProductContext } from '@/lib/ai/project-brief'
+import { extractBrandColor } from '@/lib/ai/brand-color'
+import { presetForCategory } from '@/agents/templates/blocks'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import * as fs from 'fs'
 import * as path from 'path'
+
+/**
+ * 브랜드 대표색 추출 — brand_logo 우선, 없으면 첫 제품사진(누끼).
+ * 실패 시 빈 배열 → deriveTokens가 프리셋 기본색 사용.
+ */
+async function deriveBrandColors(supabase: SupabaseClient, projectId: string): Promise<string[]> {
+  const { data: logos } = await supabase
+    .from('intake_files')
+    .select('storage_path, file_type')
+    .eq('project_id', projectId)
+    .in('file_type', ['brand_logo', 'product_photo'])
+    .order('created_at', { ascending: true })
+
+  // brand_logo 먼저, 그다음 product_photo
+  const ordered = [...(logos ?? [])].sort((a, b) =>
+    (a.file_type === 'brand_logo' ? 0 : 1) - (b.file_type === 'brand_logo' ? 0 : 1),
+  )
+  for (const f of ordered) {
+    try {
+      const { data: blob } = await supabase.storage.from('intake-files').download(f.storage_path)
+      if (!blob) continue
+      const hex = await extractBrandColor(Buffer.from(await blob.arrayBuffer()))
+      if (hex) return [hex]
+    } catch { /* 다음 파일 시도 */ }
+  }
+  return []
+}
 
 /**
  * Supabase 프로젝트를 기반으로 전체 파이프라인 실행.
@@ -87,19 +117,47 @@ export async function runPipelineForProject(projectId: string): Promise<{
     const isFood = input.category === 'food'
     let result
     if (useBlocks) {
-      // 모든 누끼컷 → 서명URL (컴포저가 AI 프롬프트/HTML <img>에 원격 URL 삽입; 로컬 경로는 접근 불가)
-      const signedUrls: string[] = []
+      // 누끼컷 → 서명URL (cutout 슬롯 + 브랜드색 추출 소스)
+      const cutoutUrls: string[] = []
       if (files) {
         for (const file of files) {
           const { data: signed } = await supabase.storage
             .from('intake-files')
             .createSignedUrl(file.storage_path, 60 * 60 * 24 * 7)
-          if (signed?.signedUrl) signedUrls.push(signed.signedUrl)
+          if (signed?.signedUrl) cutoutUrls.push(signed.signedUrl)
         }
       }
-      console.log(`[pipeline-bridge] USE_BLOCKS_COMPOSER → 블록 컴포저 경로 (이미지 ${signedUrls.length})`)
+
+      // 스타일링샷(있으면 연출 이미지로 우선 사용) — designs/projects/{id}/styling_real/*
+      const stylingUrls: string[] = []
+      const { data: stylingList } = await supabase.storage
+        .from('designs')
+        .list(`projects/${projectId}/styling_real`)
+      for (const obj of stylingList ?? []) {
+        if (obj.name && /\.(png|jpe?g|webp)$/i.test(obj.name)) {
+          const { data: pub } = supabase.storage
+            .from('designs')
+            .getPublicUrl(`projects/${projectId}/styling_real/${obj.name}`)
+          if (pub?.publicUrl) stylingUrls.push(pub.publicUrl)
+        }
+      }
+
+      // 브랜드 대표색 추출 (brand_logo 우선)
+      const brandColors = await deriveBrandColors(supabase, projectId)
+      const blocksInput: ProjectInput = { ...input, brandColors }
+
+      // 연출 풀: 스타일링샷 우선, 없으면 누끼컷 폴백
+      const heroPool = stylingUrls.length > 0 ? stylingUrls : cutoutUrls
+      console.log(
+        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${stylingUrls.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
+      )
       const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
-      result = await runBlocksPipeline(input, { heroImageUrl: signedUrls[0], imageUrls: signedUrls })
+      result = await runBlocksPipeline(blocksInput, {
+        heroImageUrl: heroPool[0],
+        imageUrls: heroPool,
+        cutoutUrls,
+        preferredPreset: presetForCategory(input.category),
+      })
     } else if (isFood) {
       // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)
       let heroImageUrl: string | undefined

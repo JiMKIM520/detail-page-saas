@@ -15,13 +15,18 @@ import { ensureOutputDirs, timer } from './utils'
 import { buildProjectBrief, type PipelineResult } from './pm'
 import { runBlocksComposer } from './blocks-composer'
 import { runExporter } from './exporter'
+import { presetForCategory } from './templates/blocks'
 import type { ProjectInput } from './types'
 
 export interface BlocksPipelineOptions {
-  /** 히어로 이미지 URL — 첫 누끼컷 서명URL. 없으면 컴포저가 이미지 슬롯 생략 */
+  /** 히어로 이미지 URL — 스타일링샷 우선, 없으면 첫 누끼컷. 없으면 컴포저가 이미지 슬롯 생략 */
   heroImageUrl?: string
-  /** 전체 이미지 URL들(서명URL). [0]=hero, [1..]=lifestyle/섹션 */
+  /** 연출(lifestyle) 이미지 URL들 — 스타일링샷 우선. [0]=hero, [1..]=lifestyle/섹션 */
   imageUrls?: string[]
+  /** 누끼컷 URL들 — cutout(제품 단면/투명) 슬롯용. 스타일링샷과 별도로 전달 */
+  cutoutUrls?: string[]
+  /** 카테고리에서 도출한 강제 프리셋(미전달 시 input.category로 자동 도출) */
+  preferredPreset?: string
 }
 
 export async function runBlocksPipeline(
@@ -58,8 +63,12 @@ export async function runBlocksPipeline(
       hero: opts.heroImageUrl,
       lifestyle:
         opts.imageUrls && opts.imageUrls.length > 1 ? opts.imageUrls.slice(1) : undefined,
+      cutout: opts.cutoutUrls?.[0],
+      section:
+        opts.cutoutUrls && opts.cutoutUrls.length > 1 ? opts.cutoutUrls.slice(1) : undefined,
     },
     brandColors: input.brandColors,
+    preferredPreset: opts.preferredPreset ?? presetForCategory(input.category),
     outputDir: dirs.base,
   })
   stages.blocksComposer = {
