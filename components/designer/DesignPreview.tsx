@@ -69,8 +69,7 @@ export function DesignPreview({ design, projectId }: { design: Design | null; pr
         </p>
         <input
           readOnly
-          value={draftUrl}
-          onFocus={(e) => e.currentTarget.select()}
+          defaultValue={draftUrl}
           className="w-full text-xs font-mono bg-white border border-indigo-200 rounded-lg px-3 py-2 text-indigo-900 select-all"
         />
       </div>
