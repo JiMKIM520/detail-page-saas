@@ -80,16 +80,21 @@ export async function runBlocksPipeline(
     `[Blocks PM] Step 3: 렌더 완료 — index.html (${sizeKb}KB), ${composer.data.usedVariants.length} blocks`,
   )
 
-  // ── Step 4: Exporter (HTML → PNG/ZIP, 비치명) ──
+  // ── Step 4: Exporter (HTML → PNG/ZIP) — Figma 플로우에선 굽기(chromium) 불필요 → 기본 스킵. RUN_EXPORT=true일 때만 실행. ──
   let exportDir: string | undefined
-  try {
-    const exportResult = await runExporter(htmlPath, dirs.base)
-    stages.exporter = { success: exportResult.success }
-    exportDir = path.join(dirs.base, '5_export')
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err)
-    console.warn('[Blocks PM] Exporter 실패(비치명):', msg.slice(0, 160))
-    stages.exporter = { success: false, error: msg }
+  if (process.env.RUN_EXPORT === 'true') {
+    try {
+      const exportResult = await runExporter(htmlPath, dirs.base)
+      stages.exporter = { success: exportResult.success }
+      exportDir = path.join(dirs.base, '5_export')
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      console.warn('[Blocks PM] Exporter 실패(비치명):', msg.slice(0, 160))
+      stages.exporter = { success: false, error: msg }
+    }
+  } else {
+    console.log('[Blocks PM] Exporter 스킵 (Figma 플로우 — 굽기 불필요, chromium 미사용)')
+    stages.exporter = { success: true }
   }
 
   console.log(`[Blocks PM] 완료 (${elapsed()}ms)`)
