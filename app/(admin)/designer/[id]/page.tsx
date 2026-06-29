@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { DesignPreview } from '@/components/designer/DesignPreview'
 import { DeliveryPanel } from '@/components/designer/DeliveryPanel'
+import { SendDraftPanel } from '@/components/designer/SendDraftPanel'
 import { StylingShotDownloads } from '@/components/designer/StylingShotDownloads'
 import { WorkflowSteps } from '@/components/shared/WorkflowSteps'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -67,7 +68,8 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
             <StylingShotDownloads shots={stylingShots} />
           </div>
         </div>
-        <div>
+        <div className="space-y-6">
+          <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
           <DeliveryPanel projectId={id} designId={design?.id} />
         </div>
       </div>

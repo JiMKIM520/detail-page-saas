@@ -25,16 +25,6 @@ const STAGE_DESCRIPTIONS: Record<ClientStage, string> = {
   delivered: '상세페이지가 완성되었습니다. 담당자가 이메일로 최종 파일을 발송했습니다.',
 }
 
-function getClientStage(status: ProjectStatus): ClientStage {
-  if (status === 'delivered' || status === 'design_approved') return 'delivered'
-  if (status === 'design_review') return 'review'
-  return 'preparing'
-}
-
-const DESIGN_SHOW_STATUSES: ProjectStatus[] = [
-  'design_review', 'design_approved', 'delivered',
-]
-
 function statusIndex(status: ProjectStatus): number {
   const ORDER: ProjectStatus[] = [
     'intake_submitted', 'script_generating', 'script_review', 'script_approved',
@@ -69,11 +59,10 @@ export default async function ClientProjectDetailPage({
   }
 
   const status = project.status as ProjectStatus
-  const clientStage = getClientStage(status)
-  const showDesign = DESIGN_SHOW_STATUSES.includes(status)
 
+  // 디자인 행은 design_review 단계부터 로드 — preview_url로 '디자이너가 사업자에게 초안을 전달했는지' 판단
   let design: { id: string; preview_url: string | null; output_url: string | null; version: number | null } | null = null
-  if (showDesign) {
+  if (statusIndex(status) >= statusIndex('design_review')) {
     const { data } = await service
       .from('designs')
       .select('id, preview_url, output_url, version')
@@ -83,6 +72,16 @@ export default async function ClientProjectDetailPage({
       .single()
     design = data
   }
+
+  // AI 1차 초안(design_review)은 디자이너 내부 검수용 — 사업자에겐 preview_url(전달본)이 있을 때만 노출
+  const draftSent = !!design?.preview_url
+  const clientStage: ClientStage =
+    status === 'delivered' || status === 'design_approved'
+      ? 'delivered'
+      : status === 'design_review' && draftSent
+        ? 'review'
+        : 'preparing'
+  const showDesign = draftSent || statusIndex(status) >= statusIndex('design_approved')
 
   // 수정 회차: design version 1 = 초안, 2 = 1차 수정본, 3 = 2차 수정본 (최대 2회)
   const revisionUsed = Math.min(Math.max((design?.version ?? 1) - 1, 0), 2)

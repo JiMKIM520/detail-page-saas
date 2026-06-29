@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { transitionStatus } from '@/lib/status-machine'
+import { sendDeliveredEmail } from '@/lib/email/send'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -34,5 +35,23 @@ export async function POST(request: Request) {
   await transitionStatus(supabase, project_id, 'design_approved', { note: '디자이너 승인' })
   await transitionStatus(supabase, project_id, 'delivered', { note: '납품 완료' })
 
-  return NextResponse.json({ success: true })
+  // 사업자에게 최종 납품 메일 (Resend; 키 없으면 dev stub / prod 실패 기록 — 납품 자체는 막지 않음)
+  let emailed = false
+  try {
+    const { data: proj } = await supabase
+      .from('projects')
+      .select('company_name, client_id')
+      .eq('id', project_id)
+      .single()
+    if (proj?.client_id && output_url) {
+      const { data: u } = await supabase.auth.admin.getUserById(proj.client_id)
+      const to = u?.user?.email
+      if (to) {
+        const r = await sendDeliveredEmail(to, proj.company_name ?? '상세페이지', output_url)
+        emailed = r.sent
+      }
+    }
+  } catch { /* 메일 실패는 납품을 막지 않음 */ }
+
+  return NextResponse.json({ success: true, emailed })
 }
