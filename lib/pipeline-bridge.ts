@@ -128,9 +128,9 @@ export async function runPipelineForProject(projectId: string): Promise<{
     // 6. designs 테이블 업데이트
     await updateDesignUrls(projectId, uploadResult.urls)
 
-    // 7. 상태 전이
-    const nextStatus = result.success ? 'design_review' : 'photo_uploaded'
-    await transitionStatus(supabase, projectId, nextStatus)
+    // 7. 상태 전이 (실패 시 design_failed — 과거 photo_uploaded는 무효 전이로 스턱 유발)
+    const nextStatus = result.success ? 'design_review' : 'design_failed'
+    await transitionStatus(supabase, projectId, nextStatus, result.success ? undefined : { note: '디자인 생성 실패' })
 
     // 8. tmp 정리 (Vercel에서는 자동 정리되지만 명시적으로)
     try {
@@ -145,9 +145,12 @@ export async function runPipelineForProject(projectId: string): Promise<{
     const message = err instanceof Error ? err.message : String(err)
     console.error('[pipeline-bridge] 파이프라인 실패:', message)
 
-    // 상태 롤백
+    // 상태 롤백 — design_generating에서 실패 시 design_failed로(재시도 가능). 직접 update로 안전 처리.
     try {
-      await transitionStatus(supabase, projectId, 'photo_uploaded')
+      await supabase.from('projects').update({ status: 'design_failed' }).eq('id', projectId)
+      await supabase.from('project_logs').insert({
+        project_id: projectId, from_status: 'design_generating', to_status: 'design_failed', note: `실패: ${message.slice(0, 200)}`,
+      })
     } catch { /* rollback failure is non-fatal */ }
 
     return { success: false, error: message }

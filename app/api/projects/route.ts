@@ -1,8 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { generateScriptForProject } from '@/lib/ai/generate-script'
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
 import { z } from 'zod'
+
+// 응답 후 after()로 스크립트 생성을 이어가므로 함수가 살아있을 시간을 확보(과거 fire-and-forget는 Vercel에서 응답 직후 종료돼 미완)
+export const maxDuration = 300
 
 const bodySchema = z.object({
   company_name: z.string().min(1),
@@ -112,8 +115,8 @@ export async function POST(request: Request) {
     if (fErr) console.error(`[projects] intake_files 저장 실패 (project ${data.id}): ${fErr.message}`)
   }
 
-  // fire-and-forget async script generation
-  generateScriptForProject(data.id)
+  // 스크립트 자동 생성 — after()로 응답 후 실행하되 함수를 살려둠(Vercel에서 완주). 실패해도 제출 응답엔 영향 없음.
+  after(() => generateScriptForProject(data.id))
 
   return NextResponse.json(data, { status: 201 })
 }

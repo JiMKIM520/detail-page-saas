@@ -2,10 +2,13 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
+/** Claude 모델 ID — env로 오버라이드 가능. 기본은 현재 유효 모델(과거 claude-sonnet-4-20250514는 404). */
+export const CLAUDE_MODEL = process.env.CLAUDE_MODEL ?? 'claude-sonnet-4-6'
+
 export async function generateScript(systemPrompt: string, userPrompt: string): Promise<string> {
   const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 4096,
+    model: CLAUDE_MODEL,
+    max_tokens: 16384,
     messages: [{ role: 'user', content: userPrompt }],
     system: systemPrompt,
   })
@@ -47,8 +50,8 @@ export async function generateScriptWithImages(
   contentBlocks.push({ type: 'text', text: userPrompt })
 
   const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 4096,
+    model: CLAUDE_MODEL,
+    max_tokens: 16384,
     messages: [{ role: 'user', content: contentBlocks }],
     system: systemPrompt,
   })

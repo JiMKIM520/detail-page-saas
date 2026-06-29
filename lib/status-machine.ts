@@ -9,6 +9,7 @@ export type ProjectStatus =
   | 'photo_scheduled'
   | 'photo_uploaded'
   | 'design_generating'
+  | 'design_failed'        // 디자인 생성 실패 — 재시도 가능(스턱 방지)
   | 'design_review'
   | 'design_approved'
   | 'delivered'
@@ -24,6 +25,7 @@ export const STATUS_LABELS: Record<ProjectStatus, string> = {
   photo_scheduled:    '촬영 예정',
   photo_uploaded:     '사진 업로드 완료',
   design_generating:  '디자인 생성 중',
+  design_failed:      '디자인 생성 실패',
   design_review:      '디자인 검수 대기',
   design_approved:    '디자인 승인',
   delivered:          '납품 완료',
@@ -41,6 +43,7 @@ export const CLIENT_STATUS_LABELS: Record<ProjectStatus, string> = {
   photo_scheduled:    '촬영 예정',
   photo_uploaded:     '사진 접수 완료',
   design_generating:  '제작 중',
+  design_failed:      '제작 중',
   design_review:      '초안 확인 요청',
   design_approved:    '최종 확인 완료',
   delivered:          '납품 완료',
@@ -57,7 +60,8 @@ const TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
   prompt_ready:      ['photo_uploaded'],                        // v6: 프롬프트 준비 → 운영자 이미지 추출·업로드
   photo_scheduled:   ['photo_uploaded'],                        // 레거시 호환 유지
   photo_uploaded:    ['design_generating'],
-  design_generating: ['design_review'],
+  design_generating: ['design_review', 'design_failed'],         // 성공 → 검수 / 실패 → 실패상태(스턱 방지)
+  design_failed:     ['design_generating', 'photo_uploaded'],    // 재시도 / 사진단계로 되돌리기
   design_review:     ['design_approved', 'design_generating'],
   design_approved:   ['delivered'],
   delivered:         [],

@@ -2,7 +2,7 @@ import { generateScriptForProject } from '@/lib/ai/generate-script'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-export const maxDuration = 60
+export const maxDuration = 300
 
 export async function POST(request: Request) {
   const userSupabase = await createClient()

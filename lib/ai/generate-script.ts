@@ -1,7 +1,7 @@
 import sharp from 'sharp'
 import { createServiceClient } from '@/lib/supabase/service'
 import type { Json } from '@/lib/supabase/types'
-import { generateScript, generateScriptWithImages, type ImageInput } from './claude'
+import { generateScript, generateScriptWithImages, CLAUDE_MODEL, type ImageInput } from './claude'
 import { SCRIPT_SYSTEM_PROMPT, buildUserPrompt } from './prompts/script-base'
 import { buildDifferentiatedSystemPrompt, buildEnhancedUserPrompt } from './prompts/builder'
 import { composeProductContext } from '@/lib/ai/project-brief'
@@ -183,17 +183,30 @@ export async function generateScriptForProject(projectId: string, clientFeedback
       rawScript = await generateScript(systemPrompt, userPrompt)
     }
 
+    // LLM이 ```json … ``` 코드펜스로 감싸 보내는 경우가 잦아, 펜스 제거 후 JSON 본문만 추출해 파싱한다.
+    const stripFence = (raw: string): string => {
+      let s = raw.trim()
+      const m = s.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i)
+      if (m) s = m[1].trim()
+      if (s[0] !== '{' && s[0] !== '[') {
+        const a = s.search(/[{[]/)
+        const b = Math.max(s.lastIndexOf('}'), s.lastIndexOf(']'))
+        if (a >= 0 && b > a) s = s.slice(a, b + 1)
+      }
+      return s
+    }
+
     let scriptContent: Json
     try {
-      scriptContent = JSON.parse(rawScript) as Json
+      scriptContent = JSON.parse(stripFence(rawScript)) as Json
     } catch (firstErr) {
       console.warn(`[generate-script] Initial JSON parse failed for project ${projectId}:`, firstErr, `Raw output length: ${rawScript.length}`)
-      const retryPrompt = systemPrompt + '\n\n반드시 순수 JSON만 응답하세요. 마크다운 없이.'
+      const retryPrompt = systemPrompt + '\n\n반드시 순수 JSON만 응답하세요. 마크다운 코드펜스(```) 없이.'
       try {
         const retried = images.length > 0
           ? await generateScriptWithImages(retryPrompt, userPrompt, images)
           : await generateScript(retryPrompt, userPrompt)
-        scriptContent = JSON.parse(retried) as Json
+        scriptContent = JSON.parse(stripFence(retried)) as Json
       } catch (retryErr) {
         throw new Error(`Script JSON parse failed after retry. Initial output (first 200 chars): ${rawScript.substring(0, 200)}`)
       }
@@ -202,7 +215,7 @@ export async function generateScriptForProject(projectId: string, clientFeedback
     await supabase.from('scripts').insert({
       project_id: projectId,
       content: scriptContent,
-      ai_model: 'claude-sonnet-4-20250514',
+      ai_model: CLAUDE_MODEL,
       planner_status: 'pending',
     })
 

@@ -11,6 +11,7 @@ const STATUS_STYLES: Record<ProjectStatus, { bg: string; text: string; dot: stri
   photo_scheduled:   { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400' },
   photo_uploaded:    { bg: 'bg-indigo-50',  text: 'text-indigo-700',  dot: 'bg-indigo-400' },
   design_generating: { bg: 'bg-violet-50',  text: 'text-violet-700',  dot: 'bg-violet-400' },
+  design_failed:     { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500' },
   design_review:     { bg: 'bg-pink-50',    text: 'text-pink-700',    dot: 'bg-pink-400' },
   design_approved:   { bg: 'bg-teal-50',    text: 'text-teal-700',    dot: 'bg-teal-400' },
   delivered:         { bg: 'bg-slate-100',  text: 'text-slate-600',   dot: 'bg-slate-400' },
