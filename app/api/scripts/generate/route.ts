@@ -7,7 +7,7 @@ export const maxDuration = 300
 export async function POST(request: Request) {
   const userSupabase = await createClient()
   const { data: { user } } = await userSupabase.auth.getUser()
-  if (!user || !['admin', 'planner'].includes(user.user_metadata?.role)) {
+  if (!user || !['admin', 'designer'].includes(user.user_metadata?.role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

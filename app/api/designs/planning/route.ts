@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const role = user.user_metadata?.role as string | undefined
-  if (!role || !['admin', 'planner'].includes(role)) {
+  if (!role || !['admin', 'designer'].includes(role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

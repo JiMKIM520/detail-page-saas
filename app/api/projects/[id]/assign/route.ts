@@ -8,7 +8,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const userSupabase = await createClient()
   const { data: { user } } = await userSupabase.auth.getUser()
   const role = user?.user_metadata?.role as string | undefined
-  if (!user || !['admin', 'planner'].includes(role ?? '')) {
+  if (!user || !['admin', 'designer'].includes(role ?? '')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
