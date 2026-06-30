@@ -22,6 +22,21 @@ interface ScriptContent {
   color_suggestion: string
 }
 
+/**
+ * AI가 문자열 자리에 객체(예: color_suggestion={main,sub1,sub2,text,accent})를 넣는 경우가 있어,
+ * 어떤 값이든 렌더 가능한 문자열로 강제. (객체 → "값" 줄바꿈, React #31 방지)
+ */
+function asText(v: unknown): string {
+  if (v == null) return ''
+  if (typeof v === 'string') return v
+  if (typeof v === 'number' || typeof v === 'boolean') return String(v)
+  if (Array.isArray(v)) return v.map(asText).join('\n')
+  if (typeof v === 'object') {
+    return Object.values(v as Record<string, unknown>).map(asText).filter(Boolean).join('\n')
+  }
+  return String(v)
+}
+
 const SECTION_LABELS: Record<string, string> = {
   hero: 'Hero',
   benefits: '핵심 장점',
@@ -136,25 +151,25 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
             {draft.title !== undefined && (
               isEditing ? (
                 <input
-                  value={draft.title}
+                  value={asText(draft.title)}
                   onChange={e => setDraftSection({ ...draftSection!, title: e.target.value })}
                   className="w-full border border-border rounded-lg px-3 py-2 text-base font-bold text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent mb-1"
                 />
               ) : (
-                <h3 className="text-base font-bold text-text-primary">{section.title}</h3>
+                <h3 className="text-base font-bold text-text-primary">{asText(section.title)}</h3>
               )
             )}
 
             {draft.subtitle !== undefined && (
               isEditing ? (
                 <textarea
-                  value={draft.subtitle}
+                  value={asText(draft.subtitle)}
                   onChange={e => setDraftSection({ ...draftSection!, subtitle: e.target.value })}
                   rows={2}
                   className="w-full border border-border rounded-lg px-3 py-2 text-sm text-text-secondary bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none mt-1"
                 />
               ) : (
-                <p className="text-sm text-text-secondary mt-1">{section.subtitle}</p>
+                <p className="text-sm text-text-secondary mt-1 whitespace-pre-wrap">{asText(section.subtitle)}</p>
               )
             )}
 
@@ -164,7 +179,7 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
                 </svg>
-                <p className="text-sm text-primary-700">{section.image_description}</p>
+                <p className="text-sm text-primary-700 whitespace-pre-wrap">{asText(section.image_description)}</p>
               </div>
             )}
 
@@ -174,12 +189,12 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
                   isEditing ? (
                     <div key={j} className="pl-3 border-l-2 border-primary-200 space-y-1">
                       <input
-                        value={item.title}
+                        value={asText(item.title)}
                         onChange={e => updateDraftItem(j, 'title', e.target.value)}
                         className="w-full border border-border rounded-lg px-3 py-1.5 text-sm font-semibold text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
                       <textarea
-                        value={item.description}
+                        value={asText(item.description)}
                         onChange={e => updateDraftItem(j, 'description', e.target.value)}
                         rows={2}
                         className="w-full border border-border rounded-lg px-3 py-1.5 text-sm text-text-secondary bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
@@ -187,8 +202,8 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
                     </div>
                   ) : (
                     <div key={j} className="pl-3 border-l-2 border-primary-200">
-                      <p className="text-sm font-semibold text-text-primary">{item.title}</p>
-                      <p className="text-sm text-text-secondary">{item.description}</p>
+                      <p className="text-sm font-semibold text-text-primary">{asText(item.title)}</p>
+                      <p className="text-sm text-text-secondary whitespace-pre-wrap">{asText(item.description)}</p>
                     </div>
                   )
                 ))}
@@ -204,13 +219,13 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
                     </span>
                     {isEditing ? (
                       <textarea
-                        value={step}
+                        value={asText(step)}
                         onChange={e => updateDraftStep(j, e.target.value)}
                         rows={2}
                         className="flex-1 border border-border rounded-lg px-3 py-1.5 text-sm text-text-secondary bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                       />
                     ) : (
-                      step
+                      asText(step)
                     )}
                   </li>
                 ))}
@@ -220,13 +235,13 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
             {draft.text !== undefined && (
               isEditing ? (
                 <textarea
-                  value={draft.text}
+                  value={asText(draft.text)}
                   onChange={e => setDraftSection({ ...draftSection!, text: e.target.value })}
                   rows={3}
                   className="w-full mt-3 border border-border rounded-lg px-3 py-2 text-sm text-text-secondary bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                 />
               ) : (
-                section.text && <p className="text-sm text-text-secondary mt-2">{section.text}</p>
+                section.text != null && <p className="text-sm text-text-secondary mt-2 whitespace-pre-wrap">{asText(section.text)}</p>
               )
             )}
           </div>
@@ -264,12 +279,12 @@ export function ScriptViewer({ content, projectId, scriptId }: ScriptViewerProps
       <div className="flex gap-6 text-sm bg-surface rounded-xl border border-border p-4">
         <div>
           <span className="text-text-tertiary">톤앤매너</span>
-          <p className="font-semibold text-text-primary mt-0.5">{content.tone}</p>
+          <p className="font-semibold text-text-primary mt-0.5 whitespace-pre-wrap">{asText(content.tone)}</p>
         </div>
         <div className="w-px bg-border" />
         <div>
           <span className="text-text-tertiary">컬러 제안</span>
-          <p className="font-semibold text-text-primary mt-0.5">{content.color_suggestion}</p>
+          <p className="font-semibold text-text-primary mt-0.5 whitespace-pre-wrap">{asText(content.color_suggestion)}</p>
         </div>
       </div>
     </div>
