@@ -8,14 +8,14 @@ const PUBLIC_PREFIXES = ['/login', '/signup', '/api/auth/', '/salt-bread', '/sam
 /** 인증 없이 접근 가능한 정확 경로 (하위 경로는 공개 아님) */
 const PUBLIC_EXACT = ['/admin']
 
-/** 스태프(admin/planner/designer) 공용 작업 경로 */
-const STAFF_PATHS = ['/dashboard', '/planner', '/designer', '/photography']
+/** 스태프 공용 작업 경로 */
+const STAFF_PATHS = ['/dashboard', '/designer', '/photography']
 
-/** admin 전용 경로 */
-const ADMIN_ONLY_PATHS = ['/users']
+/** admin 전용 경로 — /planner(접수·스크립트 검수·배정)는 관리자 업무 */
+const ADMIN_ONLY_PATHS = ['/users', '/planner']
 
-/** 스태프로 인정되는 역할 */
-const STAFF_ROLES = ['admin', 'planner', 'designer']
+/** 스태프로 인정되는 역할 (기획자는 디자이너로 통합) */
+const STAFF_ROLES = ['admin', 'designer']
 
 export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })

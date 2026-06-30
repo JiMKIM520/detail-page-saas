@@ -17,17 +17,13 @@ export default async function PlannerDashboard({ searchParams }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser()
   const role = user?.user_metadata?.role as string | undefined
   const isAdmin = role === 'admin'
-  const userId = user?.id ?? ''
 
-  let query = supabase
+  // /planner는 관리자 전용(접수·스크립트 검수). 관리자는 전체 검수 대기 건을 본다.
+  const query = supabase
     .from('projects')
-    .select('id, company_name, status, category, planner_id, created_at, platforms(name)')
+    .select('id, company_name, status, category, created_at, platforms(name)')
     .in('status', ['script_review', 'script_generating', 'design_plan_review', 'design_planning'])
     .order('created_at', { ascending: true })
-
-  if (!isAdmin || !showAll) {
-    query = query.eq('planner_id', userId)
-  }
 
   const { data: projects } = await query
 

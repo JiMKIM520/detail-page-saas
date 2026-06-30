@@ -19,22 +19,27 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
   const isAdmin = role === 'admin'
   const userId = user?.id ?? ''
 
-  // admin이 아니면 본인 작업만 / admin은 showAll 토글
+  // 관리자는 전체 초안을 검수, 디자이너는 본인 배정(designer_id)만
   let query = supabase
     .from('projects')
     .select('id, company_name, status, category, designer_id, created_at, platforms(name)')
     .in('status', ['design_review', 'design_generating'])
     .order('created_at', { ascending: true })
 
-  if (!isAdmin || !showAll) {
-    // planner/designer: 자기 designer_id인 것만
+  if (!isAdmin) {
     query = query.eq('designer_id', userId)
   }
 
   const { data: projects } = await query
 
+  // 최종본 제출(final_submitted) 프로젝트 집합 — 별도 쿼리(중첩 조인 관계 미인식 회피)
+  const { data: finalRows } = await supabase
+    .from('designs').select('project_id').eq('designer_status', 'final_submitted')
+  const finalSet = new Set((finalRows ?? []).map((r) => r.project_id as string))
+  const isFinal = (p: { id: string }) => finalSet.has(p.id)
   const reviewCount    = projects?.filter(p => p.status === 'design_review').length ?? 0
   const generatingCount = projects?.filter(p => p.status === 'design_generating').length ?? 0
+  const finalCount     = projects?.filter(isFinal).length ?? 0
 
   return (
     <div>
@@ -81,8 +86,8 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
           <p className="text-2xl font-bold text-violet-500 mt-1">{generatingCount}</p>
         </div>
         <div className="bg-surface rounded-xl border border-border p-4">
-          <p className="text-sm text-text-tertiary">{isAdmin && showAll ? '전체' : '내 작업'}</p>
-          <p className="text-2xl font-bold text-text-primary mt-1">{projects?.length ?? 0}</p>
+          <p className="text-sm text-text-tertiary">최종 검수 대기</p>
+          <p className="text-2xl font-bold text-amber-600 mt-1">{finalCount}</p>
         </div>
       </div>
 
@@ -99,6 +104,9 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
                 </p>
               </div>
               <div className="flex items-center gap-3">
+                {isFinal(project) && (
+                  <span className="text-xs font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">최종 검수 대기</span>
+                )}
                 <StatusBadge status={project.status as ProjectStatus} />
                 <svg className="w-4 h-4 text-text-tertiary group-hover:text-violet-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />

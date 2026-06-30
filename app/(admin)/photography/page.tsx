@@ -18,17 +18,15 @@ export default async function StylingListPage({ searchParams }: PageProps) {
   const isAdmin = role === 'admin'
   const userId = user?.id ?? ''
 
-  // photography 담당자 컬럼이 별도로 없으므로:
-  // admin이 아닌 경우 planner_id 기준으로 '내 작업' 표시
-  // (스타일링샷 단계는 기획자가 연계 담당하는 경우가 많음)
+  // 디자이너는 배정받은(designer_id) 작업만, 관리자는 전체(또는 내 작업) 표시
   let query = supabase
     .from('projects')
-    .select('id, company_name, status, category, planner_id, created_at, platforms(name)')
+    .select('id, company_name, status, category, designer_id, created_at, platforms(name)')
     .in('status', ['prompt_ready', 'photo_uploaded'])
     .order('created_at', { ascending: true })
 
   if (!isAdmin || !showAll) {
-    query = query.eq('planner_id', userId)
+    query = query.eq('designer_id', userId)
   }
 
   const { data: projects } = await query
@@ -42,7 +40,7 @@ export default async function StylingListPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-2xl font-bold text-text-primary">스타일링샷 제작</h1>
           <p className="text-sm text-text-tertiary mt-1">
-            기획안에 맞춘 스타일링샷 프롬프트를 확인하고, 외부 모델로 추출한 이미지를 업로드하세요
+            배정받은 제품의 스타일링샷을 AI(Gemini)로 생성·검토하세요
           </p>
         </div>
 

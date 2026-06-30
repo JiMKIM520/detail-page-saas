@@ -20,13 +20,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!user) redirect('/login')
 
   const role = user.user_metadata?.role
-  if (!['admin', 'planner', 'designer'].includes(role)) redirect('/projects')
+  if (!['admin', 'designer'].includes(role)) redirect('/projects')
 
-  // 관리자 = 감독(대시보드+사용자관리), 디자이너 = 작업(기획검수/스타일링샷/초안).
-  // 관리자도 필요 시 대시보드 카드에서 각 작업 화면으로 진입 가능(접근 차단 아님, 네비만 정리).
+  // 관리자 = 접수·스크립트 검수·배정·초안검수·발송 / 디자이너 = 스타일링샷·초안 업로드.
   const isAdmin = role === 'admin'
 
-  const roleLabel: Record<string, string> = { planner: '기획자', designer: '디자이너', admin: '관리자' }
+  const roleLabel: Record<string, string> = { designer: '디자이너', admin: '관리자' }
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,7 +57,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
-                }>기획 검수</NavLink>
+                }>접수·스크립트</NavLink>
               )}
 
               {/* 스타일링샷 제작(AI) — 디자이너 */}
@@ -76,7 +75,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
                 </svg>
-              }>{isAdmin ? '초안 검수' : '초안 제작'}</NavLink>
+              }>{isAdmin ? '초안 검수·발송' : '초안 업로드'}</NavLink>
 
             </div>
           </div>

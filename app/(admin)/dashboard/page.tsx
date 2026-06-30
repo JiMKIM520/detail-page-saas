@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 interface StageGroup {
   key: string
@@ -43,7 +44,6 @@ interface ProjectRow {
   company_name: string
   status: ProjectStatus
   category: string | null
-  planner_id: string | null
   designer_id: string | null
   created_at: string
   platforms: { name?: string } | null
@@ -83,11 +83,15 @@ export default async function DashboardPage({ searchParams }: PageProps) {
 
   const supabase = await createClient()
 
+  // 진행 대시보드는 관리자 감독용 — 디자이너는 본인 작업 화면으로
+  const { data: { user } } = await supabase.auth.getUser()
+  if (user?.user_metadata?.role !== 'admin') redirect('/designer')
+
   // ── 담당자 목록 (필터 드롭다운용) ───────────────────────────
   const { data: staffData } = await supabase
     .from('user_profiles')
     .select('id, name, role')
-    .in('role', ['planner', 'designer'])
+    .eq('role', 'designer')
     .order('name')
   const staffList = (staffData ?? []) as StaffRow[]
   const nameOf = new Map(staffList.map((s) => [s.id, s.name ?? '']))
@@ -95,25 +99,25 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   // ── 컬럼 카운트 쿼리 (필터 미적용 — 전체 현황 파악용) ───────
   const { data: allForCount } = await supabase
     .from('projects')
-    .select('id, status, planner_id, designer_id, created_at')
+    .select('id, status, designer_id, created_at')
   const allProjects = (allForCount ?? []) as Pick<
-    ProjectRow, 'id' | 'status' | 'planner_id' | 'designer_id' | 'created_at'
+    ProjectRow, 'id' | 'status' | 'designer_id' | 'created_at'
   >[]
 
   // ── 메인 쿼리: DB 레벨 필터 적용 ────────────────────────────
   type QueryBuilder = ReturnType<typeof supabase.from>
   let query: ReturnType<QueryBuilder['select']> = supabase
     .from('projects')
-    .select('id, company_name, status, category, planner_id, designer_id, created_at, platforms(name)')
+    .select('id, company_name, status, category, designer_id, created_at, platforms(name)')
 
   if (q) {
     query = query.ilike('company_name', `%${q}%`)
   }
 
   if (assignee === '미배정') {
-    query = query.is('planner_id', null).is('designer_id', null)
+    query = query.is('designer_id', null)
   } else if (assignee) {
-    query = query.or(`planner_id.eq.${assignee},designer_id.eq.${assignee}`)
+    query = query.eq('designer_id', assignee)
   }
 
   if (stage) {

@@ -31,7 +31,6 @@ export default function LoginPage() {
     const role = data.user?.user_metadata?.role ?? 'client'
     const dest =
       role === 'designer' ? '/designer'
-      : role === 'planner' ? '/planner'
       : role === 'admin' ? '/dashboard'
       : '/projects'
     router.push(dest)

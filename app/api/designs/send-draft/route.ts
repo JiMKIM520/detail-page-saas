@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   const { data: { user } } = await authClient.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const role = user.user_metadata?.role as string | undefined
-  if (!role || !['designer', 'admin', 'planner'].includes(role)) {
+  if (!role || !['designer', 'admin'].includes(role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

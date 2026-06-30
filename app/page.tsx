@@ -8,5 +8,5 @@ export default async function Home() {
   if (!user) redirect('/login')
 
   const role = user.user_metadata?.role ?? 'client'
-  redirect(role === 'client' ? '/projects' : '/planner')
+  redirect(role === 'client' ? '/projects' : role === 'designer' ? '/designer' : '/dashboard')
 }

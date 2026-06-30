@@ -7,7 +7,7 @@ export default async function UsersPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user?.user_metadata?.role !== 'admin') {
-    redirect('/planner')
+    redirect('/designer')
   }
 
   const { data: profiles } = await supabase

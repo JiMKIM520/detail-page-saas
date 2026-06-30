@@ -15,6 +15,11 @@ export default async function PhotographyPage({
   const { id } = await params
   const supabase = await createClient()
 
+  // 역할 가드 — 스태프(관리자/디자이너)만. 사업자 URL 직접 접근 차단.
+  const { data: { user } } = await supabase.auth.getUser()
+  const role = user?.user_metadata?.role as string | undefined
+  if (!user || !['admin', 'designer'].includes(role ?? '')) notFound()
+
   const { data: project } = await supabase
     .from('projects')
     .select('*, platforms(name)')

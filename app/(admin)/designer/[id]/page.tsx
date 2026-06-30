@@ -3,6 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { DesignPreview } from '@/components/designer/DesignPreview'
 import { DeliveryPanel } from '@/components/designer/DeliveryPanel'
 import { SendDraftPanel } from '@/components/designer/SendDraftPanel'
+import { GenerateDraftButton } from '@/components/designer/GenerateDraftButton'
 import { StylingShotDownloads } from '@/components/designer/StylingShotDownloads'
 import { WorkflowSteps } from '@/components/shared/WorkflowSteps'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -25,6 +26,14 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
 
   const designerStatus = (design as { designer_status?: string } | null)?.designer_status
   const finalSubmitted = designerStatus === 'final_submitted'
+  const status = project.status as ProjectStatus
+  const hasDraft = !!design
+
+  // 사업자 코멘트(수정요구) — 디자이너는 반영용, 관리자는 초안 체크용 (읽기 전용)
+  const { data: clientComments } = await supabase
+    .from('comments').select('id, content, created_at')
+    .eq('project_id', id).eq('role', 'client')
+    .order('created_at', { ascending: false }).limit(10)
 
   // AI 스타일링샷(styling_real/) — 디자이너 Figma 작업용
   const svc = createServiceClient()
@@ -38,11 +47,11 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
 
   return (
     <div>
-      <Link href="/designer" className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
+      <Link href={isAdmin ? '/designer' : '/designer'} className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
-        {isAdmin ? '초안 검수 목록' : '초안 제작 목록'}
+        {isAdmin ? '초안 검수 목록' : '초안 작업 목록'}
       </Link>
 
       <div className="mb-5 flex items-start justify-between gap-4">
@@ -52,16 +61,38 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
             {(project.platforms as { name?: string })?.name} · {project.category}
           </p>
         </div>
-        <StatusBadge status={project.status as ProjectStatus} />
+        <div className="flex items-center gap-2">
+          {finalSubmitted && (
+            <span className="text-xs font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full">최종 검수 대기</span>
+          )}
+          <StatusBadge status={status} />
+        </div>
       </div>
 
       <div className="mb-6">
-        <WorkflowSteps projectId={id} status={project.status as ProjectStatus} />
+        <WorkflowSteps projectId={id} status={status} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <DesignPreview design={design} projectId={id} />
+
+          {/* 사업자 수정요구/코멘트 (읽기 전용) */}
+          {clientComments && clientComments.length > 0 && (
+            <div className="rounded-xl border border-border bg-surface p-5">
+              <h3 className="text-sm font-semibold text-text-primary mb-3">
+                사업자 코멘트 {isAdmin ? '(초안 체크용)' : '(수정요구 반영)'}
+              </h3>
+              <ul className="space-y-3">
+                {clientComments.map((c) => (
+                  <li key={c.id} className="text-sm border-l-2 border-primary-200 pl-3">
+                    <p className="text-text-secondary whitespace-pre-wrap">{c.content}</p>
+                    <p className="text-xs text-text-tertiary mt-1">{new Date(c.created_at).toLocaleString('ko-KR')}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* 스타일링샷 다운로드 — 디자이너 Figma 작업용 */}
           {!isAdmin && (
@@ -87,6 +118,9 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
               finalUrl={(design as { output_url?: string | null } | null)?.output_url ?? null}
               finalSubmitted={finalSubmitted}
             />
+          ) : !hasDraft ? (
+            /* 디자이너: 초안 미생성 → AI 초안 생성 먼저 */
+            <GenerateDraftButton projectId={id} status={status} />
           ) : (
             /* 디자이너: 사업자 초안 전달 + 최종본 제출(관리자 검수요청) */
             <>

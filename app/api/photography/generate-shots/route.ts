@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { generateDesignImage } from '@/lib/ai/gemini-image'
 import { buildShotPrompt } from '@/agents/styling-shots'
+import { transitionStatus } from '@/lib/status-machine'
 import { NextResponse } from 'next/server'
 
 export const maxDuration = 300
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const role = user.user_metadata?.role as string | undefined
-  if (!role || !['admin', 'planner', 'designer'].includes(role)) {
+  if (!role || !['admin', 'designer'].includes(role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -74,5 +75,13 @@ export async function POST(request: Request) {
   if (out.length === 0) {
     return NextResponse.json({ error: '생성 실패', detail: errors }, { status: 500 })
   }
-  return NextResponse.json({ success: true, shots: out, errors })
+
+  // 스타일링샷이 생성되면 다음 단계(초안 제작)로 전진. prompt_ready에서만 전이(재생성 시 중복 전이 방지).
+  const { data: cur } = await svc.from('projects').select('status').eq('id', project_id).single()
+  if (cur?.status === 'prompt_ready') {
+    try { await transitionStatus(svc, project_id, 'photo_uploaded', { note: '스타일링샷 생성 완료' }) }
+    catch (e) { console.warn('[generate-shots] photo_uploaded 전이 경고:', (e as Error).message) }
+  }
+
+  return NextResponse.json({ success: true, shots: out, errors, advanced: cur?.status === 'prompt_ready' })
 }

@@ -51,7 +51,7 @@ export function ShootingList({
       alert(`촬영 완료 처리 실패: ${body?.error ?? res.statusText}`)
       return
     }
-    router.push('/planner')
+    router.push('/photography')
   }
 
   const nukki = photos.filter((p) => p.photo_type === 'nukki')

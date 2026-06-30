@@ -33,9 +33,6 @@ export async function adminLogin(adminId: string, password: string): Promise<{
     return { error: '관리자 계정이 아닙니다.' }
   }
 
-  const dest =
-    role === 'designer' ? '/designer'
-    : role === 'planner' ? '/planner'
-    : '/dashboard' // admin
+  const dest = role === 'designer' ? '/designer' : '/dashboard' // admin
   return { success: true, redirectTo: dest }
 }

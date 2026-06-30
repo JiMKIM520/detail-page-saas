@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { SubmittedIntake, type IntakeFileView } from '@/components/client/SubmittedIntake'
 import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ReviewPanel } from '@/components/planner/ReviewPanel'
 import { DesignPlanView } from '@/components/planner/DesignPlanView'
@@ -63,6 +65,26 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
 
   const hasUrlFetchFailed = logs?.some(l => l.note?.includes('URL 컨텐츠 추출 실패'))
 
+  // 접수 원문 + 첨부파일(서비스 클라이언트로 조회, 이미지엔 1h signed URL) — 관리자 '접수내용 파악'
+  const service = createServiceClient()
+  const { data: intakeFiles } = await service
+    .from('intake_files')
+    .select('id, file_type, storage_path, file_name, mime_type')
+    .eq('project_id', id)
+    .order('created_at', { ascending: true })
+  const submittedFiles: IntakeFileView[] = await Promise.all(
+    (intakeFiles ?? []).map(async (f) => {
+      const isImage = (f.mime_type ?? '').startsWith('image/')
+      let url: string | null = null
+      if (isImage) {
+        const { data: signed } = await service.storage.from('intake-files').createSignedUrl(f.storage_path, 60 * 60)
+        url = signed?.signedUrl ?? null
+      }
+      return { id: f.id, file_type: f.file_type, file_name: f.file_name, isImage, url }
+    }),
+  )
+  const platformName = (project.platforms as { name?: string } | null)?.name ?? '-'
+
   return (
     <div>
       <Link href="/planner" className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
@@ -81,6 +103,23 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
+          <SubmittedIntake
+            companyName={project.company_name}
+            brandName={project.brand_name ?? null}
+            category={project.category ?? null}
+            platformName={platformName}
+            productHighlights={project.product_highlights ?? null}
+            productName={project.product_name ?? null}
+            productDescription={project.product_description ?? null}
+            sellingPoints={(project.selling_points as string[] | string | null) ?? null}
+            designPreference={project.design_preference ?? null}
+            targetAudience={(project.target_audience as string[] | string | null) ?? null}
+            homepageUrl={project.homepage_url ?? null}
+            detailPageUrl={project.detail_page_url ?? null}
+            referenceNotes={project.reference_notes ?? null}
+            files={submittedFiles}
+            createdAt={project.created_at}
+          />
           {hasUrlFetchFailed && (
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
               <p className="text-sm font-semibold text-amber-800 mb-1">URL 컨텐츠 자동 추출 실패</p>
