@@ -38,8 +38,10 @@ const BASE_PRESERVATION_RULES = [
   'NO artificial light, NO studio flash. Natural window light only.',
   'Film grain: Kodak Portra 400, slightly grainy, warm color temperature.',
   'Natural imperfections welcome: crumbs on surface, slightly wrinkled linen, asymmetric placement.',
-  'Must feel like a real food photographer shot — NOT a 3D render, NOT AI-generated look.',
-  'Studio setting ONLY — NO cafes, NO kitchens, NO outdoor locations, NO restaurants.',
+  'Must feel like a real photographer shot — NOT a 3D render, NOT AI-generated look.',
+  // 세팅은 컷의 composition에 따름: 제품 단독(클린 표면) 또는 자연스러운 라이프스타일 장면(아늑한 가정/테이블/연출).
+  // 어떤 경우든 PRODUCT 자체는 레퍼런스 그대로(형태·색·로고·텍스트 보존), 주변 장면만 달라진다.
+  'Setting follows the composition: either the product alone on a clean surface, OR a natural real-feeling lifestyle scene that fits the product (cozy home, table, soft daylight). The PRODUCT must stay EXACTLY as in the reference image; only the surrounding scene/props vary.',
 ]
 
 // 제품 보존 규칙 빌더
@@ -95,11 +97,11 @@ Lighting: ${shot.lighting}.
 ${colorTempLine}
 Camera: ${shot.camera}.
 Mood: ${shot.mood}.
-Studio background only — NO real location (no cafe, no kitchen, no outdoor).`
+Use the setting described in [Scene] above — a clean studio surface or a natural lifestyle scene as fits this shot. Keep the product identical to the reference.`
 
   const negativeBlock = `
 [NEGATIVE]
-text, watermark, logo, brand name, busy background, symmetrical composition, artificial flash, 3D render, CGI, hyperrealistic, perfect, clean, 4K, overexposed, deep-fried colors, plastic look, staged symmetry, kitchen, cafe, outdoor, extra limbs, duplicate product.`
+text overlay, watermark, fake logo, altered packaging, distorted product, 3D render, CGI, hyperrealistic plastic look, overexposed, deep-fried colors, staged symmetry, extra limbs, duplicate product, mangled text on package.`
 
   return positiveBody + negativeBlock
 }

@@ -31,7 +31,7 @@ CRITICAL RULES:
 - NO templates — every design must be custom-crafted for this specific product
 - NO placeholder text or wireframe aesthetics
 - Typography must be GRAPHIC DESIGN quality, not just text overlay
-- Studio backgrounds only for styling shots (no real location backgrounds like cafes or kitchens)
+- Styling shots: mix clean product shots with natural lifestyle/usage scenes (emotional imagery required); keep the product identical to the reference
 
 Icon library selection guide:
 - Food/handmade/emotional → Phosphor duotone
@@ -273,9 +273,10 @@ NEVER include any instruction that:
 - Adds raw ingredients as props (e.g. butter, red bean paste, cream, sauce as separate items)
 Every rule must focus on keeping the FINISHED, INTACT product looking exactly as it appears in the reference images.
 
-STYLING SHOTS — FORBIDDEN BACKGROUNDS:
-- NO cafes, NO coffee shops, NO kitchens, NO restaurants, NO outdoor locations
-- Studio setting ONLY with appropriate surface (wood board, linen, marble, slate)
+STYLING SHOTS — SETTING:
+- Product/detail shots: clean studio surface (wood board, linen, marble, slate)
+- Lifestyle/usage shots: a natural, real-feeling scene that fits the product (cozy home, table, soft daylight),
+  a hand or the relevant subject MAY appear — but the PRODUCT must remain exactly as in the reference (no altered packaging/logo/text)
 
 Output: two JSON objects, separated by ===SEPARATOR===
 1. style-guide.json (StyleGuide schema)
@@ -380,11 +381,20 @@ ${templateCatalog ? templateCatalog + '\n' : ''}${hasReferenceImages ? '## Refer
   ]
 }
 
-Generate 6 styling shots. Each must be:
-- Studio setting only (NO cafes, NO kitchens, NO outdoor locations)
-- Unique composition (closeup, overhead, medium, minimal)
-- Camera settings in English (Canon 5D Mark IV, specific mm and f-stop)
-- Kodak Portra 400 film grain, natural imperfections
+Generate 8 styling shots covering a DIVERSE set so every section of a long detail page gets a distinct image:
+- 1 HERO: product on a clean styled surface (the main beauty shot)
+- 1~2 DETAIL/MACRO: texture or key feature close-up
+- 1 INGREDIENT/COMPONENT: real ingredients/parts placed BESIDE the product (never inside/cross-section)
+- 2~3 LIFESTYLE/USAGE: the product in a natural, real-feeling scene that fits the category —
+    pet → a happy dog with the product or a hand offering it; food → served at a cozy table / a hand holding it;
+    beauty → applied or held in hand; living·electronics → in real use at home.
+    A natural human hand or the relevant subject MAY appear. (Emotional/lifestyle imagery is REQUIRED — a page
+    with only static product shots reads as low quality.)
+- 1 MOOD/ATMOSPHERE shot
+Rules for every shot:
+- The PRODUCT must stay EXACTLY as in the reference (form, color, logo, text preserved) — only the scene/props vary
+- Unique composition; vary surface/lighting/mood so no two shots look alike
+- English camera settings (Canon 5D Mark IV, specific mm + f-stop), Kodak Portra 400 film grain, natural imperfections
 - NO "perfect", "clean", "symmetrical", "hyperrealistic" words
 
 CONCEPT SHOTS (DEPRECATED in v5):

@@ -44,6 +44,49 @@ async function deriveBrandColors(supabase: SupabaseClient, projectId: string): P
 }
 
 /**
+ * 프로젝트 행(intake) → ProjectInput. 입력 데이터를 빠짐없이 반영한다.
+ * (이전엔 targetAudience='일반 소비자' 하드코딩, design_preference·product_name·URL 누락 →
+ *  어떤 제품이든 일반화된 빈약한 초안이 나왔음. 어느 한 제품이 아니라 전 제품 품질 바닥을 올리려면 여기가 핵심.)
+ */
+function buildInputFromProject(
+  project: Record<string, unknown>,
+  nukkiPaths: string[],
+): ProjectInput {
+  const ta = project.target_audience
+  const targetAudience = Array.isArray(ta)
+    ? ta.map((x) => String(x).trim()).filter(Boolean).join(', ')
+    : typeof ta === 'string' && ta.trim()
+      ? ta.trim()
+      : '일반 소비자'
+
+  const dp = project.design_preference
+  const styleDirections = typeof dp === 'string'
+    ? dp.split(',').map((s) => s.trim()).filter(Boolean)
+    : Array.isArray(dp)
+      ? dp.map((x) => String(x).trim()).filter(Boolean)
+      : []
+
+  const productName =
+    (typeof project.product_name === 'string' && project.product_name.trim())
+      ? project.product_name.trim()
+      : String(project.company_name ?? '제품')
+
+  return {
+    productName,
+    category: (project.category as string) ?? 'food',
+    platform: (project.platforms as { slug?: string } | null)?.slug ?? 'smartstore',
+    productHighlights: composeProductContext(project as Parameters<typeof composeProductContext>[0]),
+    targetAudience,
+    styleDirections,
+    toneKeywords: styleDirections,
+    homepageUrl: (project.homepage_url as string) ?? undefined,
+    existingDetailUrl: (project.detail_page_url as string) ?? undefined,
+    referenceDescription: (project.reference_notes as string) ?? undefined,
+    nukkiPaths,
+  }
+}
+
+/**
  * Supabase 프로젝트를 기반으로 전체 파이프라인 실행.
  * API route에서 호출.
  */
@@ -102,14 +145,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
     }
 
     // 3. ProjectInput 구성
-    const input: ProjectInput = {
-      productName: project.company_name,
-      category: project.category ?? 'food',
-      platform: (project.platforms as { slug?: string })?.slug ?? 'smartstore',
-      productHighlights: composeProductContext(project),
-      targetAudience: '일반 소비자',
-      nukkiPaths,
-    }
+    const input = buildInputFromProject(project as unknown as Record<string, unknown>, nukkiPaths)
 
     // 4. 파이프라인 실행 — USE_BLOCKS_COMPOSER 플래그면 블록 컴포저 경로(실험·additive),
     //    아니면 기존 경로(식품=슬롯템플릿 / 그 외=제너릭). 플래그 미설정 시 동작 불변.
@@ -281,14 +317,7 @@ export async function runPlanningForProject(projectId: string): Promise<{
     }
 
     // 3. ProjectInput 구성 (기존 패턴 동일)
-    const input: ProjectInput = {
-      productName: project.company_name,
-      category: project.category ?? 'food',
-      platform: (project.platforms as { slug?: string })?.slug ?? 'smartstore',
-      productHighlights: composeProductContext(project),
-      targetAudience: '일반 소비자',
-      nukkiPaths,
-    }
+    const input = buildInputFromProject(project as unknown as Record<string, unknown>, nukkiPaths)
 
     // 4. 기획 파이프라인 실행
     const { runPlanningPipeline } = await import('@/agents/pm')

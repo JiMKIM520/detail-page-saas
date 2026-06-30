@@ -51,7 +51,7 @@ async function genStylingShots(svc: ReturnType<typeof createServiceClient>): Pro
   }
 
   let ok = 0
-  for (const shot of shots.slice(0, 3)) {
+  for (const shot of shots.slice(0, 8)) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt)
         ? shot.finalPrompt

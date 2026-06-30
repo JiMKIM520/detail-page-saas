@@ -51,12 +51,12 @@ export async function POST(request: Request) {
     } catch { /* skip */ }
   }
 
-  // 3) 상위 3컷 생성 + 업로드
+  // 3) 최대 8컷 생성 + 업로드 (블록이 12~18개라 이미지가 많아야 텍스트만 남는 섹션이 안 생김 — 전 제품 품질 바닥)
   const { data: project } = await svc.from('projects').select('category, platforms(slug)').eq('id', project_id).single()
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', brandColorHex: '#A8682E', aspectRatio: '3:4' }
   const out: { name: string; url: string }[] = []
   const errors: string[] = []
-  for (const shot of shots.slice(0, 3)) {
+  for (const shot of shots.slice(0, 8)) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt)
         ? shot.finalPrompt
