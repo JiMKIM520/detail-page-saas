@@ -144,10 +144,13 @@ RULES
 - Use ONLY variantId values from the catalog. Fill data EXACTLY per the block's data contract.
 - Compose 12~18 blocks. FIRST block must be a hero (hero-centered, hero-editorial, hero-points, or hero-arch). LAST block must be a closing (closing-mood or closing-light).
 - Order for a real detail page: hero → recommend/checklist → trust/checkpoint → point/feature sections (alternate text+photo) → reason/equation/callout → story → cert → compare/spec → closing.
+- VISUAL RHYTHM (CRITICAL for premium depth — a flat single-tone page reads as low quality): alternate LIGHT and DARK sections. Include 2~3 DARK / dramatic blocks spread across the page (recommend-dark, feature-dark, ingredient-grid, statement-serif, stats-figures, story-brand, event-promo, closing-mood). NEVER place 3+ light sections in a row. brand-story and closing especially should be dark/dramatic.
+- SCALE HIERARCHY: vary section scale — include at least one big-impact full-bleed/statement block (feature-fullbleed, statement-serif, callout-banner, banner-event, stats-figures) so the page is not uniform density.
+- IMAGE-FIRST: you are given MANY images (hero, lifestyle, detail, ingredient, mood). Put a DISTINCT image in as many image-bearing blocks as possible; prefer variants that carry images over text-only ones. A premium detail page is image-led — minimize text-only sections.
 - Pick presetKey by feel: warm-playful (친근한 식품/생활), modern-editorial (프리미엄/미니멀 명조), cobalt-premium (모던 커머스/전자·뷰티, 코발트블루), sand-luxury (따뜻한 뉴트럴 고급, 카멜/베이지). Match the product.
 - Do NOT repeat the same variantId more than twice. Use strip-band at most once. Vary blocks for richness.
 - Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
-- Map provided image URLs into (url) slots. Reuse the few available images sensibly across blocks. If no suitable image, omit that field.
+- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). Only repeat an image when you run out. If a block truly has no fitting image, omit the field.
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
