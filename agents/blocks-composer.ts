@@ -148,6 +148,16 @@ package-hero-list { subtitle?, title?, heroImage?(url), packages(2~4)[name(em,br
 package-band-rows { badge?, title?(em,br), subtitle?, packages(2~4)[name(em,br), desc?, priceOriginal?, price?] }   // OFFER pill 배지 + 중앙 대제목 + 교차 풀폭 틴트 밴드 행(이름/설명/가격), 이미지 없음
 story-photo-header { heroImage?(url), stripLabel?, eyebrow?(em,br), titleLine1(em,br), titleLine2?(em,br), paragraphs(em,br)(1~3) }   // 풀블리드 상단 사진 히어로 + 얇은 accent 라벨 띠 + 좌정렬 EN 디스플레이 제목 + 본문
 story-dark-editorial { decoText?, image?(url), imageAlt?, title(em,br), paragraphs(em,br)(1~3) }   // 솔리드 다크 배경 + 초대형 EN 장식 텍스트(좌) + 인셋 이미지(우) + KR 헤드라인·본문 우정렬 에디토리얼
+story-vertical-repeat { title(em), items:[{ heading(em,br), body?(em), image?(url), imageAlt? }] (2~5) }   // 내용전개 스크롤 서사(다크). accent 강조 대형 헤드라인 + [중앙 소제목·본문 → 풀폭 이미지] 수직 교번 반복
+story-rotating-highlight { title, items[{lines, highlightLine:0|1|2, body?, image?, imageAlt?, caption?}] }   // 다크 내용전개: 3줄 소제목 중 1줄 accent 하이라이트 밴드 순환 + 선택 풀폭 이미지·캡션
+detail-image-caption-stack { icon?, title, items[]{image?, imageAlt?, heading, bodyLines[]} }   // 다크 배경 원형 아이콘 배지 + 대제목 → [풀폭 이미지 → 좌정렬 소제목+본문] 수직 반복(2~5회)
+story-gallery-narrative { brand, tagline, title, introCaption, introBody, items[]{image?,imageAlt?,caption,body?} }   // 라이트 웜그레이 배경 + 헤더바(brand/tagline) + 대형 헤드라인 + 인트로 → [전폭 이미지+캡션+본문] 2~4회 반복
+story-labeled-image-stack { eyebrow?, brandName, descA?, descB?, headline, subA?, subB?, items[{chip, image?, imageAlt?}] }   // 라이트 배경 내용전개: 센터 헤더(eyebrow+브랜드명+디바이더+설명쌍+메인헤드라인) → 좌앵커 accent 칩 + 풀폭 이미지 수직반복(2~4회)
+story-stacked-image-narrative { eyebrow?, titleAccent, titleDark, lead?, leadSub?, items[]{heading, body?, image?, imageAlt?} }   // 밝은 배경 스택 이미지 서사: 다크 배지 eyebrow + 2색 헤드라인(accent/ink) + [소제목·본문→풀폭이미지] 2~4회 반복
+detail-point-scroll-stack { sectionTitle?, items[]{pointNo?, subtitle?, heading, body?, image?, imageCaption?, imageAlt?} }   // POINT 번호 eyebrow + 대형 헤드라인 + 본문 → 풀블리드 이미지 + 캡션 수직 반복 (2~5회), 밝은 배경 detail 서사 전개형
+feature-numbered-callout-scroll { sectionTitle?(em), items[]{no, eyebrow?(em), heading(em), body?(em), image?, imageAlt?} }   // 밝은 배경 순번 말풍선 배지(01,02…) + eyebrow + 볼드 헤드라인 + 본문 + 풀폭 이미지 수직 반복(2~5회)
+detail-spec-illustration-callout { title, body, image?, imageAlt?, calloutValue, calloutUnit, calloutLabel, chevronColor?, showBottomChevron? }   // 단일 특장점 수치 강조: 밝은 배경 + 위아래 chevron 전환 + 제품 일러스트 + 대형 수치 오버레이 콜아웃(accent-d, 손그림 언더라인 SVG)
+detail-numbered-point-stack { label?, items[]{no, heading(em), body?(em), image?, imageAlt?} }   // 내용전개: 밝은배경 + PRODUCT POINT 아치라벨 + 대형순번(01/02…)+밑줄바 + KR헤드라인 + 본문 + 풀폭이미지 수직반복(2~5)
 story-text-first { label?, titlePre?, titleBold(em,br), titlePost?, paragraphs(em,br)(1~4), bgImage?(url) }   // 텍스트 우선 에디토리얼 브랜드 스토리: EN 라벨+HR → 혼합 굵기 KR 대제목 → 수직 강조선 → 본문 문단
 faq-numbered { eyebrow?, title?, items(q(em,br), a(em,br))(2~6) }   // 넘버링 고스트 숫자 목록형 FAQ — brand 풀배경 + FAQ 헤더 + 대형 반투명 서수 장식 + 굵은 질문 + 들여쓰기 답변 + 헤어라인 반복
 faq-plain { title?, subtitle?, items(2~8)[q(em,br), a(em,br)] }   // 극미니멀 플랫 텍스트 FAQ — Q/A 글자 라벨 + 얇은 수평선 구분, 카드·버블 없음

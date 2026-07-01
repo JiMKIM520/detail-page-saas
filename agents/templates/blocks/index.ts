@@ -82,6 +82,16 @@ import { packageHeroList } from './variants/package-hero-list'
 import { packageBandRows } from './variants/package-band-rows'
 import { storyPhotoHeader } from './variants/story-photo-header'
 import { storyDarkEditorial } from './variants/story-dark-editorial'
+import { storyVerticalRepeat } from './variants/story-vertical-repeat'
+import { storyRotatingHighlight } from './variants/story-rotating-highlight'
+import { detailImageCaptionStack } from './variants/detail-image-caption-stack'
+import { storyGalleryNarrative } from './variants/story-gallery-narrative'
+import { storyLabeledImageStack } from './variants/story-labeled-image-stack'
+import { storyStackedImageNarrative } from './variants/story-stacked-image-narrative'
+import { detailPointScrollStack } from './variants/detail-point-scroll-stack'
+import { featureNumberedCalloutScroll } from './variants/feature-numbered-callout-scroll'
+import { detailSpecIllustrationCallout } from './variants/detail-spec-illustration-callout'
+import { detailNumberedPointStack } from './variants/detail-numbered-point-stack'
 import { storyTextFirst } from './variants/story-text-first'
 import { faqNumbered } from './variants/faq-numbered'
 import { faqPlain } from './variants/faq-plain'
@@ -301,6 +311,16 @@ registerBlocks([
   packageBandRows,
   storyPhotoHeader,
   storyDarkEditorial,
+  storyVerticalRepeat,
+  storyRotatingHighlight,
+  detailImageCaptionStack,
+  storyGalleryNarrative,
+  storyLabeledImageStack,
+  storyStackedImageNarrative,
+  detailPointScrollStack,
+  featureNumberedCalloutScroll,
+  detailSpecIllustrationCallout,
+  detailNumberedPointStack,
   storyTextFirst,
   faqNumbered,
   faqPlain,

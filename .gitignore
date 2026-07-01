@@ -96,3 +96,6 @@ assets/blocks-demo/
 assets/spike_3blocks.png
 assets/spike_3blocks.html
 assets/SCR-20260609-jwaf.jpeg
+
+# 내용전개 파일럿 렌더 검증 스크립트 (로컬 전용)
+scripts/preview-svr.ts
