@@ -199,6 +199,36 @@ feature-bento-mosaic { heroTitle, heroSub?, galleryImages[2-6]{url?,alt?}, bento
 compare-product-card-vs { eyebrow?, title, subtitle?, rival{label,image?,imageAlt?,statValue,statLabel,body?}, own{label,image?,imageAlt?,statValue,statLabel,quote?,quoteSource?}, closer? }   // 경쟁사(무채색) vs 자사(accent골드) 2열 제품카드 비교 — 핵심스펙수치+유저보이스 인용
 spec-nutrition-macro-table { title, macros[]{nutrient,value,unit,featured?}, rows[]{label,amount,pct?,sub?,highlight?}, productImage?, productImageAlt?, footnote? }   // 다크 배경 + 원형 매크로 배지 3종(중앙 accent 강조) + 계층형 영양성분 테이블 + 제품이미지 우측 플로팅
 ba-clinical-bar-chart { eyebrow, title(em/br), beforeLabel?, afterLabel?, axisMax?, items[]{metric, statValue, statSuffix?, beforePct(0-100), afterPct(0-100)} (2-5) }   // 다크 배경 임상 B&A 수평 막대 차트: eyebrow + 대제목 + [지표명 → 개선율% big-stat → 사용전(회색)/사용후(accent) 수평 바 카드 + 눈금 축] 반복
+point-discount-price-reveal { eyebrow?, title(em), titleIcon?, image?, imageAlt?, caption?(em), discountLabel, priceRows[2-4]{label,value,strikethrough?,highlight?}, badges?[0-4]{label,value} }   // 다크 특가 섹션: oversized 할인% 좌측 + 우측 가격 breakdown grid + 하단 혜택 배지 행
+point-promo-asymcard { eyebrow, title, dateRange?, mainCard{image?,imageAlt?,label?}, stackItems[2-3]{image?,imageAlt?,label?}, burstValue?, burstCaption? }   // 포인트 프로모 비대칭: vivid 그라데이션 + tall 좌카드(pill 라벨) + 우측 3-unit 스택 + floating burst 배지
+feature-dark-product-grid { heading, subheading?, items[]{categoryLabel, saleLabel, image?, imageAlt?, ctaText?} }   // 다크 캠페인 헤딩 + 2-col 제품 카드 그리드 (pill 배지 2개 + ▶ NEXT CTA)
+point-fullbleed-caption { image?, imageAlt?, badgeNo?, headline(em/br), body?(em/br) } × 2~4 items  // 풀블리드 제품사진 + 하단앵커 원형 번호배지 + 이미지 하단 accent 헤드라인·본문 수직 반복
+point-award-credential { eyebrow?, headline, heroImages[1-3]{image?,alt?}, badges[1-3]{topLine?,mainText,bottomLine?}, awards[2-6]{year,desc} }   // 다크 배경 + 로렐 리스 마일스톤 헤드라인 + 제품 히어로 위 플로팅 원형 어워드 스탬프 뱃지 + 연도순 수상 히스토리 리스트
+feature-dark-float-cutout { headline, lifestyleImage?, lifestyleAlt?, cutoutImage?, cutoutAlt?, badgeMain?, badgeSub?, eyebrow?, body? }   // 다크 배경 + 대형 헤드라인 + overflow 라이프스타일 카드(좌상 누끼 플로팅 + 우하 burst 뱃지) + eyebrow 라벨 + 서술 카피
+point-editorial-marquee { tickerText, image?, imageAlt?, eyebrow, headline, ghostWord }   // 양측 세로 ticker strip + 풀블리드 라이프스타일 이미지 + solid-black 하단 카피 패널 + oversized ghost 워드 (운동/패션/라이프스타일)
+point-heritage-split { brandKo, brandHanja?, brandSub?, eyebrow, slogan, image?, imageAlt? }   // 헤리티지 포인트: 크림슨 다크 + 단청 패턴 엠보스 + 이중언어 골드 세리프 브랜드 네임 + 캡션 밴드 + 풀블리드 제품 사진
+point-ingredient-hero { badge?, title(em/br), subheading?(em/br), body?(em), image?, imageAlt? }   // pill 브랜드 배지 + 인라인 키워드 accent 강조 헤드라인 + 서브 + 본문 + 풀블리드 성분 이미지 수직 스택
+point-brand-collab-editorial { brandCollab, headerLabel, geoTag, image?, imageAlt?, headline, ghostBrand, caption? }   // 아웃라인 로고타입 헤더 바 + 지오태그 칩 오버레이 풀블리드 이미지 + 대형 헤드라인 + 고스트 서브 브랜드네임 + 바코드 틱 스트립
+promo-event-spotlight { eventLines[3], headline, body?, dateStart, dateEnd, spotlightColor? }   // 다크 배경 + 상단 코닉 스포트라이트 빔 + 3행 풀폭 오버사이즈 이벤트명(2번째 줄 accent) + accent 서브 헤드라인 + 본문 + 구분선 테두리 날짜 범위
+promo-story-price-reveal { sourceLabel?, diaryLabel?, line1(pill:[text]), line2(pill:[text]), line3?, salePeriod?, originalPrice?, finalLabel?, finalPrice, specLine?, productImage? }   // 다이어리 헤더 + 인라인 반응 pill 헤드라인 + 가격 계단(취소선→최종가) + 제품 이미지 오버랩
+point-fullbleed-bookend { pointLabel, eyebrow?, headline, body?, image?, imageAlt?, closing }   // pill 뱃지 → eyebrow → 대형 헤드라인 → 바디 → 풀블리드 이미지 → 클로징 스테이트먼트 (북엔드 구조)
+point-timing-banner { badgeQuestion, badgeAnswer, headline(em/br), dateRange?, image?, imageAlt? }   // 타이밍 포인트 배너: 밝은 배경 + pill 2종(질문|답) + 풀폭 검정 하이라이트 밴드 위 대형 헤드라인 + 날짜기간 + 풀폭 이미지
+promo-scatter-banner { eventLabel, headline, subCopy, hashtag?, objTopLeft?, objTopRight?, objBottomLeft?, objBottomRight? }   // 다크 풀블리드 + 이벤트 레이블 + 도트 구분 초대형 헤드라인 + 서브카피 + 해시태그 필 + 4귀 오브젝트 콜라주 산포
+point-numbered-hero-card { items[]: badge, heading(em/br), image?, imageAlt?, caption(em) }   // 다크 카드 + 번호 pill 뱃지 + 헤드라인 헤더 존 → contained 이미지 → 별도 배경 캡션 스트립 (1~5 반복)
+point-numbered-image-card { eyebrow?(string), items[]{caption, label, image?, imageAlt?} }   // 다크 카드 + 대형 서수 앵커 + 텍스트 존/이미지 존 분리 수직 스택(2~5)
+point-step-timeline-bleed { eyebrow, eyebrowSub?, steps[]{label}(2~4), headThin, headBold, image?, imageAlt?, caption? }   // 수평 numbered-dot 타임라인 + split-weight 대형 헤드카피 + vertical overflow bleed 이미지
+point-radar-web { brand, title, axes[6], image?, imageAlt?, calloutHeading, calloutItems[2-4] }   // 6축 레이더 차트 중앙에 제품 이미지 오버레이 + pill-badge callout 리스트. 뷰티/식품 성분 균형 시각화.
+feature-event-poster { eyebrow?, dateHeadline, eventHeadline, timePill?, datePill?, bgImage?, calloutTitle?, calloutSub?, calloutPrice? }   // 다크 풀블리드 이벤트 포스터: ✦ sparkle 장식 대형 날짜/이벤트 헤드라인 + 시간 pill + 날짜 pill + 우하단 앵커 제품 콜아웃 카드
+point-ingredient-overlay { headline, subline?, brandLabel?, productImage?, productImageAlt?, tags[{category, name, variant?, side}](3-8), disclaimer? }   // 제품 이미지 캔버스 위 성분·기능 필 태그 좌우 부유 배치 — +아이콘·카테고리·성분명 3-tier 수직 스택, primary(accent채움)/secondary(아웃라인) 두 레벨
+feature-dark-tab-mosaic { eyebrow, headline(em), subcopy(br/em), heroImage?, tabs[]{label}×2-6, mosaicImages[3]{url?,alt?} }   // 다크 hero 상단(eyebrow+대형헤드라인+서브카피+우측블리드이미지) + 밝은 하단(수평카테고리탭+비대칭3이미지모자이크)
+stats-satisfaction-bars { title, image?, imageAlt?, bars[]{label, value(0-100), display?}, subtitle?, caption? }   // 고객 만족도 바 차트: 웜 배경 + 선언형 헤드라인 + 제품 이미지 + 레이블·진행바·퍼센트 행 반복(2~5) + 식물 오버레이
+point-product-annotation { title, subtitle?, productImage?, productImageAlt?, annotations[]{heading, desc?} (2–4) }   // 밝은 배경 + 대형 헤드라인 + 제품 이미지 중앙 + 우측 callout 점선 커넥터 annotation (기술 다이어그램/설명서 스타일)
+feature-image-row-list { offerLabel(em), offerSub?, offerImage?, offerImageAlt?, items[]{image?, imageAlt?, heading(em), body?(em/br)} 2~4 }   // 파스텔 배경 + 상단 증정 오퍼 배너(목업 이미지) + 하단 좌정사각이미지-우제목/설명 행 반복(구분선)
+point-urgency-tape-cross { eyebrow, dday, title(em), tapeText, image?, imageAlt?, body(em/br), cta? }   // 다크 배경 X자 테이프 크로스 urgency: eyebrow 라벨 + D-day 카운터 + 대형 헤드라인 + 제품 이미지 위 accent 대각선 테이프 2개(반복 마키 애니메이션) + 하단 서브카피 + CTA
+point-list-image-bleed { eyebrow?, headline, sub?, watermark?, items[label,heading,desc?]×2-5, image?, imageAlt? }   // 전폭 워터마크 타이포(상·하) + 이중 쉐브론 다이아몬드 아웃라인 pill 배지 + 좌 포인트 리스트 + 우 풀블리드 이미지. warm 뷰티/스킨케어 톤.
+stats-hero-anchor-card-grid { eyebrow, heroStat, heroCopy, images[]{url?,alt?}×1-3, cards[]{label,stat,desc}×2-6 }   // 소비자 만족도·수치 강조 — 히어로 수치(accent-d) + 좌카피 + 우이미지군집 + 하단 2열 카드그리드
+feature-product-float-icon-grid { eyebrow?, title, heroBg?, productImage1?, productImage2?, productAlt?, items[]{icon?, heading, body?} }   // 솔리드 브랜드색 배경 위 제품 이미지 자유 부유 + eyebrow + 대형 헤드라인 → 2열 라운드 카드 그리드(아이콘+소제목+본문)
+point-product-stats-split { eyebrow?, title, subtitle?, image?, imageAlt?, stats[3–5]{ value, label } }   // 다크 배경 + 풀폭 상단 헤더 + 좌 대형 제품 이미지(~50%) + 우 signed 수치 스탯 수직 리스트(구분선)
 story-text-first { label?, titlePre?, titleBold(em,br), titlePost?, paragraphs(em,br)(1~4), bgImage?(url) }   // 텍스트 우선 에디토리얼 브랜드 스토리: EN 라벨+HR → 혼합 굵기 KR 대제목 → 수직 강조선 → 본문 문단
 faq-numbered { eyebrow?, title?, items(q(em,br), a(em,br))(2~6) }   // 넘버링 고스트 숫자 목록형 FAQ — brand 풀배경 + FAQ 헤더 + 대형 반투명 서수 장식 + 굵은 질문 + 들여쓰기 답변 + 헤어라인 반복
 faq-plain { title?, subtitle?, items(2~8)[q(em,br), a(em,br)] }   // 극미니멀 플랫 텍스트 FAQ — Q/A 글자 라벨 + 얇은 수평선 구분, 카드·버블 없음

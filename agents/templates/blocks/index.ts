@@ -133,6 +133,36 @@ import { featureBentoMosaic } from './variants/feature-bento-mosaic'
 import { compareProductCardVs } from './variants/compare-product-card-vs'
 import { specNutritionMacroTable } from './variants/spec-nutrition-macro-table'
 import { baClinicalBarChart } from './variants/ba-clinical-bar-chart'
+import { pointDiscountPriceReveal } from './variants/point-discount-price-reveal'
+import { pointPromoAsymcard } from './variants/point-promo-asymcard'
+import { featureDarkProductGrid } from './variants/feature-dark-product-grid'
+import { pointFullbleedCaption } from './variants/point-fullbleed-caption'
+import { pointAwardCredential } from './variants/point-award-credential'
+import { featureDarkFloatCutout } from './variants/feature-dark-float-cutout'
+import { pointEditorialMarquee } from './variants/point-editorial-marquee'
+import { pointHeritageSplit } from './variants/point-heritage-split'
+import { pointIngredientHero } from './variants/point-ingredient-hero'
+import { pointBrandCollabEditorial } from './variants/point-brand-collab-editorial'
+import { promoEventSpotlight } from './variants/promo-event-spotlight'
+import { promoStoryPriceReveal } from './variants/promo-story-price-reveal'
+import { pointFullbleedBookend } from './variants/point-fullbleed-bookend'
+import { pointTimingBanner } from './variants/point-timing-banner'
+import { promoScatterBanner } from './variants/promo-scatter-banner'
+import { pointNumberedHeroCard } from './variants/point-numbered-hero-card'
+import { pointNumberedImageCard } from './variants/point-numbered-image-card'
+import { pointStepTimelineBleed } from './variants/point-step-timeline-bleed'
+import { pointRadarWeb } from './variants/point-radar-web'
+import { featureEventPoster } from './variants/feature-event-poster'
+import { pointIngredientOverlay } from './variants/point-ingredient-overlay'
+import { featureDarkTabMosaic } from './variants/feature-dark-tab-mosaic'
+import { statsSatisfactionBars } from './variants/stats-satisfaction-bars'
+import { pointProductAnnotation } from './variants/point-product-annotation'
+import { featureImageRowList } from './variants/feature-image-row-list'
+import { pointUrgencyTapeCross } from './variants/point-urgency-tape-cross'
+import { pointListImageBleed } from './variants/point-list-image-bleed'
+import { statsHeroAnchorCardGrid } from './variants/stats-hero-anchor-card-grid'
+import { featureProductFloatIconGrid } from './variants/feature-product-float-icon-grid'
+import { pointProductStatsSplit } from './variants/point-product-stats-split'
 import { storyTextFirst } from './variants/story-text-first'
 import { faqNumbered } from './variants/faq-numbered'
 import { faqPlain } from './variants/faq-plain'
@@ -403,6 +433,36 @@ registerBlocks([
   compareProductCardVs,
   specNutritionMacroTable,
   baClinicalBarChart,
+  pointDiscountPriceReveal,
+  pointPromoAsymcard,
+  featureDarkProductGrid,
+  pointFullbleedCaption,
+  pointAwardCredential,
+  featureDarkFloatCutout,
+  pointEditorialMarquee,
+  pointHeritageSplit,
+  pointIngredientHero,
+  pointBrandCollabEditorial,
+  promoEventSpotlight,
+  promoStoryPriceReveal,
+  pointFullbleedBookend,
+  pointTimingBanner,
+  promoScatterBanner,
+  pointNumberedHeroCard,
+  pointNumberedImageCard,
+  pointStepTimelineBleed,
+  pointRadarWeb,
+  featureEventPoster,
+  pointIngredientOverlay,
+  featureDarkTabMosaic,
+  statsSatisfactionBars,
+  pointProductAnnotation,
+  featureImageRowList,
+  pointUrgencyTapeCross,
+  pointListImageBleed,
+  statsHeroAnchorCardGrid,
+  featureProductFloatIconGrid,
+  pointProductStatsSplit,
   storyTextFirst,
   faqNumbered,
   faqPlain,
