@@ -294,6 +294,24 @@ import { packageDiscountImageRows } from './variants/package-discount-image-rows
 import { productHeroGiftPrice } from './variants/product-hero-gift-price'
 import { packageHeroPriceTable } from './variants/package-hero-price-table'
 import { packageDarkComponentGrid } from './variants/package-dark-component-grid'
+import { reviewPhotoBubbleStaggered } from './variants/review-photo-bubble-staggered'
+import { reviewDividerImageRows } from './variants/review-divider-image-rows'
+import { recommendPersonaListAnnotated } from './variants/recommend-persona-list-annotated'
+import { reviewEfficacyBarChart } from './variants/review-efficacy-bar-chart'
+import { reviewAggregateScoreCards } from './variants/review-aggregate-score-cards'
+import { reviewImageStoryStack } from './variants/review-image-story-stack'
+import { reviewSatisfactionStats } from './variants/review-satisfaction-stats'
+import { reviewDividerImageRight } from './variants/review-divider-image-right'
+import { reviewImageRows } from './variants/review-image-rows'
+import { reviewSatisfactionPillBars } from './variants/review-satisfaction-pill-bars'
+import { reviewThumbnailRows } from './variants/review-thumbnail-rows'
+import { reviewPhotoBgDashedCards } from './variants/review-photo-bg-dashed-cards'
+import { reviewHeroAvatarList } from './variants/review-hero-avatar-list'
+import { reviewStatHeaderCard } from './variants/review-stat-header-card'
+import { reviewInstagramDmMockup } from './variants/review-instagram-dm-mockup'
+import { reviewIconAlternatingRows } from './variants/review-icon-alternating-rows'
+import { reviewAggregateScoreStack } from './variants/review-aggregate-score-stack'
+import { reviewNumberedThumbnailRows } from './variants/review-numbered-thumbnail-rows'
 
 registerBlocks([
   heroCentered,
@@ -619,6 +637,24 @@ registerBlocks([
   productHeroGiftPrice,
   packageHeroPriceTable,
   packageDarkComponentGrid,
+  reviewPhotoBubbleStaggered,
+  reviewDividerImageRows,
+  recommendPersonaListAnnotated,
+  reviewEfficacyBarChart,
+  reviewAggregateScoreCards,
+  reviewImageStoryStack,
+  reviewSatisfactionStats,
+  reviewDividerImageRight,
+  reviewImageRows,
+  reviewSatisfactionPillBars,
+  reviewThumbnailRows,
+  reviewPhotoBgDashedCards,
+  reviewHeroAvatarList,
+  reviewStatHeaderCard,
+  reviewInstagramDmMockup,
+  reviewIconAlternatingRows,
+  reviewAggregateScoreStack,
+  reviewNumberedThumbnailRows,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
