@@ -27,7 +27,7 @@ export const heroCentered = defineBlock<HeroCenteredData>({
 .hc-badge{display:inline-flex;align-items:center;gap:7px;background:var(--brand);color:#F5ECDF;font-size:18px;font-weight:800;padding:9px 22px;border-radius:999px;box-shadow:0 6px 16px rgba(42,33,24,.18)}
 .hc-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .hc-title{margin-top:22px;font-size:62px}
-.hc-sub{margin-top:14px;font-size:21px;font-weight:700;color:var(--ink-2)}
+.hc-sub{margin-top:14px;font-size:21px;font-weight:700;color:var(--ink)}
 .hc-fig{position:relative;margin:38px auto 0;width:600px}
 .hc-media{width:100%;height:430px;object-fit:cover;border-radius:26px;box-shadow:0 26px 50px -18px rgba(42,33,24,.45)}
 .hc-bubble{position:absolute;top:30px;right:-12px;background:#fff;border:2.5px solid var(--brand);border-radius:22px;padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700;transform:rotate(-4deg)}

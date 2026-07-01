@@ -3,9 +3,20 @@
  */
 import type { RenderCtx, Tokens } from './types'
 
-/** HTML 특수문자 이스케이프 (XSS 차단 기본). */
-export const esc = (s: string | undefined): string =>
-  (s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+/**
+ * HTML 특수문자 이스케이프 (XSS 차단 기본) + 강조/줄바꿈 화이트리스트.
+ * 텍스트 슬롯 전반에서 <span class="em">…</span> / <br> 만 복원하고 나머지 태그는 이스케이프 유지.
+ * → (em)/(br) 계약 필드가 어느 variant에서 esc로 렌더되더라도 리터럴 태그 노출을 원천 차단.
+ *   (속성값 렌더에는 span/br이 들어오지 않으므로 무해.)
+ */
+export const esc = (s: string | undefined): string => {
+  let out = (s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  out = out.replace(/&lt;br\s*\/?&gt;/g, '<br>')
+  out = out.replace(/&lt;span class="em"&gt;([\s\S]*?)&lt;\/span&gt;/g, (_m, inner) =>
+    inner.trim() ? `<span class="em">${inner}</span>` : inner,
+  )
+  return out
+}
 
 /**
  * 제한 화이트리스트(<br>, <span class="em">)만 허용하고 나머지는 이스케이프.
@@ -15,7 +26,9 @@ export function richSafe(s: string | undefined): string {
   let out = esc(s ?? '')
   out = out.replace(/&lt;br\s*\/?&gt;/g, '<br>')
   // 매칭된 <span class="em">...</span> 쌍만 복원. 고아 </span>/중첩은 이스케이프 유지(구조적 화이트리스트).
-  out = out.replace(/&lt;span class="em"&gt;([\s\S]*?)&lt;\/span&gt;/g, '<span class="em">$1</span>')
+  out = out.replace(/&lt;span class="em"&gt;([\s\S]*?)&lt;\/span&gt;/g, (_m, inner) =>
+    inner.trim() ? `<span class="em">${inner}</span>` : inner,
+  )
   return out
 }
 
@@ -140,13 +153,13 @@ export function baseCss(tokens: Tokens, width: number): string {
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);background:#cfc6ba;-webkit-font-smoothing:antialiased}
-.dpg{width:${width}px;margin:0 auto;background:var(--bg);overflow:hidden}
+.dpg{width:${width}px;margin:0 auto;background:var(--bg);overflow:hidden;word-break:keep-all;overflow-wrap:break-word}
 .dpg img{display:block}
 .disp{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;line-height:1.14}
 .serif{font-family:var(--font-serif)}
 .lat{font-family:var(--font-lat)}
 .hand{font-family:var(--font-hand)}
-.acc,.em{color:var(--accent)}
+.acc,.em{color:var(--accent-d)}
 .ph{display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.035);border:2px dashed var(--line);color:var(--muted);font-size:13px;letter-spacing:.02em;box-shadow:none!important}
 .wm{display:none}
 .wm.light{display:none}

@@ -70,6 +70,22 @@ demo-v8/
 scripts/create-test-admin.ts
 scripts/test-login.ts
 
+# 계정 시드/조회/정리 임시 스크립트 (사업자번호·비번 하드코딩 → 커밋 금지)
+scripts/list-clients.ts
+scripts/seed-clients-extra.ts
+scripts/cleanup-clients.ts
+scripts/delete-preview.ts
+# 블록 재검증 재생성 스크립트 (세션 scratchpad 경로 하드코딩, 로컬 전용)
+scripts/recheck-regen.ts
+
+# Figma 참조 스크린샷 (라이선스: 재배포 불가 → 레포 커밋 금지, 패턴만 차용)
+.figma-refs/
+.figma-refs-v2/
+.tmp-figma/
+
+# 블록 조합 비교/검증 산출물 (로컬 참고용, 배포 무관)
+.compare-demo/
+
 # 파이프라인 임시 누끼
 tmp_nukki/
 tmp_nukki_planning/

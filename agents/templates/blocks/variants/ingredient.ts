@@ -37,7 +37,7 @@ export const ingredientAccent = defineBlock<AccentData>({
 .ia-row{display:flex;align-items:center;gap:24px;padding:16px 56px}
 .ia-ic{flex:0 0 104px;width:104px;height:104px;border-radius:50%;object-fit:cover}
 .ia-tx{flex:1}
-.ia-no{font-family:'Cafe24 ClassicType',serif;font-size:38px;color:rgba(255,255,255,.55);line-height:1}
+.ia-no{font-family:'Cafe24 ClassicType',serif;font-size:38px;color:rgba(255,255,255,.75);line-height:1}
 .ia-l{font-family:var(--font-display);font-weight:800;font-size:22px;margin-top:2px}
 .ia-d{margin-top:6px;font-size:14px;color:rgba(255,255,255,.82);line-height:1.6}
 .ia-closer{margin-top:34px;padding:0 56px;font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1.4}
@@ -93,7 +93,7 @@ export const ingredientGrid = defineBlock<GridData>({
 .ig-hd{text-align:center;margin-bottom:30px}
 .ig-eye{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.2em;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:5px}
 .ig-title{margin-top:14px;font-family:var(--font-display);font-weight:800;font-size:48px;color:#fff;line-height:1.1}
-.ig-sub{margin-top:10px;font-size:15px;color:rgba(255,255,255,.6)}
+.ig-sub{margin-top:10px;font-size:15px;color:rgba(255,255,255,.82)}
 .ig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .ig-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px}
 .ig-l{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--accent)}
@@ -118,5 +118,63 @@ export const ingredientGrid = defineBlock<GridData>({
       .join('')}
   </div>
   ${d.closer ? `<p class="ig-closer">${richSafe(d.closer)}</p>` : ''}
+</section>`,
+})
+
+// ── ingredient-spotlight (_13: 라이트 중앙정렬 + 타원 히어로 + 하이라이트 라벨 리스트) ──
+const spotlightSchema = z.object({
+  eyebrow: z.string().min(1).optional(), // 예 "INGREDIENTS"
+  title: z.string().min(1),
+  subtitle: z.string().min(1).optional(),
+  image: z.string().optional(), // 타원 히어로(누끼 권장)
+  items: z
+    .array(z.object({ label: z.string().min(1), desc: z.string().min(1).optional() }))
+    .min(2)
+    .max(5),
+  closer: z.string().min(1).optional(), // em,br
+})
+type SpotlightData = z.infer<typeof spotlightSchema>
+
+export const ingredientSpotlight = defineBlock<SpotlightData>({
+  id: 'ingredient-spotlight',
+  archetype: 'ingredient',
+  styleTags: ['premium', 'light', 'template', 'centered'],
+  imageSlots: 1,
+  describe:
+    '원료 소개(라이트 스포트라이트). 중앙정렬 + 영문 아이브로 + 대형 컬러 제목 + 타원 히어로(누끼) + 하이라이트 라벨·설명 리스트 + 마무리. 깔끔 프리미엄 라이트(다크 블록과 대비).',
+  schema: spotlightSchema,
+  css: `
+.isp{background:var(--paper);color:var(--ink);padding:62px 44px 66px;text-align:center}
+.isp-eye{font-family:var(--font-display);font-weight:800;font-size:30px;letter-spacing:.18em;color:var(--accent-d);opacity:.9;line-height:1}
+.isp-title{margin-top:10px;font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:-.02em;color:var(--accent-d);line-height:1.1}
+.isp-sub{margin-top:16px;font-size:17px;color:var(--ink);opacity:.78}
+.isp-hero{width:300px;height:300px;margin:42px auto 10px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.isp-hero-img{width:66%;height:90%;object-fit:contain}
+.isp-list{max-width:560px;margin:18px auto 0}
+.isp-row{padding:30px 6px}
+.isp-row + .isp-row{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
+.isp-chip{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:25px;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent);padding:3px 12px;line-height:1.25}
+.isp-d{margin-top:14px;font-size:16px;color:var(--ink);opacity:.82;line-height:1.7}
+.isp-closer{margin-top:48px;font-family:var(--font-display);font-weight:700;font-size:29px;color:var(--ink);line-height:1.5}
+.isp-closer .em{font-weight:800;color:var(--accent)}
+`,
+  render: (d, { esc, richSafe }) => `
+<section class="isp">
+  ${d.eyebrow ? `<p class="isp-eye">${esc(d.eyebrow)}</p>` : ''}
+  <h2 class="isp-title">${richSafe(d.title)}</h2>
+  ${d.subtitle ? `<p class="isp-sub">${esc(d.subtitle)}</p>` : ''}
+  ${d.image ? `<div class="isp-hero">${media(d.image, 'isp-hero-img', '대표 원료')}</div>` : ''}
+  <div class="isp-list">
+    ${d.items
+      .map(
+        (it) => `
+    <div class="isp-row">
+      <span class="isp-chip">${richSafe(it.label)}</span>
+      ${it.desc ? `<p class="isp-d">${richSafe(it.desc)}</p>` : ''}
+    </div>`,
+      )
+      .join('')}
+  </div>
+  ${d.closer ? `<p class="isp-closer">${richSafe(d.closer)}</p>` : ''}
 </section>`,
 })

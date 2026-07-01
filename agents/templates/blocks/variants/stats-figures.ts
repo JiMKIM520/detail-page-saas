@@ -90,8 +90,8 @@ export const statsFigures = defineBlock<Data>({
       <div class="sf-badge"><span class="sf-badge-num">${i + 1}</span></div>
       <div class="sf-row-body">
         <div class="sf-row-label">${esc(row.label)}</div>
-        <div class="sf-row-value">${esc(row.value)}</div>
-        ${row.sub ? `<div class="sf-row-sub">${esc(row.sub)}</div>` : ''}
+        <div class="sf-row-value">${richSafe(row.value)}</div>
+        ${row.sub ? `<div class="sf-row-sub">${richSafe(row.sub)}</div>` : ''}
       </div>
     </div>`).join('')
 
