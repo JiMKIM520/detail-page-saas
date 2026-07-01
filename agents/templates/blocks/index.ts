@@ -270,6 +270,30 @@ import { bannerSeasonalArch } from './variants/banner-seasonal-arch'
 import { bannerSeasonalIllustration } from './variants/banner-seasonal-illustration'
 import { bannerSeasonalDarkCoupon } from './variants/banner-seasonal-dark-coupon'
 import { bannerDarkPromo } from './variants/banner-dark-promo'
+import { packageEventPriceRows } from './variants/package-event-price-rows'
+import { packageImageRowsStrikePrice } from './variants/package-image-rows-strike-price'
+import { packageSplitImagePriceRows } from './variants/package-split-image-price-rows'
+import { packageOptionRowsPanel } from './variants/package-option-rows-panel'
+import { packageNumberedSplitRows } from './variants/package-numbered-split-rows'
+import { productTabFilterRows } from './variants/product-tab-filter-rows'
+import { packageDiscountBadgeGrid } from './variants/package-discount-badge-grid'
+import { packageOptionGrid } from './variants/package-option-grid'
+import { packageLineupBadgeRows } from './variants/package-lineup-badge-rows'
+import { productPriceBreakdownCard } from './variants/product-price-breakdown-card'
+import { productDiscountBadgeRows } from './variants/product-discount-badge-rows'
+import { packageNumberedOptionSelector } from './variants/package-numbered-option-selector'
+import { packageNumberedBandRows } from './variants/package-numbered-band-rows'
+import { packageSplitIconCards } from './variants/package-split-icon-cards'
+import { packageGradientBundleDiscount } from './variants/package-gradient-bundle-discount'
+import { packageBundleGiftRows } from './variants/package-bundle-gift-rows'
+import { productLineupDarkCards } from './variants/product-lineup-dark-cards'
+import { packageEventProductRows } from './variants/package-event-product-rows'
+import { productHeroDiscountGrid } from './variants/product-hero-discount-grid'
+import { eventCountdownProductGrid } from './variants/event-countdown-product-grid'
+import { packageDiscountImageRows } from './variants/package-discount-image-rows'
+import { productHeroGiftPrice } from './variants/product-hero-gift-price'
+import { packageHeroPriceTable } from './variants/package-hero-price-table'
+import { packageDarkComponentGrid } from './variants/package-dark-component-grid'
 
 registerBlocks([
   heroCentered,
@@ -571,6 +595,30 @@ registerBlocks([
   bannerSeasonalIllustration,
   bannerSeasonalDarkCoupon,
   bannerDarkPromo,
+  packageEventPriceRows,
+  packageImageRowsStrikePrice,
+  packageSplitImagePriceRows,
+  packageOptionRowsPanel,
+  packageNumberedSplitRows,
+  productTabFilterRows,
+  packageDiscountBadgeGrid,
+  packageOptionGrid,
+  packageLineupBadgeRows,
+  productPriceBreakdownCard,
+  productDiscountBadgeRows,
+  packageNumberedOptionSelector,
+  packageNumberedBandRows,
+  packageSplitIconCards,
+  packageGradientBundleDiscount,
+  packageBundleGiftRows,
+  productLineupDarkCards,
+  packageEventProductRows,
+  productHeroDiscountGrid,
+  eventCountdownProductGrid,
+  packageDiscountImageRows,
+  productHeroGiftPrice,
+  packageHeroPriceTable,
+  packageDarkComponentGrid,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'
