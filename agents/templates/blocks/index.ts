@@ -110,6 +110,29 @@ import { csAuthorizedSellerHero } from './variants/cs-authorized-seller-hero'
 import { csAuthorizedRetailerBadge } from './variants/cs-authorized-retailer-badge'
 import { shippingIllustHero } from './variants/shipping-illust-hero'
 import { shippingDateTimeline } from './variants/shipping-date-timeline'
+import { baPainpointBubbles } from './variants/ba-painpoint-bubbles'
+import { baPhotoSplitCard } from './variants/ba-photo-split-card'
+import { recommendPersonaGrid } from './variants/recommend-persona-grid'
+import { compareProductCards } from './variants/compare-product-cards'
+import { eventCommentPrizeGrid } from './variants/event-comment-prize-grid'
+import { comparePriceBarChart } from './variants/compare-price-bar-chart'
+import { compareOverlapCards } from './variants/compare-overlap-cards'
+import { baMultiEffectStacked } from './variants/ba-multi-effect-stacked'
+import { compareCompetitorPhoto } from './variants/compare-competitor-photo'
+import { recommendPainpointBubbles } from './variants/recommend-painpoint-bubbles'
+import { compareTabPanelsImageList } from './variants/compare-tab-panels-image-list'
+import { comparePriceCardPair } from './variants/compare-price-card-pair'
+import { credentialsStatBento } from './variants/credentials-stat-bento'
+import { painpointBrandResearchTrio } from './variants/painpoint-brand-research-trio'
+import { compareProductSpecMatrix } from './variants/compare-product-spec-matrix'
+import { compareUpgradeProductCards } from './variants/compare-upgrade-product-cards'
+import { featureDarkGrid } from './variants/feature-dark-grid'
+import { featureBentoPhotoGrid } from './variants/feature-bento-photo-grid'
+import { featureBentoPhotoTiles } from './variants/feature-bento-photo-tiles'
+import { featureBentoMosaic } from './variants/feature-bento-mosaic'
+import { compareProductCardVs } from './variants/compare-product-card-vs'
+import { specNutritionMacroTable } from './variants/spec-nutrition-macro-table'
+import { baClinicalBarChart } from './variants/ba-clinical-bar-chart'
 import { storyTextFirst } from './variants/story-text-first'
 import { faqNumbered } from './variants/faq-numbered'
 import { faqPlain } from './variants/faq-plain'
@@ -357,6 +380,29 @@ registerBlocks([
   csAuthorizedRetailerBadge,
   shippingIllustHero,
   shippingDateTimeline,
+  baPainpointBubbles,
+  baPhotoSplitCard,
+  recommendPersonaGrid,
+  compareProductCards,
+  eventCommentPrizeGrid,
+  comparePriceBarChart,
+  compareOverlapCards,
+  baMultiEffectStacked,
+  compareCompetitorPhoto,
+  recommendPainpointBubbles,
+  compareTabPanelsImageList,
+  comparePriceCardPair,
+  credentialsStatBento,
+  painpointBrandResearchTrio,
+  compareProductSpecMatrix,
+  compareUpgradeProductCards,
+  featureDarkGrid,
+  featureBentoPhotoGrid,
+  featureBentoPhotoTiles,
+  featureBentoMosaic,
+  compareProductCardVs,
+  specNutritionMacroTable,
+  baClinicalBarChart,
   storyTextFirst,
   faqNumbered,
   faqPlain,
