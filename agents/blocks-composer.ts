@@ -158,6 +158,24 @@ detail-point-scroll-stack { sectionTitle?, items[]{pointNo?, subtitle?, heading,
 feature-numbered-callout-scroll { sectionTitle?(em), items[]{no, eyebrow?(em), heading(em), body?(em), image?, imageAlt?} }   // 밝은 배경 순번 말풍선 배지(01,02…) + eyebrow + 볼드 헤드라인 + 본문 + 풀폭 이미지 수직 반복(2~5회)
 detail-spec-illustration-callout { title, body, image?, imageAlt?, calloutValue, calloutUnit, calloutLabel, chevronColor?, showBottomChevron? }   // 단일 특장점 수치 강조: 밝은 배경 + 위아래 chevron 전환 + 제품 일러스트 + 대형 수치 오버레이 콜아웃(accent-d, 손그림 언더라인 SVG)
 detail-numbered-point-stack { label?, items[]{no, heading(em), body?(em), image?, imageAlt?} }   // 내용전개: 밝은배경 + PRODUCT POINT 아치라벨 + 대형순번(01/02…)+밑줄바 + KR헤드라인 + 본문 + 풀폭이미지 수직반복(2~5)
+cs-hours-contact { logo?(img), brand(str), hoursTitle(str), hoursDesc(richSafe), hoursItems[]{day,time}(1-6), notices[]?(str,0-3), contacts[]{icon:pin|phone, text}(1-3) }   // CS 운영시간+연락처: 로고슬롯→헤어라인→2컬럼시간표(좌제목+설명/수직룰/우요일-시간rows+bullet공지)→헤어라인→하단연락처rows
+cs-contact-banner { eyebrow, title, image?, imageAlt?, intro?, contacts[{label,value}]×1-3, notes[]×0-4 }   // CS 고객문의 안내 투존 배너 (상단 accent 그라디언트 헤더 + 하단 다크 연락처 존)
+cs-closure-calendar { eyebrow?, title, datelines[], monthLabel?, weeks[{days[7]}], closureDays[{day,label}], footerNote? }   // 휴진·임시휴업 안내형: 웜베이지 배경 + 대형 제목 + 날짜목록 + 미니 캘린더 그리드(강조일 빨간 원+라벨) + 하단 안내문
+reason-zebra-rows { chapterNumber:string, title:string(em/br), items[3-5]:{ num:string, desc:string(em) } }   // CS 근거 나열: 밝은 청회색 배경 + 챕터 헤더(accent 세로선) + 오프셋 흰카드 + 번호·설명 zebra 교번 행
+cs-monthly-calendar { month, subtitle, notice1?, notice2?, days:[{date,status:'normal'|'operating'|'closed'|'empty',label?}](7~42) }   // CS 월간 운영일정 캘린더 — accent 다크 히어로존 + 7컬럼 그리드 + 원형 상태배지(운영=accent/휴진=danger)
+cs-vacation-calendar { title, weeks[{days[{date,state,label?}x7]}x1-4], notes[1-3] }   // 휴가·명절 압축 캘린더(2~4주 창): 범위pill/휴무filled/재개outline 상태 + 날짜 레이블 + 하단 안내문
+cs-holiday-calendar { title, badgeLabel, days[]{day,status,label?}, notes[], legend?[]{status,label}, monthLabel? }   // 공휴일 배송 마감 캘린더 — 다크(brand) 7열 그리드(핑크=배송휴무/흰=순차출고/노랑=범위휴무) + bullet 안내
+cs-delivery-calendar { title, startDayOffset, weeks[]{day?,kind,label?,rangeStart?,rangeEnd?}, legend?[]{iconKind,text} }   // 배송 출고 캘린더 CS 블록 — 이미지 없음, 7열 SUN-SAT 그리드, 날짜 4종 상태(cutoff/holiday-range/sequential/closed)
+cs-delivery-guarantee-split { eyebrow, headline, heroImage?, heroImageAlt?, weekday:{badge,condition}, weekend:{head,badge,condition,subCondition?}, footnote?, notices?:string[] }   // 당일발송·도착보장: brand 상단 아치존(일러스트+eyebrow+헤드라인) + 2컬럼 조건카드(평일=라이트/주말=brand다크, 도착보장 배지) + 하단 footnote+유의사항 리스트
+shipping-hero-notice-strip { eyebrow, headlineTop, headlineBottom, heroImage?, heroImageAlt?, notices[2..5] }   // 배송 히어로(다크 brand 배경+eyebrow+2행 헤드라인+우측 3D 이미지) + 하단 코랄 공지 스트립(불릿 리스트)
+'shipping-speed-banner' { headline: string; subline: string; note?: string; image?: string; imageAlt?: string }   // 빠른/당일배송 강조 배너 — 솔리드 브랜드블루 배경 + 초대형 흰 헤드라인 + accent 서브라인 + 우측 배송 일러스트 이미지
+shipping-subscription-hero { productName, serviceLabel, subtitle, image?, imageAlt?, benefits[3]{icon?,label,desc?}, ctaText }   // 정기배송·구독 히어로: 브랜드 웜(accent) 배경 + 대형 2줄 헤드라인 + 중앙 이미지 + 01/02/03 점선 연결 3단 혜택 그리드 + 풀폭 CTA 밴드
+shipping-speed-hero { headlineTop, headlineBadge, heroImage?, heroImageAlt?, body, steps[{label,highlight?}×3-5] }   // 빠른배송 히어로: 풀블리드 브랜드 배경+박스뱃지 헤드라인+중앙 이미지(1슬롯)+강조 서브 본문+도트 타임라인
+`shipping-vehicle-composite-hero { eyebrow, headline(em), subCaption?, vehicleImage?, vehicleImageAlt?, productLeftImage?, productLeftAlt?, productRightImage?, productRightAlt?, footerCaption?(em) }   // 다크 배경 당일출발 히어로: 시계 아이콘 + 주문마감 아이브로 + 대형 헤드라인 + 배송차량 중앙 + 제품 누끼 좌우 floating 합성 슬롯 + 하단 캡션`
+cs-authorized-seller-hero { brandLabel, title, certCaption?, badgeImage?, badgeImageAlt?, warningText, disclaimerText? }   // 공식 판매처 인증 히어로 — 상단 로고+헤드라인+배지이미지 / 하단 shield 경고카드
+cs-authorized-retailer-badge { badgeBrand, badgeLabel, badgeStars?, headline, certBody, certSub?, warningLead, warningBody, warningSub?, legalNotice? }   // 공식 판매처 인증 배지 — 다크 배경 + 원형 금색 테두리 배지(좌) + 헤드라인(우) + 비공식 구매 경고 박스 + 저작권 고지
+shipping-illust-hero { headLine1: string, headLine2: string, illustImage?: url, illustAlt?: string, bgTone?: 'light'|'mid' }   // CS 배송 히어로: 하늘색 배경 + 2줄 헤드라인(2번째 줄 노랑 하이라이트박스) + 배송 일러스트 1슬롯
+'shipping-date-timeline' { title: string; steps: [{rail?:'accent'|'danger'|'neutral'|'none'; date: string; dateSuffix?: string; label: string; continuation?: string}](2-5); image?: string; imageAlt?: string }   // 배송공지 날짜 타임라인: 수평 컬러 레일 바 + 대형 날짜 숫자 + 카피 수직 반복
 story-text-first { label?, titlePre?, titleBold(em,br), titlePost?, paragraphs(em,br)(1~4), bgImage?(url) }   // 텍스트 우선 에디토리얼 브랜드 스토리: EN 라벨+HR → 혼합 굵기 KR 대제목 → 수직 강조선 → 본문 문단
 faq-numbered { eyebrow?, title?, items(q(em,br), a(em,br))(2~6) }   // 넘버링 고스트 숫자 목록형 FAQ — brand 풀배경 + FAQ 헤더 + 대형 반투명 서수 장식 + 굵은 질문 + 들여쓰기 답변 + 헤어라인 반복
 faq-plain { title?, subtitle?, items(2~8)[q(em,br), a(em,br)] }   // 극미니멀 플랫 텍스트 FAQ — Q/A 글자 라벨 + 얇은 수평선 구분, 카드·버블 없음

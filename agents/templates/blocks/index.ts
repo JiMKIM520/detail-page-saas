@@ -92,6 +92,24 @@ import { detailPointScrollStack } from './variants/detail-point-scroll-stack'
 import { featureNumberedCalloutScroll } from './variants/feature-numbered-callout-scroll'
 import { detailSpecIllustrationCallout } from './variants/detail-spec-illustration-callout'
 import { detailNumberedPointStack } from './variants/detail-numbered-point-stack'
+import { csHoursContact } from './variants/cs-hours-contact'
+import { csContactBanner } from './variants/cs-contact-banner'
+import { csClosureCalendar } from './variants/cs-closure-calendar'
+import { reasonZebraRows } from './variants/reason-zebra-rows'
+import { csMonthlyCalendar } from './variants/cs-monthly-calendar'
+import { csVacationCalendar } from './variants/cs-vacation-calendar'
+import { csHolidayCalendar } from './variants/cs-holiday-calendar'
+import { csDeliveryCalendar } from './variants/cs-delivery-calendar'
+import { csDeliveryGuaranteeSplit } from './variants/cs-delivery-guarantee-split'
+import { shippingHeroNoticeStrip } from './variants/shipping-hero-notice-strip'
+import { shippingSpeedBanner } from './variants/shipping-speed-banner'
+import { shippingSubscriptionHero } from './variants/shipping-subscription-hero'
+import { shippingSpeedHero } from './variants/shipping-speed-hero'
+import { shippingVehicleCompositeHero } from './variants/shipping-vehicle-composite-hero'
+import { csAuthorizedSellerHero } from './variants/cs-authorized-seller-hero'
+import { csAuthorizedRetailerBadge } from './variants/cs-authorized-retailer-badge'
+import { shippingIllustHero } from './variants/shipping-illust-hero'
+import { shippingDateTimeline } from './variants/shipping-date-timeline'
 import { storyTextFirst } from './variants/story-text-first'
 import { faqNumbered } from './variants/faq-numbered'
 import { faqPlain } from './variants/faq-plain'
@@ -321,6 +339,24 @@ registerBlocks([
   featureNumberedCalloutScroll,
   detailSpecIllustrationCallout,
   detailNumberedPointStack,
+  csHoursContact,
+  csContactBanner,
+  csClosureCalendar,
+  reasonZebraRows,
+  csMonthlyCalendar,
+  csVacationCalendar,
+  csHolidayCalendar,
+  csDeliveryCalendar,
+  csDeliveryGuaranteeSplit,
+  shippingHeroNoticeStrip,
+  shippingSpeedBanner,
+  shippingSubscriptionHero,
+  shippingSpeedHero,
+  shippingVehicleCompositeHero,
+  csAuthorizedSellerHero,
+  csAuthorizedRetailerBadge,
+  shippingIllustHero,
+  shippingDateTimeline,
   storyTextFirst,
   faqNumbered,
   faqPlain,
