@@ -131,7 +131,7 @@ export const heroNumberedCols = defineBlock<Data>({
 <section class="hnc">
   <!-- 브랜드 로고 바 -->
   <div class="hnc-bar">
-    <span class="hnc-bar-logo">${esc(d.brandLogo ?? 'BRAND LOGO')}</span>
+    <span class="hnc-bar-logo">${d.brandLogo ? esc(d.brandLogo) : ''}</span>
   </div>
 
   <!-- 헤드라인 -->

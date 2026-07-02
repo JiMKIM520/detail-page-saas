@@ -598,6 +598,23 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   if (sanStats.removedFabricated || sanStats.removedOverBudget)
     console.warn(`[Blocks Composer] 이미지 새니타이즈 — 지어낸URL ${sanStats.removedFabricated}건, 예산초과 ${sanStats.removedOverBudget}건 제거`)
 
+  // 사진 주도형 블록(imageSlots>=2)인데 이미지가 하나도 없으면 — 거대한 빈 공간을 만들므로 블록 자체 제거(히어로/클로징 제외)
+  const hasHttp = (o: unknown): boolean => {
+    if (typeof o === 'string') return /^https?:\/\//.test(o)
+    if (Array.isArray(o)) return o.some(hasHttp)
+    if (o && typeof o === 'object') return Object.values(o as Record<string, unknown>).some(hasHttp)
+    return false
+  }
+  const beforeLen = spec.blocks.length
+  spec.blocks = spec.blocks.filter((b, i) => {
+    if (i === 0 || i === spec.blocks.length - 1) return true
+    const v = getVariant(b.variantId)
+    if (!v || v.imageSlots < 2) return true
+    return hasHttp(b.data)
+  })
+  if (spec.blocks.length < beforeLen)
+    console.warn(`[Blocks Composer] 이미지 없는 사진형 블록 ${beforeLen - spec.blocks.length}개 제거`)
+
   const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
   return { spec, html: rendered.html, usedVariants: rendered.usedVariants }
 }

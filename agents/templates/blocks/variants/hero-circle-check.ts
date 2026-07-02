@@ -165,7 +165,7 @@ export const heroCircleCheck = defineBlock<Data>({
 
   <!-- 라벤더 중간존: 말풍선 + 원형 이미지 -->
   <div class="hcc-mid">
-    <div class="hcc-bubble">${esc(d.brandLogo ?? 'BRAND LOGO')}</div>
+    ${d.brandLogo ? `<div class="hcc-bubble">${esc(d.brandLogo)}</div>` : ''}
     <div class="hcc-circle-wrap">
       ${media(d.productImage, 'hcc-circle-img', esc(d.productName))}
     </div>

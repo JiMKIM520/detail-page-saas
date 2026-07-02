@@ -187,7 +187,9 @@ body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);backg
  * sizeClass가 너비/높이/라운드를 정의하고, .ph가 점선 룩을 더한다.
  */
 export function media(url: string | undefined, sizeClass: string, label: string): string {
-  return url
+  // URL 형태가 아니면(LLM이 이모지·설명 텍스트를 넣는 경우) 깨진 <img> 대신 placeholder로
+  const isUrl = typeof url === 'string' && /^(https?:\/\/|data:|\/)/.test(url.trim())
+  return isUrl
     ? `<img class="${sizeClass}" src="${attr(url)}" alt="${attr(label)}">`
     : `<div class="${sizeClass} ph" role="img" aria-label="${attr(label)}"></div>`
 }

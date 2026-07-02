@@ -170,7 +170,7 @@ export const heroPhotoPinned = defineBlock<Data>({
 
   <!-- 상단 블랙 바 -->
   <div class="hpp-topbar">
-    <span class="hpp-brand">${esc(d.brandLogo ?? 'BRAND LOGO')}</span>
+    <span class="hpp-brand">${d.brandLogo ? esc(d.brandLogo) : ''}</span>
   </div>
 
   <!-- 메인 컬러 존 -->

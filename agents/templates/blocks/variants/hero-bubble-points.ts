@@ -227,7 +227,7 @@ export const heroBubblePoints = defineBlock<Data>({
   </div>
 
   <!-- 하단 브랜드 로고 -->
-  <div class="hbp-logo">${esc(d.brandLogo ?? 'BRAND LOGO')}</div>
+  ${d.brandLogo ? `<div class="hbp-logo">${esc(d.brandLogo)}</div>` : ''}
 
 </section>`,
 })
