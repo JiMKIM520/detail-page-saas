@@ -14,8 +14,8 @@ const schema = z.object({
   items: z
     .array(
       z.object({
-        /** 3줄 볼드 소제목 — 줄 구분은 <br> 사용 (richSafe 허용) */
-        lines: z.string().min(1),
+        /** 3줄 볼드 소제목 — 줄 구분은 <br> 사용 (richSafe 허용). LLM이 배열로 보내면 <br>로 join. */
+        lines: z.preprocess((v) => (Array.isArray(v) ? v.map(String).join('<br>') : v), z.string().min(1)),
         /** 하이라이트 밴드를 적용할 줄 인덱스 (0=첫째줄, 1=둘째줄, 2=셋째줄) */
         highlightLine: z.number().int().min(0).max(2),
         /** 하이라이트 줄 아래 소형 본문 (선택) */

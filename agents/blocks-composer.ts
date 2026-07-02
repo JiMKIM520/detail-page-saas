@@ -26,7 +26,7 @@ const composerOutputSchema = z.object({
     .array(z.object({ variantId: z.string().min(1), data: z.unknown() }))
     .min(10)
     .max(20)
-    .refine((b) => Boolean(b[0]?.variantId?.startsWith('hero-')), { message: '첫 블록은 hero 변형이어야 함' })
+    .refine((b) => Boolean(b[0]?.variantId?.startsWith('hero-') || b[0]?.variantId?.startsWith('intro-')), { message: '첫 블록은 hero/intro 계열 변형이어야 함' })
     .refine((b) => Boolean(b[b.length - 1]?.variantId?.startsWith('closing-')), { message: '마지막 블록은 closing 변형이어야 함' }),
 })
 export type ComposerOutput = z.infer<typeof composerOutputSchema>
@@ -435,13 +435,14 @@ OUTPUT: pure JSON, no markdown. Shape:
 
 RULES
 - Use ONLY variantId values from the catalog. Fill data EXACTLY per the block's data contract.
-- Compose 12~18 blocks. FIRST block must be a hero (hero-centered, hero-editorial, hero-points, or hero-arch). LAST block must be a closing (closing-mood or closing-light).
+- Compose 12~18 blocks. FIRST block must be a hero-family variant (variantId starting with "hero-" or "intro-"). LAST block must be a closing (closing-mood or closing-light).
 - Order for a real detail page: hero → recommend/checklist → trust/checkpoint → point/feature sections (alternate text+photo) → reason/equation/callout → story → cert → compare/spec → closing.
-- VISUAL RHYTHM (CRITICAL for premium depth — a flat single-tone page reads as low quality): alternate LIGHT and DARK sections. Include 2~3 DARK / dramatic blocks spread across the page (recommend-dark, feature-dark, ingredient-grid, statement-serif, stats-figures, story-brand, event-promo, closing-mood). NEVER place 3+ light sections in a row. brand-story and closing especially should be dark/dramatic.
-- SCALE HIERARCHY: vary section scale — include at least one big-impact full-bleed/statement block (feature-fullbleed, statement-serif, callout-banner, banner-event, stats-figures) so the page is not uniform density.
+- VISUAL RHYTHM (CRITICAL for premium depth — a flat single-tone page reads as low quality): alternate LIGHT and DARK sections. Include 2~3 DARK / dramatic blocks spread across the page — many families (story/feature/stats/ingredient/recommend/point/package/award/promo) have dark variants; identify them by "다크"/"dark"/"블랙" in the catalog descriptions and pick DIFFERENT dark variants each page. NEVER place 3+ light sections in a row. brand-story and closing especially should be dark/dramatic.
+- SCALE HIERARCHY: vary section scale — include at least one big-impact full-bleed/statement/banner-scale block (fullbleed·statement·callout·banner·대형 수치 계열) so the page is not uniform density.
 - IMAGE-FIRST: you are given MANY images (hero, lifestyle, detail, ingredient, mood). Put a DISTINCT image in as many image-bearing blocks as possible; prefer variants that carry images over text-only ones. A premium detail page is image-led — minimize text-only sections.
 - Pick presetKey by feel: warm-playful (친근한 식품/생활), modern-editorial (프리미엄/미니멀 명조), cobalt-premium (모던 커머스/전자·뷰티, 코발트블루), sand-luxury (따뜻한 뉴트럴 고급, 카멜/베이지). Match the product.
 - Do NOT repeat the same variantId more than twice. Use strip-band at most once. Vary blocks for richness.
+- DIVERSITY (CRITICAL): the catalog has 300+ variants — do NOT default to the same familiar variants page after page. The user prompt includes a FEATURED VARIANTS rotation list for THIS page: when multiple variants fit a role, PREFER ones from that list. Aim for at least half of your non-hero/non-closing picks to come from FEATURED VARIANTS when they fit the content.
 - Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
 - <span class="em"> and <br> are allowed ONLY in fields annotated (em) / (br) in the contract. In a field WITHOUT that annotation, output PLAIN TEXT — inserting em/br there renders as literal visible tags.
 - NEVER output an empty emphasis tag as a fill-in-blank placeholder (e.g. 우리 아이에게 <span class="em"></span>가 있어요 is WRONG). Put the real word inside the span, or use plain text with no span.
@@ -449,6 +450,26 @@ RULES
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
+
+/** 카탈로그 로테이션 — 호출마다 다른 부분집합을 FEATURED로 지목해 LLM의 익숙한 변형 편향을 깬다.
+ *  id 접두 계열별 셔플 후 상위 N개 추출 → 모든 계열이 매 호출 노출 기회를 가진다. */
+function sampleFeatured(perFamily = 3, cap = 48): string[] {
+  const byFamily = new Map<string, string[]>()
+  for (const c of catalog()) {
+    if (!CONTRACTED_IDS.has(c.id)) continue
+    if (c.id.startsWith('closing-')) continue
+    const fam = c.id.split('-')[0]
+    const arr = byFamily.get(fam) ?? []
+    arr.push(c.id)
+    byFamily.set(fam, arr)
+  }
+  const picked: string[] = []
+  for (const arr of byFamily.values()) {
+    const shuffled = [...arr].sort(() => Math.random() - 0.5)
+    picked.push(...shuffled.slice(0, perFamily))
+  }
+  return picked.sort(() => Math.random() - 0.5).slice(0, cap)
+}
 
 function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): string {
   const { brief, images } = input
@@ -484,6 +505,9 @@ function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): strin
 
 사용 가능한 이미지:
 ${imageBlock}
+
+FEATURED VARIANTS (이번 페이지 다양성 로테이션 — 역할에 맞으면 카탈로그의 다른 변형보다 우선 선택):
+${sampleFeatured().join(', ')}
 
 블록 카탈로그(variantId · archetype · imageSlots · 설명):
 ${catalog()
@@ -521,8 +545,14 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       result = await callOnce(input)
     } catch (firstErr: unknown) {
       const issues = firstErr instanceof Error ? firstErr.message.slice(0, 900) : String(firstErr)
-      console.warn('[Blocks Composer] 1차 검증 실패 → 1회 재시도:', issues.slice(0, 160))
-      result = await callOnce(input, issues)
+      console.warn('[Blocks Composer] 1차 검증 실패 → 재시도 1/2:', issues.slice(0, 160))
+      try {
+        result = await callOnce(input, issues)
+      } catch (secondErr: unknown) {
+        const issues2 = secondErr instanceof Error ? secondErr.message.slice(0, 900) : String(secondErr)
+        console.warn('[Blocks Composer] 2차 검증 실패 → 재시도 2/2:', issues2.slice(0, 160))
+        result = await callOnce(input, issues2)
+      }
     }
     saveJson(result.spec, `${input.outputDir}/page-spec.json`)
     const ms = elapsed()
