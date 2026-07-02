@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const galleryHalfwidthStagger = defineBlock<Data>({
   id: 'gallery-halfwidth-stagger',
-  archetype: 'gallery' as any,
+  archetype: 'gallery',
   styleTags: ['editorial', 'light', 'stagger', 'floating-label', 'premium'],
   imageSlots: 3,
   describe:

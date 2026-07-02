@@ -22,7 +22,7 @@ type Data = z.infer<typeof schema>
 
 export const bannerSeasonalArch = defineBlock<Data>({
   id: 'banner-seasonal-arch',
-  archetype: 'banner' as any,
+  archetype: 'banner',
   styleTags: ['premium', 'template', 'seasonal', 'playful', 'warm', 'light'],
   imageSlots: 1,
   describe:

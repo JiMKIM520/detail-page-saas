@@ -146,7 +146,7 @@ const HERO_TROPHY_SVG = `<svg class="atbg-hero-trophy" viewBox="0 0 180 200" fil
 
 export const awardTrophyBadgeGrid = defineBlock<Data>({
   id: 'award-trophy-badge-grid',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'trophy', 'laurel', 'grid', 'premium', 'template'],
   imageSlots: 0,
   describe:

@@ -57,7 +57,7 @@ type Data = z.infer<typeof schema>
 
 export const csHoursContact = defineBlock<Data>({
   id: 'cs-hours-contact',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['light', 'monochrome', 'minimal', 'cs', 'hours', 'contact', 'template'],
   imageSlots: 1,
   describe:

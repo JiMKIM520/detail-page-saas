@@ -25,7 +25,7 @@ type Data = z.infer<typeof schema>
 
 export const storyHighlightBox = defineBlock<Data>({
   id: 'story-highlight-box',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['editorial', 'light', 'template', 'fullbleed', 'story', 'colorblock'],
   imageSlots: 1,
   describe:

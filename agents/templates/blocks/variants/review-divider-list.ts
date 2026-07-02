@@ -28,7 +28,7 @@ const starN = (icon: (n: string) => string, n: number): string =>
 
 export const reviewDividerList = defineBlock<Data>({
   id: 'review-divider-list',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['minimal', 'trust', 'template', 'light'],
   imageSlots: 1,
   describe:

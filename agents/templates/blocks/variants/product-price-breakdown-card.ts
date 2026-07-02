@@ -59,7 +59,7 @@ type Data = z.infer<typeof schema>
 
 export const productPriceBreakdownCard = defineBlock<Data>({
   id: 'product-price-breakdown-card',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['commerce', 'price', 'benefit', 'card', 'template'],
   imageSlots: 4,
   describe:

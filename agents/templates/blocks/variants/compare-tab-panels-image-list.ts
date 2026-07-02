@@ -31,7 +31,7 @@ type Data = z.infer<typeof schema>
 
 export const compareTabPanelsImageList = defineBlock<Data>({
   id: 'compare-tab-panels-image-list',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['light', 'comparison', 'tab', 'template', 'competitor'],
   imageSlots: 2,
   describe:

@@ -73,7 +73,7 @@ function renderDay(
 
 export const csMonthlyCalendar = defineBlock<Data>({
   id: 'cs-monthly-calendar',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['cs', 'calendar', 'schedule', 'light', 'accent-hero', 'clinic', 'template'],
   imageSlots: 0,
   describe:

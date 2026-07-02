@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const storyCenteredSecondaryImage = defineBlock<Data>({
   id: 'story-centered-secondary-image',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['editorial', 'light', 'template', 'story', 'centered', 'texture'],
   imageSlots: 1,
   describe:

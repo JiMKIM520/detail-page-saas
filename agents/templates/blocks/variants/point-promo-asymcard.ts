@@ -41,7 +41,7 @@ type Data = z.infer<typeof schema>
 
 export const pointPromoAsymcard = defineBlock<Data>({
   id: 'point-promo-asymcard',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['promo', 'gradient', 'asymmetric', 'commerce', 'sale', 'template'],
   imageSlots: 4,
   describe:

@@ -37,7 +37,7 @@ type Data = z.infer<typeof schema>
 // ── 변형 정의 ─────────────────────────────────────────────────────────────────
 export const detailPackageFaq = defineBlock<Data>({
   id: 'detail-package-faq',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'template', 'food', 'package', 'faq'],
   imageSlots: 9,
   describe:

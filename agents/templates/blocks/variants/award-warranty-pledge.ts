@@ -95,7 +95,7 @@ type Data = z.infer<typeof schema>
 
 export const awardWarrantyPledge = defineBlock<Data>({
   id: 'award-warranty-pledge',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'gold', 'warranty', 'award', 'premium', 'template'],
   imageSlots: 1,
   describe:

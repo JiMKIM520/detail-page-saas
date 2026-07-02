@@ -48,7 +48,7 @@ type Data = z.infer<typeof schema>
 
 export const reviewEfficacyBarChart = defineBlock<Data>({
   id: 'review-efficacy-bar-chart',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['data', 'stats', 'bar-chart', 'efficacy', 'template'],
   imageSlots: 0,
   describe:

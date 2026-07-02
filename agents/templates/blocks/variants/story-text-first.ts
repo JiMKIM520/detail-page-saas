@@ -25,7 +25,7 @@ type Data = z.infer<typeof schema>
 
 export const storyTextFirst = defineBlock<Data>({
   id: 'story-text-first',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['editorial', 'light', 'template', 'story', 'minimal'],
   imageSlots: 1,
   describe:

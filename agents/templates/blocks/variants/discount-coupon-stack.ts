@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const discountCouponStack = defineBlock<Data>({
   id: 'discount-coupon-stack',
-  archetype: 'discount' as any,
+  archetype: 'discount',
   styleTags: ['premium', 'dark', 'template', 'coupon', 'event'],
   imageSlots: 1,
   describe:

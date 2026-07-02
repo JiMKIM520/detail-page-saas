@@ -46,7 +46,7 @@ type Data = z.infer<typeof schema>
 
 export const productHeroDiscountGrid = defineBlock<Data>({
   id: 'product-hero-discount-grid',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['commerce', 'discount', 'grid', 'event', 'template'],
   imageSlots: 7,
   describe:

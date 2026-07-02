@@ -56,7 +56,7 @@ type Data = z.infer<typeof schema>
 
 export const featureBentoMosaic = defineBlock<Data>({
   id: 'feature-bento-mosaic',
-  archetype: 'feature' as any,
+  archetype: 'feature',
   styleTags: ['light', 'bento', 'gallery', 'mosaic', 'feature', 'template'],
   imageSlots: 7,
   describe:

@@ -41,7 +41,7 @@ type Data = z.infer<typeof schema>
 
 export const storyLabeledImageStack = defineBlock<Data>({
   id: 'story-labeled-image-stack',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['light', 'narrative', 'scroll', 'branded', 'template'],
   imageSlots: 3,
   describe:

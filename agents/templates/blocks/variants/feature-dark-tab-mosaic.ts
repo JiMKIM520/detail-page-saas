@@ -36,7 +36,7 @@ type Data = z.infer<typeof schema>
 
 export const featureDarkTabMosaic = defineBlock<Data>({
   id: 'feature-dark-tab-mosaic',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark', 'grand-open', 'editorial', 'outdoor', 'mosaic', 'tab-nav', 'template'],
   imageSlots: 4,
   describe:

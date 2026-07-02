@@ -28,7 +28,7 @@ const DEFAULT_ROTATES = [-4, 6, -7, 3]
 
 export const reviewCollage = defineBlock<Data>({
   id: 'review-collage',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['playful', 'collage', 'light', 'social', 'template'],
   imageSlots: 1,
   describe:

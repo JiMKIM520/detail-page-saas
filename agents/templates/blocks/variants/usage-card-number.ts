@@ -27,7 +27,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const usageCardNumber = defineBlock<Data>({
   id: 'usage-card-number',
-  archetype: 'usage' as any,
+  archetype: 'usage',
   styleTags: ['premium', 'light', 'template', 'howto', 'numbered', 'card'],
   imageSlots: 1,
   describe:

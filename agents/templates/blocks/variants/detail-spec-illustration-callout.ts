@@ -31,7 +31,7 @@ type Data = z.infer<typeof schema>
 
 export const detailSpecIllustrationCallout = defineBlock<Data>({
   id: 'detail-spec-illustration-callout',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'spec', 'illustration', 'callout', 'narrative', 'template'],
   imageSlots: 1,
   describe:

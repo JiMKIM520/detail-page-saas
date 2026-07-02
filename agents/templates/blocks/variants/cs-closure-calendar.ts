@@ -48,7 +48,7 @@ type Data = z.infer<typeof schema>
 
 export const csClosureCalendar = defineBlock<Data>({
   id: 'cs-closure-calendar',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['light', 'warm', 'cs', 'notice', 'calendar', 'minimal'],
   imageSlots: 0,
   describe:

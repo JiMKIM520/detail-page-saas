@@ -54,7 +54,7 @@ function starRow(count: number, scoreLabel?: string): string {
 
 export const reviewAggregateScoreStack = defineBlock<Data>({
   id: 'review-aggregate-score-stack',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['dark', 'review', 'social-proof', 'aggregate', 'hero-score', 'template'],
   imageSlots: 0,
   describe:

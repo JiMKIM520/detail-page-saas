@@ -34,7 +34,7 @@ type Data = z.infer<typeof schema>
 
 export const pointProductStatsSplit = defineBlock<Data>({
   id: 'point-product-stats-split',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark', 'stats', 'split', 'skincare', 'premium', 'template'],
   imageSlots: 1,
   describe:

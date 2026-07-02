@@ -151,7 +151,7 @@ const BRACKET_R = `<svg class="ats-bracket ats-bracket--r" viewBox="0 0 32 60" f
 
 export const awardTrophyStat = defineBlock<Data>({
   id: 'award-trophy-stat',
-  archetype: 'stats' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'trophy', 'stats', 'hero', 'premium', 'template'],
   imageSlots: 0,
   describe:

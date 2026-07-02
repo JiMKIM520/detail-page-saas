@@ -113,7 +113,7 @@ function buildRadarSvg(axes: string[]): string {
 
 export const pointRadarWeb = defineBlock<Data>({
   id: 'point-radar-web',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['light', 'performance', 'beauty', 'ingredient', 'radar', 'template'],
   imageSlots: 1,
   describe:

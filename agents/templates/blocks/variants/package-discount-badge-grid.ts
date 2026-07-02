@@ -35,7 +35,7 @@ type Data = z.infer<typeof schema>
 
 export const packageDiscountBadgeGrid = defineBlock<Data>({
   id: 'package-discount-badge-grid',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['promo', 'commerce', 'grid', 'badge', 'discount', 'template'],
   imageSlots: 3,
   describe:

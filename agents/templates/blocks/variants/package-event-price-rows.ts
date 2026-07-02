@@ -45,7 +45,7 @@ type Data = z.infer<typeof schema>
 
 export const packageEventPriceRows = defineBlock<Data>({
   id: 'package-event-price-rows',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['dark', 'ecommerce', 'price', 'event', 'commerce', 'template'],
   imageSlots: 4,
   describe:

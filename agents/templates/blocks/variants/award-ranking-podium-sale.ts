@@ -186,7 +186,7 @@ type Data = z.infer<typeof schema>
 
 export const awardRankingPodiumSale = defineBlock<Data>({
   id: 'award-ranking-podium-sale',
-  archetype: 'promo' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'podium', 'ranking', 'sale', 'event', 'premium', 'template'],
   imageSlots: 0,
   describe:

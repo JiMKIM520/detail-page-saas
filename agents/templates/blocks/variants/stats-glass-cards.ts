@@ -23,7 +23,7 @@ type Data = z.infer<typeof schema>
 
 export const statsGlassCards = defineBlock<Data>({
   id: 'stats-glass-cards',
-  archetype: 'stats' as any,
+  archetype: 'stats',
   styleTags: ['premium', 'template', 'cobalt', 'glassmorphism', 'impact'],
   imageSlots: 1,
   describe:

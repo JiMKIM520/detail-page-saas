@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const detailEditorialVenn = defineBlock<Data>({
   id: 'detail-editorial-venn',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['editorial', 'light', 'premium', 'template', 'diagram'],
   imageSlots: 3,
   describe:

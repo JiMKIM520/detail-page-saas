@@ -36,7 +36,7 @@ type Data = z.infer<typeof schema>
 
 export const packageDarkComponentGrid = defineBlock<Data>({
   id: 'package-dark-component-grid',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['dark', 'luxury', 'beauty', 'care', 'grid', 'pedestal', 'template'],
   imageSlots: 5,
   describe:

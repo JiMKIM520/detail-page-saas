@@ -53,7 +53,7 @@ type Data = z.infer<typeof schema>
 
 export const compareProductCardVs = defineBlock<Data>({
   id: 'compare-product-card-vs',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['light', 'comparison', 'stats', 'review', 'template'],
   imageSlots: 2,
   describe:

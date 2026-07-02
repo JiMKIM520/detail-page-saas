@@ -39,7 +39,7 @@ type Data = z.infer<typeof schema>
 
 export const featureBentoPhotoGrid = defineBlock<Data>({
   id: 'feature-bento-photo-grid',
-  archetype: 'feature' as any,
+  archetype: 'feature',
   styleTags: ['bento', 'photo', 'lifestyle', 'overlay', 'dark', 'grid', 'template'],
   imageSlots: 5,
   describe:

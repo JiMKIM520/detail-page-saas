@@ -41,7 +41,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const productLineupDarkCards = defineBlock<Data>({
   id: 'product-lineup-dark-cards',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['dark', 'lineup', 'cards', 'numbered', 'template'],
   imageSlots: 4,
   describe:

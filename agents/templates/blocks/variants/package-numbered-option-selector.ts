@@ -37,7 +37,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const packageNumberedOptionSelector = defineBlock<Data>({
   id: 'package-numbered-option-selector',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'selector', 'grid', 'package', 'numbered', 'template'],
   imageSlots: 4,
   describe:

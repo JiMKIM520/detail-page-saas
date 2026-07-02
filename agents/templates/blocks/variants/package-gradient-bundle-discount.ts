@@ -42,7 +42,7 @@ type Data = z.infer<typeof schema>
 
 export const packageGradientBundleDiscount = defineBlock<Data>({
   id: 'package-gradient-bundle-discount',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['pastel', 'gradient', 'bundle', 'discount', 'package', 'template'],
   imageSlots: 1,
   describe:

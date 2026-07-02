@@ -39,7 +39,7 @@ type Data = z.infer<typeof schema>
 
 export const credentialsStatBento = defineBlock<Data>({
   id: 'credentials-stat-bento',
-  archetype: 'feature' as any,
+  archetype: 'feature',
   styleTags: ['dark', 'bento', 'stats', 'kpi', 'credential', 'template'],
   imageSlots: 4,
   describe:

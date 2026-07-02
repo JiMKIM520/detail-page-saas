@@ -31,7 +31,7 @@ type Data = z.infer<typeof schema>
 // ── 블록 정의 ─────────────────────────────────────────────────────────────────
 export const detailDimensionFaq = defineBlock<Data>({
   id: 'detail-dimension-faq',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'editorial', 'template', 'premium'],
   imageSlots: 2,
   describe:

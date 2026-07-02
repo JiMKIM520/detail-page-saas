@@ -26,7 +26,7 @@ type Data = z.infer<typeof schema>
 // ── 변형 정의 ────────────────────────────────────────────────────────────────
 export const detailPolicyTable = defineBlock<Data>({
   id: 'detail-policy-table',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'template', 'table', 'policy', 'editorial'],
   imageSlots: 0,
   describe:

@@ -41,7 +41,7 @@ type Data = z.infer<typeof schema>
 
 export const baMultiEffectStacked = defineBlock<Data>({
   id: 'ba-multi-effect-stacked',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['light', 'comparison', 'before-after', 'stacked', 'template', 'commerce'],
   imageSlots: 6,
   describe:

@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const faqLabelSpecTable = defineBlock<Data>({
   id: 'faq-label-spec-table',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['dark-header', 'spec', 'table', 'label-badge', 'announcement', 'template'],
   imageSlots: 0,
   describe:

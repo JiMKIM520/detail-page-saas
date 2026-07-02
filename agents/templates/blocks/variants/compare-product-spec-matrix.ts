@@ -45,7 +45,7 @@ type Data = z.infer<typeof schema>
 
 export const compareProductSpecMatrix = defineBlock<Data>({
   id: 'compare-product-spec-matrix',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['light', 'comparison', 'matrix', 'table', 'spec', 'template'],
   imageSlots: 3,
   describe:

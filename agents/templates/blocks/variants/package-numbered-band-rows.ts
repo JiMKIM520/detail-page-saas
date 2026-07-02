@@ -39,7 +39,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const packageNumberedBandRows = defineBlock<Data>({
   id: 'package-numbered-band-rows',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['dark', 'premium', 'pricing', 'numbered', 'template'],
   imageSlots: 0,
   describe:

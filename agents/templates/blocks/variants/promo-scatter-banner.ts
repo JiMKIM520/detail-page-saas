@@ -30,7 +30,7 @@ type Data = z.infer<typeof schema>
 
 export const promoScatterBanner = defineBlock<Data>({
   id: 'promo-scatter-banner',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['dark', 'event', 'scatter', 'playful', 'fullbleed', 'template'],
   imageSlots: 4,
   describe:

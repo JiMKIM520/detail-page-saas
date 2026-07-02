@@ -30,15 +30,15 @@ export const usageSteps = defineBlock<Data>({
   css: `
 .us{background:var(--bg);padding:52px 0 56px}
 .us-hd{text-align:center;padding:0 56px}
-.us-title{font-family:var(--font-display);font-weight:800;font-size:64px;color:var(--accent);letter-spacing:-.01em;line-height:1.04}
+.us-title{font-family:var(--font-display);font-weight:800;font-size:64px;color:var(--accent-d);letter-spacing:-.01em;line-height:1.04}
 .us-sub{margin-top:12px;font-size:16px;font-weight:600;color:var(--ink-2)}
 .us-hero{width:100%;height:280px;object-fit:cover;margin:26px 0 8px}
 .us-steps{padding:0 56px;margin-top:22px}
 .us-step{display:flex;align-items:center;gap:22px;padding:24px 0}
 .us-step + .us-step{border-top:1px solid var(--line)}
-.us-ic{flex:0 0 70px;width:70px;height:70px;border-radius:50%;background:var(--paper);box-shadow:0 8px 20px rgba(0,0,0,.08);display:grid;place-items:center;color:var(--accent)}
+.us-ic{flex:0 0 70px;width:70px;height:70px;border-radius:50%;background:var(--paper);box-shadow:0 8px 20px rgba(0,0,0,.08);display:grid;place-items:center;color:var(--accent-d)}
 .us-ic svg{width:34px;height:34px}
-.us-l{font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--accent);letter-spacing:.04em}
+.us-l{font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--accent-d);letter-spacing:.04em}
 .us-t{margin-top:6px;font-size:16px;color:var(--ink-2);line-height:1.5}
 .us-t .em{color:var(--accent);font-weight:700}
 .us-closer{margin-top:38px;padding:0 56px;text-align:center;font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.4}

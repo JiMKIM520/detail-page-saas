@@ -49,7 +49,7 @@ export const ingredientPhotoGrid = defineBlock<Data>({
 .ipg-hd{text-align:center;padding:52px 48px 36px}
 .ipg-title{font-family:var(--font-display);font-weight:800;font-size:56px;letter-spacing:-.02em;line-height:1.1;color:var(--accent)}
 .ipg-title .em{color:var(--ink)}
-.ipg-sub{margin-top:14px;font-size:17px;color:var(--ink);opacity:.6;line-height:1.6}
+.ipg-sub{margin-top:14px;font-size:17px;color:var(--ink);opacity:.78;line-height:1.6}
 
 /* ── 2×2 다크 카드 그리드 ── */
 .ipg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 40px}

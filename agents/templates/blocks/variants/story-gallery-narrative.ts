@@ -39,7 +39,7 @@ type Data = z.infer<typeof schema>
 
 export const storyGalleryNarrative = defineBlock<Data>({
   id: 'story-gallery-narrative',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['light', 'warm', 'minimal', 'narrative', 'scroll', 'template'],
   imageSlots: 3,
   describe:

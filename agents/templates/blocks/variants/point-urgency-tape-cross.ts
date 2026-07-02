@@ -35,7 +35,7 @@ function repeatTape(text: string, n: number): string {
 
 export const pointUrgencyTapeCross = defineBlock<Data>({
   id: 'point-urgency-tape-cross',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark', 'urgency', 'promo', 'tape', 'dday', 'template'],
   imageSlots: 1,
   describe:

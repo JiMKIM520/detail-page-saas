@@ -47,7 +47,7 @@ type Data = z.infer<typeof schema>
 
 export const eventCommentPrizeGrid = defineBlock<Data>({
   id: 'event-comment-prize-grid',
-  archetype: 'event' as any,
+  archetype: 'event',
   styleTags: ['light', 'playful', 'event', 'social', 'template'],
   imageSlots: 3,
   describe:

@@ -50,7 +50,7 @@ type Data = z.infer<typeof schema>
 
 export const pointDiscountPriceReveal = defineBlock<Data>({
   id: 'point-discount-price-reveal',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['dark', 'discount', 'price', 'impact', 'commerce', 'template'],
   imageSlots: 1,
   describe:

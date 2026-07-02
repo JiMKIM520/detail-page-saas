@@ -34,7 +34,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const reviewNumberedThumbnailRows = defineBlock<Data>({
   id: 'review-numbered-thumbnail-rows',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['warm', 'trust', 'numbered', 'review', 'template'],
   imageSlots: 5,
   describe:

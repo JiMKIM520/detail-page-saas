@@ -29,7 +29,7 @@ const starN = (icon: (n: string) => string, n: number): string =>
 
 export const reviewImageGrid = defineBlock<Data>({
   id: 'review-image-grid',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['premium', 'trust', 'template', 'grid', 'checkerboard'],
   imageSlots: 4,
   describe:

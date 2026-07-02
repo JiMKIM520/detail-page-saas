@@ -30,7 +30,7 @@ const starN = (icon: (n: string) => string, n: number): string =>
 
 export const reviewThumbnailCards = defineBlock<Data>({
   id: 'review-thumbnail-cards',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['dark', 'premium', 'trust', 'template'],
   imageSlots: 4,
   describe:

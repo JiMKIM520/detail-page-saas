@@ -50,7 +50,7 @@ type Data = z.infer<typeof schema>
 
 export const csDeliveryGuaranteeSplit = defineBlock<Data>({
   id: 'cs-delivery-guarantee-split',
-  archetype: 'cs' as any,
+  archetype: 'cs',
   styleTags: ['cs', 'shipping', 'brand', 'split', 'guarantee', 'light'],
   imageSlots: 1,
   describe:

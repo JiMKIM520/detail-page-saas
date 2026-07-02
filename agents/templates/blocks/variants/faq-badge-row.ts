@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const faqBadgeRow = defineBlock<Data>({
   id: 'faq-badge-row',
-  archetype: 'faq' as any,
+  archetype: 'faq',
   styleTags: ['light', 'premium', 'structured', 'cobalt', 'template'],
   imageSlots: 0,
   describe:

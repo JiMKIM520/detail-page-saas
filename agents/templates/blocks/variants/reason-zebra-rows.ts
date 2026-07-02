@@ -28,7 +28,7 @@ type Data = z.infer<typeof schema>
 
 export const reasonZebraRows = defineBlock<Data>({
   id: 'reason-zebra-rows',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'cs', 'reason', 'zebra', 'chapter', 'template'],
   imageSlots: 0,
   describe:

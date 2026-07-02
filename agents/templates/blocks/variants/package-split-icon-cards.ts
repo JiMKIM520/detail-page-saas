@@ -37,7 +37,7 @@ type Data = z.infer<typeof schema>
 
 export const packageSplitIconCards = defineBlock<Data>({
   id: 'package-split-icon-cards',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark-hero', 'light-cards', 'icon', 'split-bg', 'feature', 'template'],
   imageSlots: 0,
   describe:

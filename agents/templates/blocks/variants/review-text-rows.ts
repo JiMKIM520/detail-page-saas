@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const reviewTextRows = defineBlock<Data>({
   id: 'review-text-rows',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['premium', 'dark', 'trust', 'award', 'template'],
   imageSlots: 1,
   describe:

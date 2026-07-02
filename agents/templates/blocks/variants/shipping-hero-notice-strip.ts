@@ -28,7 +28,7 @@ type Data = z.infer<typeof schema>
 
 export const shippingHeroNoticeStrip = defineBlock<Data>({
   id: 'shipping-hero-notice-strip',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['dark', 'hero', 'notice', 'cs', 'delivery', 'playful'],
   imageSlots: 1,
   describe:

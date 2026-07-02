@@ -53,7 +53,7 @@ type Data = z.infer<typeof schema>
 
 export const csDeliveryCalendar = defineBlock<Data>({
   id: 'cs-delivery-calendar',
-  archetype: 'cs' as any,
+  archetype: 'cs',
   styleTags: ['light', 'warm', 'calendar', 'delivery', 'cs', 'minimal'],
   imageSlots: 0,
   describe:

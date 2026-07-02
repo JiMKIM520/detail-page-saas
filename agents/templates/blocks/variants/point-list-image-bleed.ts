@@ -40,7 +40,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const pointListImageBleed = defineBlock<Data>({
   id: 'point-list-image-bleed',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['warm', 'editorial', 'badge', 'bleed', 'template'],
   imageSlots: 1,
   describe:

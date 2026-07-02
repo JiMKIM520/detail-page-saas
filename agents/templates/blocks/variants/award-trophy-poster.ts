@@ -144,7 +144,7 @@ const LAUREL_BRANCH_RIGHT = `<svg class="atp-branch atp-branch-r" viewBox="0 0 9
 
 export const awardTrophyPoster = defineBlock<Data>({
   id: 'award-trophy-poster',
-  archetype: 'promo' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'trophy', 'poster', 'event', 'premium', 'template'],
   imageSlots: 0,
   describe:

@@ -30,7 +30,7 @@ type Data = z.infer<typeof schema>
 
 export const featureDarkFloatCutout = defineBlock<Data>({
   id: 'feature-dark-float-cutout',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark', 'lifestyle', 'float', 'badge', 'commerce', 'template'],
   imageSlots: 2,
   describe:

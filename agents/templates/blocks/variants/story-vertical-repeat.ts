@@ -30,7 +30,7 @@ type Data = z.infer<typeof schema>
 
 export const storyVerticalRepeat = defineBlock<Data>({
   id: 'story-vertical-repeat',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['dark', 'narrative', 'scroll', 'template'],
   imageSlots: 3,
   describe:

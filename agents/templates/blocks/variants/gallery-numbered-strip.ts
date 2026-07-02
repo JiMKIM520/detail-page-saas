@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const galleryNumberedStrip = defineBlock<Data>({
   id: 'gallery-numbered-strip',
-  archetype: 'gallery' as any,
+  archetype: 'gallery',
   styleTags: ['premium', 'editorial', 'colorblock', 'template', 'dark'],
   imageSlots: 4,
   describe:

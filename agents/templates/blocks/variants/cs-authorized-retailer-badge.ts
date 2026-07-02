@@ -32,7 +32,7 @@ type Data = z.infer<typeof schema>
 
 export const csAuthorizedRetailerBadge = defineBlock<Data>({
   id: 'cs-authorized-retailer-badge',
-  archetype: 'cs' as any,
+  archetype: 'cs',
   styleTags: ['dark', 'trust', 'badge', 'legal', 'cs', 'template'],
   imageSlots: 0,
   describe:

@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const baPhotoSplitCard = defineBlock<Data>({
   id: 'ba-photo-split-card',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['light', 'mint', 'beforeafter', 'photo', 'card', 'template'],
   imageSlots: 2,
   describe:

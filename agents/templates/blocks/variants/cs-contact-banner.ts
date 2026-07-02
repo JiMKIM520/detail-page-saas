@@ -36,7 +36,7 @@ type Data = z.infer<typeof schema>
 
 export const csContactBanner = defineBlock<Data>({
   id: 'cs-contact-banner',
-  archetype: 'cs' as any,
+  archetype: 'cs',
   styleTags: ['dark', 'accent', 'cs', 'contact', 'twozone'],
   imageSlots: 1,
   describe:

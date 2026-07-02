@@ -26,7 +26,7 @@ type Data = z.infer<typeof schema>
 
 export const faqBox = defineBlock<Data>({
   id: 'faq-box',
-  archetype: 'faq' as any,
+  archetype: 'faq',
   styleTags: ['light', 'structured', 'minimal', 'template'],
   imageSlots: 1,
   describe:

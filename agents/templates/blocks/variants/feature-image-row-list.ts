@@ -35,7 +35,7 @@ type Data = z.infer<typeof schema>
 
 export const featureImageRowList = defineBlock<Data>({
   id: 'feature-image-row-list',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['pastel', 'offer', 'row-list', 'commerce', 'template'],
   imageSlots: 4,
   describe:

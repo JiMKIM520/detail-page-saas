@@ -99,7 +99,7 @@ const GOLD_STAR = `<svg class="aneb-star" viewBox="0 0 20 20" fill="#F5D77E" xml
 
 export const awardNo1EmblemBadges = defineBlock<Data>({
   id: 'award-no1-emblem-badges',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'premium', 'authority', 'rank1', 'emblem', 'template'],
   imageSlots: 0,
   describe:

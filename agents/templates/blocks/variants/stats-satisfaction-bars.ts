@@ -36,7 +36,7 @@ type Data = z.infer<typeof schema>
 
 export const statsSatisfactionBars = defineBlock<Data>({
   id: 'stats-satisfaction-bars',
-  archetype: 'stats' as any,
+  archetype: 'stats',
   styleTags: ['warm', 'nature', 'satisfaction', 'bar-chart', 'stats', 'template'],
   imageSlots: 1,
   describe:

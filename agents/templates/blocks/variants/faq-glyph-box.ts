@@ -20,7 +20,7 @@ type Data = z.infer<typeof schema>
 
 export const faqGlyphBox = defineBlock<Data>({
   id: 'faq-glyph-box',
-  archetype: 'faq' as any,
+  archetype: 'faq',
   styleTags: ['light', 'editorial', 'template', 'minimal'],
   imageSlots: 0,
   describe:

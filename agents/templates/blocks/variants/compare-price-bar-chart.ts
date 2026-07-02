@@ -39,7 +39,7 @@ type Data = z.infer<typeof schema>
 
 export const comparePriceBarChart = defineBlock<Data>({
   id: 'compare-price-bar-chart',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['dark', 'compare', 'price', 'chart', 'savings', 'template'],
   imageSlots: 1,
   describe:

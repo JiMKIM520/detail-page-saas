@@ -25,7 +25,7 @@ type Data = z.infer<typeof schema>
 
 export const ingredientZigzag = defineBlock<Data>({
   id: 'ingredient-zigzag',
-  archetype: 'ingredient' as any,
+  archetype: 'ingredient',
   styleTags: ['light', 'premium', 'storytelling', 'template', 'zigzag'],
   imageSlots: 4,
   describe:

@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const detailCompareTable = defineBlock<Data>({
   id: 'detail-compare-table',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['premium', 'light', 'editorial', 'template', 'compare'],
   imageSlots: 0,
   describe:

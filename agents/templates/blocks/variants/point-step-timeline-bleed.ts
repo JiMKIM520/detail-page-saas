@@ -38,7 +38,7 @@ type Data = z.infer<typeof schema>
 
 export const pointStepTimelineBleed = defineBlock<Data>({
   id: 'point-step-timeline-bleed',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['timeline', 'bleed', 'split-weight', 'beauty', 'step', 'template'],
   imageSlots: 1,
   describe:

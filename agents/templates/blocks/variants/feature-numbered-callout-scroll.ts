@@ -35,7 +35,7 @@ type Data = z.infer<typeof schema>
 
 export const featureNumberedCalloutScroll = defineBlock<Data>({
   id: 'feature-numbered-callout-scroll',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['light', 'numbered', 'scroll', 'narrative', 'feature', 'template'],
   imageSlots: 3,
   describe:

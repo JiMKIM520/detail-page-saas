@@ -33,7 +33,7 @@ type Data = z.infer<typeof schema>
 
 export const shippingVehicleCompositeHero = defineBlock<Data>({
   id: 'shipping-vehicle-composite-hero',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['dark', 'cs', 'hero', 'composite', 'cutoff', 'template', 'centered'],
   imageSlots: 3,
   describe:

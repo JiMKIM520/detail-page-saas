@@ -110,7 +110,7 @@ const STAR_INLINE = `<svg class="atd-star" viewBox="0 0 16 16" fill="#C9A84C" xm
 
 export const awardTrophyDeclare = defineBlock<Data>({
   id: 'award-trophy-declare',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'trophy', 'hero', 'premium', 'template'],
   imageSlots: 0,
   describe:

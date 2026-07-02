@@ -26,7 +26,7 @@ type Data = z.infer<typeof schema>
 
 export const certClipboard = defineBlock<Data>({
   id: 'cert-clipboard',
-  archetype: 'cert' as any,
+  archetype: 'cert',
   styleTags: ['trust', 'premium', 'template', 'light', 'clipboard'],
   imageSlots: 2,
   describe:

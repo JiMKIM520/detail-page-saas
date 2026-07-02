@@ -37,7 +37,7 @@ type Data = z.infer<typeof schema>
 
 export const ingredientEditorialHero = defineBlock<Data>({
   id: 'ingredient-editorial-hero',
-  archetype: 'ingredient' as any,
+  archetype: 'ingredient',
   styleTags: ['editorial', 'premium', 'light', 'template', 'hero-overlay'],
   imageSlots: 5,
   describe:

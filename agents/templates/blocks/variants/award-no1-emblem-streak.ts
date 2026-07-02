@@ -78,7 +78,7 @@ function starRow(count: number): string {
 
 export const awardNo1EmblemStreak = defineBlock<Data>({
   id: 'award-no1-emblem-streak',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'emblem', 'streak', 'authority', 'premium', 'template'],
   imageSlots: 2,
   describe:

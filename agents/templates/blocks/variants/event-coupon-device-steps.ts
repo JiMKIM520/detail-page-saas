@@ -25,7 +25,7 @@ type Data = z.infer<typeof schema>
 
 export const eventCouponDeviceSteps = defineBlock<Data>({
   id: 'event-coupon-device-steps',
-  archetype: 'event' as any,
+  archetype: 'event',
   styleTags: ['playful', 'light', 'coupon', 'template', 'step'],
   imageSlots: 1,
   describe:

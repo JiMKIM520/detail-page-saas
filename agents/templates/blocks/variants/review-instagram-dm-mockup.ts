@@ -39,7 +39,7 @@ type Data = z.infer<typeof schema>
 
 export const reviewInstagramDmMockup = defineBlock<Data>({
   id: 'review-instagram-dm-mockup',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['social-proof', 'mockup', 'instagram', 'dm', 'warm', 'template'],
   imageSlots: 2,
   describe:

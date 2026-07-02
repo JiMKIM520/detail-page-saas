@@ -26,7 +26,7 @@ type Data = z.infer<typeof schema>
 
 export const reviewChatBubbles = defineBlock<Data>({
   id: 'review-chat-bubbles',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['playful', 'social', 'messenger', 'kakao', 'template'],
   imageSlots: 1,
   describe:

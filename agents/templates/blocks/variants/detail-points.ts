@@ -22,7 +22,7 @@ type Data = z.infer<typeof schema>
 
 export const detailPoints = defineBlock<Data>({
   id: 'detail-points',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['premium', 'dark', 'editorial', 'template'],
   imageSlots: 4,
   describe:

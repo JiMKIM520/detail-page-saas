@@ -38,7 +38,7 @@ type Data = z.infer<typeof schema>
 
 export const featureProductFloatIconGrid = defineBlock<Data>({
   id: 'feature-product-float-icon-grid',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['brand-bg', 'float', 'grid', 'icon-card', 'rounded', 'template'],
   imageSlots: 2,
   describe:

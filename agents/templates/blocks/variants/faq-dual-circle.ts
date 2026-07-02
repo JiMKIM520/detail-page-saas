@@ -28,7 +28,7 @@ type Data = z.infer<typeof schema>
 
 export const faqDualCircle = defineBlock<Data>({
   id: 'faq-dual-circle',
-  archetype: 'faq' as any,
+  archetype: 'faq',
   styleTags: ['light', 'clean', 'faq', 'dual-badge', 'template'],
   imageSlots: 0,
   describe:

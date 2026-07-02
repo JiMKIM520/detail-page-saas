@@ -40,7 +40,7 @@ type Data = z.infer<typeof schema>
 
 export const baClinicalBarChart = defineBlock<Data>({
   id: 'ba-clinical-bar-chart',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['dark', 'clinical', 'stats', 'before-after', 'chart', 'template'],
   imageSlots: 0,
   describe:

@@ -48,7 +48,7 @@ type Data = z.infer<typeof schema>
 
 export const packageBundleGiftRows = defineBlock<Data>({
   id: 'package-bundle-gift-rows',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['promo', 'bundle', 'gradient', 'badge', 'gift', 'template'],
   imageSlots: 4,
   describe:

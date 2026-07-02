@@ -22,7 +22,7 @@ type Data = z.infer<typeof schema>
 
 export const statsTextOnly = defineBlock<Data>({
   id: 'stats-text-only',
-  archetype: 'stats' as any,
+  archetype: 'stats',
   styleTags: ['premium', 'dark', 'template', 'impact', 'typography'],
   imageSlots: 0,
   describe:

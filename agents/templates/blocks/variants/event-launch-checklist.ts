@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const eventLaunchChecklist = defineBlock<Data>({
   id: 'event-launch-checklist',
-  archetype: 'event' as any,
+  archetype: 'event',
   styleTags: ['premium', 'template', 'dark', 'launch', 'checklist', 'twotone'],
   imageSlots: 1,
   describe:

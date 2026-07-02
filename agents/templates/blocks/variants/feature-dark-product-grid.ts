@@ -35,7 +35,7 @@ type Data = z.infer<typeof schema>
 
 export const featureDarkProductGrid = defineBlock<Data>({
   id: 'feature-dark-product-grid',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark', 'promo', 'grid', 'campaign', 'commerce', 'template'],
   imageSlots: 4,
   describe:

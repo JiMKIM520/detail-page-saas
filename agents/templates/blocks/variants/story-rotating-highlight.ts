@@ -35,7 +35,7 @@ type Data = z.infer<typeof schema>
 
 export const storyRotatingHighlight = defineBlock<Data>({
   id: 'story-rotating-highlight',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['dark', 'narrative', 'highlight', 'scroll', 'template'],
   imageSlots: 3,
   describe:

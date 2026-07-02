@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const pointFullbleedBookend = defineBlock<Data>({
   id: 'point-fullbleed-bookend',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['warm', 'editorial', 'narrative', 'template'],
   imageSlots: 1,
   describe:

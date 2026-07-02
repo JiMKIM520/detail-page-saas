@@ -40,7 +40,7 @@ type Data = z.infer<typeof schema>
 
 export const pointIngredientOverlay = defineBlock<Data>({
   id: 'point-ingredient-overlay',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['ingredient', 'overlay', 'floating-tag', 'beauty', 'product-canvas', 'template'],
   imageSlots: 1,
   describe:

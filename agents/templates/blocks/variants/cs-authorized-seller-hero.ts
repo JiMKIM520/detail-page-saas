@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const csAuthorizedSellerHero = defineBlock<Data>({
   id: 'cs-authorized-seller-hero',
-  archetype: 'cs' as any,
+  archetype: 'cs',
   styleTags: ['light', 'warm', 'cs', 'authorized', 'hero', 'trust', 'template'],
   imageSlots: 1,
   describe:

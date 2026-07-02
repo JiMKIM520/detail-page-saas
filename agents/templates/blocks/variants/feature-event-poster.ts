@@ -30,7 +30,7 @@ type Data = z.infer<typeof schema>
 
 export const featureEventPoster = defineBlock<Data>({
   id: 'feature-event-poster',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['dark', 'event', 'poster', 'sparkle', 'fullbleed', 'template'],
   imageSlots: 1,
   describe:

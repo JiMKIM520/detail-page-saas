@@ -80,7 +80,7 @@ const LAUREL_RIGHT = `<svg class="amh-laurel amh-laurel-r" viewBox="0 0 70 52" f
 
 export const awardMilestoneHero = defineBlock<Data>({
   id: 'award-milestone-hero',
-  archetype: 'stats' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'milestone', 'stage', 'spotlight', 'premium', 'gold', 'template'],
   imageSlots: 1,
   describe:

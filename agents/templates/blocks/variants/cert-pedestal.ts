@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const certPedestal = defineBlock<Data>({
   id: 'cert-pedestal',
-  archetype: 'cert' as any,
+  archetype: 'cert',
   styleTags: ['dark', 'premium', 'trust', 'template', 'editorial'],
   imageSlots: 4,
   describe:

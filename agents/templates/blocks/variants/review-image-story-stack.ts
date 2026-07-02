@@ -50,7 +50,7 @@ function renderStars(count: number): string {
 
 export const reviewImageStoryStack = defineBlock<Data>({
   id: 'review-image-story-stack',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['light', 'review', 'social-proof', 'stacked', 'template'],
   imageSlots: 3,
   describe:

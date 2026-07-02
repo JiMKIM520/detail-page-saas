@@ -43,7 +43,7 @@ type Data = z.infer<typeof schema>
 
 export const eventReviewPrizeGrid = defineBlock<Data>({
   id: 'event-review-prize-grid',
-  archetype: 'event' as any,
+  archetype: 'event',
   styleTags: ['premium', 'template', 'dark', 'review', 'event', 'prize'],
   imageSlots: 4,
   describe:

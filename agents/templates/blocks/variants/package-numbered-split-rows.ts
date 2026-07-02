@@ -55,7 +55,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const packageNumberedSplitRows = defineBlock<Data>({
   id: 'package-numbered-split-rows',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['promo', 'package', 'pricing', 'warm', 'template'],
   imageSlots: 5,
   describe:

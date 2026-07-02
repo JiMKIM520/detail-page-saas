@@ -23,7 +23,7 @@ type Data = z.infer<typeof schema>
 
 export const statsEmojiStack = defineBlock<Data>({
   id: 'stats-emoji-stack',
-  archetype: 'stats' as any,
+  archetype: 'stats',
   styleTags: ['dark', 'impact', 'cobalt', 'template', 'bold'],
   imageSlots: 3,
   describe:

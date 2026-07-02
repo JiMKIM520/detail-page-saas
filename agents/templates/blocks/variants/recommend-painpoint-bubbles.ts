@@ -38,7 +38,7 @@ type Data = z.infer<typeof schema>
 
 export const recommendPainpointBubbles = defineBlock<Data>({
   id: 'recommend-painpoint-bubbles',
-  archetype: 'recommend' as any,
+  archetype: 'recommend',
   styleTags: ['light', 'chat', 'recommend', 'painpoint', 'template'],
   imageSlots: 1,
   describe:

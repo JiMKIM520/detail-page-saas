@@ -26,7 +26,7 @@ type Data = z.infer<typeof schema>
 
 export const ingredientRuleGrid = defineBlock<Data>({
   id: 'ingredient-rule-grid',
-  archetype: 'ingredient' as any,
+  archetype: 'ingredient',
   styleTags: ['light', 'minimal', 'template', 'grid', 'icon', 'rule'],
   imageSlots: 0,
   describe:

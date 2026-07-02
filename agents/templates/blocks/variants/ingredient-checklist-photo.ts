@@ -25,7 +25,7 @@ type Data = z.infer<typeof schema>
 
 export const ingredientChecklistPhoto = defineBlock<Data>({
   id: 'ingredient-checklist-photo',
-  archetype: 'ingredient' as any,
+  archetype: 'ingredient',
   styleTags: ['light', 'trust', 'minimal', 'checklist', 'template'],
   imageSlots: 1,
   describe:

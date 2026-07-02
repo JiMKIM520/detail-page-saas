@@ -28,7 +28,7 @@ type Data = z.infer<typeof schema>
 
 export const compareGridTable = defineBlock<Data>({
   id: 'compare-grid-table',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['premium', 'light', 'template', 'comparison', 'minimal'],
   imageSlots: 2,
   describe:

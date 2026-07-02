@@ -40,7 +40,7 @@ type Data = z.infer<typeof schema>
 
 export const packageOptionGrid = defineBlock<Data>({
   id: 'package-option-grid',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['commerce', 'grid', 'pricing', 'template'],
   imageSlots: 4,
   describe:

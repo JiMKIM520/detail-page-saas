@@ -23,7 +23,7 @@ type Data = z.infer<typeof schema>
 
 export const storyArchImage = defineBlock<Data>({
   id: 'story-arch-image',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['editorial', 'light', 'template', 'arch', 'story', 'centered'],
   imageSlots: 1,
   describe:

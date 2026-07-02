@@ -24,7 +24,7 @@ type Data = z.infer<typeof schema>
 
 export const usageDarkBands = defineBlock<Data>({
   id: 'usage-dark-bands',
-  archetype: 'usage' as any,
+  archetype: 'usage',
   styleTags: ['dark', 'premium', 'template', 'howto', 'colorblock', 'centered'],
   imageSlots: 0,
   describe:

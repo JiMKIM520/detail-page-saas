@@ -114,7 +114,7 @@ const SPARKLES_SVG = `<svg class="aneb-sparkles" viewBox="0 0 400 400" fill="non
 
 export const awardNo1EmblemBanner = defineBlock<Data>({
   id: 'award-no1-emblem-banner',
-  archetype: 'banner' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'emblem', 'no1', 'ranking', 'premium', 'template'],
   imageSlots: 1,
   describe:

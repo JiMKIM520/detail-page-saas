@@ -67,7 +67,7 @@ const LAUREL_RIGHT = `<svg class="alsr-laurel alsr-laurel-r" viewBox="0 0 60 110
 
 export const awardLaurelStatRows = defineBlock<Data>({
   id: 'award-laurel-stat-rows',
-  archetype: 'stats' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'stats', 'laurel', 'premium', 'credential', 'template'],
   imageSlots: 1,
   describe:

@@ -55,7 +55,7 @@ function railColor(rail: (typeof RAIL_COLOR)[number] | undefined): string {
 
 export const shippingDateTimeline = defineBlock<Data>({
   id: 'shipping-date-timeline',
-  archetype: 'cs' as any,
+  archetype: 'cs',
   styleTags: ['light', 'cs', 'timeline', 'shipping', 'notice', 'template'],
   imageSlots: 1,
   describe:

@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const compareHeroTable = defineBlock<Data>({
   id: 'compare-hero-table',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['premium', 'light', 'template', 'comparison', 'asymmetric'],
   imageSlots: 1,
   describe:

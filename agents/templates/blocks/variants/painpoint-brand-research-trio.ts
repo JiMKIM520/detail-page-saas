@@ -35,7 +35,7 @@ type Data = z.infer<typeof schema>
 
 export const painpointBrandResearchTrio = defineBlock<Data>({
   id: 'painpoint-brand-research-trio',
-  archetype: 'feature' as any,
+  archetype: 'feature',
   styleTags: ['dark', 'painpoint', 'research', 'authority', 'narrative', 'template'],
   imageSlots: 1,
   describe:

@@ -22,7 +22,7 @@ type Data = z.infer<typeof schema>
 
 export const eventReopenPriceStrip = defineBlock<Data>({
   id: 'event-reopen-price-strip',
-  archetype: 'event' as any,
+  archetype: 'event',
   styleTags: ['premium', 'template', 'light', 'reopen', 'promo', 'price'],
   imageSlots: 1,
   describe:

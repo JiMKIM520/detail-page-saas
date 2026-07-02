@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const usagePhotoThumbList = defineBlock<Data>({
   id: 'usage-photo-thumb-list',
-  archetype: 'usage' as any,
+  archetype: 'usage',
   styleTags: ['premium', 'photo', 'template', 'howto', 'overlay', 'thumblist'],
   imageSlots: 5,
   describe:

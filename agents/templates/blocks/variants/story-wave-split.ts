@@ -22,7 +22,7 @@ type Data = z.infer<typeof schema>
 
 export const storyWaveSplit = defineBlock<Data>({
   id: 'story-wave-split',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['dark', 'editorial', 'premium', 'template', 'fullbleed', 'colorblock'],
   imageSlots: 1,
   describe:

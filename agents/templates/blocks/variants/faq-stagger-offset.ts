@@ -27,7 +27,7 @@ type Data = z.infer<typeof schema>
 
 export const faqStaggerOffset = defineBlock<Data>({
   id: 'faq-stagger-offset',
-  archetype: 'faq' as any,
+  archetype: 'faq',
   styleTags: ['light', 'stagger', 'offset', 'clean', 'template'],
   imageSlots: 0,
   describe:

@@ -43,7 +43,7 @@ function renderStars(count: number): string {
 
 export const reviewStatHeaderCard = defineBlock<Data>({
   id: 'review-stat-header-card',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['warm', 'social-proof', 'kpi', 'review', 'template'],
   imageSlots: 0,
   describe:

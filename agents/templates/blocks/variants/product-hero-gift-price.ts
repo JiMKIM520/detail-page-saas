@@ -50,7 +50,7 @@ type Data = z.infer<typeof schema>
 
 export const productHeroGiftPrice = defineBlock<Data>({
   id: 'product-hero-gift-price',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['commerce', 'price', 'gift', 'premium', 'warm', 'template'],
   imageSlots: 2,
   describe:

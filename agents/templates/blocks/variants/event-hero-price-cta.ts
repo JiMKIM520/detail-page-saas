@@ -23,7 +23,7 @@ type Data = z.infer<typeof schema>
 
 export const eventHeroPriceCta = defineBlock<Data>({
   id: 'event-hero-price-cta',
-  archetype: 'event' as any,
+  archetype: 'event',
   styleTags: ['premium', 'template', 'dark', 'hero', 'promo', 'fullscreen'],
   imageSlots: 1,
   describe:

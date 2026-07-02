@@ -26,7 +26,7 @@ const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 export const usageNumberBand = defineBlock<Data>({
   id: 'usage-number-band',
-  archetype: 'usage' as any,
+  archetype: 'usage',
   styleTags: ['premium', 'light', 'template', 'howto', 'colorblock', 'numbered'],
   imageSlots: 0,
   describe:

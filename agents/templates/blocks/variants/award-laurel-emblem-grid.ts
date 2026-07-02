@@ -136,7 +136,7 @@ type Data = z.infer<typeof schema>
 // ── defineBlock ────────────────────────────────────────────────────────────────
 export const awardLaurelEmblemGrid = defineBlock<Data>({
   id: 'award-laurel-emblem-grid',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'emblem', 'laurel', 'grid', 'premium', 'credential'],
   imageSlots: 0,
   describe:

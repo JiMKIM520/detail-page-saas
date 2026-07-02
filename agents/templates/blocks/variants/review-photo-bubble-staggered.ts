@@ -38,7 +38,7 @@ type Data = z.infer<typeof schema>
 
 export const reviewPhotoBubbleStaggered = defineBlock<Data>({
   id: 'review-photo-bubble-staggered',
-  archetype: 'review' as any,
+  archetype: 'review',
   styleTags: ['dark', 'photo', 'review', 'staggered', 'bubble', 'social-proof', 'template'],
   imageSlots: 3,
   describe:

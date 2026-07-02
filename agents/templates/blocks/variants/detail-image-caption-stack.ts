@@ -33,7 +33,7 @@ type Data = z.infer<typeof schema>
 
 export const detailImageCaptionStack = defineBlock<Data>({
   id: 'detail-image-caption-stack',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['dark', 'narrative', 'scroll', 'caption', 'template'],
   imageSlots: 3,
   describe:

@@ -40,6 +40,9 @@ export type BlockArchetype =
   | 'compare' // 2단 비교 (조리법 등)
   | 'spec' // 제품 상세 정보 테이블
   | 'closing' // 마무리 히어로/CTA
+  | 'cs' // 고객센터/운영시간/교환환불 안내
+  | 'promo' // 프로모션 캠페인 (비대칭 카드/스캐터)
+  | 'award' // 수상/권위 (No.1 엠블럼/트로피)
 
 /** 페이지 전역 디자인 토큰. composer가 :root CSS 변수로 주입한다. */
 export interface Tokens {

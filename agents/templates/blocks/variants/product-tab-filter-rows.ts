@@ -47,7 +47,7 @@ type Data = z.infer<typeof schema>
 
 export const productTabFilterRows = defineBlock<Data>({
   id: 'product-tab-filter-rows',
-  archetype: 'lineup' as any,
+  archetype: 'lineup',
   styleTags: ['commerce', 'filter', 'card', 'price', 'template'],
   imageSlots: 4,
   describe:

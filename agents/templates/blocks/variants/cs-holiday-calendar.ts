@@ -70,7 +70,7 @@ const DOW = ['일', '월', '화', '수', '목', '금', '토'] as const
 
 export const csHolidayCalendar = defineBlock<Data>({
   id: 'cs-holiday-calendar',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['light', 'cs', 'calendar', 'holiday', 'shipping', 'structured'],
   imageSlots: 0,
   describe:

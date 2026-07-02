@@ -25,7 +25,7 @@ type Data = z.infer<typeof schema>
 
 export const ingredientStagger = defineBlock<Data>({
   id: 'ingredient-stagger',
-  archetype: 'ingredient' as any,
+  archetype: 'ingredient',
   styleTags: ['light', 'step', 'template', 'stagger', 'icon'],
   imageSlots: 0,
   describe:

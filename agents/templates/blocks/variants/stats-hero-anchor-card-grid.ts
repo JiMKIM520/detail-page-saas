@@ -42,7 +42,7 @@ type Data = z.infer<typeof schema>
 
 export const statsHeroAnchorCardGrid = defineBlock<Data>({
   id: 'stats-hero-anchor-card-grid',
-  archetype: 'stats' as any,
+  archetype: 'stats',
   styleTags: ['stats', 'hero-stat', 'card-grid', 'light', 'template'],
   imageSlots: 4,
   describe:

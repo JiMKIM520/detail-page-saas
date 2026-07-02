@@ -31,7 +31,7 @@ type Data = z.infer<typeof schema>
 
 export const compareHeroPanels = defineBlock<Data>({
   id: 'compare-hero-panels',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['premium', 'light', 'template', 'comparison', 'hero', 'offset'],
   imageSlots: 2,
   describe:

@@ -28,7 +28,7 @@ type Data = z.infer<typeof schema>
 
 export const pointHeritageSplit = defineBlock<Data>({
   id: 'point-heritage-split',
-  archetype: 'point' as any,
+  archetype: 'point',
   styleTags: ['heritage', 'dark', 'crimson', 'korean', 'luxury', 'bilingual', 'template'],
   imageSlots: 1,
   describe:

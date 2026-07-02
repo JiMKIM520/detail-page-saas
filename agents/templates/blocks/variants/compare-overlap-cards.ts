@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const compareOverlapCards = defineBlock<Data>({
   id: 'compare-overlap-cards',
-  archetype: 'compare' as any,
+  archetype: 'compare',
   styleTags: ['light', 'comparison', 'overlap', 'competitive', 'template'],
   imageSlots: 2,
   describe:

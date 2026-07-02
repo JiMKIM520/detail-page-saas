@@ -50,7 +50,7 @@ type Data = z.infer<typeof schema>
 
 export const specNutritionMacroTable = defineBlock<Data>({
   id: 'spec-nutrition-macro-table',
-  archetype: 'detail' as any,
+  archetype: 'detail',
   styleTags: ['dark', 'nutrition', 'spec', 'table', 'macro', 'food', 'health'],
   imageSlots: 1,
   describe:

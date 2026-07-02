@@ -42,7 +42,7 @@ type Data = z.infer<typeof schema>
 
 export const eventCountdownProductGrid = defineBlock<Data>({
   id: 'event-countdown-product-grid',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['dark', 'event', 'countdown', 'grid', 'commerce', 'template'],
   imageSlots: 4,
   describe:

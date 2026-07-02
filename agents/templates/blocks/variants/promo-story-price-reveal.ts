@@ -45,7 +45,7 @@ function parsePills(s: string): string {
 
 export const promoStoryPriceReveal = defineBlock<Data>({
   id: 'promo-story-price-reveal',
-  archetype: 'promo' as any,
+  archetype: 'promo',
   styleTags: ['storytelling', 'conversational', 'price', 'diary', 'inline-chip', 'template'],
   imageSlots: 1,
   describe:

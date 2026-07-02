@@ -35,7 +35,7 @@ const RADAR_SVG = `<svg class="irdr-radar" viewBox="0 0 320 300" xmlns="http://w
 
 export const ingredientRadar = defineBlock<Data>({
   id: 'ingredient-radar',
-  archetype: 'ingredient' as any,
+  archetype: 'ingredient',
   styleTags: ['light', 'checklist', 'template', 'minimal'],
   imageSlots: 0,
   describe:

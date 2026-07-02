@@ -23,7 +23,7 @@ type Data = z.infer<typeof schema>
 
 export const storyCurvePanel = defineBlock<Data>({
   id: 'story-curve-panel',
-  archetype: 'story' as any,
+  archetype: 'story',
   styleTags: ['editorial', 'light', 'template', 'fullbleed', 'story', 'curve'],
   imageSlots: 1,
   describe:

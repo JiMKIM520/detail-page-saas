@@ -55,7 +55,7 @@ type Data = z.infer<typeof schema>
 /* ── 블록 정의 ───────────────────────────────────────────────────────── */
 export const recommendPersonaListAnnotated = defineBlock<Data>({
   id: 'recommend-persona-list-annotated',
-  archetype: 'recommend' as any,
+  archetype: 'recommend',
   styleTags: ['warm', 'handdrawn', 'persona', 'annotated', 'template'],
   imageSlots: 0,
   describe:

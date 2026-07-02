@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const faqSatisfactionBar = defineBlock<Data>({
   id: 'faq-satisfaction-bar',
-  archetype: 'stats' as any,
+  archetype: 'stats',
   styleTags: ['dark', 'gold', 'satisfaction', 'review', 'data-viz', 'template'],
   imageSlots: 0,
   describe:

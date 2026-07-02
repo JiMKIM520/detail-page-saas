@@ -146,7 +146,7 @@ type Data = z.infer<typeof schema>
 
 export const awardNo1Emblem = defineBlock<Data>({
   id: 'award-no1-emblem',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'gold', 'authority', 'medallion', 'premium', 'template'],
   imageSlots: 0,
   describe:

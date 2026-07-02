@@ -113,7 +113,7 @@ const LAUREL_RIGHT = `<svg class="agsh-laurel agsh-laurel-r" viewBox="0 0 60 140
 
 export const awardGovSealHero = defineBlock<Data>({
   id: 'award-gov-seal-hero',
-  archetype: 'feature' as any,
+  archetype: 'award',
   styleTags: ['dark', 'award', 'government', 'seal', 'medallion', 'premium', 'authority', 'template'],
   imageSlots: 1,
   describe:

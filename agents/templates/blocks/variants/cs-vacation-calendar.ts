@@ -44,7 +44,7 @@ const DOW = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
 export const csVacationCalendar = defineBlock<Data>({
   id: 'cs-vacation-calendar',
-  archetype: 'shipping' as any,
+  archetype: 'shipping',
   styleTags: ['light', 'cs', 'calendar', 'vacation', 'holiday', 'minimal', 'template'],
   imageSlots: 0,
   describe:

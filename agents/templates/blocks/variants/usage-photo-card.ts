@@ -29,7 +29,7 @@ type Data = z.infer<typeof schema>
 
 export const usagePhotoCard = defineBlock<Data>({
   id: 'usage-photo-card',
-  archetype: 'usage' as any,
+  archetype: 'usage',
   styleTags: ['premium', 'photo', 'frosted', 'template', 'howto', 'overlay'],
   imageSlots: 5,
   describe:
