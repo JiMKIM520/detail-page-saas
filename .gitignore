@@ -99,3 +99,7 @@ assets/SCR-20260609-jwaf.jpeg
 
 # 내용전개 파일럿 렌더 검증 스크립트 (로컬 전용)
 scripts/preview-svr.ts
+# DB 초안 생성/조회 로컬 스크립트 (세션 경로 하드코딩)
+scripts/draft-from-db.ts
+scripts/list-test-projects.ts
+scripts/delete-preview.ts
