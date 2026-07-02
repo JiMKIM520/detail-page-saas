@@ -320,6 +320,23 @@ import { faqPillCardSplit } from './variants/faq-pill-card-split'
 import { faqSatisfactionBar } from './variants/faq-satisfaction-bar'
 import { faqDualCircle } from './variants/faq-dual-circle'
 import { specTableLabelValue } from './variants/spec-table-label-value'
+import { awardWarrantyPledge } from './variants/award-warranty-pledge'
+import { awardRank1ListingCard } from './variants/award-rank1-listing-card'
+import { awardLaurelStatRows } from './variants/award-laurel-stat-rows'
+import { awardNo1EmblemBanner } from './variants/award-no1-emblem-banner'
+import { awardTrophyDeclare } from './variants/award-trophy-declare'
+import { awardMilestoneHero } from './variants/award-milestone-hero'
+import { awardNo1Emblem } from './variants/award-no1-emblem'
+import { awardNo1EmblemStreak } from './variants/award-no1-emblem-streak'
+import { awardNo1EmblemHero } from './variants/award-no1-emblem-hero'
+import { awardNo1EmblemBadges } from './variants/award-no1-emblem-badges'
+import { awardTrophyStat } from './variants/award-trophy-stat'
+import { awardTrophyPoster } from './variants/award-trophy-poster'
+import { awardGovSealHero } from './variants/award-gov-seal-hero'
+import { awardRankingPodiumSale } from './variants/award-ranking-podium-sale'
+import { awardLaurelEmblemGrid } from './variants/award-laurel-emblem-grid'
+import { awardTrophyBadgeGrid } from './variants/award-trophy-badge-grid'
+import { awardNo1EmblemRosette } from './variants/award-no1-emblem-rosette'
 
 registerBlocks([
   heroCentered,
@@ -671,6 +688,23 @@ registerBlocks([
   faqSatisfactionBar,
   faqDualCircle,
   specTableLabelValue,
+  awardWarrantyPledge,
+  awardRank1ListingCard,
+  awardLaurelStatRows,
+  awardNo1EmblemBanner,
+  awardTrophyDeclare,
+  awardMilestoneHero,
+  awardNo1Emblem,
+  awardNo1EmblemStreak,
+  awardNo1EmblemHero,
+  awardNo1EmblemBadges,
+  awardTrophyStat,
+  awardTrophyPoster,
+  awardGovSealHero,
+  awardRankingPodiumSale,
+  awardLaurelEmblemGrid,
+  awardTrophyBadgeGrid,
+  awardNo1EmblemRosette,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

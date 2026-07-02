@@ -151,13 +151,13 @@ const schema = z.object({
    * 포디움 배지 (반드시 3개: index 0=1위, 1=2위, 2=3위).
    * ⚠️ 순위·판매량은 실제 데이터 기준. 플레이스홀더 필수.
    */
-  podium: z.tuple([podiumItemSchema, podiumItemSchema, podiumItemSchema]),
+  podium: z.array(podiumItemSchema).min(3).max(3),
 
   /**
    * 2×2 상품 카드 그리드 (반드시 4개).
    * ⚠️ 가격·상품명은 반드시 플레이스홀더.
    */
-  gridCards: z.array(productCardSchema).length(4),
+  gridCards: z.array(productCardSchema).min(2).max(4),
 
   /**
    * 브랜드 베스트 섹션 구분선 텍스트 (em 허용).
@@ -170,7 +170,7 @@ const schema = z.object({
    * 하단 3열 대형 가격 카드 (반드시 3개).
    * ⚠️ 가격·상품명은 반드시 플레이스홀더.
    */
-  bottomCards: z.array(productCardSchema).length(3),
+  bottomCards: z.array(productCardSchema).min(2).max(3),
 
   /**
    * 푸터 유의사항 (선택). 이벤트 기간·금액·조건 안내.
