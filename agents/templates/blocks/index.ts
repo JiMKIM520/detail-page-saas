@@ -312,6 +312,14 @@ import { reviewInstagramDmMockup } from './variants/review-instagram-dm-mockup'
 import { reviewIconAlternatingRows } from './variants/review-icon-alternating-rows'
 import { reviewAggregateScoreStack } from './variants/review-aggregate-score-stack'
 import { reviewNumberedThumbnailRows } from './variants/review-numbered-thumbnail-rows'
+import { faqCircleBadge } from './variants/faq-circle-badge'
+import { faqStaggerOffset } from './variants/faq-stagger-offset'
+import { faqLabelSpecTable } from './variants/faq-label-spec-table'
+import { faqEditorialSplit } from './variants/faq-editorial-split'
+import { faqPillCardSplit } from './variants/faq-pill-card-split'
+import { faqSatisfactionBar } from './variants/faq-satisfaction-bar'
+import { faqDualCircle } from './variants/faq-dual-circle'
+import { specTableLabelValue } from './variants/spec-table-label-value'
 
 registerBlocks([
   heroCentered,
@@ -655,6 +663,14 @@ registerBlocks([
   reviewIconAlternatingRows,
   reviewAggregateScoreStack,
   reviewNumberedThumbnailRows,
+  faqCircleBadge,
+  faqStaggerOffset,
+  faqLabelSpecTable,
+  faqEditorialSplit,
+  faqPillCardSplit,
+  faqSatisfactionBar,
+  faqDualCircle,
+  specTableLabelValue,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

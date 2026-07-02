@@ -213,6 +213,14 @@ review-instagram-dm-mockup { eyebrow?, rating?, title, bgImage?, dmSenderName?, 
 review-icon-alternating-rows { eyebrow?(string), title(string+em), items[2-6]{ iconImage?(url), iconName?(string), heading(string+em), body?(string) }, bgColor?(css) }   // 아이콘 교차 리뷰: 선명한 배경 + 화이트 라운드 카드, 홀수행=아이콘 좌/짝수행=아이콘 우 교차, 3D PNG 또는 라인 아이콘 폴백
 review-aggregate-score-stack { eyebrow?, productLabel?, title, score, scoreUnit?, reviews[]{stars?,starScore?,line1,line2?,line3?,cta?} }   // 다크 배경 집계 점수 히어로 + 골드 별점+본문+CTA 카드 수직 반복
 review-numbered-thumbnail-rows { eyebrow, title(em), items[]{heading(em), body?(em/br), image?, imageAlt?} }   // 만족도 1등 신뢰 앵커 + 번호(01~N)·이유·우측 썸네일 행 반복(3~7회) 리뷰 섹션
+faq-circle-badge { title?(string), items[2-8]{ question(string, em/br ok), answer(string, em/br ok) } }   // 솔리드 원형 Q. 뱃지 + 질문(accent-d) + 답변(ink) 수직 스택, 흰 카드 컨테이너, 이미지 없음
+faq-stagger-offset { eyebrow?, title, items[]{question, answer} }   // Q카드 풀폭+A카드 우측 오프셋 스태거, trailing A 글리프
+faq-label-spec-table { eyebrow?, title, tableTitle?, rows[]{label, value, sub?} }   // 다크 헤드라인 헤더 + filled-black-badge 라벨×값 메타데이터 테이블 (채용공고·이벤트·상품스펙 공시형)
+faq-editorial-split { brandTop?, brandBottom?, question, questionNote?, answerHead, answerBody, heroImage?, circleImage? }   // FAQ 단일 Q&A 에디토리얼 스플릿: 좌(크림) 사이드바 + 우(다크) 패널 풀블리드 히어로 + 대형 Q/구분선/A 오버레이 + 원형 블리드 이미지
+faq-pill-card-split { displayTitle?, heading, items[]{question, answer} }   // Dark pill Q-header + white card A-answer, orange Q./A. labels, no images, 2–7 pairs
+faq-satisfaction-bar { title(em), subtitle?, items[]{label, percent:int}, notes[]? }   // 다크 배경 + 골드 그라데이션 전폭 바 행 + 우측 대형 퍼센트 — 만족도 데이터 시각화
+faq-dual-circle { title?(string+em), items[2-6]{ question(string+em), answerHead(string+em), answerBody?(string+em/br) } }   // 틸(Q) 네이비(A) 원형 글리프 배지 + 질문 + 볼드 헤드라인 + 보조 바디 반복. 이미지 없음.
+spec-table-label-value { title, subtitle?, brand?, sectionHeading?, rows[{label, value}×2-8] }   // 구조형 라벨-값 테이블: 대제목+accent서브+우측브랜드 → 풀폭hr → 섹션헤딩 → [hr+좌라벨72px/우멀티라인텍스트우정렬] 행 반복(2~8). FAQ·스펙·채용·배송 구조 정보 전달용.
 `shipping-vehicle-composite-hero { eyebrow, headline(em), subCaption?, vehicleImage?, vehicleImageAlt?, productLeftImage?, productLeftAlt?, productRightImage?, productRightAlt?, footerCaption?(em) }   // 다크 배경 당일출발 히어로: 시계 아이콘 + 주문마감 아이브로 + 대형 헤드라인 + 배송차량 중앙 + 제품 누끼 좌우 floating 합성 슬롯 + 하단 캡션`
 cs-authorized-seller-hero { brandLabel, title, certCaption?, badgeImage?, badgeImageAlt?, warningText, disclaimerText? }   // 공식 판매처 인증 히어로 — 상단 로고+헤드라인+배지이미지 / 하단 shield 경고카드
 cs-authorized-retailer-badge { badgeBrand, badgeLabel, badgeStars?, headline, certBody, certSub?, warningLead, warningBody, warningSub?, legalNotice? }   // 공식 판매처 인증 배지 — 다크 배경 + 원형 금색 테두리 배지(좌) + 헤드라인(우) + 비공식 구매 경고 박스 + 저작권 고지
