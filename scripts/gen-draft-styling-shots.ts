@@ -20,7 +20,7 @@ const SHOTS_BY_COMPANY: Record<string, StylingShot[]> = {
   '대관령 황태이야기': [
     { name: '아침 식탁', filename: 'breakfast-table.png', composition: 'stick sachet leaning against a white bowl of warm soup on a neat breakfast table', surface: 'light gray stone table', props: ['white ceramic bowl with steam', 'linen napkin', 'wooden spoon'], lighting: 'bright clean morning light', camera: '45-degree angle, medium shot', mood: 'healthy, honest, clean start of the day' },
     { name: '과립 텍스처', filename: 'granule-texture.png', composition: 'granules poured out from the sachet onto a ceramic dish, close-up on texture', surface: 'matte white ceramic dish on stone', props: ['scattered granules trail'], lighting: 'soft side window light', camera: 'macro, shallow depth', mood: 'pure, artisanal, appetizing umami' },
-    { name: '온수 컵과 함께', filename: 'warm-cup.png', composition: 'sachet beside a clear glass cup of warm water being stirred, steam rising', surface: 'warm neutral kitchen counter', props: ['clear glass cup', 'small spoon'], lighting: 'backlit soft daylight highlighting steam', camera: 'eye level, medium close', mood: 'soothing, daily wellness ritual' },
+    { name: '밥 위 토핑', filename: 'topping-rice.png', composition: 'granules being sprinkled from the sachet over a bowl of steaming white rice, hand holding the sachet mid-pour', surface: 'warm wooden dining table', props: ['bowl of steaming white rice', 'wooden chopsticks resting'], lighting: 'soft warm daylight', camera: '45-degree close shot on the bowl', mood: 'homely, savory, effortless daily protein' },
   ],
   '주식회사 럽앤다이브': [
     { name: '핸드 어플라이', filename: 'hand-apply.png', composition: 'elegant hands applying cream, the tube held in one hand, summer light across skin', surface: 'soft-focus bright interior', props: ['thin gold ring on finger'], lighting: 'airy bright summer window light', camera: 'close-up on hands, tube label readable', mood: 'fresh, elegant, sensorial summer skincare' },
@@ -53,9 +53,10 @@ void (async () => {
     }
     if (!refs.length) { console.log(`✗ ${p.company_name}: 레퍼런스 없음`); continue }
     const { data: existing } = await s.storage.from('designs').list(`drafts-styling/${p.id}`)
-    if ((existing?.length ?? 0) >= shots.length) { console.log(`↷ ${p.company_name}: 이미 ${existing!.length}컷 존재 — 스킵`); continue }
+    const have = new Set((existing ?? []).map((f) => f.name))
     console.log(`\n── ${p.company_name}: 레퍼런스 ${refs.length}장, ${shots.length}컷 생성`)
     for (const shot of shots) {
+      if (have.has(shot.filename)) { console.log(`  ↷ ${shot.name} — 존재, 스킵`); continue }
       const t = Date.now()
       try {
         const prompt = buildShotPrompt(shot, [], { category: CATEGORY_META[key!], aspectRatio: '3:4' })

@@ -27,6 +27,8 @@ export interface BlocksPipelineOptions {
   cutoutUrls?: string[]
   /** 카테고리에서 도출한 강제 프리셋(미전달 시 input.category로 자동 도출) */
   preferredPreset?: string
+  /** 이미지 URL → 컷 설명 (컴포저 시맨틱 배치용) */
+  imageNotes?: Record<string, string>
 }
 
 export async function runBlocksPipeline(
@@ -67,6 +69,7 @@ export async function runBlocksPipeline(
       section:
         opts.cutoutUrls && opts.cutoutUrls.length > 1 ? opts.cutoutUrls.slice(1) : undefined,
     },
+    imageNotes: opts.imageNotes,
     brandColors: input.brandColors,
     preferredPreset: opts.preferredPreset ?? presetForCategory(input.category),
     outputDir: dirs.base,

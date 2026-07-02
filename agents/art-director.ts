@@ -32,6 +32,7 @@ CRITICAL RULES:
 - NO placeholder text or wireframe aesthetics
 - Typography must be GRAPHIC DESIGN quality, not just text overlay
 - Styling shots: mix clean product shots with natural lifestyle/usage scenes (emotional imagery required); keep the product identical to the reference
+- USAGE GROUNDING (CRITICAL): every usage/lifestyle scene MUST reflect how the product is ACTUALLY consumed/used per the brief (섭취법·사용법·용도). NEVER invent consumption methods — e.g. do not show powder dissolved in water, brewing, or cooking steps unless the brief explicitly says so.
 
 Icon library selection guide:
 - Food/handmade/emotional → Phosphor duotone

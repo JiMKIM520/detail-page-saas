@@ -166,6 +166,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
 
       // 스타일링샷(있으면 연출 이미지로 우선 사용) — designs/projects/{id}/styling_real/*
       const stylingUrls: string[] = []
+      const imageNotes: Record<string, string> = {}
       const { data: stylingList } = await supabase.storage
         .from('designs')
         .list(`projects/${projectId}/styling_real`)
@@ -174,7 +175,10 @@ export async function runPipelineForProject(projectId: string): Promise<{
           const { data: pub } = supabase.storage
             .from('designs')
             .getPublicUrl(`projects/${projectId}/styling_real/${obj.name}`)
-          if (pub?.publicUrl) stylingUrls.push(pub.publicUrl)
+          if (pub?.publicUrl) {
+            stylingUrls.push(pub.publicUrl)
+            imageNotes[pub.publicUrl] = `연출 스타일링샷: ${f.name.replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ')}`
+          }
         }
       }
 
@@ -192,6 +196,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
         cutoutUrls,
+        imageNotes: { ...imageNotes, ...Object.fromEntries(cutoutUrls.map((u) => [u, '제품 누끼/단독 컷'])) },
         preferredPreset: presetForCategory(input.category),
       })
     } else if (isFood) {

@@ -47,6 +47,8 @@ export function assemblePageSpec(out: ComposerOutput, brandColors?: string[], pr
 export interface BlocksComposerInput {
   brief: ProjectBrief
   images?: { hero?: string; lifestyle?: string[]; cutout?: string; section?: string[] }
+  /** 이미지 URL → 컷 설명(시맨틱 라벨). LLM이 섹션-이미지 의미 매칭을 하려면 필수. */
+  imageNotes?: Record<string, string>
   brandColors?: string[]
   /** 카테고리에서 도출한 강제 프리셋(있으면 AI presetKey 대체). */
   preferredPreset?: string
@@ -449,7 +451,8 @@ RULES
 - Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
 - <span class="em"> and <br> are allowed ONLY in fields annotated (em) / (br) in the contract. In a field WITHOUT that annotation, output PLAIN TEXT — inserting em/br there renders as literal visible tags.
 - NEVER output an empty emphasis tag as a fill-in-blank placeholder (e.g. 우리 아이에게 <span class="em"></span>가 있어요 is WRONG). Put the real word inside the span, or use plain text with no span.
-- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). **HARD CAP: use the SAME image URL in at most 2 blocks.** When images run out, choose image-light/text-first variants instead of repeating a third time — repeated identical photos read as low-effort. If a block truly has no fitting image, omit the field.
+- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). **HARD CAP: use the SAME image URL in at most 2 blocks.** When images run out, choose image-light/text-first variants instead of repeating a third time — repeated identical photos read as low-effort.
+- IMAGE-SECTION SEMANTICS (CRITICAL): match each image's 컷 내용 note to the section's meaning. Lifestyle/연출 shots belong in hero, feature/point, story, usage, closing — NEVER inside spec tables, 성분/영양 정보, FAQ, shipping/CS blocks (those are text-led; leave their image fields empty instead). Texture/누끼 close-ups fit ingredient/detail sections. When in doubt, prioritize giving images to feature/point sections over tables. If a block truly has no fitting image, omit the field.
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
 - GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
@@ -478,11 +481,13 @@ function sampleFeatured(avoid: ReadonlySet<string>, perFamily = 3, cap = 48): st
 
 function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): string {
   const { brief, images } = input
+  const notes = input.imageNotes ?? {}
+  const withNote = (u: string): string => (notes[u] ? `${u}\n    ↳ 컷 내용: ${notes[u]}` : u)
   const imgLines: string[] = []
-  if (images?.hero) imgLines.push(`- hero(메인): ${images.hero}`)
-  if (images?.cutout) imgLines.push(`- cutout(누끼/단면): ${images.cutout}`)
-  ;(images?.lifestyle ?? []).forEach((u, i) => imgLines.push(`- lifestyle${i + 1}(연출): ${u}`))
-  ;(images?.section ?? []).forEach((u, i) => imgLines.push(`- section${i + 1}: ${u}`))
+  if (images?.hero) imgLines.push(`- hero(메인): ${withNote(images.hero)}`)
+  if (images?.cutout) imgLines.push(`- cutout(누끼/단면): ${withNote(images.cutout)}`)
+  ;(images?.lifestyle ?? []).forEach((u, i) => imgLines.push(`- lifestyle${i + 1}(연출): ${withNote(u)}`))
+  ;(images?.section ?? []).forEach((u, i) => imgLines.push(`- section${i + 1}: ${withNote(u)}`))
   const imageBlock = imgLines.length ? imgLines.join('\n') : '(제공 이미지 없음 — 이미지 슬롯은 생략)'
   const distinctImgs = new Set([images?.hero, images?.cutout, ...(images?.lifestyle ?? []), ...(images?.section ?? [])].filter(Boolean)).size
   const imgBudget =
@@ -542,10 +547,20 @@ ${avoidBlock}\n\n위 제품을 위한 상세페이지를 블록 조합으로 설
 /** 결정적 이미지 새니타이저 — LLM이 지어낸 URL 제거 + 같은 이미지 3회째부터 제거.
  *  제거로 블록 스키마가 깨지면 해당 블록 데이터 원복(필수 필드 보호). 프롬프트 규칙의 확률적 위반을 코드로 봉쇄. */
 function sanitizeSpecImages(spec: PageSpec, allowed: ReadonlySet<string>): { removedFabricated: number; removedOverBudget: number } {
-  const useCount = new Map<string, number>()
   let removedFabricated = 0
   let removedOverBudget = 0
-  const walk = (obj: Record<string, unknown>): void => {
+  // 섹션 중요도 — 예산 초과 시 낮은 곳부터 이미지를 회수한다(특장점이 스펙표에 이미지를 뺏기지 않도록)
+  const PRIORITY: Record<string, number> = {
+    hero: 100, closing: 90,
+    feature: 80, point: 80, ingredient: 80, stats: 78, detail: 76,
+    story: 60, gallery: 60, usage: 60, compare: 58, recommend: 56, review: 54,
+    banner: 50, event: 50, promo: 50, discount: 50, award: 50,
+    checklist: 40, checkpoint: 40, reason: 40, equation: 40, callout: 40, strip: 40, cert: 40, lineup: 40,
+    faq: 10, shipping: 10, cs: 10, spec: 10,
+  }
+  type Ref = { obj: Record<string, unknown>; key: string; blockIdx: number; prio: number }
+  const refsByUrl = new Map<string, Ref[]>()
+  const collect = (obj: Record<string, unknown>, blockIdx: number, prio: number): void => {
     for (const k of Object.keys(obj)) {
       const v = obj[k]
       if (typeof v === 'string' && /^https?:\/\//.test(v)) {
@@ -554,27 +569,36 @@ function sanitizeSpecImages(spec: PageSpec, allowed: ReadonlySet<string>): { rem
           removedFabricated++
           continue
         }
-        const n = (useCount.get(v) ?? 0) + 1
-        useCount.set(v, n)
-        if (n > 2) {
-          obj[k] = undefined
-          removedOverBudget++
-        }
+        const arr = refsByUrl.get(v) ?? []
+        arr.push({ obj, key: k, blockIdx, prio })
+        refsByUrl.set(v, arr)
       } else if (Array.isArray(v)) {
-        for (const item of v) if (item && typeof item === 'object') walk(item as Record<string, unknown>)
+        for (const item of v) if (item && typeof item === 'object') collect(item as Record<string, unknown>, blockIdx, prio)
       } else if (v && typeof v === 'object') {
-        walk(v as Record<string, unknown>)
+        collect(v as Record<string, unknown>, blockIdx, prio)
       }
     }
   }
-  for (const b of spec.blocks) {
-    const backup = JSON.parse(JSON.stringify(b.data ?? {}))
-    walk((b.data ?? {}) as Record<string, unknown>)
-    const schema = getVariant(b.variantId)?.schema
-    if (schema && !schema.safeParse(b.data).success) {
-      b.data = backup
+  const backups = spec.blocks.map((b) => JSON.parse(JSON.stringify(b.data ?? {})))
+  spec.blocks.forEach((b, i) => {
+    const arch = String(getVariant(b.variantId)?.archetype ?? '')
+    collect((b.data ?? {}) as Record<string, unknown>, i, PRIORITY[arch] ?? 45)
+  })
+  for (const [, refs] of refsByUrl) {
+    if (refs.length <= 2) continue
+    // 우선순위 낮은 곳부터 회수 (동순위면 문서 뒤쪽부터)
+    const sorted = [...refs].sort((a, b) => a.prio - b.prio || b.blockIdx - a.blockIdx)
+    for (let i = 0; i < refs.length - 2; i++) {
+      sorted[i].obj[sorted[i].key] = undefined
+      removedOverBudget++
     }
   }
+  spec.blocks.forEach((b, i) => {
+    const schema = getVariant(b.variantId)?.schema
+    if (schema && !schema.safeParse(b.data).success) {
+      b.data = backups[i]
+    }
+  })
   return { removedFabricated, removedOverBudget }
 }
 
