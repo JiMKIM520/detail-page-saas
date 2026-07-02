@@ -5,7 +5,7 @@
  *  흥분·축제 커머스 분위기. 어두운 히어로와 밝은 상품 리스트가 한 유닛으로 결합. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 이벤트 기간 배지 (pill) */
@@ -298,7 +298,7 @@ export const packageEventProductRows = defineBlock<Data>({
       : ''
 
     const decoImg = d.heroDecoImage
-      ? `<img class="pepr-deco" src="${esc(d.heroDecoImage)}" alt="이벤트 데코">`
+      ? `<img class="pepr-deco" src="${attr(d.heroDecoImage)}" alt="이벤트 데코">`
       : `<div class="pepr-deco ph"></div>`
 
     const rows = d.items

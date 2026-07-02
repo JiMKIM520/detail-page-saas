@@ -61,11 +61,11 @@ export const storyDarkEditorial = defineBlock<Data>({
   padding:48px 0 32px 48px;
   font-family:var(--font-display);
   font-weight:800;
-  font-size:clamp(52px,9vw,88px);
+  font-size:clamp(44px,8vw,72px);
   line-height:1.05;
   letter-spacing:-.02em;
   color:var(--accent);
-  word-break:break-word;
+  word-break:keep-all;
   hyphens:none;
   /* 세 줄로 자연스럽게 흘러가게 허용 */
   white-space:pre-wrap;

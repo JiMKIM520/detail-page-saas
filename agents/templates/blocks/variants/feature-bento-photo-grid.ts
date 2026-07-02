@@ -4,7 +4,7 @@
  *  헤더(eyebrow + 제품 헤드라인) → 가격 배지 → 2열 벤토(메인 1칸 높이 2배 + 보조 3칸) 구조. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media, ICON_NAMES } from '../shared'
+import { media, ICON_NAMES, attr } from '../shared'
 
 const iconEnum = z.enum(ICON_NAMES)
 
@@ -214,7 +214,7 @@ export const featureBentoPhotoGrid = defineBlock<Data>({
           : ''
         // media() returns <img> or <div class="ph"> — we need absolute positioning so we inline the class
         const bgHtml = it.image
-          ? `<img class="fbpg-bg" src="${esc(it.image)}" alt="${esc(it.imageAlt ?? '')}">`
+          ? `<img class="fbpg-bg" src="${attr(it.image)}" alt="${attr(it.imageAlt ?? '')}">`
           : `<div class="fbpg-bg ph">${esc(it.imageAlt ?? '이미지')}</div>`
 
         return `

@@ -8,6 +8,7 @@
  *    (schema describe 및 이 주석 참고) */
 import { z } from 'zod'
 import { defineBlock } from '../types'
+import { attr } from '../shared'
 
 const schema = z.object({
   /** 골드 대형 헤드라인 (em 허용). 플레이스홀더: "[수상 문구]를 입력하세요." */
@@ -351,7 +352,7 @@ export const awardTrophyBadgeGrid = defineBlock<Data>({
     }
 
     const badgeHtml = (b: (typeof d.badges)[number]) => `
-      <div class="atbg-badge" role="img" aria-label="${esc(b.mainText)}">
+      <div class="atbg-badge" role="img" aria-label="${attr(b.mainText)}">
         ${LAUREL_BADGE_SVG}
         <div class="atbg-badge-inner">
           ${b.topLine ? `<div class="atbg-badge-top">${esc(b.topLine)}</div>` : ''}

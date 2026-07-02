@@ -4,7 +4,7 @@
  *  (할인% 버스트 배지 오버레이 + 쿠폰 pill + 취소선 원가 + 강조 최종가 + 화살표 CTA). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 /** 개별 상품 카드 */
 const itemSchema = z.object({
@@ -96,7 +96,7 @@ export const productTabFilterRows = defineBlock<Data>({
     const tabs = d.tabs
       .map(
         (t, i) =>
-          `<button class="ptfr-tab${i === 0 ? ' active' : ''}" data-tab="${esc(t.key)}" onclick="(function(btn){var p=btn.closest('.ptfr');p.querySelectorAll('.ptfr-tab').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');var key=btn.dataset.tab;p.querySelectorAll('.ptfr-card').forEach(function(c){c.classList.toggle('ptfr-hidden',c.dataset.tab!==key&&c.dataset.tab!=='')});} )(this)">${esc(t.label)}</button>`,
+          `<button class="ptfr-tab${i === 0 ? ' active' : ''}" data-tab="${attr(t.key)}" onclick="(function(btn){var p=btn.closest('.ptfr');p.querySelectorAll('.ptfr-tab').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');var key=btn.dataset.tab;p.querySelectorAll('.ptfr-card').forEach(function(c){c.classList.toggle('ptfr-hidden',c.dataset.tab!==key&&c.dataset.tab!=='')});} )(this)">${esc(t.label)}</button>`,
       )
       .join('')
 
@@ -118,11 +118,11 @@ export const productTabFilterRows = defineBlock<Data>({
           ? `<span class="ptfr-orig">${esc(it.originalPrice)}</span>`
           : ''
         const ctaHtml = it.ctaHref
-          ? `<a class="ptfr-cta" href="${esc(it.ctaHref)}" aria-label="상품 보기">${arrowSvg}</a>`
+          ? `<a class="ptfr-cta" href="${attr(it.ctaHref)}" aria-label="상품 보기">${arrowSvg}</a>`
           : ''
 
         return `
-<div class="ptfr-card${hiddenClass}" data-tab="${esc(tab)}">
+<div class="ptfr-card${hiddenClass}" data-tab="${attr(tab)}">
   <div class="ptfr-img-wrap">
     ${media(it.image, 'ptfr-img', esc(it.imageAlt ?? it.name))}
     ${badgeHtml}

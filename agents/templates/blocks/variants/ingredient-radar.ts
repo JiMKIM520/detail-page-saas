@@ -50,6 +50,13 @@ export const ingredientRadar = defineBlock<Data>({
 .irdr-sub{margin-top:14px;font-size:17px;color:var(--ink-2);line-height:1.6}
 .irdr-chart{display:flex;justify-content:center;align-items:center;padding:36px 44px 40px}
 .irdr-radar{width:260px;height:244px;overflow:visible}
+.irdr-radar-wrap{position:relative;display:inline-block}
+.irdr-vertex{position:absolute;transform:translate(-50%,-50%);background:var(--paper);border:1.5px solid var(--accent);color:var(--accent-d);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.irdr-v0{left:50%;top:2%}
+.irdr-v1{left:99%;top:38%}
+.irdr-v2{left:82%;top:96%}
+.irdr-v3{left:18%;top:96%}
+.irdr-v4{left:1%;top:38%}
 .irdr-radar-outer{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 4;opacity:.55}
 .irdr-radar-inner{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:1.5;opacity:.8}
 .irdr-card{margin:0 32px 56px;background:var(--paper);border-radius:20px;overflow:hidden}
@@ -71,7 +78,10 @@ export const ingredientRadar = defineBlock<Data>({
     ${d.subtitle ? `<p class="irdr-sub">${esc(d.subtitle)}</p>` : ''}
   </div>
   <div class="irdr-chart">
-    ${RADAR_SVG}
+    <div class="irdr-radar-wrap">
+      ${RADAR_SVG}
+      ${d.items.slice(0, 5).map((it, i) => `<span class="irdr-vertex irdr-v${i}">${richSafe(it.label)}</span>`).join('')}
+    </div>
   </div>
   <div class="irdr-card">
     ${d.items

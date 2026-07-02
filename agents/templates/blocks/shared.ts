@@ -10,11 +10,18 @@ import type { RenderCtx, Tokens } from './types'
  *   (속성값 렌더에는 span/br이 들어오지 않으므로 무해.)
  */
 export const esc = (s: string | undefined): string => {
-  let out = (s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  // 큰따옴표도 이스케이프 — src/alt 등 속성 컨텍스트에서 attribute breakout(따옴표 탈출) 원천 차단
+  let out = (s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
   out = out.replace(/&lt;br\s*\/?&gt;/g, '<br>')
-  out = out.replace(/&lt;span class="em"&gt;([\s\S]*?)&lt;\/span&gt;/g, (_m, inner) =>
+  out = out.replace(/&lt;span class=&quot;em&quot;&gt;([\s\S]*?)&lt;\/span&gt;/g, (_m, inner) =>
     inner.trim() ? `<span class="em">${inner}</span>` : inner,
   )
+  // 고아 태그 제거 — LLM이 짝 없는 여분 태그를 출력해도 화면에 노출되지 않게
+  out = out.replace(/&lt;\/?span[^&]*&gt;/g, '')
   return out
 }
 
@@ -23,14 +30,21 @@ export const esc = (s: string | undefined): string => {
  * 헤드라인 줄바꿈·강조에만 사용 (LLM raw 출력 직접 삽입 금지).
  */
 export function richSafe(s: string | undefined): string {
-  let out = esc(s ?? '')
-  out = out.replace(/&lt;br\s*\/?&gt;/g, '<br>')
-  // 매칭된 <span class="em">...</span> 쌍만 복원. 고아 </span>/중첩은 이스케이프 유지(구조적 화이트리스트).
-  out = out.replace(/&lt;span class="em"&gt;([\s\S]*?)&lt;\/span&gt;/g, (_m, inner) =>
-    inner.trim() ? `<span class="em">${inner}</span>` : inner,
-  )
-  return out
+  // esc()가 이스케이프+<br>/<span class="em"> 화이트리스트 복원+고아태그 제거를 모두 수행 — 동일 동작 위임
+  return esc(s)
 }
+
+/**
+ * 속성값 전용 이스케이프 — 화이트리스트 복원 없음(속성 안에서 따옴표/태그가 살아나면 attribute breakout).
+ * 태그 유사 문자열은 제거해 alt 등에 깨끗한 텍스트만 남긴다.
+ */
+export const attr = (s: string | undefined): string =>
+  (s ?? '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 
 /** CSS 값 주입 방어 — <style> 탈출 문자 제거. 색(hex)·폰트('A', sans-serif) 값엔 영향 없음. */
 export const cssSafe = (v: string | undefined): string => (v ?? '').replace(/[<>{}\\]/g, '')
@@ -153,7 +167,7 @@ export function baseCss(tokens: Tokens, width: number): string {
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);background:#cfc6ba;-webkit-font-smoothing:antialiased}
-.dpg{width:${width}px;margin:0 auto;background:var(--bg);overflow:hidden;word-break:keep-all;overflow-wrap:break-word}
+.dpg{width:${width}px;margin:0 auto;background:var(--bg);overflow:hidden;word-break:keep-all;overflow-wrap:break-word;font-synthesis:none}
 .dpg img{display:block}
 .disp{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;line-height:1.14}
 .serif{font-family:var(--font-serif)}
@@ -173,8 +187,8 @@ body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);backg
  */
 export function media(url: string | undefined, sizeClass: string, label: string): string {
   return url
-    ? `<img class="${sizeClass}" src="${esc(url)}" alt="${esc(label)}">`
-    : `<div class="${sizeClass} ph">${esc(label)}</div>`
+    ? `<img class="${sizeClass}" src="${attr(url)}" alt="${attr(label)}">`
+    : `<div class="${sizeClass} ph" role="img" aria-label="${attr(label)}"></div>`
 }
 
 /** 변형 render에 넘길 컨텍스트 생성. */

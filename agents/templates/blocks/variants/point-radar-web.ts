@@ -4,7 +4,7 @@
  *  제품 이미지 오버레이 + 하단 pill-badge 헤드라인 + 점선 분리 callout 리스트. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 브랜드명 한 줄 (--ink 색) */
@@ -161,7 +161,7 @@ export const pointRadarWeb = defineBlock<Data>({
 <section class="prw">
   <p class="prw-brand">${esc(d.brand)}</p>
   <h2 class="prw-title">${richSafe(d.title)}</h2>
-  <div class="prw-radar" role="img" aria-label="${esc(d.axes.join(', '))} 성분 레이더 차트">
+  <div class="prw-radar" role="img" aria-label="${attr(d.axes.join(', '))} 성분 레이더 차트">
     ${radarSvg}
     ${imgWrap}
   </div>

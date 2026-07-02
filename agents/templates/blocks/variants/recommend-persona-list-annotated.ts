@@ -5,7 +5,7 @@
  *  "이런 분에게 추천" 타겟 페르소나 열거형 — 다른 recommend/review 변형에 없는 고유 모티프. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 /* ── 오렌지 손그림 어노테이션 SVG 생성 헬퍼 ────────────────────────────── */
 
@@ -145,7 +145,7 @@ export const recommendPersonaListAnnotated = defineBlock<Data>({
       .map((it, idx) => {
         /* 아바타 */
         const avatarHtml = it.avatar
-          ? `<img class="rpla-avatar" src="${esc(it.avatar)}" alt="${esc(it.heading)} 아바타">`
+          ? `<img class="rpla-avatar" src="${attr(it.avatar)}" alt="${attr(it.heading)} 아바타">`
           : `<div class="rpla-avatar ph">${silhouette}</div>`
 
         /* 소제목: annotatedKeyword가 있으면 해당 부분을 래퍼로 감싸고 어노테이션 SVG 삽입 */

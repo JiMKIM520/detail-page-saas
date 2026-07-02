@@ -109,6 +109,8 @@ export const recommendPersonaGrid = defineBlock<Data>({
   display:block;
 }
 /* placeholder: .ph 전역 클래스를 사용하되 원형 컨테이너 안에서 크기 맞춤 */
+.rpg-avatar-fb{width:100%;height:100%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 14%,var(--paper));color:var(--accent-d)}
+.rpg-avatar-fb svg{width:42%;height:42%}
 .rpg-avatar.ph{
   width:100%;
   height:100%;
@@ -134,18 +136,16 @@ export const recommendPersonaGrid = defineBlock<Data>({
   color:var(--accent-d);
 }
 `,
-  render: (d, { esc, richSafe }) => {
+  render: (d, { esc, richSafe, icon }) => {
     const eyebrowHtml = d.eyebrow
       ? `<p class="rpg-eyebrow">${esc(d.eyebrow)}</p>`
       : ''
 
     const cardsHtml = d.items
       .map((it) => {
-        const avatarHtml = media(
-          it.image,
-          'rpg-avatar',
-          esc(it.imageAlt ?? '페르소나 아바타'),
-        )
+        const avatarHtml = it.image
+          ? media(it.image, 'rpg-avatar', esc(it.imageAlt ?? '페르소나 아바타'))
+          : `<div class="rpg-avatar rpg-avatar-fb">${icon('person')}</div>`
         return `
     <div class="rpg-card">
       <div class="rpg-avatar-wrap">${avatarHtml}</div>

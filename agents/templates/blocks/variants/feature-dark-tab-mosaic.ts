@@ -4,7 +4,7 @@
  *            + 밝은 배경 하단(수평 4-탭 카테고리 Nav + 비대칭 3-이미지 모자이크(좌측 2열 스택, 우측 1열 tall)). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 최상단 소형 eyebrow 레이블 (예: "Outdoor wear store open") */
@@ -217,18 +217,18 @@ export const featureDarkTabMosaic = defineBlock<Data>({
     // Mosaic images
     const m = d.mosaicImages
     const img0 = m[0].url
-      ? `<img class="fdtm-m0" src="${esc(m[0].url)}" alt="${esc(m[0].alt ?? '이미지 1')}">`
+      ? `<img class="fdtm-m0" src="${attr(m[0].url)}" alt="${attr(m[0].alt ?? '이미지 1')}">`
       : `<div class="fdtm-m0 ph">${esc(m[0].alt ?? '이미지 1')}</div>`
     const img1 = m[1].url
-      ? `<img class="fdtm-m1" src="${esc(m[1].url)}" alt="${esc(m[1].alt ?? '이미지 2')}">`
+      ? `<img class="fdtm-m1" src="${attr(m[1].url)}" alt="${attr(m[1].alt ?? '이미지 2')}">`
       : `<div class="fdtm-m1 ph">${esc(m[1].alt ?? '이미지 2')}</div>`
     const img2 = m[2].url
-      ? `<img class="fdtm-m2" src="${esc(m[2].url)}" alt="${esc(m[2].alt ?? '이미지 3')}">`
+      ? `<img class="fdtm-m2" src="${attr(m[2].url)}" alt="${attr(m[2].alt ?? '이미지 3')}">`
       : `<div class="ph">${esc(m[2].alt ?? '이미지 3')}</div>`
 
     // Hero image (right-bleed, absolute)
     const heroHtml = d.heroImage
-      ? `<img class="fdtm-hero-img" src="${esc(d.heroImage)}" alt="${esc(d.heroImageAlt ?? 'hero 이미지')}">`
+      ? `<img class="fdtm-hero-img" src="${attr(d.heroImage)}" alt="${attr(d.heroImageAlt ?? 'hero 이미지')}">`
       : `<div class="fdtm-hero-img ph">${esc(d.heroImageAlt ?? 'hero 이미지')}</div>`
 
     return `

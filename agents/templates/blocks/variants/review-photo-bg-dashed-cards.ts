@@ -4,7 +4,7 @@
  *  반투명 점선 보더 카드 3장 수직 스택 (각 카드: 원형 아바타 좌 + 다줄 리뷰 텍스트 우). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 배경 사진 URL (풀블리드) */
@@ -68,7 +68,7 @@ export const reviewPhotoBgDashedCards = defineBlock<Data>({
     const cards = d.items
       .map((it) => {
         const avatarHtml = it.avatar
-          ? `<img class="rpbdc-avatar" src="${esc(it.avatar)}" alt="${esc(it.name ?? '리뷰어')}">`
+          ? `<img class="rpbdc-avatar" src="${attr(it.avatar)}" alt="${attr(it.name ?? '리뷰어')}">`
           : `<div class="rpbdc-avatar ph">${esc(it.name ? it.name.slice(0, 2) : '리뷰')}</div>`
 
         return `

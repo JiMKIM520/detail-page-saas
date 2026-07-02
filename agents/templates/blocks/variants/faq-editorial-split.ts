@@ -5,7 +5,7 @@
  *  에디토리얼 히어로 이미지(우 패널 풀블리드) + 원형 인물 이미지(패널 경계 블리드). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 좌 사이드바 브랜드 레이블 상단 (예: "brand") */
@@ -216,11 +216,11 @@ export const faqEditorialSplit = defineBlock<Data>({
     const brandBottom = esc(d.brandBottom ?? 'name')
 
     const heroImg = d.heroImage
-      ? `<img class="fes-hero" src="${esc(d.heroImage)}" alt="배경 이미지">`
+      ? `<img class="fes-hero" src="${attr(d.heroImage)}" alt="배경 이미지">`
       : `<div class="fes-hero ph"></div>`
 
     const circleImg = d.circleImage
-      ? `<img class="fes-circle" src="${esc(d.circleImage)}" alt="제품/인물 이미지">`
+      ? `<img class="fes-circle" src="${attr(d.circleImage)}" alt="제품/인물 이미지">`
       : `<div class="fes-circle ph"></div>`
 
     return `

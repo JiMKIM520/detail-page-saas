@@ -5,7 +5,7 @@
  *  브랜드 자사(첫 번째) 강조 컬럼 vs 경쟁사 중립 컬럼. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 섹션 상단 eyebrow 라벨 (선택) */
@@ -241,7 +241,7 @@ export const compareProductSpecMatrix = defineBlock<Data>({
       .map((p) => {
         const hlClass = p.highlight ? ' hl' : ''
         const imgHtml = p.image
-          ? `<img class="cpsm-prod-img" src="${esc(p.image)}" alt="${esc(p.imageAlt ?? p.name)}">`
+          ? `<img class="cpsm-prod-img" src="${attr(p.image)}" alt="${attr(p.imageAlt ?? p.name)}">`
           : `<div class="cpsm-prod-img ph">${esc(p.name)}</div>`
         return `<div class="cpsm-prod-hd${hlClass}">
         ${imgHtml}

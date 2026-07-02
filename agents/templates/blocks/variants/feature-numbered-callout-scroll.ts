@@ -5,7 +5,7 @@
  *  2~5개 아이템 수직 반복(스크롤 서사 전개). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 섹션 최상단 타이틀 (선택). em, br 허용 */
@@ -99,7 +99,7 @@ export const featureNumberedCalloutScroll = defineBlock<Data>({
     <div class="fncs-item">
       <div class="fncs-badge-wrap">
         ${it.eyebrow ? `<p class="fncs-eyebrow">${richSafe(it.eyebrow)}</p>` : ''}
-        <div class="fncs-badge" aria-label="${esc(it.no)}번째 특징">${esc(it.no)}</div>
+        <div class="fncs-badge" aria-label="${attr(it.no)}번째 특징">${esc(it.no)}</div>
       </div>
       <h3 class="fncs-heading">${richSafe(it.heading)}</h3>
       ${it.body ? `<p class="fncs-body">${richSafe(it.body)}</p>` : ''}

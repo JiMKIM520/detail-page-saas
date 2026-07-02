@@ -50,6 +50,8 @@ export interface BlocksComposerInput {
   /** 카테고리에서 도출한 강제 프리셋(있으면 AI presetKey 대체). */
   preferredPreset?: string
   outputDir: string
+  /** 다른 페이지에서 이미 사용된 변형 — 이번 페이지에서 사용 금지(다사 차별화). closing-* 는 넣지 말 것 */
+  avoidVariants?: string[]
 }
 
 export interface BlocksComposerResult {
@@ -439,25 +441,27 @@ RULES
 - Order for a real detail page: hero → recommend/checklist → trust/checkpoint → point/feature sections (alternate text+photo) → reason/equation/callout → story → cert → compare/spec → closing.
 - VISUAL RHYTHM (CRITICAL for premium depth — a flat single-tone page reads as low quality): alternate LIGHT and DARK sections. Include 2~3 DARK / dramatic blocks spread across the page — many families (story/feature/stats/ingredient/recommend/point/package/award/promo) have dark variants; identify them by "다크"/"dark"/"블랙" in the catalog descriptions and pick DIFFERENT dark variants each page. NEVER place 3+ light sections in a row. brand-story and closing especially should be dark/dramatic.
 - SCALE HIERARCHY: vary section scale — include at least one big-impact full-bleed/statement/banner-scale block (fullbleed·statement·callout·banner·대형 수치 계열) so the page is not uniform density.
-- IMAGE-FIRST: you are given MANY images (hero, lifestyle, detail, ingredient, mood). Put a DISTINCT image in as many image-bearing blocks as possible; prefer variants that carry images over text-only ones. A premium detail page is image-led — minimize text-only sections.
+- IMAGE USE: when MANY distinct images are provided, lead with them across image-bearing blocks. When FEW are provided, do NOT stretch them — a repeated identical photo reads as low-effort. Follow the per-page image budget given in the user prompt.
 - Pick presetKey by feel: warm-playful (친근한 식품/생활), modern-editorial (프리미엄/미니멀 명조), cobalt-premium (모던 커머스/전자·뷰티, 코발트블루), sand-luxury (따뜻한 뉴트럴 고급, 카멜/베이지). Match the product.
 - Do NOT repeat the same variantId more than twice. Use strip-band at most once. Vary blocks for richness.
 - DIVERSITY (CRITICAL): the catalog has 300+ variants — do NOT default to the same familiar variants page after page. The user prompt includes a FEATURED VARIANTS rotation list for THIS page: when multiple variants fit a role, PREFER ones from that list. Aim for at least half of your non-hero/non-closing picks to come from FEATURED VARIANTS when they fit the content.
 - Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
 - <span class="em"> and <br> are allowed ONLY in fields annotated (em) / (br) in the contract. In a field WITHOUT that annotation, output PLAIN TEXT — inserting em/br there renders as literal visible tags.
 - NEVER output an empty emphasis tag as a fill-in-blank placeholder (e.g. 우리 아이에게 <span class="em"></span>가 있어요 is WRONG). Put the real word inside the span, or use plain text with no span.
-- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). Only repeat an image when you run out. If a block truly has no fitting image, omit the field.
+- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). **HARD CAP: use the SAME image URL in at most 2 blocks.** When images run out, choose image-light/text-first variants instead of repeating a third time — repeated identical photos read as low-effort. If a block truly has no fitting image, omit the field.
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
+- GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
 
 /** 카탈로그 로테이션 — 호출마다 다른 부분집합을 FEATURED로 지목해 LLM의 익숙한 변형 편향을 깬다.
  *  id 접두 계열별 셔플 후 상위 N개 추출 → 모든 계열이 매 호출 노출 기회를 가진다. */
-function sampleFeatured(perFamily = 3, cap = 48): string[] {
+function sampleFeatured(avoid: ReadonlySet<string>, perFamily = 3, cap = 48): string[] {
   const byFamily = new Map<string, string[]>()
   for (const c of catalog()) {
     if (!CONTRACTED_IDS.has(c.id)) continue
     if (c.id.startsWith('closing-')) continue
+    if (avoid.has(c.id)) continue
     const fam = c.id.split('-')[0]
     const arr = byFamily.get(fam) ?? []
     arr.push(c.id)
@@ -479,6 +483,13 @@ function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): strin
   ;(images?.lifestyle ?? []).forEach((u, i) => imgLines.push(`- lifestyle${i + 1}(연출): ${u}`))
   ;(images?.section ?? []).forEach((u, i) => imgLines.push(`- section${i + 1}: ${u}`))
   const imageBlock = imgLines.length ? imgLines.join('\n') : '(제공 이미지 없음 — 이미지 슬롯은 생략)'
+  const distinctImgs = new Set([images?.hero, images?.cutout, ...(images?.lifestyle ?? []), ...(images?.section ?? [])].filter(Boolean)).size
+  const imgBudget =
+    distinctImgs === 0
+      ? ''
+      : distinctImgs < 5
+        ? `\n\nIMAGE BUDGET (엄수): 서로 다른 이미지가 ${distinctImgs}장뿐이다. 같은 이미지 URL은 **최대 2개 블록**에만 사용. 이미지 슬롯을 채우는 블록 수를 ${Math.min(distinctImgs * 2, 8)}개 이하로 유지하고, 나머지 자리는 이미지 없이도 완성돼 보이는 텍스트/그래픽/수치 변형을 선택하라. 점선 placeholder 박스가 보이면 실패다 — image? 필드를 비울 바에는 이미지 없는 변형을 고를 것.`
+        : ''
 
   const required =
     brief.requiredContent?.phrases?.length
@@ -496,6 +507,11 @@ function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): strin
     ? `\n\n⚠️ 직전 출력이 검증 실패. 아래 오류를 정확히 고쳐 다시 유효 JSON만 출력:\n${repairNote}`
     : ''
 
+  const avoid = new Set(input.avoidVariants ?? [])
+  const avoidBlock = avoid.size
+    ? `\n\nDO NOT USE (다른 페이지에서 이미 사용 — 다사 비교 시 차별화를 위해 이번 페이지 사용 금지):\n${[...avoid].join(', ')}`
+    : ''
+
   return `제품명: ${brief.productName}
 카테고리: ${brief.category}
 플랫폼: ${brief.platform}
@@ -504,21 +520,21 @@ function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): strin
 톤: ${(brief.toneKeywords ?? []).join(', ')} / 방향: ${brief.styleDirection ?? ''}${required}${certs}${forbidden}
 
 사용 가능한 이미지:
-${imageBlock}
+${imageBlock}${imgBudget}
 
 FEATURED VARIANTS (이번 페이지 다양성 로테이션 — 역할에 맞으면 카탈로그의 다른 변형보다 우선 선택):
-${sampleFeatured().join(', ')}
+${sampleFeatured(avoid).join(', ')}
 
 블록 카탈로그(variantId · archetype · imageSlots · 설명):
 ${catalog()
-  .filter((c) => CONTRACTED_IDS.has(c.id))
+  .filter((c) => CONTRACTED_IDS.has(c.id) && !avoid.has(c.id))
   .map((c) => `- ${c.id} · ${c.archetype} · img${c.imageSlots} · ${c.describe}`)
   .join('\n')}
 
 각 블록 데이터 계약:
 ${DATA_CONTRACTS}
 
-위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
+${avoidBlock}\n\n위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
 }
 
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {

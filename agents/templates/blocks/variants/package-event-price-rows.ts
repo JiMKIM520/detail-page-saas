@@ -6,7 +6,7 @@
  *  기존 package-* 계열(2단)과 달리 이벤트 3단 + % 배지를 갖는 게 핵심 차별점. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const rowSchema = z.object({
   /** 제품 썸네일 이미지 URL (선택 — 없으면 placeholder) */
@@ -93,7 +93,7 @@ export const packageEventPriceRows = defineBlock<Data>({
     const rows = d.items
       .map((it) => {
         const thumb = it.image
-          ? `<img class="pepr-thumb" src="${esc(it.image)}" alt="${esc(it.imageAlt ?? it.name)}">`
+          ? `<img class="pepr-thumb" src="${attr(it.image)}" alt="${attr(it.imageAlt ?? it.name)}">`
           : `<div class="pepr-thumb ph">${esc(it.imageAlt ?? '')}</div>`
 
         const regularLabel = esc(it.regularLabel ?? '정상가')

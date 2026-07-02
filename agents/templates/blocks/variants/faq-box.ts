@@ -6,7 +6,7 @@
  *  선택적 장식 이미지(FAQ 아이콘 등) 우하단 배치 가능. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   eyebrow: z.string().min(1).optional(),  // 기본 "자주 묻는 질문"
@@ -134,6 +134,6 @@ export const faqBox = defineBlock<Data>({
       )
       .join('')}
   </div>
-  ${d.decorImage ? `<img class="faqbox-decor" src="${esc(d.decorImage)}" alt="FAQ 장식">` : ''}
+  ${d.decorImage ? `<img class="faqbox-decor" src="${attr(d.decorImage)}" alt="FAQ 장식">` : ''}
 </section>`,
 })

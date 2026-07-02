@@ -3,7 +3,7 @@
  *  시그니처: 단일 파스텔 배경 + 상단 증정 오퍼 배너(대형 목업 이미지) + 하단 좌정사각이미지-우타이틀/설명 3행 반복(행 구분선). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 상단 오퍼 배너 아이캐처 텍스트 (em 허용, 예: "구매 시 <span class=\"em\">증정품</span> 증정") */
@@ -67,13 +67,13 @@ export const featureImageRowList = defineBlock<Data>({
 `,
   render: (d, { esc, richSafe }) => {
     const bannerImg = d.offerImage
-      ? `<img class="firl-banner-img" src="${esc(d.offerImage)}" alt="${esc(d.offerImageAlt ?? '증정 이미지')}">`
+      ? `<img class="firl-banner-img" src="${attr(d.offerImage)}" alt="${attr(d.offerImageAlt ?? '증정 이미지')}">`
       : `<div class="firl-banner-img ph">${esc(d.offerImageAlt ?? '증정 이미지')}</div>`
 
     const rows = d.items
       .map((it) => {
         const thumb = it.image
-          ? `<img class="firl-thumb" src="${esc(it.image)}" alt="${esc(it.imageAlt ?? '')}">`
+          ? `<img class="firl-thumb" src="${attr(it.image)}" alt="${attr(it.imageAlt ?? '')}">`
           : `<div class="firl-thumb ph">${esc(it.imageAlt ?? '이미지')}</div>`
         return `
     <div class="firl-row">

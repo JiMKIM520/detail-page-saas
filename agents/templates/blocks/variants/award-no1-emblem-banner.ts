@@ -7,6 +7,7 @@
  *    근거 없이 실제 값을 지어내서는 안 된다(brief 금지 규칙). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
+import { attr } from '../shared'
 
 const schema = z.object({
   /** 브랜드 로고 URL (없으면 숨김) */
@@ -247,7 +248,7 @@ export const awardNo1EmblemBanner = defineBlock<Data>({
 `,
   render: (d, { esc, richSafe }) => {
     const logo = d.logoImage
-      ? `<img class="aneb-logo" src="${esc(d.logoImage)}" alt="${esc(d.logoAlt ?? '브랜드 로고')}">`
+      ? `<img class="aneb-logo" src="${attr(d.logoImage)}" alt="${attr(d.logoAlt ?? '브랜드 로고')}">`
       : ''
 
     const eyebrow = d.eyebrow

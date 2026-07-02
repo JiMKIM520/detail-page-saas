@@ -5,7 +5,7 @@
  *  인풋바 크롬(카메라·마이크·하트 아이콘)까지 재현해 소셜 증거 신뢰도 극대화. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 섹션 상단 eyebrow (예: "#리얼후기 #인스타그램") */
@@ -115,7 +115,7 @@ export const reviewInstagramDmMockup = defineBlock<Data>({
     ).join('')
 
     const avatarSm = d.dmSenderAvatar
-      ? `<img src="${esc(d.dmSenderAvatar)}" alt="${esc(d.dmSenderName ?? '발신자')}" class="ridm-msg-avatar"><img>`
+      ? `<img src="${attr(d.dmSenderAvatar)}" alt="${attr(d.dmSenderName ?? '발신자')}" class="ridm-msg-avatar"><img>`
       : `<div class="ridm-msg-avatar"><div class="ridm-avatar-ph"></div></div>`
 
     const messages = d.messages
@@ -124,7 +124,7 @@ export const reviewInstagramDmMockup = defineBlock<Data>({
     <div class="ridm-msg">
       ${
         d.dmSenderAvatar
-          ? `<div class="ridm-msg-avatar"><img src="${esc(d.dmSenderAvatar)}" alt="${esc(d.dmSenderName ?? '')}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;display:block"></div>`
+          ? `<div class="ridm-msg-avatar"><img src="${attr(d.dmSenderAvatar)}" alt="${attr(d.dmSenderName ?? '')}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;display:block"></div>`
           : `<div class="ridm-msg-avatar"><div class="ridm-avatar-ph"></div></div>`
       }
       <div class="ridm-bubble-wrap">
@@ -138,7 +138,7 @@ export const reviewInstagramDmMockup = defineBlock<Data>({
 
     // DM 헤더 아바타
     const dmAvatar = d.dmSenderAvatar
-      ? `<img src="${esc(d.dmSenderAvatar)}" alt="${esc(d.dmSenderName ?? '발신자')}" class="ridm-avatar">`
+      ? `<img src="${attr(d.dmSenderAvatar)}" alt="${attr(d.dmSenderName ?? '발신자')}" class="ridm-avatar">`
       : `<div class="ridm-avatar ph"></div>`
 
     const placeholder = esc(d.inputPlaceholder ?? '제품의 특성을 입력해주세요!')

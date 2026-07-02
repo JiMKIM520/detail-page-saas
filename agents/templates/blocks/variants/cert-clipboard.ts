@@ -5,7 +5,7 @@
  *  카드마다 제목·이미지·(하단 풋노트 캡션)·금색 씰 스탬프. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const cardSchema = z.object({
   title: z.string().min(1),          // 카드 제목 (em,br)
@@ -67,7 +67,7 @@ export const certClipboard = defineBlock<Data>({
       <div class="ccb-card-divider"></div>
       <div class="ccb-card-media">
         ${media(c.image, 'ccb-img', '인증서 이미지')}
-        <div class="ccb-seal" aria-label="${esc(c.sealText ?? 'CERTIFIED')}">
+        <div class="ccb-seal" aria-label="${attr(c.sealText ?? 'CERTIFIED')}">
           <span class="ccb-seal-text">${esc(c.sealText ?? 'CERTIFIED')}</span>
         </div>
       </div>

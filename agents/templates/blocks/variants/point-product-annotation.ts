@@ -4,7 +4,7 @@
  *  기술 다이어그램/설명서 스타일 — 제품 세부 특징을 시각적으로 연결해 설명. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 섹션 대제목 (em 허용 — 일부 어절 accent 강조) */
@@ -86,7 +86,7 @@ export const pointProductAnnotation = defineBlock<Data>({
 `,
   render: (d, { esc, richSafe }) => {
     const imgHtml = d.productImage
-      ? `<img class="ppa-img" src="${esc(d.productImage)}" alt="${esc(d.productImageAlt ?? '제품 이미지')}">`
+      ? `<img class="ppa-img" src="${attr(d.productImage)}" alt="${attr(d.productImageAlt ?? '제품 이미지')}">`
       : `<div class="ppa-img ph">${esc(d.productImageAlt ?? '제품 이미지')}</div>`
 
     const annotRows = d.annotations

@@ -4,7 +4,7 @@
  *  overflow lifestyle 이미지 카드 + 우하 burst 할인 뱃지 오버레이 + eyebrow 라벨 + 서술 카피. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 대형 헤드라인 (em 허용 — 일부 어절 accent 강조, br 허용) */
@@ -74,7 +74,7 @@ export const featureDarkFloatCutout = defineBlock<Data>({
     ${media(d.lifestyleImage, 'fdfc-life', esc(d.lifestyleAlt ?? '라이프스타일 이미지'))}
     <div class="fdfc-cutout-wrap">${media(d.cutoutImage, 'fdfc-cutout', esc(d.cutoutAlt ?? '제품 이미지'))}</div>
     ${hasBadge
-      ? `<div class="fdfc-badge" role="img" aria-label="${esc(d.badgeMain)}${d.badgeSub ? ' ' + esc(d.badgeSub) : ''}"><span class="fdfc-badge-main">${esc(d.badgeMain)}</span>${d.badgeSub ? `<span class="fdfc-badge-sub">${esc(d.badgeSub)}</span>` : ''}</div>`
+      ? `<div class="fdfc-badge" role="img" aria-label="${attr(d.badgeMain)}${d.badgeSub ? ' ' + esc(d.badgeSub) : ''}"><span class="fdfc-badge-main">${esc(d.badgeMain)}</span>${d.badgeSub ? `<span class="fdfc-badge-sub">${esc(d.badgeSub)}</span>` : ''}</div>`
       : ''}
   </div>
   ${d.eyebrow ? `<p class="fdfc-eyebrow">${esc(d.eyebrow)}</p>` : ''}

@@ -5,7 +5,7 @@
  *  리뷰어 사진 없이 아이콘으로 시각 다양성 확보. 복잡도 low. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 상단 eyebrow 라벨 필(pill) — 브랜드명·제품 카테고리 (선택) */
@@ -78,7 +78,7 @@ export const reviewIconAlternatingRows = defineBlock<Data>({
       .map((it, i) => {
         const isLeft = i % 2 === 0 // 0-based: 홀수행(1,3,5) = index 0,2,4 → 아이콘 왼쪽
         const iconHtml = it.iconImage
-          ? `<img class="riar-icon-img" src="${esc(it.iconImage)}" alt="${esc(it.heading)} 아이콘">`
+          ? `<img class="riar-icon-img" src="${attr(it.iconImage)}" alt="${attr(it.heading)} 아이콘">`
           : `<span class="riar-icon-svg">${icon(it.iconName ?? 'star')}</span>`
 
         const iconWrap = `<div class="riar-icon-wrap ${isLeft ? 'left' : 'right'}">${iconHtml}</div>`

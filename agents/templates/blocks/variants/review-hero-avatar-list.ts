@@ -4,7 +4,7 @@
  *  아바타+텍스트 행의 순수 수직 반복(장식 없음). 복잡도 low. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 헤더 겸 히어로 상품 이미지 URL */
@@ -72,7 +72,7 @@ export const reviewHeroAvatarList = defineBlock<Data>({
 `,
   render: (d, { esc, richSafe }) => {
     const hero = d.heroImage
-      ? `<img class="rhal-hero" src="${esc(d.heroImage)}" alt="${esc(d.heroImageAlt ?? '상품 이미지')}">`
+      ? `<img class="rhal-hero" src="${attr(d.heroImage)}" alt="${attr(d.heroImageAlt ?? '상품 이미지')}">`
       : `<div class="rhal-hero ph">${esc(d.heroImageAlt ?? '상품 사진 기입')}</div>`
 
     const quoteWrap = `
@@ -84,7 +84,7 @@ export const reviewHeroAvatarList = defineBlock<Data>({
     const items = d.reviews
       .map((r) => {
         const avatarEl = r.avatar
-          ? `<img class="rhal-avatar" src="${esc(r.avatar)}" alt="${esc(r.name)}">`
+          ? `<img class="rhal-avatar" src="${attr(r.avatar)}" alt="${attr(r.name)}">`
           : `<div class="rhal-avatar ph" aria-hidden="true">&#128100;</div>`
         return `
   <div class="rhal-item">

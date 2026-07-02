@@ -4,7 +4,7 @@
  *  warm 배경(bg)에 coral/peachy 분위기, 포인트 번호 pill은 이중 아웃라인 다이아형 쉐브론 SVG. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 아이사이 캐치카피 (보조 eyebrow, optional) */
@@ -143,7 +143,7 @@ export const pointListImageBleed = defineBlock<Data>({
 </svg>`
 
         return `<div class="plib-item">
-  <div class="plib-pill" aria-label="${esc(it.label)}">
+  <div class="plib-pill" aria-label="${attr(it.label)}">
     ${diamondSvg}
     <span class="plib-pill-txt">${esc(it.label.toUpperCase() || `POINT ${pad2(i + 1)}`)}</span>
   </div>
@@ -155,7 +155,7 @@ export const pointListImageBleed = defineBlock<Data>({
 
     // 우측 이미지: media()는 ph div를 반환하지만 블리드 레이아웃은 position:absolute 필요
     const imgHtml = d.image
-      ? `<img class="plib-img" src="${esc(d.image)}" alt="${esc(d.imageAlt ?? '포인트 이미지')}">`
+      ? `<img class="plib-img" src="${attr(d.image)}" alt="${attr(d.imageAlt ?? '포인트 이미지')}">`
       : `<div class="plib-img ph">${esc(d.imageAlt ?? '제품 이미지')}</div>`
 
     return `

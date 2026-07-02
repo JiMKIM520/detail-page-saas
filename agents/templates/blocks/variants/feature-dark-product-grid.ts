@@ -5,7 +5,7 @@
  *  이미지 풀 채움 + 하단-좌 "▶ NEXT" 인라인 CTA. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 브랜드/캠페인 대형 헤드라인 (em 허용 — 할인율 등 강조 어절) */
@@ -78,7 +78,7 @@ export const featureDarkProductGrid = defineBlock<Data>({
       .map((it) => {
         const cta = esc(it.ctaText ?? 'NEXT')
         const imgEl = it.image
-          ? `<img class="fdpg-img" src="${esc(it.image)}" alt="${esc(it.imageAlt ?? it.saleLabel)}">`
+          ? `<img class="fdpg-img" src="${attr(it.image)}" alt="${attr(it.imageAlt ?? it.saleLabel)}">`
           : `<div class="fdpg-img ph">${esc(it.imageAlt ?? '제품 이미지')}</div>`
         return `
     <div class="fdpg-card">

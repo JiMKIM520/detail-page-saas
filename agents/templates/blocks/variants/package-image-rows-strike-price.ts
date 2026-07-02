@@ -5,7 +5,7 @@
  *  하단 accent CTA 버튼. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 브랜드 로고 텍스트 또는 이미지 URL — 문자면 pill 배지, URL이면 img */
@@ -94,7 +94,7 @@ export const packageImageRowsStrikePrice = defineBlock<Data>({
     const isUrl = (s: string) => /^https?:\/\//.test(s) || s.startsWith('/')
     const logoHtml = d.brandLogo
       ? isUrl(d.brandLogo)
-        ? `<img class="pirsp-logo-img" src="${esc(d.brandLogo)}" alt="브랜드 로고">`
+        ? `<img class="pirsp-logo-img" src="${attr(d.brandLogo)}" alt="브랜드 로고">`
         : `<span class="pirsp-logo-badge">${esc(d.brandLogo)}</span>`
       : ''
 
@@ -118,7 +118,7 @@ export const packageImageRowsStrikePrice = defineBlock<Data>({
       .join('')
 
     const ctaHtml = d.ctaText
-      ? `<div class="pirsp-cta-wrap"><a class="pirsp-cta" href="${esc(d.ctaUrl ?? '#')}">${esc(d.ctaText)} &#9658;</a></div>`
+      ? `<div class="pirsp-cta-wrap"><a class="pirsp-cta" href="${attr(d.ctaUrl ?? '#')}">${esc(d.ctaText)} &#9658;</a></div>`
       : ''
 
     return `

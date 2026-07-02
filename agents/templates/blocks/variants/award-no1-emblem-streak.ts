@@ -13,7 +13,7 @@
  */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 회사/브랜드 로고 URL (선택 — 없으면 점선 placeholder) */
@@ -322,12 +322,12 @@ export const awardNo1EmblemStreak = defineBlock<Data>({
 
     // 로고
     const logoHtml = d.logoImage
-      ? `<img class="anes-logo" src="${esc(d.logoImage)}" alt="${esc(d.logoAlt ?? '회사 로고')}">`
+      ? `<img class="anes-logo" src="${attr(d.logoImage)}" alt="${attr(d.logoAlt ?? '회사 로고')}">`
       : `<div class="anes-logo ph">회사 로고</div>`
 
     // 제품 이미지 (선택)
     const productHtml = d.productImage
-      ? `<img class="anes-product" src="${esc(d.productImage)}" alt="${esc(d.productImageAlt ?? '제품 이미지')}">`
+      ? `<img class="anes-product" src="${attr(d.productImage)}" alt="${attr(d.productImageAlt ?? '제품 이미지')}">`
       : ''
 
     // 엠블럼 서브라벨 (선택)

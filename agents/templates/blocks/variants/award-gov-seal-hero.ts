@@ -15,7 +15,7 @@
  */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 아이브로우 — 제품 카테고리나 브랜드 포지셔닝 한 줄
@@ -259,7 +259,7 @@ export const awardGovSealHero = defineBlock<Data>({
       : ''
 
     const sealHtml = d.sealImage
-      ? `<img class="agsh-seal-img" src="${esc(d.sealImage)}" alt="${esc(d.sealAlt ?? '정부기관 씰')}">`
+      ? `<img class="agsh-seal-img" src="${attr(d.sealImage)}" alt="${attr(d.sealAlt ?? '정부기관 씰')}">`
       : `<div class="agsh-seal-img ph">${esc(d.sealAlt ?? '씰')}</div>`
 
     const categoryHtml = d.category

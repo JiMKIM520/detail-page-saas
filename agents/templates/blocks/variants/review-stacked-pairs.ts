@@ -4,8 +4,8 @@
 import { z } from 'zod'
 import { defineBlock } from '../types'
 
-const star5 = (icon: (n: string) => string): string =>
-  Array.from({ length: 5 }, () => icon('star')).join('')
+const STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7-6-3.4-6 3.4 1.3-6.7-5-4.6 6.8-.8z"/></svg>'
+const star5 = (_icon: (n: string) => string): string => Array.from({ length: 5 }, () => STAR).join('')
 
 const schema = z.object({
   eyebrow: z.string().min(1).optional(),   // 예 "Customer Review"

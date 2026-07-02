@@ -4,7 +4,7 @@
  *  복합 원형 배지 클러스터(할인율 원 + 혜택명 원 겹침) + 가격/CTA 행. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 상단 eyebrow 레이블 (예: "브랜드 로고", 선택) */
@@ -129,7 +129,7 @@ export const packageBundleGiftRows = defineBlock<Data>({
               <span class="pbgr-final">${esc(row.finalPrice)}</span>
             </div>
           </div>
-          <a class="pbgr-cta" href="${esc(row.ctaHref ?? '#')}">
+          <a class="pbgr-cta" href="${attr(row.ctaHref ?? '#')}">
             ${esc(row.ctaLabel ?? '제품 보러가기')}<span class="pbgr-cta-arrow">→</span>
           </a>
         </div>`

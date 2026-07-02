@@ -8,6 +8,7 @@
  *  병원·영업·서비스업 CS 섹션 전용. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
+import { attr } from '../shared'
 
 const schema = z.object({
   /** 상단 로고 슬롯 — 이미지 URL 또는 undefined(없으면 브랜드명 텍스트로 폴백) */
@@ -242,7 +243,7 @@ export const csHoursContact = defineBlock<Data>({
   render: (d, { esc, richSafe, icon }) => {
     /* 로고 슬롯 */
     const logoHtml = d.logo
-      ? `<img class="chc-logo" src="${esc(d.logo)}" alt="${esc(d.brand)}">`
+      ? `<img class="chc-logo" src="${attr(d.logo)}" alt="${attr(d.brand)}">`
       : `<span class="chc-brand-text">${esc(d.brand)}</span>`
 
     /* 요일-시간 rows */

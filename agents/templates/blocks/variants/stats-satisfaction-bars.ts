@@ -4,7 +4,7 @@
  *  + 레이블·진행바·퍼센트 수치 행 반복(satisfaction-bar-row) + 식물 장식 오버레이. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 const schema = z.object({
   /** 대형 선언형 헤드라인 — em으로 강조 어절, br 허용 */
@@ -118,7 +118,7 @@ export const statsSatisfactionBars = defineBlock<Data>({
       .join('')
 
     const imgHtml = d.image
-      ? `<img class="ssb-img" src="${esc(d.image)}" alt="${esc(d.imageAlt ?? '제품 이미지')}">`
+      ? `<img class="ssb-img" src="${attr(d.image)}" alt="${attr(d.imageAlt ?? '제품 이미지')}">`
       : `<div class="ssb-img ph">${esc(d.imageAlt ?? '제품 이미지')}</div>`
 
     return `

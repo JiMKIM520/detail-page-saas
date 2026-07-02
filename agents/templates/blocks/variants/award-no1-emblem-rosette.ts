@@ -17,7 +17,7 @@
  */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media, attr } from '../shared'
 
 // ── 인라인 SVG 상수 ───────────────────────────────────────────────────────────
 
@@ -430,11 +430,11 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
 
     /* Zone B — 인증서 슬롯 */
     const certLeft = d.certImageLeft
-      ? `<img class="aner-cert" src="${esc(d.certImageLeft)}" alt="인증서 (좌)">`
+      ? `<img class="aner-cert" src="${attr(d.certImageLeft)}" alt="인증서 (좌)">`
       : `<div class="aner-cert ph" role="img" aria-label="인증서를 넣어주세요">인증서를<br>넣어주세요</div>`
 
     const certRight = d.certImageRight
-      ? `<img class="aner-cert" src="${esc(d.certImageRight)}" alt="인증서 (우)">`
+      ? `<img class="aner-cert" src="${attr(d.certImageRight)}" alt="인증서 (우)">`
       : `<div class="aner-cert ph" role="img" aria-label="인증서를 넣어주세요">인증서를<br>넣어주세요</div>`
 
     /* Zone C */
@@ -458,11 +458,11 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
         ${certLeft}
         <div class="aner-rosette-stack">
           ${ROSETTE_WREATH}
-          <span class="aner-num" aria-label="${esc(d.plaqueCenterText)}">${esc(d.plaqueCenterText)}</span>
+          <span class="aner-num" aria-label="${attr(d.plaqueCenterText)}">${esc(d.plaqueCenterText)}</span>
         </div>
         ${certRight}
       </div>
-      <div class="aner-ribbon-wrap" aria-label="${esc(d.ribbonBrandName)}">
+      <div class="aner-ribbon-wrap" aria-label="${attr(d.ribbonBrandName)}">
         ${RIBBON_SVG}
         <span class="aner-ribbon-text">${esc(d.ribbonBrandName)}</span>
       </div>
