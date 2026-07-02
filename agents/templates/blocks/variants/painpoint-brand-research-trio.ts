@@ -181,7 +181,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   </div>
   <p class="pbrt-bridge">${richSafe(d.bridge)}</p>
   ${media(d.productImage, 'pbrt-product', esc(d.productImageAlt ?? '제품 이미지'))}
-  <div class="pbrt-brand">[${esc(d.brand)}]</div>
+  <div class="pbrt-brand">${esc(d.brand)}</div>
 </section>`
   },
 })

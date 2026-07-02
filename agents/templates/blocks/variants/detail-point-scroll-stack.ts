@@ -157,7 +157,7 @@ export const detailPointScrollStack = defineBlock<Data>({
   render: (d, { esc, richSafe }) => {
     const itemsHtml = d.items
       .map((it, i) => {
-        const no = it.pointNo ?? String(i + 1).padStart(2, '0')
+        const no = String(i + 1).padStart(2, '0') // LLM pointNo 무시 — 중복/누락 방지 결정적 넘버링
         return `
     <div class="dpss-item">
       <div class="dpss-text">

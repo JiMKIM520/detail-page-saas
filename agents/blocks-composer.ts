@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
+import { getVariant } from './templates/blocks/registry'
 
 // ── AI 출력 계약 ────────────────────────────────────────────────
 const composerOutputSchema = z.object({
@@ -537,6 +538,46 @@ ${DATA_CONTRACTS}
 ${avoidBlock}\n\n위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
 }
 
+
+/** 결정적 이미지 새니타이저 — LLM이 지어낸 URL 제거 + 같은 이미지 3회째부터 제거.
+ *  제거로 블록 스키마가 깨지면 해당 블록 데이터 원복(필수 필드 보호). 프롬프트 규칙의 확률적 위반을 코드로 봉쇄. */
+function sanitizeSpecImages(spec: PageSpec, allowed: ReadonlySet<string>): { removedFabricated: number; removedOverBudget: number } {
+  const useCount = new Map<string, number>()
+  let removedFabricated = 0
+  let removedOverBudget = 0
+  const walk = (obj: Record<string, unknown>): void => {
+    for (const k of Object.keys(obj)) {
+      const v = obj[k]
+      if (typeof v === 'string' && /^https?:\/\//.test(v)) {
+        if (!allowed.has(v)) {
+          obj[k] = undefined
+          removedFabricated++
+          continue
+        }
+        const n = (useCount.get(v) ?? 0) + 1
+        useCount.set(v, n)
+        if (n > 2) {
+          obj[k] = undefined
+          removedOverBudget++
+        }
+      } else if (Array.isArray(v)) {
+        for (const item of v) if (item && typeof item === 'object') walk(item as Record<string, unknown>)
+      } else if (v && typeof v === 'object') {
+        walk(v as Record<string, unknown>)
+      }
+    }
+  }
+  for (const b of spec.blocks) {
+    const backup = JSON.parse(JSON.stringify(b.data ?? {}))
+    walk((b.data ?? {}) as Record<string, unknown>)
+    const schema = getVariant(b.variantId)?.schema
+    if (schema && !schema.safeParse(b.data).success) {
+      b.data = backup
+    }
+  }
+  return { removedFabricated, removedOverBudget }
+}
+
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
   const message = await anthropicClient.messages.create({
     model: MODELS.CLAUDE_SONNET,
@@ -548,6 +589,15 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const raw = parseJsonResponse<unknown>(text)
   const out = composerOutputSchema.parse(raw)
   const spec = assemblePageSpec(out, input.brandColors, input.preferredPreset)
+  const allowedUrls = new Set(
+    [input.images?.hero, input.images?.cutout, ...(input.images?.lifestyle ?? []), ...(input.images?.section ?? [])].filter(
+      (u): u is string => Boolean(u),
+    ),
+  )
+  const sanStats = sanitizeSpecImages(spec, allowedUrls)
+  if (sanStats.removedFabricated || sanStats.removedOverBudget)
+    console.warn(`[Blocks Composer] 이미지 새니타이즈 — 지어낸URL ${sanStats.removedFabricated}건, 예산초과 ${sanStats.removedOverBudget}건 제거`)
+
   const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
   return { spec, html: rendered.html, usedVariants: rendered.usedVariants }
 }

@@ -38,13 +38,8 @@ export const faqBadgeRow = defineBlock<Data>({
   position:relative;
   padding:56px 60px 52px;
   background-color:var(--paper);
-  background-image:
-    linear-gradient(45deg,color-mix(in srgb,var(--ink) 6%,transparent) 25%,transparent 25%),
-    linear-gradient(-45deg,color-mix(in srgb,var(--ink) 6%,transparent) 25%,transparent 25%),
-    linear-gradient(45deg,transparent 75%,color-mix(in srgb,var(--ink) 6%,transparent) 75%),
-    linear-gradient(-45deg,transparent 75%,color-mix(in srgb,var(--ink) 6%,transparent) 75%);
-  background-size:40px 40px;
-  background-position:0 0,0 20px,20px -20px,-20px 0;
+  background-image:radial-gradient(color-mix(in srgb,var(--accent) 14%,transparent) 1.5px,transparent 1.5px);
+  background-size:22px 22px;
   border-top:1px solid var(--line);
 }
 .fbr-eyebrow{font-size:18px;font-weight:500;color:var(--ink-2);letter-spacing:.01em;margin-bottom:8px}

@@ -82,7 +82,7 @@ export const detailSpecTable = defineBlock<Data>({
         <div class="dst-val">${richSafe(r.value)}</div>
       </div>
       <div class="dst-half">
-        ${r.label2
+        ${(r.label2 && r.value2)
           ? `<div class="dst-label">${esc(r.label2)}</div><div class="dst-val">${richSafe(r.value2)}</div>`
           : `<div class="dst-label dst-empty"></div><div class="dst-val dst-empty"></div>`
         }
