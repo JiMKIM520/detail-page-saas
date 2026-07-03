@@ -3,7 +3,88 @@
 > 목적: Claude Code가 같은 잘못된 결과를 반복하지 않도록, Codex가 감시 중 발견한 반복 문제를 남긴다.
 > 작업 전 `CLAUDE.md`와 함께 이 문서를 확인하고, 아래 항목이 해결됐는지 DB/브라우저/산출물로 검증한다.
 
+<!-- CODEX-WATCHDOG:AUTO-CHECK:START -->
+## 최근 자동 점검 요약
+
+- 점검 시각: 2026-06-01T23:38:35.801Z
+- HEAD: `2c6dd4c docs: compact 핸드오프 — MVP 우선순위(웹앱+상세페이지 완성도), 템플릿↔이미지 연속성 보류 결정 반영`
+- worktree: `M agents/html-builder.ts
+ M app/(admin)/layout.tsx
+ M app/(auth)/login/page.tsx
+ M app/(client)/intake/page.tsx
+ M app/actions/admin-login.ts
+ M app/api/designs/review/route.ts
+ M app/api/photography/shooting-list/route.ts
+ M app/api/scripts/ab-test/route.ts
+ M app/api/scripts/generate/route.ts
+ M app/layout.tsx
+ M components/designer/DesignPreview.tsx
+ M docs/CODEX-WATCHDOG.md
+ M proxy.ts
+?? .watchdog/
+?? docs/AUDIT-FINDINGS.md
+?? docs/CLIENT-STATUS.html
+?? docs/CODEX-WATCHDOG-RUNS.md
+?? docs/MORNING-REPORT.md
+?? docs/OVERNIGHT-PROGRESS.md
+?? scripts/codex-watchdog.ts
+?? scripts/com.detailai.codex-watchdog.plist
+?? scripts/gen-ssal-extra-shots.ts
+?? scripts/publish-ssal-v2.ts
+?? scripts/render-html.ts
+?? scripts/rerender-ssal-template.ts
+?? scripts/run-codex-watchdog-loop.sh
+?? scripts/run-codex-watchdog.sh
+?? scripts/upload-ssal-rerender.ts`
+- 발견 이슈: 9건
+
+| 프로젝트 | status | script | preview | section_images | output_url keys | photos | 판정 |
+|---|---|---|---|---:|---|---:|---|
+| 돈덕 순대 | delivered | claude-sonnet-4-20250514 / 7섹션 | image | 7 | - | 0/0 | delivered인데 output_url 다운로드 링크 없음<br>photos=0 상태에서 design 존재: 업로드 스타일링샷 검증 증거로 보기 어려움 |
+| 쌀과밀 소금빵 | design_review | claude-sonnet-4-20250514 / 6섹션 | image | 20 | html, mobile_zip, pc_zip, designer_zip | 1/6 | output_url은 있으나 design_review라 사업자 다운로드 UI에서 숨겨질 수 있음<br>photos 슬롯 6개 중 업로드 1개 |
+| 황태이야기 | design_review | claude-sonnet-4-20250514 / 7섹션 | image | 7 | - | 0/0 | photos=0 상태에서 design 존재: 업로드 스타일링샷 검증 증거로 보기 어려움 |
+| 청정원 흑마늘진액 | design_review | claude-sonnet-4-20250514 / 6섹션 | non-image | 0 | html | 0/0 | preview_url이 이미지가 아님: https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/projects/6eee52ac-696b-4e54-b170-66a68a42d870/4_final/index.html<br>section_images 없음<br>output_url은 있으나 design_review라 사업자 다운로드 UI에서 숨겨질 수 있음<br>photos=0 상태에서 design 존재: 업로드 스타일링샷 검증 증거로 보기 어려움 |
+
+### 발견 이슈
+- 돈덕 순대: delivered인데 output_url 다운로드 링크 없음
+- 돈덕 순대: photos=0 상태에서 design 존재: 업로드 스타일링샷 검증 증거로 보기 어려움
+- 쌀과밀 소금빵: output_url은 있으나 design_review라 사업자 다운로드 UI에서 숨겨질 수 있음
+- 쌀과밀 소금빵: photos 슬롯 6개 중 업로드 1개
+- 황태이야기: photos=0 상태에서 design 존재: 업로드 스타일링샷 검증 증거로 보기 어려움
+- 청정원 흑마늘진액: preview_url이 이미지가 아님: https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/projects/6eee52ac-696b-4e54-b170-66a68a42d870/4_final/index.html
+- 청정원 흑마늘진액: section_images 없음
+- 청정원 흑마늘진액: output_url은 있으나 design_review라 사업자 다운로드 UI에서 숨겨질 수 있음
+- 청정원 흑마늘진액: photos=0 상태에서 design 존재: 업로드 스타일링샷 검증 증거로 보기 어려움
+<!-- CODEX-WATCHDOG:AUTO-CHECK:END -->
 ## 2026-06-01 반복 문제
+
+### 0. "최종 완성" 문서와 DB/웹앱 상태를 반드시 대조
+
+- 최신 주장 문서: `docs/FINAL-DELIVERABLES.md`
+  - 3종 데모(돈덕 순대·쌀과밀 소금빵·황태이야기)가 실제 한국어 상세페이지로 완성됐다고 기록됨.
+- DB로 확인된 개선:
+  - 3종 모두 최신 `scripts.ai_model`이 `claude-sonnet-4-20250514`.
+  - 더미 흔적은 없고 제품 키워드가 반영됨.
+  - `designs.preview_url`은 이미지 URL이고 `preview_pdf_url`도 존재.
+  - section images 수: 돈덕 7장, 쌀과밀 6장, 황태 7장.
+- 남은 불일치:
+  - 후속 확인: `쌀과밀 소금빵`은 `output_url` JSON에 `html`, `mobile_zip`, `pc_zip`, `designer_zip`가 들어가도록 개선됨.
+  - 그러나 `돈덕 순대`, `황태이야기`는 여전히 `designs.output_url`이 `null`.
+  - 사업자 결과 페이지는 `design_approved` 이상이고 `output_url` JSON에 다운로드 URL이 있을 때만 "결과물 다운로드" 영역을 보여준다.
+  - `쌀과밀 소금빵`은 다운로드 URL이 있어도 `design_review` 상태라 사업자 화면에서 다운로드 영역이 숨겨질 가능성이 높다.
+  - 황태는 `design_review` 상태라 아직 최종 승인/납품이 아니다.
+  - 돈덕은 `delivered`지만 `output_url=null`이라 다운로드 가능한 최종 파일 링크가 없다.
+  - `청정원 흑마늘진액`은 아직 `preview_url`이 HTML URL이고 `output_url`에는 HTML만 있어 이미지 미리보기/zip 납품 경로가 깨져 있다.
+- 빌드 확인:
+  - sandbox 네트워크 제한 상태에서는 Google Fonts fetch 실패로 `npm run build`가 실패했다.
+  - 네트워크 허용 상태에서는 `npm run build` 성공.
+  - 단, Turbopack 경고: `next.config.ts`가 `app/api/designs/[id]/html/route.ts` import trace에 잡혀 프로젝트 전체 trace 가능성이 경고됨.
+- 실패 기준:
+  - 이미지/PDF 미리보기 존재만으로 "최종 납품 가능" 또는 "사업자가 다운로드 가능"이라고 주장하면 안 된다.
+  - `docs/FINAL-DELIVERABLES.md`의 육안 검증 주장은 DB/브라우저 증거가 동반되지 않으면 완료 증거로 보지 않는다.
+- 수용 기준:
+  - 최소한 `preview_url`/`preview_pdf_url` 접근 가능성, `section_images` 렌더링, 사업자/운영자 화면 렌더링을 실제 브라우저로 확인한다.
+  - 납품 완료를 주장하려면 `design_approved` 또는 `delivered` 상태와 함께 다운로드 가능한 `output_url` 또는 명시된 대체 납품 경로가 있어야 한다.
 
 ### 1. `prompt_ready` 이후 스타일링샷 업로드 플로우가 막힘
 
