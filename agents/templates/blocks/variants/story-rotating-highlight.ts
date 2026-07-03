@@ -133,7 +133,7 @@ export const storyRotatingHighlight = defineBlock<Data>({
      * highlightLine(0|1|2)에 해당하는 줄만 .srh-hl 래퍼로 감싼다.
      * richSafe() 후 <br>을 기준으로 분리 → 해당 인덱스에 srh-hl 삽입 → 재결합.
      */
-    function renderLines(raw: string, hl: 0 | 1 | 2): string {
+    function renderLines(raw: string, hl: number): string {
       const safe = richSafe(raw)
       // <br> 또는 <br/> 기준으로 분리
       const parts = safe.split(/<br\s*\/?>/i)
