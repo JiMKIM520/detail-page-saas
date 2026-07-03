@@ -91,13 +91,15 @@ export type PresetKey = 'warm-playful' | 'modern-editorial' | 'cobalt-premium' |
  */
 export function presetForCategory(category?: string): PresetKey {
   const c = (category ?? '').toLowerCase()
-  // 한글/영문 키워드 모두 매칭
-  if (/(beauty|뷰티|화장품|코스메틱)/.test(c)) return 'cobalt-premium'
-  if (/(electronic|전자|가전|디지털|테크|tech)/.test(c)) return 'cobalt-premium'
+  // 한글/영문 키워드 모두 매칭 — 4개 프리셋을 카테고리 성격에 맞게 분산
+  // (뷰티·건강·전자가 전부 cobalt로 몰리고 warm-playful이 미사용이던 매핑을 재배치.
+  //  식품은 warm-playful 편향 방지를 위해 sand-luxury 유지 — 위 주석 참조)
+  if (/(pet|반려|강아지|고양이|애완|키즈|유아|완구)/.test(c)) return 'warm-playful'
+  if (/(beauty|뷰티|화장품|코스메틱|스킨케어)/.test(c)) return 'modern-editorial'
   if (/(fashion|패션|의류|잡화|액세서리)/.test(c)) return 'modern-editorial'
   if (/(health|건강|영양|supplement|헬스)/.test(c)) return 'cobalt-premium'
-  if (/(food|식품|음식|먹|디저트|베이커리|빵)/.test(c)) return 'sand-luxury'
-  if (/(pet|반려|강아지|고양이|애완)/.test(c)) return 'sand-luxury'
+  if (/(electronic|전자|가전|디지털|테크|tech)/.test(c)) return 'cobalt-premium'
+  if (/(food|식품|음식|먹|디저트|베이커리|빵|커피|카페|농축수산)/.test(c)) return 'sand-luxury'
   if (/(living|생활|리빙|홈|인테리어)/.test(c)) return 'sand-luxury'
   return 'cobalt-premium'
 }

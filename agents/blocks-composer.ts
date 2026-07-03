@@ -455,6 +455,7 @@ RULES
 - IMAGE-SECTION SEMANTICS (CRITICAL): match each image's 컷 내용 note to the section's meaning. Lifestyle/연출 shots belong in hero, feature/point, story, usage, closing — NEVER inside spec tables, 성분/영양 정보, FAQ, shipping/CS blocks (those are text-led; leave their image fields empty instead). Texture/누끼 close-ups fit ingredient/detail sections. When in doubt, prioritize giving images to feature/point sections over tables. If a block truly has no fitting image, omit the field.
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
+- IDENTITY DATA (CRITICAL): phone numbers, business/item registration numbers, addresses, courier/partner brand names, account numbers — use ONLY strings that appear verbatim in the brief. If the brief has none, OMIT the row/line entirely (e.g., write "고객센터로 문의해 주세요" without a number). A fabricated phone number sends real customers to a stranger.
 - GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
 
@@ -593,13 +594,199 @@ function sanitizeSpecImages(spec: PageSpec, allowed: ReadonlySet<string>): { rem
       removedOverBudget++
     }
   }
+  // 백업 복원 시 지어낸 URL이 되살아나면 안 된다 — 예산 회수만 되돌리고 위조 URL은 재제거
+  const stripFabricated = (obj: Record<string, unknown>): void => {
+    for (const k of Object.keys(obj)) {
+      const v = obj[k]
+      if (typeof v === 'string' && /^https?:\/\//.test(v) && !allowed.has(v)) obj[k] = undefined
+      else if (Array.isArray(v)) {
+        for (const item of v) if (item && typeof item === 'object') stripFabricated(item as Record<string, unknown>)
+      } else if (v && typeof v === 'object') stripFabricated(v as Record<string, unknown>)
+    }
+  }
   spec.blocks.forEach((b, i) => {
     const schema = getVariant(b.variantId)?.schema
     if (schema && !schema.safeParse(b.data).success) {
       b.data = backups[i]
+      stripFabricated((b.data ?? {}) as Record<string, unknown>)
     }
   })
   return { removedFabricated, removedOverBudget }
+}
+
+/** ── 결정적 자동 수리(repair) + 불량 블록 드롭(salvage) ─────────────────────
+ *  LLM 출력의 사소한 스키마 위반(배열 개수 초과·문자열 길이 초과·빈 문자열)은 재호출 없이 기계적으로
+ *  수리하고, 수리 불가 블록은 드롭한다. 블록 1개 불량이 페이지 전체 실패로 번지지 않게 하는 최종 방어선.
+ *  단 히어로(첫 블록)·클로징(마지막 블록)은 페이지 성립 요건이라 수리 실패 시 throw — 상위 재시도로 넘긴다. */
+type RepairIssue = {
+  code: string
+  path?: (string | number)[]
+  maximum?: number | bigint
+  minimum?: number | bigint
+  origin?: string
+  keys?: string[]
+}
+
+function resolveParent(root: unknown, path: (string | number)[]): { parent: Record<string, unknown> | null; key: string | number } {
+  let parent: unknown = root
+  for (let i = 0; i < path.length - 1; i++) parent = (parent as Record<string, unknown> | undefined)?.[path[i] as never]
+  return {
+    parent: parent && typeof parent === 'object' ? (parent as Record<string, unknown>) : null,
+    key: path[path.length - 1],
+  }
+}
+
+/** path 조상 중 가장 가까운 배열 원소를 제거 — 필수 필드가 비어 아이템 자체가 성립 불가할 때의 최후 수단 */
+function dropNearestArrayItem(root: unknown, path: (string | number)[]): boolean {
+  for (let i = path.length - 1; i >= 0; i--) {
+    if (typeof path[i] !== 'number') continue
+    let arr: unknown = root
+    for (let j = 0; j < i; j++) arr = (arr as Record<string, unknown> | undefined)?.[path[j] as never]
+    if (Array.isArray(arr)) {
+      arr.splice(path[i] as number, 1)
+      return true
+    }
+  }
+  return false
+}
+
+function applyMechanicalFixes(data: unknown, issues: RepairIssue[]): boolean {
+  let fixed = false
+  // 뒤쪽 인덱스부터 처리 — 배열 splice가 앞쪽 이슈의 path를 흔들지 않도록
+  const sorted = [...issues].sort((a, b) => JSON.stringify(b.path ?? []).localeCompare(JSON.stringify(a.path ?? [])))
+  for (const issue of sorted) {
+    const path = issue.path ?? []
+    const { parent, key } = resolveParent(data, path)
+    if (issue.code === 'unrecognized_keys' && issue.keys) {
+      const target = path.length === 0 ? (data as Record<string, unknown>) : (parent?.[key as never] as Record<string, unknown> | undefined)
+      if (target && typeof target === 'object') {
+        for (const k of issue.keys) delete target[k]
+        fixed = true
+      }
+    } else if (issue.code === 'too_big' && parent) {
+      const v = parent[key as never] as unknown
+      const max = Number(issue.maximum)
+      if (Array.isArray(v) && Number.isFinite(max)) {
+        v.length = max
+        fixed = true
+      } else if (typeof v === 'string' && Number.isFinite(max)) {
+        ;(parent as Record<string, unknown>)[key as never] = v.slice(0, max) as never
+        fixed = true
+      }
+    } else if (issue.code === 'too_small' && issue.origin === 'string' && parent) {
+      // 빈/짧은 문자열은 지어낼 수 없다 — 필드 제거(옵션 필드면 통과), 필수면 다음 라운드 invalid_type에서 아이템 제거
+      delete parent[key as never]
+      fixed = true
+    } else if (issue.code === 'invalid_type' && path.length > 0) {
+      const { parent: p2, key: k2 } = resolveParent(data, path)
+      const cur = p2?.[k2 as never]
+      if (cur === undefined && dropNearestArrayItem(data, path)) fixed = true
+    }
+  }
+  return fixed
+}
+
+export function repairAndSalvageBlocks(spec: PageSpec): void {
+  const kept: PageSpec['blocks'] = []
+  const dropped: string[] = []
+  let repairedCount = 0
+  const lastIdx = spec.blocks.length - 1
+  for (let i = 0; i < spec.blocks.length; i++) {
+    const b = spec.blocks[i]
+    const schema = getVariant(b.variantId)?.schema
+    if (!schema) {
+      kept.push(b)
+      continue
+    }
+    let res = schema.safeParse(b.data)
+    let touched = false
+    for (let t = 0; !res.success && t < 5; t++) {
+      if (!applyMechanicalFixes(b.data, res.error.issues as unknown as RepairIssue[])) break
+      touched = true
+      res = schema.safeParse(b.data)
+    }
+    if (res.success) {
+      if (touched) repairedCount++
+      kept.push(b)
+      continue
+    }
+    if (i === 0 || i === lastIdx) {
+      throw new Error(
+        `[composer] invalid slot data for ${b.variantId} (block ${i}, 자동수리 불가): ${JSON.stringify(res.error.issues).slice(0, 600)}`,
+      )
+    }
+    dropped.push(b.variantId)
+  }
+  if (repairedCount) console.warn(`[Blocks Composer] 스키마 자동 수리 — ${repairedCount}개 블록`)
+  if (dropped.length) console.warn(`[Blocks Composer] 수리 불가 블록 드롭 — ${dropped.join(', ')}`)
+  if (kept.length < 6)
+    throw new Error(`[composer] 드롭 후 블록 ${kept.length}개(<6) — 페이지 구성 미달 (dropped: ${dropped.join(', ')})`)
+  spec.blocks = kept
+}
+
+/** ── 근거 없는 단위 수치 봉쇄 ─────────────────────────────────────────────
+ *  식품 상세페이지에서 영양·용량 수치를 지어내면 표시광고 리스크가 된다.
+ *  브리프(고객 제공 데이터)·이미지노트 코퍼스에 없는 "숫자+단위" 토큰을 실은 블록은 드롭.
+ *  단위 없는 숫자(순번·개수 등)는 검사하지 않아 오탐을 피한다. 프롬프트 GROUNDING 규칙의 결정적 백업. */
+const UNIT_NUM_RE = /(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?)\s*(g|kg|mg|kcal|ml|l|%)(?![a-z0-9])/gi
+
+function collectUnitNums(text: string): Set<string> {
+  const out = new Set<string>()
+  for (const m of text.matchAll(UNIT_NUM_RE)) {
+    out.add(`${parseFloat(m[1].replace(/,/g, ''))}${m[2].toLowerCase()}`)
+  }
+  return out
+}
+
+/** 무근거 전화번호 수술 — 브리프에 없는 전화번호(하이픈 표기)가 든 문자열 필드를 제거한다.
+ *  지어낸 상담 전화는 실제 고객을 엉뚱한 번호로 보내는 사고 — 프롬프트 규칙의 결정적 백업.
+ *  필드 제거로 스키마가 깨지면 이어지는 repairAndSalvageBlocks가 해당 배열 아이템만 들어낸다. */
+const PHONE_RE = /(?<!\d)0\d{1,2}-\d{3,4}-\d{4}(?!\d)/g
+
+export function sanitizeUngroundedPhones(spec: PageSpec, corpus: string): void {
+  const digits = (s: string): string => s.replace(/\D/g, '')
+  const grounded = new Set([...corpus.matchAll(PHONE_RE)].map((m) => digits(m[0])))
+  const removed: string[] = []
+  const walk = (obj: Record<string, unknown>, variantId: string): void => {
+    for (const k of Object.keys(obj)) {
+      const v = obj[k]
+      if (typeof v === 'string') {
+        const bad = [...v.matchAll(PHONE_RE)].filter((m) => !grounded.has(digits(m[0])))
+        if (bad.length) {
+          delete obj[k]
+          removed.push(`${variantId}.${k}(${bad.map((m) => m[0]).join(',')})`)
+        }
+      } else if (Array.isArray(v)) {
+        for (const item of v) if (item && typeof item === 'object') walk(item as Record<string, unknown>, variantId)
+      } else if (v && typeof v === 'object') {
+        walk(v as Record<string, unknown>, variantId)
+      }
+    }
+  }
+  for (const b of spec.blocks) walk((b.data ?? {}) as Record<string, unknown>, b.variantId)
+  if (removed.length) console.warn(`[Blocks Composer] 무근거 전화번호 제거 — ${removed.join(' · ')}`)
+}
+
+export function dropUngroundedNumericBlocks(spec: PageSpec, corpus: string): void {
+  const grounded = collectUnitNums(corpus)
+  const lastIdx = spec.blocks.length - 1
+  const dropped: string[] = []
+  spec.blocks = spec.blocks.filter((b, i) => {
+    const nums = collectUnitNums(JSON.stringify(b.data ?? {}))
+    const violations = [...nums].filter((n) => !grounded.has(n))
+    if (violations.length === 0) return true
+    // 무근거 1개는 정당한 파생일 수 있다(5g×2포→10g, "대두만 사용"→100%) — 경고만.
+    // 2개 이상 몰리면 지어낸 영양표/스펙표 패턴 — 드롭. 히어로·클로징은 페이지 성립 요건이라 항상 경고만.
+    if (violations.length === 1 || i === 0 || i === lastIdx) {
+      console.warn(`[Blocks Composer] ⚠ 무근거 수치 경고 — ${b.variantId}: ${violations.join(', ')}`)
+      return true
+    }
+    dropped.push(`${b.variantId}(${violations.join(',')})`)
+    return false
+  })
+  if (dropped.length) console.warn(`[Blocks Composer] 무근거 수치 블록 드롭 — ${dropped.join(' · ')}`)
+  if (spec.blocks.length < 6)
+    throw new Error(`[composer] 무근거 수치 드롭 후 블록 ${spec.blocks.length}개(<6) — 페이지 구성 미달`)
 }
 
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
@@ -638,6 +825,17 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   })
   if (spec.blocks.length < beforeLen)
     console.warn(`[Blocks Composer] 이미지 없는 사진형 블록 ${beforeLen - spec.blocks.length}개 제거`)
+
+  const groundingCorpus = JSON.stringify(input.brief) + JSON.stringify(input.imageNotes ?? {})
+
+  // 무근거 전화번호가 든 필드 제거 — 깨진 스키마는 아래 수리 패스가 해당 항목만 들어낸다
+  sanitizeUngroundedPhones(spec, groundingCorpus)
+
+  // 사소한 스키마 위반은 기계적으로 수리, 수리 불가 블록은 드롭 — 블록 1개 불량이 전체 실패로 번지지 않게
+  repairAndSalvageBlocks(spec)
+
+  // 근거 없는 단위 수치(g/kcal/% 등) 봉쇄 — 브리프·이미지노트에 없는 수치를 실은 블록은 드롭
+  dropUngroundedNumericBlocks(spec, groundingCorpus)
 
   const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
   return { spec, html: rendered.html, usedVariants: rendered.usedVariants }

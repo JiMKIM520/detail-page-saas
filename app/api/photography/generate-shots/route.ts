@@ -76,6 +76,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: '생성 실패', detail: errors }, { status: 500 })
   }
 
+  // 재생성 성공 시 이전 기획의 컷 정리 — 파일명이 기획마다 달라 방치하면 구 컷이 새 컷과 섞여 초안에 들어간다
+  try {
+    const valid = new Set(shots.slice(0, 8).map((s) => s.filename || (s.name + '.png')))
+    const { data: existing } = await svc.storage.from('designs').list(`projects/${project_id}/styling_real`)
+    const stale = (existing ?? []).filter((f) => f.name && !valid.has(f.name)).map((f) => `projects/${project_id}/styling_real/${f.name}`)
+    if (stale.length) {
+      await svc.storage.from('designs').remove(stale)
+      console.log(`[generate-shots] 구 스타일링샷 ${stale.length}장 정리`)
+    }
+  } catch (e) { console.warn('[generate-shots] 구 컷 정리 경고:', (e as Error).message) }
+
   // 스타일링샷이 생성되면 다음 단계(초안 제작)로 전진. prompt_ready에서만 전이(재생성 시 중복 전이 방지).
   const { data: cur } = await svc.from('projects').select('status').eq('id', project_id).single()
   if (cur?.status === 'prompt_ready') {

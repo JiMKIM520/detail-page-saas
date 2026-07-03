@@ -164,6 +164,25 @@ export async function runPipelineForProject(projectId: string): Promise<{
         }
       }
 
+      // 스타일링샷 의도 매핑 — 파일명만으로는 컷의 역할(성분/사용/무드)을 알 수 없어
+      // 기획 산출물(styling-final-prompts.json)의 shot name을 imageNotes로 전달한다
+      const shotNameByFile = new Map<string, string>()
+      try {
+        const { data: promptsBlob } = await supabase.storage
+          .from('designs')
+          .download(`projects/${projectId}/planning/styling-final-prompts.json`)
+        if (promptsBlob) {
+          const promptsJson = JSON.parse(await promptsBlob.text()) as {
+            shots?: Array<{ name?: string; filename?: string }>
+          }
+          for (const s of promptsJson.shots ?? []) {
+            if (s.filename && s.name) shotNameByFile.set(s.filename, s.name)
+          }
+        }
+      } catch {
+        /* 기획 산출물 없으면 파일명 폴백 */
+      }
+
       // 스타일링샷(있으면 연출 이미지로 우선 사용) — designs/projects/{id}/styling_real/*
       const stylingUrls: string[] = []
       const imageNotes: Record<string, string> = {}
@@ -177,7 +196,26 @@ export async function runPipelineForProject(projectId: string): Promise<{
             .getPublicUrl(`projects/${projectId}/styling_real/${obj.name}`)
           if (pub?.publicUrl) {
             stylingUrls.push(pub.publicUrl)
-            imageNotes[pub.publicUrl] = `연출 스타일링샷: ${f.name.replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ')}`
+            const intent = shotNameByFile.get(obj.name) ?? obj.name.replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ')
+            imageNotes[pub.publicUrl] = `연출 스타일링샷: ${intent}`
+          }
+        }
+      }
+
+      // 섹션 보조 이미지(관리자 수동 업로드 등) — projects/{id}/section_images/*
+      // 주의: art-director sectionImageBriefs 산출물(장식 텍스처, 제품 없음)은 여기에 올리지 말 것 — 콘텐츠 슬롯 오염
+      const sectionUrls: string[] = []
+      const { data: sectionList } = await supabase.storage
+        .from('designs')
+        .list(`projects/${projectId}/section_images`)
+      for (const obj of sectionList ?? []) {
+        if (obj.name && /\.(png|jpe?g|webp)$/i.test(obj.name)) {
+          const { data: pub } = supabase.storage
+            .from('designs')
+            .getPublicUrl(`projects/${projectId}/section_images/${obj.name}`)
+          if (pub?.publicUrl) {
+            sectionUrls.push(pub.publicUrl)
+            imageNotes[pub.publicUrl] = `섹션 보조 이미지: ${obj.name.replace(/^section_/, '').replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ')}`
           }
         }
       }
@@ -189,13 +227,14 @@ export async function runPipelineForProject(projectId: string): Promise<{
       // 연출 풀: 스타일링샷 우선, 없으면 누끼컷 폴백
       const heroPool = stylingUrls.length > 0 ? stylingUrls : cutoutUrls
       console.log(
-        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${stylingUrls.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
+        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${stylingUrls.length} · 섹션이미지 ${sectionUrls.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
       )
       const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
       result = await runBlocksPipeline(blocksInput, {
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
         cutoutUrls,
+        sectionImageUrls: sectionUrls,
         imageNotes: { ...imageNotes, ...Object.fromEntries(cutoutUrls.map((u) => [u, '제품 누끼/단독 컷'])) },
         preferredPreset: presetForCategory(input.category),
       })

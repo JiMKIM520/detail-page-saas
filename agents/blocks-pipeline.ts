@@ -27,6 +27,8 @@ export interface BlocksPipelineOptions {
   cutoutUrls?: string[]
   /** 카테고리에서 도출한 강제 프리셋(미전달 시 input.category로 자동 도출) */
   preferredPreset?: string
+  /** 섹션 이미지(성분/공정 등) URL — section 슬롯 풀에 추가 */
+  sectionImageUrls?: string[]
   /** 이미지 URL → 컷 설명 (컴포저 시맨틱 배치용) */
   imageNotes?: Record<string, string>
 }
@@ -66,8 +68,10 @@ export async function runBlocksPipeline(
       lifestyle:
         opts.imageUrls && opts.imageUrls.length > 1 ? opts.imageUrls.slice(1) : undefined,
       cutout: opts.cutoutUrls?.[0],
-      section:
-        opts.cutoutUrls && opts.cutoutUrls.length > 1 ? opts.cutoutUrls.slice(1) : undefined,
+      section: [
+        ...(opts.cutoutUrls && opts.cutoutUrls.length > 1 ? opts.cutoutUrls.slice(1) : []),
+        ...(opts.sectionImageUrls ?? []),
+      ],
     },
     imageNotes: opts.imageNotes,
     brandColors: input.brandColors,

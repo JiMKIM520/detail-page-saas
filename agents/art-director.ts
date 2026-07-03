@@ -385,7 +385,9 @@ ${templateCatalog ? templateCatalog + '\n' : ''}${hasReferenceImages ? '## Refer
 Generate 8 styling shots covering a DIVERSE set so every section of a long detail page gets a distinct image:
 - 1 HERO: product on a clean styled surface (the main beauty shot)
 - 1~2 DETAIL/MACRO: texture or key feature close-up
-- 1 INGREDIENT/COMPONENT: real ingredients/parts placed BESIDE the product (never inside/cross-section)
+- 1 INGREDIENT/COMPONENT: real ingredients/parts placed BESIDE the product (never inside/cross-section).
+    ONLY ingredients/materials explicitly stated in the brief may appear — NEVER invent ingredients
+    the product does not contain (wrong raw materials in an ingredient shot destroy trust).
 - 2~3 LIFESTYLE/USAGE: the product in a natural, real-feeling scene that fits the category —
     pet → a happy dog with the product or a hand offering it; food → served at a cozy table / a hand holding it;
     beauty → applied or held in hand; living·electronics → in real use at home.
