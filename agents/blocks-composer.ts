@@ -532,16 +532,24 @@ ${imageBlock}${imgBudget}
 FEATURED VARIANTS (이번 페이지 다양성 로테이션 — 역할에 맞으면 카탈로그의 다른 변형보다 우선 선택):
 ${sampleFeatured(avoid).join(', ')}
 
-블록 카탈로그(variantId · archetype · imageSlots · 설명):
+${avoidBlock}\n\n시스템 프롬프트의 블록 카탈로그·데이터 계약을 준수해, 위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
+}
+
+/** 캐시 대상 정적 페이로드 — 카탈로그+데이터 계약(~70k자)은 호출마다 동일하므로 시스템 블록으로 옮겨
+ *  프롬프트 캐싱(cache_control) 적용. avoid 필터를 여기 적용하면 캐시가 깨지므로 회피는
+ *  유저 프롬프트의 DO NOT USE 지시로만 처리한다. 캐시 히트 시 이 구간 입력 단가 90% 절감. */
+let staticCatalogBlock: string | null = null
+function getStaticCatalogBlock(): string {
+  if (staticCatalogBlock) return staticCatalogBlock
+  staticCatalogBlock = `블록 카탈로그(variantId · archetype · imageSlots · 설명):
 ${catalog()
-  .filter((c) => CONTRACTED_IDS.has(c.id) && !avoid.has(c.id))
+  .filter((c) => CONTRACTED_IDS.has(c.id))
   .map((c) => `- ${c.id} · ${c.archetype} · img${c.imageSlots} · ${c.describe}`)
   .join('\n')}
 
 각 블록 데이터 계약:
-${DATA_CONTRACTS}
-
-${avoidBlock}\n\n위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
+${DATA_CONTRACTS}`
+  return staticCatalogBlock
 }
 
 
@@ -792,10 +800,18 @@ export function dropUngroundedNumericBlocks(spec: PageSpec, corpus: string): voi
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
   const message = await anthropicClient.messages.create({
     model: MODELS.CLAUDE_SONNET,
-    max_tokens: 16384,
-    system: SYSTEM_PROMPT,
+    max_tokens: 24576, // Sonnet 5 신형 토크나이저 ~30% 토큰 증가 반영 (기존 16384)
+    system: [
+      { type: 'text', text: SYSTEM_PROMPT },
+      // 정적 카탈로그+계약 — 캐시 히트 시 이 구간 입력 단가 90% 절감 (5분 TTL: 재시도·체인 실행에서 히트)
+      { type: 'text', text: getStaticCatalogBlock(), cache_control: { type: 'ephemeral' } },
+    ],
     messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
   })
+  const usage = message.usage as unknown as Record<string, number | undefined>
+  console.log(
+    `[Blocks Composer] usage — in:${usage.input_tokens} cacheW:${usage.cache_creation_input_tokens ?? 0} cacheR:${usage.cache_read_input_tokens ?? 0} out:${usage.output_tokens}`,
+  )
   const text = message.content[0]?.type === 'text' ? message.content[0].text : ''
   const raw = parseJsonResponse<unknown>(text)
   const out = composerOutputSchema.parse(raw)

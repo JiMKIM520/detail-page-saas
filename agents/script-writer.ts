@@ -171,7 +171,7 @@ export async function runScriptWriter(
 
     const message = await anthropicClient.messages.create({
       model: MODELS.CLAUDE_SONNET,
-      max_tokens: 16384,   // 4096은 한글 다섹션 스크립트에 부족 → 응답 잘림(Unterminated JSON) 유발
+      max_tokens: 24576,   // 4096은 한글 다섹션 스크립트에 부족 → 응답 잘림 유발. Sonnet 5 토크나이저 +30% 반영 상향
       system: systemPrompt,
       messages: [{ role: 'user', content: buildUserPrompt(brief, styleGuide, validationFeedback) }],
     })

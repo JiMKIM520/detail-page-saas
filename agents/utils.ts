@@ -78,8 +78,10 @@ export const MODELS = {
   GEMINI_FLASH: 'gemini-2.5-flash',
 
   // Claude (2026 최신)
-  CLAUDE_SONNET: 'claude-sonnet-4-6',
-  CLAUDE_OPUS:   'claude-opus-4-7',
+  // Sonnet 5: 2026-08-31까지 인트로 단가 $2/$10 — 9/1 정가($3/$15) 전환 시 비용 재평가 필요.
+  // 신형 토크나이저(Sonnet 5·Opus 4.7+)는 같은 텍스트에 ~30% 더 많은 토큰 → max_tokens 여유 필요.
+  CLAUDE_SONNET: 'claude-sonnet-5',
+  CLAUDE_OPUS:   'claude-opus-4-8',
   CLAUDE_HAIKU:  'claude-haiku-4-5-20251001',
 } as const
 
