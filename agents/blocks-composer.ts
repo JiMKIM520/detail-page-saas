@@ -55,6 +55,8 @@ export interface BlocksComposerInput {
   outputDir: string
   /** 다른 페이지에서 이미 사용된 변형 — 이번 페이지에서 사용 금지(다사 차별화). closing-* 는 넣지 말 것 */
   avoidVariants?: string[]
+  /** 업로드 원본 누끼 URL 전체 — 연출형 슬롯 오배치 방지 가드(placement guard)용 */
+  cutoutUrls?: string[]
 }
 
 export interface BlocksComposerResult {
@@ -456,6 +458,11 @@ RULES
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
 - IDENTITY DATA (CRITICAL): phone numbers, business/item registration numbers, addresses, courier/partner brand names, account numbers — use ONLY strings that appear verbatim in the brief. If the brief has none, OMIT the row/line entirely (e.g., write "고객센터로 문의해 주세요" without a number). A fabricated phone number sends real customers to a stranger.
+- IMAGE REALITY (CRITICAL): each image's 컷 내용 note starting with "실물 확인" describes what is ACTUALLY in the image — trust it over the filename or your assumption. A note marked "차선 — 소형 슬롯에만" may only fill small thumbnail slots, never hero/full-bleed.
+- ORIENTATION-FIT: notes mark each image [세로]/[가로]/[정방]. NEVER place a [세로] image into a wide panorama/full-width banner slot — it becomes a grotesque over-zoomed crop. Wide full-bleed slots take [가로] images only.
+- IMAGE-ASSET GROUNDING: blocks whose visual story requires specific subjects (raw ingredients for 원료 공식/원료 비주얼, real usage scene for usage photos) may only be selected if a note confirms such an image EXISTS. Never caption an image with content it does not show (e.g., a package close-up captioned as "베르가못 오일"). If no fitting image exists, choose a text/graphic variant instead.
+- CUTOUT USE: 누끼(제품 단독컷) images fit product-focused slots (hero, detail, feature, ingredient). Do NOT use them as story/gallery/mood backgrounds or full-bleed scenery.
+- NO EMOJI anywhere in output text — this is a professional detail page; use block-provided icons only.
 - GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
 
@@ -746,6 +753,60 @@ function collectUnitNums(text: string): Set<string> {
   return out
 }
 
+/** ── 배치 결함 결정적 가드 3종 ─────────────────────────────────────────────
+ *  ① 표/FAQ/배송/CS 계열(텍스트 주도)에서 이미지 필드 강제 제거 — 프롬프트 규칙(IMAGE-SECTION
+ *     SEMANTICS)의 확률적 위반을 코드로 봉쇄 (황태 영양표에 누끼가 들어간 실사례).
+ *  ② 이모지 스트립 — 상세페이지 디자인 정책상 이모지 금지(아트 디렉터 규칙)를 블록 데이터에도 적용.
+ *  ③ 누끼(제품 단독컷) 배치 화이트리스트 — 연출형 스토리/갤러리/무드 슬롯에 누끼가 들어가면
+ *     과확대 크롭 괴물이 된다(럽앤 실사례). 제품 중심 아키타입에만 허용. */
+const TEXT_LED_ARCHETYPES = new Set(['spec', 'faq', 'shipping', 'cs'])
+const CUTOUT_OK_ARCHETYPES = new Set(['hero', 'detail', 'feature', 'point', 'ingredient', 'usage', 'compare', 'equation', 'stats'])
+const EMOJI_RE = /[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu
+
+function walkStringFields(
+  obj: Record<string, unknown>,
+  fn: (parent: Record<string, unknown>, key: string, value: string) => void,
+): void {
+  for (const k of Object.keys(obj)) {
+    const v = obj[k]
+    if (typeof v === 'string') fn(obj, k, v)
+    else if (Array.isArray(v)) {
+      for (const item of v) if (item && typeof item === 'object') walkStringFields(item as Record<string, unknown>, fn)
+    } else if (v && typeof v === 'object') walkStringFields(v as Record<string, unknown>, fn)
+  }
+}
+
+export function applyPlacementGuards(spec: PageSpec, cutoutSet: ReadonlySet<string>): void {
+  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0 }
+  for (const b of spec.blocks) {
+    const arch = String(getVariant(b.variantId)?.archetype ?? '')
+    const data = (b.data ?? {}) as Record<string, unknown>
+    walkStringFields(data, (parent, key, value) => {
+      const isUrl = /^https?:\/\//.test(value)
+      if (isUrl && TEXT_LED_ARCHETYPES.has(arch)) {
+        delete parent[key]
+        stats.textLedImg++
+        return
+      }
+      if (isUrl && cutoutSet.has(value) && !CUTOUT_OK_ARCHETYPES.has(arch)) {
+        delete parent[key]
+        stats.cutoutMoved++
+        return
+      }
+      if (!isUrl && EMOJI_RE.test(value)) {
+        const cleaned = value.replace(EMOJI_RE, '').replace(/\s{2,}/g, ' ').trim()
+        stats.emoji++
+        if (cleaned) parent[key] = cleaned
+        else delete parent[key]
+      }
+    })
+  }
+  if (stats.textLedImg || stats.emoji || stats.cutoutMoved)
+    console.warn(
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved}`,
+    )
+}
+
 /** 무근거 전화번호 수술 — 브리프에 없는 전화번호(하이픈 표기)가 든 문자열 필드를 제거한다.
  *  지어낸 상담 전화는 실제 고객을 엉뚱한 번호로 보내는 사고 — 프롬프트 규칙의 결정적 백업.
  *  필드 제거로 스키마가 깨지면 이어지는 repairAndSalvageBlocks가 해당 배열 아이템만 들어낸다. */
@@ -852,6 +913,9 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
     console.warn(`[Blocks Composer] 이미지 없는 사진형 블록 ${beforeLen - spec.blocks.length}개 제거`)
 
   const groundingCorpus = JSON.stringify(input.brief) + JSON.stringify(input.imageNotes ?? {})
+
+  // 배치 결함 가드 — 표계열 이미지·이모지·누끼 오배치를 코드로 봉쇄 (깨진 스키마는 수리 패스가 수습)
+  applyPlacementGuards(spec, new Set(input.cutoutUrls ?? (input.images?.cutout ? [input.images.cutout] : [])))
 
   // 무근거 전화번호가 든 필드 제거 — 깨진 스키마는 아래 수리 패스가 해당 항목만 들어낸다
   sanitizeUngroundedPhones(spec, groundingCorpus)

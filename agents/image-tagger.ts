@@ -1,0 +1,124 @@
+/**
+ * Agent: Image Tagger — 배치 전 이미지 실물 검수.
+ * 컴포저는 이미지를 보지 못한 채 파일명·의도 노트만으로 배치한다(블라인드 배치).
+ * 생성 컷은 의도와 다르게 나올 수 있으므로(라벨 훼손·브랜드명 변조·엉뚱한 피사체),
+ * 저렴한 비전 모델(Haiku)이 각 컷을 실제로 보고 ① 실물 설명 ② 용도 태그 ③ 방향
+ * ④ 품질 판정(reject 사유 포함)을 생성한다. reject 컷은 풀에서 제외되고,
+ * 설명·방향은 imageNotes로 컴포저에 전달되어 의도≠실물 배치를 막는다.
+ */
+import { anthropicClient, parseJsonResponse, timer, MODELS, extractText } from './utils'
+import type { AgentResult } from './types'
+
+export interface ImageTag {
+  /** 실물에 실제로 보이는 것 한 줄 (라벨 판독 가능 여부 포함) */
+  desc: string
+  /** 적합 용도 태그 (예: hero, lifestyle, texture, ingredient, product-label, usage) */
+  roles: string[]
+  orientation: 'portrait' | 'landscape' | 'square'
+  /** ok=사용 가능, degraded=차선(작게만 사용), reject=사용 금지 */
+  quality: 'ok' | 'degraded' | 'reject'
+  /** 결함 사유 (브랜드명 오기, 라벨 뭉개짐, 흰 밴드, 왜곡 등) */
+  defects?: string
+}
+
+export interface TaggerInput {
+  url: string
+  /** 'cutout'=업로드 원본 누끼(품질 신뢰, 설명만), 'styling'=생성 컷(전수 검수) */
+  kind: 'cutout' | 'styling' | 'section'
+  /** 아트 디렉터의 컷 의도 (실물과 대조용) */
+  intendedNote?: string
+}
+
+const SYSTEM_PROMPT = `You are a meticulous photo editor QA-ing images for a Korean e-commerce detail page.
+For EACH numbered image you receive, report what is ACTUALLY visible — not what was intended.
+
+REFERENCE COMPARISON (CRITICAL):
+The first image labeled [REFERENCE] is the client's ORIGINAL product photo — its label text is ground truth.
+For every test image where the product label is visible, compare the brand name and label text
+CHARACTER BY CHARACTER against the reference. AI-generated shots frequently alter letters
+(e.g. MOMOS→NONOS, 500g→800g, garbled Korean). Any mismatch in brand name, product name,
+or quantity = quality "reject". Do not assume text is correct because it looks plausible — READ it.
+
+Judging rules:
+- desc: ONE short Korean sentence (max 80 chars) describing the actual content. If a product label
+  is visible, state whether its text matches the reference or how it deviates. Be terse — no prose.
+- roles: which page roles this image actually fits (choose from: hero, lifestyle, mood, texture,
+  ingredient, product-label, usage, detail, gallery). Base this on what you SEE.
+- orientation: portrait / landscape / square by visual aspect.
+- quality:
+  - "reject" if ANY of: brand name misspelled or altered, label text severely garbled where prominent,
+    wrong quantity/claims rendered on packaging, large empty bands/artifacts, heavy distortion.
+  - "degraded" if minor artifacts or label slightly soft but usable when small.
+  - "ok" otherwise.
+- defects: short Korean note of the specific defect when quality is not "ok".
+- If an intended note is provided and the actual content does NOT match it, say so in desc
+  (e.g. "의도는 크림 텍스처였으나 실제로는 패키지 라벨 확대").
+
+Output raw JSON array only, one object per image in the same order:
+[{"index":0,"desc":"...","roles":["hero"],"orientation":"portrait","quality":"ok","defects":""}]`
+
+/** 이미지 URL들을 한 번의 비전 호출로 검수한다. referenceUrl은 라벨 대조용 원본 누끼.
+ *  실패 시 success:false — 호출부는 파일명 폴백. (Haiku는 라벨 변조를 놓쳐 Sonnet 사용) */
+export async function runImageTagger(
+  inputs: TaggerInput[],
+  referenceUrl?: string,
+): Promise<AgentResult<Record<string, ImageTag>>> {
+  const elapsed = timer()
+  if (inputs.length === 0) return { success: true, data: {}, durationMs: 0 }
+  console.log(`[Image Tagger] 시작 — ${inputs.length}장 검수${referenceUrl ? ' (원본 라벨 대조)' : ''}`)
+
+  try {
+    const content: Array<Record<string, unknown>> = []
+    if (referenceUrl) {
+      content.push({ type: 'text', text: '[REFERENCE] 고객 제공 원본 — 라벨 텍스트의 정답 기준' })
+      content.push({ type: 'image', source: { type: 'url', url: referenceUrl } })
+    }
+    inputs.forEach((img, i) => {
+      content.push({
+        type: 'text',
+        text: `[image ${i}] kind: ${img.kind}${img.intendedNote ? ` / 의도: ${img.intendedNote}` : ''}`,
+      })
+      content.push({ type: 'image', source: { type: 'url', url: img.url } })
+    })
+    content.push({ type: 'text', text: `위 ${inputs.length}장을 순서대로 검수해 JSON 배열만 출력하세요.` })
+
+    const message = await anthropicClient.messages.create({
+      model: MODELS.CLAUDE_SONNET,
+      max_tokens: 10000, // 10장+ 검수 시 4096은 잘림(Unterminated JSON 실사례) — S5 토크나이저 여유 포함
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: content as never }],
+    })
+    if (message.stop_reason === 'max_tokens')
+      console.warn('[Image Tagger] ⚠ 출력이 max_tokens로 잘림 — 검수 장수를 줄이거나 한도 상향 필요')
+    const rows = parseJsonResponse<Array<Partial<ImageTag> & { index?: number }>>(extractText(message.content))
+
+    const out: Record<string, ImageTag> = {}
+    rows.forEach((row, i) => {
+      const idx = typeof row.index === 'number' ? row.index : i
+      const input = inputs[idx]
+      if (!input) return
+      out[input.url] = {
+        desc: String(row.desc ?? '').slice(0, 200) || '설명 없음',
+        roles: Array.isArray(row.roles) ? row.roles.map(String).slice(0, 5) : [],
+        orientation: row.orientation === 'landscape' || row.orientation === 'square' ? row.orientation : 'portrait',
+        // 업로드 원본(누끼)은 고객 제공물 — 비전 오판으로 제외되지 않게 reject를 degraded로 완화
+        quality:
+          row.quality === 'reject'
+            ? input.kind === 'cutout'
+              ? 'degraded'
+              : 'reject'
+            : row.quality === 'degraded'
+              ? 'degraded'
+              : 'ok',
+        defects: row.defects ? String(row.defects).slice(0, 120) : undefined,
+      }
+    })
+    const rejected = Object.values(out).filter((t) => t.quality === 'reject').length
+    console.log(`[Image Tagger] 완료 (${elapsed()}ms) — ${Object.keys(out).length}장 태깅, reject ${rejected}장`)
+    return { success: true, data: out, durationMs: elapsed() }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn('[Image Tagger] 실패(파일명 폴백):', msg.slice(0, 160))
+    return { success: false, error: msg, durationMs: elapsed() }
+  }
+}

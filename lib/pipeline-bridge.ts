@@ -220,22 +220,57 @@ export async function runPipelineForProject(projectId: string): Promise<{
         }
       }
 
+      // 이미지 태거 — 컴포저는 이미지를 못 보므로(블라인드 배치), 비전 모델이 각 컷의 실물을
+      // 검수해 노트를 실물 기반으로 교체하고 훼손 컷(라벨 변조 등)은 풀에서 제외한다.
+      // 원본 누끼를 정답 레퍼런스로 대조(브랜드명·용량 변조 검출). 실패 시 기존 노트 유지.
+      for (const u of cutoutUrls) imageNotes[u] = '제품 누끼/단독 컷 (업로드 원본)'
+      let rejectedUrls = new Set<string>()
+      try {
+        const { runImageTagger } = await import('@/agents/image-tagger')
+        const taggerInputs = [
+          ...stylingUrls.map((u) => ({ url: u, kind: 'styling' as const, intendedNote: imageNotes[u] })),
+          ...sectionUrls.map((u) => ({ url: u, kind: 'section' as const, intendedNote: imageNotes[u] })),
+          ...cutoutUrls.map((u) => ({ url: u, kind: 'cutout' as const })),
+        ]
+        const tagged = await runImageTagger(taggerInputs, cutoutUrls[0])
+        if (tagged.success && tagged.data) {
+          for (const [u, t] of Object.entries(tagged.data)) {
+            if (t.quality === 'reject') {
+              rejectedUrls.add(u)
+              continue
+            }
+            const marks = [t.orientation === 'portrait' ? '세로' : t.orientation === 'landscape' ? '가로' : '정방']
+            if (t.quality === 'degraded') marks.push('차선 — 소형 슬롯에만')
+            const prefix = cutoutUrls.includes(u) ? '제품 누끼(원본)' : '실물 확인'
+            imageNotes[u] = `${prefix}[${marks.join('·')}]: ${t.desc}`
+          }
+          if (rejectedUrls.size)
+            console.warn(
+              `[pipeline-bridge] 태거 reject ${rejectedUrls.size}장 제외 — ${[...rejectedUrls].map((u) => u.split('/').pop()).join(', ')}`,
+            )
+        }
+      } catch (e) {
+        console.warn('[pipeline-bridge] 이미지 태거 실패(파일명 노트 유지):', (e as Error).message?.slice(0, 120))
+      }
+      const okStyling = stylingUrls.filter((u) => !rejectedUrls.has(u))
+      const okSection = sectionUrls.filter((u) => !rejectedUrls.has(u))
+
       // 브랜드 대표색 추출 (brand_logo 우선)
       const brandColors = await deriveBrandColors(supabase, projectId)
       const blocksInput: ProjectInput = { ...input, brandColors }
 
       // 연출 풀: 스타일링샷 우선, 없으면 누끼컷 폴백
-      const heroPool = stylingUrls.length > 0 ? stylingUrls : cutoutUrls
+      const heroPool = okStyling.length > 0 ? okStyling : cutoutUrls
       console.log(
-        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${stylingUrls.length} · 섹션이미지 ${sectionUrls.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
+        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${okStyling.length}(제외 ${stylingUrls.length - okStyling.length}) · 섹션이미지 ${okSection.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
       )
       const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
       result = await runBlocksPipeline(blocksInput, {
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
         cutoutUrls,
-        sectionImageUrls: sectionUrls,
-        imageNotes: { ...imageNotes, ...Object.fromEntries(cutoutUrls.map((u) => [u, '제품 누끼/단독 컷'])) },
+        sectionImageUrls: okSection,
+        imageNotes,
         preferredPreset: presetForCategory(input.category),
       })
     } else if (isFood) {

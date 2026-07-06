@@ -40,13 +40,13 @@ export const usagePhotoCard = defineBlock<Data>({
 /* 배경 이미지 */
 .upc-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
 .upc-bg-ph{position:absolute;inset:0;z-index:0;background:color-mix(in srgb,var(--accent) 18%,#ddd)}
-/* 배경 위 어두운 스크림(가독성) */
-.upc::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.22);z-index:1}
+/* 배경 위 스크림 — 사진 위 대형 타이포 가독성을 위해 상단을 강하게 (accent 타이틀이 배경에 묻히던 실사례 보정) */
+.upc::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.34) 42%,rgba(255,255,255,.24) 100%);z-index:1}
 /* 모든 콘텐츠는 z-index:2 이상 */
 .upc-inner{position:relative;z-index:2;padding:54px 0 58px}
 /* 상단 헤더 */
 .upc-hd{padding:0 52px 0;text-align:center}
-.upc-title{font-family:var(--font-display);font-weight:800;font-size:64px;letter-spacing:-.01em;line-height:1.0;color:var(--accent);text-shadow:0 2px 16px rgba(0,0,0,.12)}
+.upc-title{font-family:var(--font-display);font-weight:800;font-size:clamp(36px,7.5vw,56px);letter-spacing:-.01em;line-height:1.15;color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.5)}
 .upc-title .em{color:var(--accent-d)}
 .upc-sub{margin-top:10px;font-size:17px;color:var(--ink);opacity:.8;font-weight:500}
 /* 프로스티드 배너 */

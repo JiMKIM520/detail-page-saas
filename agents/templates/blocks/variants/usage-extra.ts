@@ -98,6 +98,8 @@ export const usageDark = defineBlock<DarkData>({
 .ud-step{display:flex;align-items:center;border-top:1px solid rgba(255,255,255,.14)}
 .ud-step:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
 .ud-thumb{flex:0 0 200px;width:200px;height:190px;object-fit:cover}
+/* 썸네일 없는 구성(전 스텝 텍스트형) — 행 높이 보정 */
+.ud-step--noimg .ud-body{padding:22px}
 .ud-body{flex:1;padding:0 22px}
 .ud-l{font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--accent)}
 .ud-t{margin-top:8px;font-size:14px;color:rgba(255,255,255,.72);line-height:1.6}
@@ -107,7 +109,10 @@ export const usageDark = defineBlock<DarkData>({
 .ud-closer{margin-top:44px;text-align:center;padding:0 56px;font-family:var(--font-display);font-weight:800;font-size:28px;color:#fff;line-height:1.45}
 .ud-closer .em{color:var(--accent)}
 `,
-  render: (d, { esc, richSafe, icon }) => `
+  render: (d, { esc, richSafe, icon }) => {
+    // 일부 스텝에만 이미지가 있으면 절름발이 레이아웃이 된다 — 전 스텝에 있을 때만 썸네일 렌더
+    const withThumbs = d.steps.every((s) => Boolean(s.image))
+    return `
 <section class="ud">
   <div class="ud-ribbon">STEP BY STEP &nbsp;·&nbsp; HOW TO USE &nbsp;·&nbsp; STEP BY STEP &nbsp;·&nbsp; HOW TO USE &nbsp;·&nbsp; STEP BY STEP</div>
   <div class="ud-hd">
@@ -118,8 +123,8 @@ export const usageDark = defineBlock<DarkData>({
     ${d.steps
       .map(
         (s, i) => `
-    <div class="ud-step">
-      ${media(s.image, 'ud-thumb', '사용법 단계')}
+    <div class="ud-step${withThumbs ? '' : ' ud-step--noimg'}">
+      ${withThumbs ? media(s.image, 'ud-thumb', '사용법 단계') : ''}
       <div class="ud-body">
         <div class="ud-l">${esc(s.label ?? `STEP ${pad2(i + 1)}`)}</div>
         <div class="ud-t">${richSafe(s.text)}</div>
@@ -130,5 +135,6 @@ export const usageDark = defineBlock<DarkData>({
       .join('')}
   </div>
   ${d.closer ? `<p class="ud-closer">${richSafe(d.closer)}</p>` : ''}
-</section>`,
+</section>`
+  },
 })

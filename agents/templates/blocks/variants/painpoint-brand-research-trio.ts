@@ -39,7 +39,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   styleTags: ['dark', 'painpoint', 'research', 'authority', 'narrative', 'template'],
   imageSlots: 1,
   describe:
-    '고민 3행 브랜드 권위 섹션. 다크 배경 + 생각 이모지 앵커 + 브랜드 bracket 권위 카피 + 번호형 고민 3행(아웃라인 박스) + 해결 브릿지 + 제품 이미지 + 브랜드 라벨 마무리. 사용자 페인포인트 공감 후 브랜드 해결사 포지셔닝.',
+    '고민 3행 브랜드 권위 섹션. 다크 배경 + 물음표 배지 앵커 + 브랜드 bracket 권위 카피 + 번호형 고민 3행(아웃라인 박스) + 해결 브릿지 + 중앙 제품 이미지 + 브랜드 라벨 마무리. 사용자 페인포인트 공감 후 브랜드 해결사 포지셔닝.',
   schema,
   css: `
 /* painpoint-brand-research-trio — 접두사 pbrt- */
@@ -54,13 +54,20 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   overflow-wrap:break-word;
 }
 
-/* 생각 이모지 앵커 */
-.pbrt-emoji{
-  font-size:52px;
-  line-height:1;
+/* 물음표 앵커 배지 — 이모지 금지 정책(디자인 규칙)에 따라 타이포 배지로 대체 */
+.pbrt-q{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  color:var(--accent);
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:28px;
+  line-height:52px;
+  text-align:center;
+  display:inline-block;
   margin-bottom:20px;
-  display:block;
-  /* 이모지는 시스템 폰트 — font-family 재정의 없음 */
 }
 
 /* 권위 카피 */
@@ -92,6 +99,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   border-radius:10px;
   padding:18px 20px;
   text-align:left;
+  background:rgba(255,255,255,.05);
 }
 .pbrt-item-label{
   font-family:var(--font-display);
@@ -129,17 +137,17 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   color:var(--accent);
 }
 
-/* 제품 이미지 */
+/* 제품 이미지 — 풀폭 cover는 세로 누끼를 괴물 확대로 만든다 → 중앙 카드형으로 제한 */
 .pbrt-product{
-  width:100%;
+  width:min(100%,420px);
   aspect-ratio:3/4;
   object-fit:cover;
   display:block;
   border-radius:8px;
-  margin-bottom:32px;
+  margin:0 auto 32px;
 }
 .pbrt-product.ph{
-  width:100%;
+  width:min(100%,420px);
   aspect-ratio:3/4;
   border:2px dashed rgba(255,255,255,.22);
   background:rgba(255,255,255,.06);
@@ -174,7 +182,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
 
     return `
 <section class="pbrt">
-  <span class="pbrt-emoji" aria-hidden="true">🤔</span>
+  <span class="pbrt-q" aria-hidden="true">?</span>
   <p class="pbrt-authority">${richSafe(d.authorityCopy)}</p>
   <div class="pbrt-list">
     ${painpointItems}

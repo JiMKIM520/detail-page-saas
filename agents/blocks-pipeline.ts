@@ -77,6 +77,7 @@ export async function runBlocksPipeline(
     brandColors: input.brandColors,
     preferredPreset: opts.preferredPreset ?? presetForCategory(input.category),
     outputDir: dirs.base,
+    cutoutUrls: opts.cutoutUrls,
   })
   stages.blocksComposer = {
     success: composer.success,
