@@ -57,6 +57,63 @@ Judging rules:
 Output raw JSON array only, one object per image in the same order:
 [{"index":0,"desc":"...","roles":["hero"],"orientation":"portrait","quality":"ok","defects":""}]`
 
+export interface PairingInput {
+  /** 검사할 (섹션 카피, 이미지) 쌍 */
+  pairs: Array<{ id: string; url: string; sectionCopy: string }>
+}
+
+const PAIRING_SYSTEM = `You are QA-ing a composed Korean e-commerce detail page.
+You receive numbered images, then a list of (pair id → image number + section copy) assignments.
+For EACH pair, judge: does this image MEANINGFULLY support this copy for a shopper?
+
+- fit=false when the image is unrelated to the copy's subject (e.g. copy about skin absorption
+  next to a close-up of the package label; a step "물과 함께 섭취" next to a shelf mood shot).
+- A product/package shot fits copy about the product itself, packaging, or brand — but NOT copy
+  about efficacy, texture, ingredients, or usage steps it does not depict.
+- When unsure, fit=true (do not over-remove).
+Output raw JSON array only: [{"id":"...","fit":true,"reason":"..."}] — reason in Korean, max 40 chars.`
+
+/** 조립 후 페어링 QA — 배치된 (카피, 이미지) 쌍을 실제로 보고 부적합 쌍을 알려준다.
+ *  실패 시 success:false — 호출부는 쌍 제거 없이 진행(무중단). */
+export async function runPairingQA(
+  input: PairingInput,
+): Promise<AgentResult<Record<string, { fit: boolean; reason?: string }>>> {
+  const elapsed = timer()
+  if (input.pairs.length === 0) return { success: true, data: {}, durationMs: 0 }
+  const urls = [...new Set(input.pairs.map((p) => p.url))]
+  console.log(`[Pairing QA] 시작 — 쌍 ${input.pairs.length}개 (이미지 ${urls.length}장)`)
+  try {
+    const content: Array<Record<string, unknown>> = []
+    urls.forEach((u, i) => {
+      content.push({ type: 'text', text: `[image ${i}]` })
+      content.push({ type: 'image', source: { type: 'url', url: u } })
+    })
+    const pairLines = input.pairs
+      .map((p) => `- id "${p.id}": image ${urls.indexOf(p.url)} ← 카피: "${p.sectionCopy.slice(0, 140)}"`)
+      .join('\n')
+    content.push({ type: 'text', text: `배치된 쌍 목록:\n${pairLines}\n\n각 쌍을 판정해 JSON 배열만 출력하세요.` })
+
+    const message = await anthropicClient.messages.create({
+      model: MODELS.CLAUDE_SONNET,
+      max_tokens: 6000,
+      system: PAIRING_SYSTEM,
+      messages: [{ role: 'user', content: content as never }],
+    })
+    const rows = parseJsonResponse<Array<{ id?: string; fit?: boolean; reason?: string }>>(extractText(message.content))
+    const out: Record<string, { fit: boolean; reason?: string }> = {}
+    for (const r of rows) {
+      if (typeof r.id === 'string') out[r.id] = { fit: r.fit !== false, reason: r.reason ? String(r.reason).slice(0, 80) : undefined }
+    }
+    const unfit = Object.values(out).filter((v) => !v.fit).length
+    console.log(`[Pairing QA] 완료 (${elapsed()}ms) — 부적합 ${unfit}/${input.pairs.length}쌍`)
+    return { success: true, data: out, durationMs: elapsed() }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn('[Pairing QA] 실패(쌍 제거 없이 진행):', msg.slice(0, 140))
+    return { success: false, error: msg, durationMs: elapsed() }
+  }
+}
+
 /** 이미지 URL들을 한 번의 비전 호출로 검수한다. referenceUrl은 라벨 대조용 원본 누끼.
  *  실패 시 success:false — 호출부는 파일명 폴백. (Haiku는 라벨 변조를 놓쳐 Sonnet 사용) */
 export async function runImageTagger(

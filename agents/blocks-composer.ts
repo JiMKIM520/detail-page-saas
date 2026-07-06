@@ -777,10 +777,23 @@ function walkStringFields(
 }
 
 export function applyPlacementGuards(spec: PageSpec, cutoutSet: ReadonlySet<string>): void {
-  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0 }
+  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0 }
   for (const b of spec.blocks) {
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     const data = (b.data ?? {}) as Record<string, unknown>
+    // usage 스텝 이미지 균일성 — 일부 스텝에만 이미지가 있으면 전부 제거(절름발이 레이아웃 방지)
+    if (arch === 'usage') {
+      for (const v of Object.values(data)) {
+        if (!Array.isArray(v) || v.length < 2) continue
+        const items = v.filter((it): it is Record<string, unknown> => Boolean(it) && typeof it === 'object')
+        if (items.length < 2) continue
+        const withImg = items.filter((it) => typeof it.image === 'string' && /^https?:\/\//.test(String(it.image)))
+        if (withImg.length > 0 && withImg.length < items.length) {
+          for (const it of items) delete it.image
+          stats.usageUniform += withImg.length
+        }
+      }
+    }
     walkStringFields(data, (parent, key, value) => {
       const isUrl = /^https?:\/\//.test(value)
       if (isUrl && TEXT_LED_ARCHETYPES.has(arch)) {
@@ -801,9 +814,9 @@ export function applyPlacementGuards(spec: PageSpec, cutoutSet: ReadonlySet<stri
       }
     })
   }
-  if (stats.textLedImg || stats.emoji || stats.cutoutMoved)
+  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform}`,
     )
 }
 
@@ -858,6 +871,71 @@ export function dropUngroundedNumericBlocks(spec: PageSpec, corpus: string): voi
     throw new Error(`[composer] 무근거 수치 드롭 후 블록 ${spec.blocks.length}개(<6) — 페이지 구성 미달`)
 }
 
+/** 사진 주도형 블록(imageSlots>=2)인데 이미지가 하나도 없으면 — 거대한 빈 공간을 만들므로 블록 자체 제거(히어로/클로징 제외) */
+function dropEmptyPhotoBlocks(spec: PageSpec): void {
+  const hasHttp = (o: unknown): boolean => {
+    if (typeof o === 'string') return /^https?:\/\//.test(o)
+    if (Array.isArray(o)) return o.some(hasHttp)
+    if (o && typeof o === 'object') return Object.values(o as Record<string, unknown>).some(hasHttp)
+    return false
+  }
+  const beforeLen = spec.blocks.length
+  spec.blocks = spec.blocks.filter((b, i) => {
+    if (i === 0 || i === spec.blocks.length - 1) return true
+    const v = getVariant(b.variantId)
+    if (!v || v.imageSlots < 2) return true
+    return hasHttp(b.data)
+  })
+  if (spec.blocks.length < beforeLen)
+    console.warn(`[Blocks Composer] 이미지 없는 사진형 블록 ${beforeLen - spec.blocks.length}개 제거`)
+}
+
+/** ── 조립 후 페어링 QA ─────────────────────────────────────────────────────
+ *  컴포저는 텍스트 노트만 보고 배치하므로 "카피 ↔ 이미지 어울림"의 최종 판단이 확률적이다
+ *  (효능 카피 옆 패키지 라벨 확대 실사례). 조립이 끝난 spec의 (섹션 카피, 이미지) 쌍을
+ *  비전 모델이 실제로 보고, 부적합 쌍의 이미지만 제거한다. 실패 시 spec 그대로(무중단). */
+async function applyPairingQA(spec: PageSpec): Promise<number> {
+  const pairs: Array<{ id: string; url: string; sectionCopy: string }> = []
+  spec.blocks.forEach((b, i) => {
+    if (i === 0) return // 히어로 메인컷은 제품 대표 비주얼 — 카피 적합성 검사 대상 아님
+    const data = (b.data ?? {}) as Record<string, unknown>
+    const urls = new Set<string>()
+    const copyParts: string[] = []
+    walkStringFields(data, (_p, _k, v) => {
+      if (/^https?:\/\//.test(v)) urls.add(v)
+      else if (v.length > 3) copyParts.push(v)
+    })
+    if (!urls.size) return
+    const copy = copyParts.join(' · ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140)
+    for (const u of urls) pairs.push({ id: `${i}|${u}`, url: u, sectionCopy: copy || b.variantId })
+  })
+  if (!pairs.length) return 0
+
+  const { runPairingQA } = await import('./image-tagger')
+  const qa = await runPairingQA({ pairs })
+  if (!qa.success || !qa.data) return 0
+
+  let removed = 0
+  const reasons: string[] = []
+  for (const [id, verdict] of Object.entries(qa.data)) {
+    if (verdict.fit) continue
+    const sep = id.indexOf('|')
+    const idx = Number(id.slice(0, sep))
+    const url = id.slice(sep + 1)
+    const b = spec.blocks[idx]
+    if (!b) continue
+    walkStringFields((b.data ?? {}) as Record<string, unknown>, (parent, key, value) => {
+      if (value === url) {
+        delete parent[key]
+        removed++
+      }
+    })
+    reasons.push(`${b.variantId}(${verdict.reason ?? '부적합'})`)
+  }
+  if (removed) console.warn(`[Blocks Composer] 페어링 QA — 부적합 이미지 ${removed}건 제거: ${reasons.join(' · ')}`)
+  return removed
+}
+
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
   // max_tokens 24576은 SDK 논스트리밍 10분 제한을 초과 추정 → 스트리밍 필수 (SDK가 create를 거부)
   const message = await anthropicClient.messages
@@ -895,22 +973,7 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   if (sanStats.removedFabricated || sanStats.removedOverBudget)
     console.warn(`[Blocks Composer] 이미지 새니타이즈 — 지어낸URL ${sanStats.removedFabricated}건, 예산초과 ${sanStats.removedOverBudget}건 제거`)
 
-  // 사진 주도형 블록(imageSlots>=2)인데 이미지가 하나도 없으면 — 거대한 빈 공간을 만들므로 블록 자체 제거(히어로/클로징 제외)
-  const hasHttp = (o: unknown): boolean => {
-    if (typeof o === 'string') return /^https?:\/\//.test(o)
-    if (Array.isArray(o)) return o.some(hasHttp)
-    if (o && typeof o === 'object') return Object.values(o as Record<string, unknown>).some(hasHttp)
-    return false
-  }
-  const beforeLen = spec.blocks.length
-  spec.blocks = spec.blocks.filter((b, i) => {
-    if (i === 0 || i === spec.blocks.length - 1) return true
-    const v = getVariant(b.variantId)
-    if (!v || v.imageSlots < 2) return true
-    return hasHttp(b.data)
-  })
-  if (spec.blocks.length < beforeLen)
-    console.warn(`[Blocks Composer] 이미지 없는 사진형 블록 ${beforeLen - spec.blocks.length}개 제거`)
+  dropEmptyPhotoBlocks(spec)
 
   const groundingCorpus = JSON.stringify(input.brief) + JSON.stringify(input.imageNotes ?? {})
 
@@ -948,6 +1011,19 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
         result = await callOnce(input, issues2)
       }
     }
+    // 조립 후 페어링 QA — 부적합 (카피,이미지) 쌍의 이미지 제거 후 재렌더 (QA 실패 시 원안 유지)
+    try {
+      const removed = await applyPairingQA(result.spec)
+      if (removed > 0) {
+        dropEmptyPhotoBlocks(result.spec)
+        repairAndSalvageBlocks(result.spec)
+        const re = renderPage(result.spec)
+        result = { spec: result.spec, html: re.html, usedVariants: re.usedVariants }
+      }
+    } catch (e) {
+      console.warn('[Blocks Composer] 페어링 QA 스킵:', (e as Error).message?.slice(0, 120))
+    }
+
     saveJson(result.spec, `${input.outputDir}/page-spec.json`)
     const ms = elapsed()
     console.log(`[Blocks Composer] 완료 (${ms}ms) — ${result.usedVariants.length} blocks`)
