@@ -3,7 +3,7 @@
  * 스크립트 + 스타일 가이드 기반으로 섹션별 마이크로 카피 튜닝
  */
 
-import { anthropicClient, parseJsonResponse, saveJson, sanitizeRefinedCopy, timer, MODELS } from './utils'
+import { anthropicClient, parseJsonResponse, saveJson, sanitizeRefinedCopy, timer, MODELS, extractText } from './utils'
 import type { Script, StyleGuide, RefinedCopy, AgentResult, ProjectBrief } from './types'
 
 const SYSTEM_PROMPT = `You are a senior Korean e-commerce copywriter specializing in high-conversion product detail pages.
@@ -78,7 +78,7 @@ export async function runCopyWriter(
       messages: [{ role: 'user', content: buildUserPrompt(script, styleGuide, brief) }],
     })
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const text = extractText(message.content)
     const refinedCopy = parseJsonResponse<RefinedCopy>(text)
 
     // items.value 누락 보정 — 빈 값이면 label 첫 단어로 대체

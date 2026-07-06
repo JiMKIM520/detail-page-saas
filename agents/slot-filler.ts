@@ -7,7 +7,7 @@
  *   - trust.certs = brief 인증정보에서만
  *   - trust.score/count/reviews = 입력 소스에 명시된 경우에만, 없으면 비움
  */
-import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { Script, RefinedCopy, AgentResult, ProjectBrief } from './types'
 import { foodCopySchema, type FoodCopyData } from './templates/slots/food-slot'
 
@@ -102,7 +102,7 @@ async function callOnce(input: SlotFillerInput, repairNote?: string): Promise<Fo
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
   })
-  const text = message.content[0]?.type === 'text' ? message.content[0].text : ''
+  const text = extractText(message.content)
   const raw = parseJsonResponse<unknown>(text)
   return foodCopySchema.parse(raw)
 }

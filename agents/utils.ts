@@ -199,6 +199,15 @@ export function loadJson<T>(filePath: string): T {
 
 // ─── Claude JSON 파싱 헬퍼 ───────────────────────────────────
 
+/** 응답 content에서 text 블록만 이어붙인다 — Sonnet 5는 복잡한 작업에서 thinking 블록을
+ *  선두에 낼 수 있어 content[0] 고정 접근은 빈 문자열이 된다(JSON.parse가 "Unexpected end of JSON input"). */
+export function extractText(content: ReadonlyArray<{ type: string }>): string {
+  return content
+    .filter((b): b is { type: 'text'; text: string } => b.type === 'text')
+    .map((b) => b.text)
+    .join('')
+}
+
 export function parseJsonResponse<T>(text: string): T {
   // 마크다운 코드 블록 제거
   const cleaned = text

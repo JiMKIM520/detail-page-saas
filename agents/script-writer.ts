@@ -7,7 +7,7 @@
 import { buildDifferentiatedSystemPrompt } from '../lib/ai/prompts/builder'
 import { getCategoryPrompt } from '../lib/ai/prompts/categories'
 import { getPlatformPrompt } from '../lib/ai/prompts/platforms'
-import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { ProjectBrief, Script, AgentResult, StyleGuide } from './types'
 import * as fs from 'fs'
 
@@ -169,14 +169,17 @@ export async function runScriptWriter(
       includeDesignGuide: true,
     })
 
-    const message = await anthropicClient.messages.create({
-      model: MODELS.CLAUDE_SONNET,
-      max_tokens: 24576,   // 4096은 한글 다섹션 스크립트에 부족 → 응답 잘림 유발. Sonnet 5 토크나이저 +30% 반영 상향
-      system: systemPrompt,
-      messages: [{ role: 'user', content: buildUserPrompt(brief, styleGuide, validationFeedback) }],
-    })
+    // max_tokens 24576은 SDK 논스트리밍 10분 제한을 초과 추정 → 스트리밍 필수 (SDK가 create를 거부)
+    const message = await anthropicClient.messages
+      .stream({
+        model: MODELS.CLAUDE_SONNET,
+        max_tokens: 24576,   // 4096은 한글 다섹션 스크립트에 부족 → 응답 잘림 유발. Sonnet 5 토크나이저 +30% 반영 상향
+        system: systemPrompt,
+        messages: [{ role: 'user', content: buildUserPrompt(brief, styleGuide, validationFeedback) }],
+      })
+      .finalMessage()
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const text = extractText(message.content)
     if (message.stop_reason === 'max_tokens') {
       console.warn('[Script Writer] ⚠️ 응답이 max_tokens로 잘림 — JSON 불완전 가능, max_tokens 추가 상향 필요')
     }

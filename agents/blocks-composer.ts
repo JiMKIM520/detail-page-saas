@@ -10,7 +10,7 @@
  * 정직성: brief에 없는 인증/후기/수치를 지어내지 않는다.
  */
 import { z } from 'zod'
-import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
 import { getVariant } from './templates/blocks/registry'
@@ -798,21 +798,30 @@ export function dropUngroundedNumericBlocks(spec: PageSpec, corpus: string): voi
 }
 
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
-  const message = await anthropicClient.messages.create({
-    model: MODELS.CLAUDE_SONNET,
-    max_tokens: 24576, // Sonnet 5 신형 토크나이저 ~30% 토큰 증가 반영 (기존 16384)
-    system: [
-      { type: 'text', text: SYSTEM_PROMPT },
-      // 정적 카탈로그+계약 — 캐시 히트 시 이 구간 입력 단가 90% 절감 (5분 TTL: 재시도·체인 실행에서 히트)
-      { type: 'text', text: getStaticCatalogBlock(), cache_control: { type: 'ephemeral' } },
-    ],
-    messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
-  })
-  const usage = message.usage as unknown as Record<string, number | undefined>
+  // max_tokens 24576은 SDK 논스트리밍 10분 제한을 초과 추정 → 스트리밍 필수 (SDK가 create를 거부)
+  const message = await anthropicClient.messages
+    .stream({
+      model: MODELS.CLAUDE_SONNET,
+      max_tokens: 32000, // Sonnet 5 토크나이저 +30% & 적응형 thinking이 출력 예산을 공유 → 여유 확보 (기존 16384)
+      system: [
+        { type: 'text', text: SYSTEM_PROMPT },
+        // 정적 카탈로그+계약 — 캐시 히트 시 이 구간 입력 단가 90% 절감 (5분 TTL: 재시도·체인 실행에서 히트)
+        { type: 'text', text: getStaticCatalogBlock(), cache_control: { type: 'ephemeral' } },
+      ],
+      messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
+    })
+    .finalMessage()
+  const usage = message.usage as unknown as {
+    input_tokens?: number
+    cache_creation_input_tokens?: number
+    cache_read_input_tokens?: number
+    output_tokens?: number
+    output_tokens_details?: { thinking_tokens?: number }
+  }
   console.log(
-    `[Blocks Composer] usage — in:${usage.input_tokens} cacheW:${usage.cache_creation_input_tokens ?? 0} cacheR:${usage.cache_read_input_tokens ?? 0} out:${usage.output_tokens}`,
+    `[Blocks Composer] usage — in:${usage.input_tokens} cacheW:${usage.cache_creation_input_tokens ?? 0} cacheR:${usage.cache_read_input_tokens ?? 0} out:${usage.output_tokens} think:${usage.output_tokens_details?.thinking_tokens ?? 0} stop:${message.stop_reason}`,
   )
-  const text = message.content[0]?.type === 'text' ? message.content[0].text : ''
+  const text = extractText(message.content)
   const raw = parseJsonResponse<unknown>(text)
   const out = composerOutputSchema.parse(raw)
   const spec = assemblePageSpec(out, input.brandColors, input.preferredPreset)

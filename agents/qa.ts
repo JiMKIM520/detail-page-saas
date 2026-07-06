@@ -5,7 +5,7 @@
  * - 기업 금지사항 체크
  */
 
-import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import { getCategoryPrompt } from '../lib/ai/prompts/categories'
 import { getPlatformPrompt } from '../lib/ai/prompts/platforms'
 import type { Script, ProjectBrief, ComplianceReport, AgentResult } from './types'
@@ -79,7 +79,7 @@ export async function runQA(
       messages: [{ role: 'user', content: buildUserPrompt(script, brief) }],
     })
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const text = extractText(message.content)
     const report = parseJsonResponse<ComplianceReport>(text)
 
     saveJson(report, `${outputDir}/compliance-report.json`)

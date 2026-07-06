@@ -3,7 +3,7 @@
  * style-guide.json 기준으로 모든 산출물의 통일성 검증
  */
 
-import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { StyleGuide, RefinedCopy, ValidationReport, AgentResult, ProjectBrief } from './types'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -161,7 +161,7 @@ export async function runValidator(
       ],
     })
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const text = extractText(message.content)
     const report = parseJsonResponse<ValidationReport>(text)
 
     saveJson(report, `${outputDir}/validation-report.json`)

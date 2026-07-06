@@ -5,7 +5,7 @@
  */
 
 import type { ImageBlockParam, TextBlockParam } from '@anthropic-ai/sdk/resources'
-import { anthropicClient, loadImageAsBase64, parseJsonResponse, saveJson, timer, MODELS } from './utils'
+import { anthropicClient, loadImageAsBase64, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { ProjectBrief, StyleGuide, StylingPromptsJson, AgentResult } from './types'
 import { buildTemplateCatalog } from './templates/index'
 import * as fs from 'fs'
@@ -477,7 +477,7 @@ export async function runArtDirector(
       messages: [{ role: 'user', content: userContent }],
     })
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const text = extractText(message.content)
 
     // 두 JSON 분리
     const parts = text.split('===SEPARATOR===')

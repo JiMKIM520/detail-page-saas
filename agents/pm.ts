@@ -5,7 +5,7 @@
  *   → Icon Mapper → HTML Builder → QA → Validator → Playwright 캡처
  */
 
-import { saveJson, ensureOutputDirs, timer, anthropicClient, parseJsonResponse, MODELS } from './utils'
+import { saveJson, ensureOutputDirs, timer, anthropicClient, parseJsonResponse, MODELS, extractText } from './utils'
 import { runScriptWriter } from './script-writer'
 import { runArtDirector } from './art-director'
 import { runStylingShots } from './styling-shots'
@@ -135,7 +135,7 @@ ${issues.map((i, n) => `${n + 1}. [${i.severity}/${i.type}] ${i.description ?? '
 Which agent should re-run? Output JSON only.`
       }],
     })
-    const text = response.content[0].type === 'text' ? response.content[0].text : '{}'
+    const text = extractText(response.content) || '{}'
     const parsed = parseJsonResponse<{ agent: unknown; reason?: string }>(text)
     if (!isValidFailingAgent(parsed.agent)) {
       console.warn(`[PM Advisor] invalid agent value "${parsed.agent}" — failFast로 처리`)
