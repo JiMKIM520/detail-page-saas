@@ -31,6 +31,10 @@ export interface BlocksPipelineOptions {
   sectionImageUrls?: string[]
   /** 이미지 URL → 컷 설명 (컴포저 시맨틱 배치용) */
   imageNotes?: Record<string, string>
+  /** 승인 스크립트(scripts.content) — 있으면 페이지 플래너가 청사진을 만들어 컴포저를 구속 */
+  script?: { tone?: string; sections: Array<Record<string, unknown>> }
+  /** 브랜드 로고 URL — hero/closing 소형 슬롯 전용(배치 가드) */
+  logoUrls?: string[]
 }
 
 export async function runBlocksPipeline(
@@ -60,9 +64,24 @@ export async function runBlocksPipeline(
   const brief = buildProjectBrief(input, projectId)
   console.log('[Blocks PM] Step 1: 브리프 생성')
 
+  // ── Step 1.5: 페이지 플래너 (승인 스크립트가 있을 때) — 서사·블록·이미지 배정 청사진 ──
+  let blueprint: import('./page-planner').PageBlueprint | undefined
+  if (opts.script?.sections?.length) {
+    const { runPagePlanner } = await import('./page-planner')
+    const planned = await runPagePlanner({
+      brief,
+      script: opts.script,
+      imageNotes: opts.imageNotes ?? {},
+    })
+    if (planned.success && planned.data) blueprint = planned.data
+    // 플래너 실패 시 청사진 없이 기존 단일 컴포저 경로로 진행 (무중단)
+  }
+
   // ── Step 2: 블록 컴포저 (카탈로그 조합 → PageSpec → HTML, 내부 슬롯 zod 검증) ──
   const composer = await runBlocksComposer({
     brief,
+    blueprint,
+    logoUrls: opts.logoUrls,
     images: {
       hero: opts.heroImageUrl,
       lifestyle:

@@ -255,6 +255,52 @@ export async function runPipelineForProject(projectId: string): Promise<{
       const okStyling = stylingUrls.filter((u) => !rejectedUrls.has(u))
       const okSection = sectionUrls.filter((u) => !rejectedUrls.has(u))
 
+      // 승인 스크립트 로드 — scripts 테이블 최신본 우선, 없으면 기획 산출물 script.json 폴백 (재설계 Sprint 1a)
+      let approvedScript: { tone?: string; sections: Array<Record<string, unknown>> } | undefined
+      const { data: scriptRow } = await supabase
+        .from('scripts')
+        .select('content')
+        .eq('project_id', projectId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      const rowContent = (scriptRow?.content ?? null) as { tone?: string; sections?: unknown[] } | null
+      if (Array.isArray(rowContent?.sections) && rowContent.sections.length) {
+        approvedScript = rowContent as { tone?: string; sections: Array<Record<string, unknown>> }
+      } else {
+        try {
+          const { data: blob } = await supabase.storage
+            .from('designs')
+            .download(`projects/${projectId}/planning/script.json`)
+          if (blob) {
+            const js = JSON.parse(await blob.text()) as { sections?: unknown[] }
+            if (Array.isArray(js?.sections) && js.sections.length)
+              approvedScript = js as { tone?: string; sections: Array<Record<string, unknown>> }
+          }
+        } catch {
+          /* 스크립트 없음 — 청사진 없이 기존 경로 */
+        }
+      }
+      console.log(`[pipeline-bridge] 승인 스크립트: ${approvedScript ? `${approvedScript.sections.length}섹션` : '없음(청사진 생략)'}`)
+
+      // 브랜드 로고 — 색 추출 외에 이미지 자체를 브랜드 라벨 소형 슬롯 후보로 편입 (재설계 Sprint 1c)
+      let logoUrls: string[] = []
+      const { data: logoFiles } = await supabase
+        .from('intake_files')
+        .select('storage_path')
+        .eq('project_id', projectId)
+        .eq('file_type', 'brand_logo')
+        .limit(1)
+      if (logoFiles?.[0]) {
+        const { data: signedLogo } = await supabase.storage
+          .from('intake-files')
+          .createSignedUrl(logoFiles[0].storage_path, 60 * 60 * 24 * 7)
+        if (signedLogo?.signedUrl) {
+          logoUrls = [signedLogo.signedUrl]
+          imageNotes[signedLogo.signedUrl] = '브랜드 로고 원본 — 히어로/클로징 브랜드 라벨 소형 슬롯 전용'
+        }
+      }
+
       // 브랜드 대표색 추출 (brand_logo 우선)
       const brandColors = await deriveBrandColors(supabase, projectId)
       const blocksInput: ProjectInput = { ...input, brandColors }
@@ -269,9 +315,11 @@ export async function runPipelineForProject(projectId: string): Promise<{
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
         cutoutUrls,
-        sectionImageUrls: okSection,
+        sectionImageUrls: [...okSection, ...logoUrls],
         imageNotes,
         preferredPreset: presetForCategory(input.category),
+        script: approvedScript,
+        logoUrls,
       })
     } else if (isFood) {
       // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)
@@ -395,8 +443,25 @@ export async function runPlanningForProject(projectId: string): Promise<{
       console.warn(`[pipeline-bridge/planning] projectId=${projectId}: 누끼컷 없음, 빈 배열로 기획 진행`)
     }
 
+    // 2.5. 고객 업로드 레퍼런스 디자인(≤3장) — 아트디렉터 스타일 참조 재연결 (Sprint 1c)
+    const { data: refFiles } = await supabase
+      .from('intake_files')
+      .select('storage_path, file_name')
+      .eq('project_id', projectId)
+      .eq('file_type', 'reference_design')
+      .limit(3)
+    const referenceImagePaths: string[] = []
+    for (const file of refFiles ?? []) {
+      const { data: blob } = await supabase.storage.from('intake-files').download(file.storage_path)
+      if (!blob) continue
+      const localPath = path.join(tmpNukkiDir, `ref_${file.file_name}`)
+      fs.writeFileSync(localPath, Buffer.from(await blob.arrayBuffer()))
+      referenceImagePaths.push(localPath)
+    }
+
     // 3. ProjectInput 구성 (기존 패턴 동일)
     const input = buildInputFromProject(project as unknown as Record<string, unknown>, nukkiPaths)
+    input.referenceImagePaths = referenceImagePaths
 
     // 4. 기획 파이프라인 실행
     const { runPlanningPipeline } = await import('@/agents/pm')

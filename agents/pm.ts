@@ -705,12 +705,13 @@ export async function runPlanningPipeline(input: ProjectInput): Promise<Planning
   saveJson(brief, `${dirs.base}/project-brief.json`)
   console.log('[PM/기획] Step 1: 프로젝트 브리프 생성 완료')
 
-  // ── Step 2: (제거됨) v6 — 디자인 레퍼런스 이미지 비전 폐기 ──
-  // 웹/섹션 레퍼런스 비전 분석은 v5 layer-image 자동 생성용 잔재.
-  // v6는 템플릿(코드화 DetailTemplate) 기반이라 불필요 + Opus many-image라 느리고 비쌈(실측 2.3분).
-  // → Art Director에는 제품 누끼컷만 전달 (제품 색·형태 파악용). design-researcher 호출 제거.
-  const allReferenceImages = input.nukkiPaths ?? []
+  // ── Step 2: v6 — 웹/섹션 레퍼런스 비전은 폐기(비용), 단 "고객 업로드 레퍼런스 디자인"은 전달 ──
+  // v6 전환에서 design-researcher를 제거하며 고객 업로드분까지 끊겼던 것을 재연결 (Sprint 1c).
+  // 고객이 준 취향 기준(≤3장)은 스타일가이드가 반영해야 할 입력이다.
+  const allReferenceImages = [...(input.nukkiPaths ?? []), ...(input.referenceImagePaths ?? []).slice(0, 3)]
   const sectionRefs: { section: string; paths: string[] }[] = []
+  if (input.referenceImagePaths?.length)
+    console.log(`[PM/기획] 고객 레퍼런스 디자인 ${Math.min(input.referenceImagePaths.length, 3)}장 아트디렉터 전달`)
 
   // ── Step 3: Art Director (디자인기획 = style-guide + 스타일링샷 프롬프트) ──
   console.log('\n[PM/기획] Step 3: Art Director 실행 (디자인 기획)')

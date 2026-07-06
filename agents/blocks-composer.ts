@@ -57,6 +57,10 @@ export interface BlocksComposerInput {
   avoidVariants?: string[]
   /** 업로드 원본 누끼 URL 전체 — 연출형 슬롯 오배치 방지 가드(placement guard)용 */
   cutoutUrls?: string[]
+  /** 페이지 플래너 청사진 — 있으면 블록·순서·이미지 배정의 구속 계약 (재설계 A→B단계) */
+  blueprint?: import('./page-planner').PageBlueprint
+  /** 브랜드 로고 URL — 배치 가드가 hero/closing/cs 외 오배치를 제거한다 */
+  logoUrls?: string[]
 }
 
 export interface BlocksComposerResult {
@@ -416,7 +420,7 @@ banner-dark-promo { patternText?, subhead?(em,br), titleLine1(em,br), titleLine2
 /** DATA_CONTRACTS에 슬롯 계약이 정의된 variantId 집합 (각 줄 맨 앞 `<id> {` 파싱).
  *  catalog()에는 있으나 계약이 없는 변형은 AI에게 제시하지 않는다 → 계약/카탈로그 드리프트로 인한
  *  Zod 검증 실패를 원천 차단(correct-by-construction). */
-const CONTRACTED_IDS: ReadonlySet<string> = new Set(
+export const CONTRACTED_IDS: ReadonlySet<string> = new Set(
   DATA_CONTRACTS.split('\n')
     .map((line) => line.trim().match(/^([a-z0-9-]+)\s*\{/i)?.[1])
     .filter((id): id is string => Boolean(id)),
@@ -536,10 +540,19 @@ function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): strin
 사용 가능한 이미지:
 ${imageBlock}${imgBudget}
 
-FEATURED VARIANTS (이번 페이지 다양성 로테이션 — 역할에 맞으면 카탈로그의 다른 변형보다 우선 선택):
+${
+  input.blueprint
+    ? `PAGE BLUEPRINT (BINDING — 아래 순서·변형·이미지 배정을 그대로 따르라. 변형 임의 교체·추가 금지):
+${input.blueprint.sections
+  .map((s, i) => `${i + 1}. ${s.variantId} | 이미지: ${s.imageUrls.join(', ') || '(없음)'} | 내용: ${s.copyBrief}`)
+  .join('\n')}
+
+카피 원천 (CRITICAL): 각 항목의 '내용'은 고객이 승인한 스크립트의 요지다 — 이를 다듬어 슬롯을 채우고, 여기에 없는 사실·수치·주장을 창작하지 말 것.`
+    : `FEATURED VARIANTS (이번 페이지 다양성 로테이션 — 역할에 맞으면 카탈로그의 다른 변형보다 우선 선택):
 ${sampleFeatured(avoid).join(', ')}
 
-${avoidBlock}\n\n시스템 프롬프트의 블록 카탈로그·데이터 계약을 준수해, 위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
+${avoidBlock}`
+}\n\n시스템 프롬프트의 블록 카탈로그·데이터 계약을 준수해, 위 제품을 위한 상세페이지를 블록 조합으로 설계해 JSON으로 출력하세요.${repair}`
 }
 
 /** 캐시 대상 정적 페이로드 — 카탈로그+데이터 계약(~70k자)은 호출마다 동일하므로 시스템 블록으로 옮겨
@@ -776,8 +789,14 @@ function walkStringFields(
   }
 }
 
-export function applyPlacementGuards(spec: PageSpec, cutoutSet: ReadonlySet<string>): void {
-  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0 }
+const LOGO_OK_ARCHETYPES = new Set(['hero', 'closing', 'cs'])
+
+export function applyPlacementGuards(
+  spec: PageSpec,
+  cutoutSet: ReadonlySet<string>,
+  logoSet: ReadonlySet<string> = new Set(),
+): void {
+  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0 }
   for (const b of spec.blocks) {
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     const data = (b.data ?? {}) as Record<string, unknown>
@@ -806,6 +825,12 @@ export function applyPlacementGuards(spec: PageSpec, cutoutSet: ReadonlySet<stri
         stats.cutoutMoved++
         return
       }
+      // 브랜드 로고는 브랜드 라벨 성격 슬롯(hero/closing/cs)에만 — 본문 콘텐츠 이미지로 오배치 금지
+      if (isUrl && logoSet.has(value) && !LOGO_OK_ARCHETYPES.has(arch)) {
+        delete parent[key]
+        stats.logoMoved++
+        return
+      }
       if (!isUrl && EMOJI_RE.test(value)) {
         const cleaned = value.replace(EMOJI_RE, '').replace(/\s{2,}/g, ' ').trim()
         stats.emoji++
@@ -816,7 +841,7 @@ export function applyPlacementGuards(spec: PageSpec, cutoutSet: ReadonlySet<stri
   }
   if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved}`,
     )
 }
 
@@ -941,7 +966,7 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const message = await anthropicClient.messages
     .stream({
       model: MODELS.CLAUDE_SONNET,
-      max_tokens: 32000, // Sonnet 5 토크나이저 +30% & 적응형 thinking이 출력 예산을 공유 → 여유 확보 (기존 16384)
+      max_tokens: 40000, // S5는 페이지 JSON에 28~32k+ 출력(32000 캡 도달 실사례) — 여유 확보
       system: [
         { type: 'text', text: SYSTEM_PROMPT },
         // 정적 카탈로그+계약 — 캐시 히트 시 이 구간 입력 단가 90% 절감 (5분 TTL: 재시도·체인 실행에서 히트)
@@ -964,6 +989,19 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const raw = parseJsonResponse<unknown>(text)
   const out = composerOutputSchema.parse(raw)
   const spec = assemblePageSpec(out, input.brandColors, input.preferredPreset)
+
+  // 청사진 이탈 결정적 검증 — 조립 변형은 청사진의 부분집합이어야 하고 2개 초과 누락 금지 (실패 시 재시도 피드백)
+  if (input.blueprint) {
+    const planned = input.blueprint.sections.map((s) => s.variantId)
+    const plannedSet = new Set(planned)
+    const composed = spec.blocks.map((b) => b.variantId)
+    const alien = composed.filter((v) => !plannedSet.has(v))
+    if (alien.length > 0 || composed.length < planned.length - 2) {
+      throw new Error(
+        `[composer] 청사진 이탈 — 계획 외 변형: ${alien.join(',') || '없음'} / 조립 ${composed.length}블록 vs 계획 ${planned.length}블록. PAGE BLUEPRINT를 그대로 따르라.`,
+      )
+    }
+  }
   const allowedUrls = new Set(
     [input.images?.hero, input.images?.cutout, ...(input.images?.lifestyle ?? []), ...(input.images?.section ?? [])].filter(
       (u): u is string => Boolean(u),
@@ -978,7 +1016,11 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const groundingCorpus = JSON.stringify(input.brief) + JSON.stringify(input.imageNotes ?? {})
 
   // 배치 결함 가드 — 표계열 이미지·이모지·누끼 오배치를 코드로 봉쇄 (깨진 스키마는 수리 패스가 수습)
-  applyPlacementGuards(spec, new Set(input.cutoutUrls ?? (input.images?.cutout ? [input.images.cutout] : [])))
+  applyPlacementGuards(
+    spec,
+    new Set(input.cutoutUrls ?? (input.images?.cutout ? [input.images.cutout] : [])),
+    new Set(input.logoUrls ?? []),
+  )
 
   // 무근거 전화번호가 든 필드 제거 — 깨진 스키마는 아래 수리 패스가 해당 항목만 들어낸다
   sanitizeUngroundedPhones(spec, groundingCorpus)
