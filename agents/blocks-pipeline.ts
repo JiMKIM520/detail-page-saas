@@ -35,6 +35,8 @@ export interface BlocksPipelineOptions {
   script?: { tone?: string; sections: Array<Record<string, unknown>> }
   /** 브랜드 로고 URL — hero/closing 소형 슬롯 전용(배치 가드) */
   logoUrls?: string[]
+  /** 아트디렉터 스타일가이드(planning/style-guide.json) — 토큰 오버라이드용 (Sprint 4-D) */
+  styleGuide?: import('./templates/blocks/tokens').StyleGuideTokenInput
 }
 
 export async function runBlocksPipeline(
@@ -82,6 +84,7 @@ export async function runBlocksPipeline(
     brief,
     blueprint,
     logoUrls: opts.logoUrls,
+    styleGuide: opts.styleGuide,
     images: {
       hero: opts.heroImageUrl,
       lifestyle:

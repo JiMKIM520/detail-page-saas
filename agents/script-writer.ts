@@ -8,6 +8,7 @@ import { buildDifferentiatedSystemPrompt } from '../lib/ai/prompts/builder'
 import { getCategoryPrompt } from '../lib/ai/prompts/categories'
 import { getPlatformPrompt } from '../lib/ai/prompts/platforms'
 import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
+import { buildCanvasPrompt } from './templates/blocks/canvas'
 import type { ProjectBrief, Script, AgentResult, StyleGuide } from './types'
 import * as fs from 'fs'
 
@@ -70,6 +71,8 @@ ${brief.restrictions.styles.length > 0 ? '금지 스타일: ' + brief.restrictio
 감성:정보 비율 = ${ratio.emotion}:${ratio.info}
 - 감성적 스토리텔링 ${ratio.emotion}%, 객관적 정보 ${ratio.info}%로 구성하세요.
 ${styleSection}${feedbackSection}
+${buildCanvasPrompt()}
+
 섹션 수 (중요): 이상적으로 8~10개. 최대 10개를 절대 초과하지 말 것. 억지로 섹션을 늘리지 말 것 — 필요한 내용만 자연스럽게 구성하세요.
 포함 필수 타입(7개): hero, brand_story, photo_gallery, process 또는 how_to_use, ingredients 또는 key_benefit, packaging 또는 delivery_info, cta
 steps 타입을 사용할 경우 최대 4단계 이내로 구성할 것 — 단계가 많으면 가독성이 떨어짐.

@@ -301,6 +301,27 @@ export async function runPipelineForProject(projectId: string): Promise<{
         }
       }
 
+      // 아트디렉터 스타일가이드 — 팔레트·폰트를 블록 토큰에 반영 (Sprint 4-D. 없으면 프리셋 유지)
+      let styleGuideTokens: import('@/agents/templates/blocks/tokens').StyleGuideTokenInput | undefined
+      try {
+        const { data: sgBlob } = await supabase.storage
+          .from('designs')
+          .download(`projects/${projectId}/planning/style-guide.json`)
+        if (sgBlob) {
+          const sg = JSON.parse(await sgBlob.text()) as {
+            colors?: Record<string, string>
+            typography?: Record<string, unknown>
+          }
+          styleGuideTokens = {
+            colors: sg.colors,
+            typography: sg.typography as import('@/agents/templates/blocks/tokens').StyleGuideTokenInput['typography'],
+          }
+          console.log('[pipeline-bridge] 스타일가이드 로드 — 토큰 오버라이드 적용 예정')
+        }
+      } catch {
+        /* 스타일가이드 없음 — 프리셋 토큰 유지 */
+      }
+
       // 브랜드 대표색 추출 (brand_logo 우선)
       const brandColors = await deriveBrandColors(supabase, projectId)
       const blocksInput: ProjectInput = { ...input, brandColors }
@@ -320,6 +341,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
         preferredPreset: presetForCategory(input.category),
         script: approvedScript,
         logoUrls,
+        styleGuide: styleGuideTokens,
       })
     } else if (isFood) {
       // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)

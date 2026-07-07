@@ -139,15 +139,31 @@ export async function runImageTagger(
     })
     content.push({ type: 'text', text: `위 ${inputs.length}장을 순서대로 검수해 JSON 배열만 출력하세요.` })
 
-    const message = await anthropicClient.messages.create({
-      model: MODELS.CLAUDE_SONNET,
-      max_tokens: 10000, // 10장+ 검수 시 4096은 잘림(Unterminated JSON 실사례) — S5 토크나이저 여유 포함
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: content as never }],
-    })
-    if (message.stop_reason === 'max_tokens')
-      console.warn('[Image Tagger] ⚠ 출력이 max_tokens로 잘림 — 검수 장수를 줄이거나 한도 상향 필요')
-    const rows = parseJsonResponse<Array<Partial<ImageTag> & { index?: number }>>(extractText(message.content))
+    const callOnce = async (repairNote?: string): Promise<Array<Partial<ImageTag> & { index?: number }>> => {
+      const message = await anthropicClient.messages.create({
+        model: MODELS.CLAUDE_SONNET,
+        max_tokens: 10000, // 10장+ 검수 시 4096은 잘림(Unterminated JSON 실사례) — S5 토크나이저 여유 포함
+        system: SYSTEM_PROMPT,
+        messages: [
+          {
+            role: 'user',
+            content: (repairNote
+              ? [...content, { type: 'text', text: `⚠️ 직전 출력이 JSON 파싱 실패: ${repairNote} — 문자열 안에 개행 없이 한 줄 JSON으로 다시.` }]
+              : content) as never,
+          },
+        ],
+      })
+      if (message.stop_reason === 'max_tokens')
+        console.warn('[Image Tagger] ⚠ 출력이 max_tokens로 잘림 — 검수 장수를 줄이거나 한도 상향 필요')
+      return parseJsonResponse<Array<Partial<ImageTag> & { index?: number }>>(extractText(message.content))
+    }
+    let rows: Array<Partial<ImageTag> & { index?: number }>
+    try {
+      rows = await callOnce()
+    } catch (parseErr: unknown) {
+      // 문자열 내 개행 등 형식 문제 — 1회 재시도 (실패 시 상위에서 파일명 폴백)
+      rows = await callOnce((parseErr as Error).message?.slice(0, 120))
+    }
 
     const out: Record<string, ImageTag> = {}
     rows.forEach((row, i) => {

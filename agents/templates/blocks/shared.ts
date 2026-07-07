@@ -152,6 +152,73 @@ export const FONT_LINKS: string = [
 </style>`,
 ].join('\n')
 
+/** 폰트 화이트리스트 (Sprint 4-D) — 로드 방법을 아는 폰트만 스타일가이드 토큰 오버라이드 허용.
+ *  gf 값이 있으면 Google Fonts css2로 추가 로드, 없으면 기본 FONT_LINKS에 이미 포함.
+ *  비 GF 폰트(GmarketSans·Tenada·KoPub 등)는 CDN 파일명 검증 전이라 미등재 — 프리셋 폴백. */
+export const FONT_WHITELIST: Record<string, { gf?: string }> = {
+  'pretendard': {}, 'black han sans': {}, 'gaegu': {}, 'gowun batang': {}, 'cormorant garamond': {},
+  'paperlogy': {}, 'cafe24 classictype': {}, 'cafe24 dangdanghae': {},
+  'ibm plex sans kr': { gf: 'IBM+Plex+Sans+KR:wght@400;500;700' },
+  'noto sans kr': { gf: 'Noto+Sans+KR:wght@400;700;900' },
+  'noto serif kr': { gf: 'Noto+Serif+KR:wght@400;600;900' },
+  'gothic a1': { gf: 'Gothic+A1:wght@400;700;900' },
+  'sunflower': { gf: 'Sunflower:wght@300;500;700' },
+  'stylish': { gf: 'Stylish' },
+  'do hyeon': { gf: 'Do+Hyeon' },
+  'jua': { gf: 'Jua' },
+  'gowun dodum': { gf: 'Gowun+Dodum' },
+  'nanum myeongjo': { gf: 'Nanum+Myeongjo:wght@400;700;800' },
+  'nanum gothic': { gf: 'Nanum+Gothic:wght@400;700;800' },
+  'nanum pen script': { gf: 'Nanum+Pen+Script' },
+  'nanum brush script': { gf: 'Nanum+Brush+Script' },
+  'hahmlet': { gf: 'Hahmlet:wght@400;600;800' },
+  'song myung': { gf: 'Song+Myung' },
+  'poor story': { gf: 'Poor+Story' },
+  'gamja flower': { gf: 'Gamja+Flower' },
+  'yeon sung': { gf: 'Yeon+Sung' },
+  'gugi': { gf: 'Gugi' },
+  'hi melody': { gf: 'Hi+Melody' },
+  'cute font': { gf: 'Cute+Font' },
+  'single day': { gf: 'Single+Day' },
+  'east sea dokdo': { gf: 'East+Sea+Dokdo' },
+  'kirang haerang': { gf: 'Kirang+Haerang' },
+}
+
+/** 표기 변형 → 정식 패밀리명 별칭 (아트디렉터가 'Pretendard Variable' 등으로 쓰는 실사례) */
+const FONT_ALIASES: Record<string, string> = {
+  'pretendard variable': 'Pretendard',
+  'noto sans korean': 'Noto Sans KR',
+  'noto serif korean': 'Noto Serif KR',
+}
+
+/** 화이트리스트 폰트면 정식 패밀리명 반환, 아니면 null */
+export function resolveWhitelistFont(family: string): string | null {
+  const key = family.trim().toLowerCase()
+  const canonical = FONT_ALIASES[key] ?? family.trim()
+  return FONT_WHITELIST[canonical.toLowerCase()] !== undefined ? canonical : null
+}
+
+export function isWhitelistedFont(family: string): boolean {
+  return resolveWhitelistFont(family) !== null
+}
+
+/** 토큰의 폰트 패밀리에서 추가 Google Fonts 링크 생성 — 기본 로드 밖 화이트리스트 폰트를 동적 로드 */
+export function buildFontLinks(tokens: Tokens): string {
+  const fams = new Set<string>()
+  for (const v of [tokens.fontDisplay, tokens.fontBody, tokens.fontSerif, tokens.fontHand]) {
+    const m = String(v).match(/^'([^']+)'/)
+    if (m) fams.add(m[1].trim().toLowerCase())
+  }
+  const gfParams = [...fams]
+    .map((f) => FONT_WHITELIST[f]?.gf)
+    .filter((x): x is string => Boolean(x))
+    .map((p) => `family=${p}`)
+  const extra = gfParams.length
+    ? `\n<link href="https://fonts.googleapis.com/css2?${gfParams.join('&')}&display=swap" rel="stylesheet">`
+    : ''
+  return FONT_LINKS + extra
+}
+
 /** 토큰 → :root CSS 변수 + 리셋 + 페이지 + 공유 유틸리티(워터마크/라벨/디스플레이). composer가 1회 주입. */
 export function baseCss(tokens: Tokens, width: number): string {
   const t = { ...tokens }

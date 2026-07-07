@@ -171,7 +171,11 @@ export async function generateScriptForProject(projectId: string, clientFeedback
           platform_style_guide: platformStyleGuide,
         })
 
-    let userPrompt = baseUserPrompt + (urlContext ? `\n\n## 참조 URL에서 추출한 컨텐츠\n${urlContext}` : '')
+    // Sprint 4-A: 표현 가능 공간 주입 — 스크립트가 조립 가능한 형태로만 쓰이게 한다
+    const { buildCanvasPrompt } = await import('@/agents/templates/blocks/canvas')
+    let userPrompt =
+      `${baseUserPrompt}\n\n## ${buildCanvasPrompt()}` +
+      (urlContext ? `\n\n## 참조 URL에서 추출한 컨텐츠\n${urlContext}` : '')
     if (clientFeedback) {
       userPrompt += `\n\n## 클라이언트 수정 요청\n다음 피드백을 반영하여 스크립트를 수정하세요:\n${clientFeedback}`
     }

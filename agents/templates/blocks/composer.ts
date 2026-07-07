@@ -8,7 +8,7 @@
  *  4) baseCss(토큰) + 변형 CSS + 폰트링크 + 렌더된 섹션들로 문서 조립
  */
 import { z } from 'zod'
-import { baseCss, esc, FONT_LINKS, makeCtx } from './shared'
+import { baseCss, buildFontLinks, esc, makeCtx } from './shared'
 import { getVariant } from './registry'
 import type { PageSpec } from './types'
 
@@ -52,7 +52,7 @@ export function renderPage(spec: PageSpec): RenderResult {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=${width}">
 <title>${esc(title)}</title>
-${FONT_LINKS}
+${buildFontLinks(spec.tokens)}
 <style>
 ${styles}
 </style>

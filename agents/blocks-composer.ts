@@ -37,10 +37,15 @@ export type ComposerOutput = z.infer<typeof composerOutputSchema>
  * presetOverride가 있으면 AI가 고른 presetKey 대신 강제(카테고리별 프리미엄 프리셋 노출용).
  * 브랜드색이 있으면 배경도 옅게 틴트해 업체별로 분위기가 달라지게 한다.
  */
-export function assemblePageSpec(out: ComposerOutput, brandColors?: string[], presetOverride?: string): PageSpec {
+export function assemblePageSpec(
+  out: ComposerOutput,
+  brandColors?: string[],
+  presetOverride?: string,
+  styleGuide?: import('./templates/blocks/tokens').StyleGuideTokenInput,
+): PageSpec {
   const presetKey = presetOverride ?? out.presetKey
   const hasBrand = (brandColors ?? []).length > 0
-  const tokens = deriveTokens(presetKey, brandColors, { tintBackground: hasBrand })
+  const tokens = deriveTokens(presetKey, brandColors, { tintBackground: hasBrand, styleGuide })
   return { meta: { ...out.meta }, tokens, blocks: out.blocks }
 }
 
@@ -61,6 +66,8 @@ export interface BlocksComposerInput {
   blueprint?: import('./page-planner').PageBlueprint
   /** 브랜드 로고 URL — 배치 가드가 hero/closing/cs 외 오배치를 제거한다 */
   logoUrls?: string[]
+  /** 아트디렉터 스타일가이드 — 팔레트·폰트를 토큰에 반영 (대비·화이트리스트 가드, Sprint 4-D) */
+  styleGuide?: import('./templates/blocks/tokens').StyleGuideTokenInput
 }
 
 export interface BlocksComposerResult {
@@ -1012,7 +1019,7 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const text = extractText(message.content)
   const raw = parseJsonResponse<unknown>(text)
   const out = composerOutputSchema.parse(raw)
-  const spec = assemblePageSpec(out, input.brandColors, input.preferredPreset)
+  const spec = assemblePageSpec(out, input.brandColors, input.preferredPreset, input.styleGuide)
 
   // 청사진 이탈 결정적 검증 — 조립 변형은 청사진의 부분집합이어야 하고 2개 초과 누락 금지 (실패 시 재시도 피드백)
   if (input.blueprint) {

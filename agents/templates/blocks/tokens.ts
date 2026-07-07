@@ -3,6 +3,7 @@
  * 변형(블록)은 토큰 무관하게 동작하고, 토큰만 바꿔도 페이지 분위기가 달라진다.
  */
 import type { Tokens } from './types'
+import { resolveWhitelistFont } from './shared'
 
 /** 스타일 A — 따뜻한 플레이풀 푸드 (Black Han Sans + 말풍선/워터마크). */
 export const warmPlayful: Tokens = {
@@ -132,10 +133,43 @@ const WARM_WHITE = { r: 250, g: 246, b: 239 }
  * - bg     = 브랜드 메인색을 따뜻한 화이트로 93% 섞은 밝은 배경 (프리셋 bg 대체, 선택)
  * 폰트/구조는 프리셋 유지 → 스타일 방향은 프리셋이, 색조는 브랜드가 결정.
  */
+/** WCAG 상대 휘도 기반 대비율 — 스타일가이드 색 오버라이드의 가독성 가드(Sprint 4-D) */
+function luminance(c: { r: number; g: number; b: number }): number {
+  const f = (v: number): number => {
+    const s = v / 255
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4)
+  }
+  return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b)
+}
+function contrastRatio(a: { r: number; g: number; b: number }, b: { r: number; g: number; b: number }): number {
+  const l1 = luminance(a)
+  const l2 = luminance(b)
+  const [hi, lo] = l1 > l2 ? [l1, l2] : [l2, l1]
+  return (hi + 0.05) / (lo + 0.05)
+}
+const WHITE = { r: 255, g: 255, b: 255 }
+
+/** 아트디렉터 스타일가이드 → 토큰 오버라이드 입력 (Sprint 4-D) */
+export interface StyleGuideTokenInput {
+  colors?: {
+    primary?: string
+    accent?: string
+    surface1?: string
+    surface2?: string
+    textDark?: string
+  }
+  typography?: {
+    headlineFont?: string
+    storyFont?: string
+    bodyFont?: string
+    accentFont?: string
+  }
+}
+
 export function deriveTokens(
   presetKey: string,
   brandColors?: string[],
-  opts?: { tintBackground?: boolean },
+  opts?: { tintBackground?: boolean; styleGuide?: StyleGuideTokenInput },
 ): Tokens {
   const preset = TOKEN_PRESETS[presetKey] ?? warmPlayful
   const valid = (brandColors ?? []).map((c) => parseHex(c)).filter((x): x is { r: number; g: number; b: number } => x !== null)
@@ -153,6 +187,75 @@ export function deriveTokens(
   if (accentRgb) {
     next.accent = toHex(accentRgb.r, accentRgb.g, accentRgb.b)
     next.accentDark = mix(accentRgb, BLACK, 0.18)
+  }
+
+  // ── 스타일가이드 오버라이드 (Sprint 4-D) — 아트디렉터 기획을 실제 토큰에 반영.
+  // 각 색은 가독성 대비 가드 통과 시만 적용, 폰트는 화이트리스트만 — 미달은 조용히 프리셋/브랜드색 유지.
+  const sg = opts?.styleGuide
+  if (sg) {
+    const applied: string[] = []
+    const skipped: string[] = []
+    const c = sg.colors ?? {}
+    const inkRgb = (): { r: number; g: number; b: number } => parseHex(next.ink) ?? BLACK
+
+    const bgCand = parseHex(c.surface1 ?? '')
+    if (bgCand) {
+      if (contrastRatio(inkRgb(), bgCand) >= 7) {
+        next.bg = toHex(bgCand.r, bgCand.g, bgCand.b)
+        applied.push('bg')
+      } else skipped.push('bg(대비)')
+    }
+    const paperCand = parseHex(c.surface2 ?? '')
+    if (paperCand) {
+      if (contrastRatio(inkRgb(), paperCand) >= 7) {
+        next.paper = toHex(paperCand.r, paperCand.g, paperCand.b)
+        applied.push('paper')
+      } else skipped.push('paper(대비)')
+    }
+    const inkCand = parseHex(c.textDark ?? '')
+    if (inkCand) {
+      const bgNow = parseHex(next.bg) ?? WHITE
+      if (contrastRatio(inkCand, bgNow) >= 7) {
+        next.ink = toHex(inkCand.r, inkCand.g, inkCand.b)
+        next.ink2 = mix(inkCand, WHITE, 0.24)
+        applied.push('ink')
+      } else skipped.push('ink(대비)')
+    }
+    const primaryCand = parseHex(c.primary ?? '')
+    if (primaryCand) {
+      // brand는 다크 섹션 배경(흰 텍스트) — 흰색과의 대비가 확보돼야 한다
+      if (contrastRatio(WHITE, primaryCand) >= 4.5) {
+        next.brand = toHex(primaryCand.r, primaryCand.g, primaryCand.b)
+        applied.push('brand')
+      } else skipped.push('brand(대비)')
+    }
+    const accentCand = parseHex(c.accent ?? '')
+    if (accentCand) {
+      const paperNow = parseHex(next.paper) ?? WHITE
+      if (contrastRatio(accentCand, paperNow) >= 3) {
+        next.accent = toHex(accentCand.r, accentCand.g, accentCand.b)
+        next.accentDark = mix(accentCand, BLACK, 0.18)
+        applied.push('accent')
+      } else skipped.push('accent(대비)')
+    }
+
+    const t = sg.typography ?? {}
+    // shared의 화이트리스트 — 동적 import 불가 위치라 lazy require 대신 정적 import 사용
+    const setFont = (key: 'fontDisplay' | 'fontBody' | 'fontSerif' | 'fontHand', family: string | undefined, generic: string): void => {
+      if (!family?.trim()) return
+      const canonical = resolveWhitelistFont(family)
+      if (canonical) {
+        next[key] = `'${canonical}', ${generic}`
+        applied.push(key)
+      } else skipped.push(`${key}(${family.trim()})`)
+    }
+    setFont('fontDisplay', t.headlineFont, 'sans-serif')
+    setFont('fontBody', t.bodyFont, 'sans-serif')
+    setFont('fontSerif', t.storyFont, 'serif')
+    setFont('fontHand', t.accentFont, 'sans-serif')
+
+    if (applied.length || skipped.length)
+      console.log(`[tokens] 스타일가이드 반영 — 적용: ${applied.join(',') || '없음'} · 폴백: ${skipped.join(',') || '없음'}`)
   }
   return next
 }
