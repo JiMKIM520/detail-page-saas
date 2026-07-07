@@ -928,11 +928,18 @@ function dropEmptyPhotoBlocks(spec: PageSpec): void {
   spec.blocks = spec.blocks.filter((b, i) => {
     if (i === 0 || i === spec.blocks.length - 1) return true
     const v = getVariant(b.variantId)
-    if (!v || v.imageSlots < 2) return true
-    return hasHttp(b.data)
+    if (!v || v.imageSlots < 1) return true
+    if (hasHttp(b.data)) return true
+    // 사진 주도형(imageSlots>=2)은 이미지 0장이면 거대한 빈 공간 — 드롭
+    if (v.imageSlots >= 2) return false
+    // 오버레이형(absolute 배치 CSS)은 이미지 0장이면 높이가 붕괴해 캡션이 이웃 섹션 위로
+    // 떠오른다(feature-fullbleed 텍스트 겹침 실사례) — 무이미지 강등 렌더(noimg-safe)가 없는 변형은 드롭
+    if (v.styleTags?.includes('noimg-safe')) return true
+    if (/position:\s*absolute/.test(v.css ?? '')) return false
+    return true
   })
   if (spec.blocks.length < beforeLen)
-    console.warn(`[Blocks Composer] 이미지 없는 사진형 블록 ${beforeLen - spec.blocks.length}개 제거`)
+    console.warn(`[Blocks Composer] 이미지 없는 사진형/오버레이형 블록 ${beforeLen - spec.blocks.length}개 제거`)
 }
 
 /** ── 조립 후 페어링 QA ─────────────────────────────────────────────────────

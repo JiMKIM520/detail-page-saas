@@ -59,7 +59,8 @@ type FeatureData = z.infer<typeof featureSchema>
 export const featureFullbleed = defineBlock<FeatureData>({
   id: 'feature-fullbleed',
   archetype: 'feature',
-  styleTags: ['editorial', 'premium', 'bold'],
+  // noimg-safe: 이미지 부재 시 다크 밴드로 강등 렌더 — 오버레이 붕괴 드롭 규칙에서 제외
+  styleTags: ['editorial', 'premium', 'bold', 'noimg-safe'],
   imageSlots: 1,
   describe: '풀블리드 대형 사진 + 하단 그라데이션 위 명조 캡션. 한 장면을 강렬하게.',
   schema: featureSchema,
@@ -70,11 +71,23 @@ export const featureFullbleed = defineBlock<FeatureData>({
 .ff-cap{position:absolute;left:0;right:0;bottom:46px;text-align:center;color:#fff;padding:0 60px}
 .ff-k{font-size:12px;letter-spacing:.4em;text-transform:uppercase;opacity:.85}
 .ff-t{font-family:var(--font-serif);font-weight:700;font-size:40px;margin-top:14px;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+/* 이미지 부재 시 — absolute 캡션이 이웃 섹션 위로 떠오르는 높이 붕괴 방지: 일반 플로우 다크 밴드로 강등 */
+.ff--noimg{background:var(--brand);padding:72px 60px}
+.ff--noimg .ff-cap{position:static;padding:0}
 `,
-  render: (d, { esc }) => `
+  render: (d, { esc }) =>
+    d.image
+      ? `
 <section class="ff">
   ${media(d.image, 'ff-media', '풀블리드 이미지')}
   <div class="ff-ov"></div>
+  <div class="ff-cap">
+    ${d.kicker ? `<p class="ff-k">${esc(d.kicker)}</p>` : ''}
+    <h2 class="ff-t">${esc(d.title)}</h2>
+  </div>
+</section>`
+      : `
+<section class="ff ff--noimg">
   <div class="ff-cap">
     ${d.kicker ? `<p class="ff-k">${esc(d.kicker)}</p>` : ''}
     <h2 class="ff-t">${esc(d.title)}</h2>

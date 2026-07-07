@@ -114,6 +114,53 @@ export async function runPairingQA(
   }
 }
 
+const VISUAL_AUDIT_SYSTEM = `You are a rendering QA inspector for Korean e-commerce detail pages.
+You receive one full page as vertical screenshot segments (top→bottom, numbered).
+Detect ONLY rendering defects:
+1. Overlapping text — two text layers colliding, or caption text floating over an unrelated section
+2. Collapsed sections or huge unintended empty gaps
+3. Sentences visibly cut off mid-word
+4. Broken image icons / grossly distorted layout
+Do NOT comment on content, copy quality, taste, or design preferences. When unsure, pass.
+Output raw compact JSON only: {"pass":true,"issues":[]} or {"pass":false,"issues":["세그먼트 2: ..."]}`
+
+/** 렌더 시각 감사 — 조립·가드가 못 보는 "실제 렌더 결함"(겹침·붕괴)을 스크린샷으로 검출.
+ *  chromium이 있는 환경(로컬 러너/QA)에서 호출. 실패 시 success:false(감사 생략). */
+export async function runVisualAudit(
+  pngBase64Segments: string[],
+): Promise<AgentResult<{ pass: boolean; issues: string[] }>> {
+  const elapsed = timer()
+  if (pngBase64Segments.length === 0) return { success: true, data: { pass: true, issues: [] }, durationMs: 0 }
+  console.log(`[Visual Audit] 시작 — 세그먼트 ${pngBase64Segments.length}장`)
+  try {
+    const content: Array<Record<string, unknown>> = []
+    pngBase64Segments.slice(0, 8).forEach((data, i) => {
+      content.push({ type: 'text', text: `[세그먼트 ${i}]` })
+      content.push({ type: 'image', source: { type: 'base64', media_type: 'image/png', data } })
+    })
+    content.push({ type: 'text', text: '렌더 결함만 검출해 JSON만 출력하세요.' })
+    const message = await anthropicClient.messages.create({
+      model: MODELS.CLAUDE_SONNET,
+      max_tokens: 3000,
+      system: VISUAL_AUDIT_SYSTEM,
+      messages: [{ role: 'user', content: content as never }],
+    })
+    const raw = parseJsonResponse<{ pass?: boolean; issues?: unknown[] }>(extractText(message.content))
+    const verdict = {
+      pass: raw.pass !== false,
+      issues: Array.isArray(raw.issues) ? raw.issues.map(String).slice(0, 8) : [],
+    }
+    console.log(
+      `[Visual Audit] 완료 (${elapsed()}ms) — ${verdict.pass ? '통과' : `결함 ${verdict.issues.length}건: ${verdict.issues.join(' / ').slice(0, 200)}`}`,
+    )
+    return { success: true, data: verdict, durationMs: elapsed() }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn('[Visual Audit] 실패(감사 생략):', msg.slice(0, 140))
+    return { success: false, error: msg, durationMs: elapsed() }
+  }
+}
+
 /** 이미지 URL들을 한 번의 비전 호출로 검수한다. referenceUrl은 라벨 대조용 원본 누끼.
  *  실패 시 success:false — 호출부는 파일명 폴백. (Haiku는 라벨 변조를 놓쳐 Sonnet 사용) */
 export async function runImageTagger(
