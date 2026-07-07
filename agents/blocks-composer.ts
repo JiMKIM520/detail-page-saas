@@ -68,6 +68,9 @@ export interface BlocksComposerInput {
   logoUrls?: string[]
   /** 아트디렉터 스타일가이드 — 팔레트·폰트를 토큰에 반영 (대비·화이트리스트 가드, Sprint 4-D) */
   styleGuide?: import('./templates/blocks/tokens').StyleGuideTokenInput
+  /** 승인 스크립트 전문 — 근거 코퍼스(수치·전화 가드)의 완결 소스. copyBrief 요약만으로는
+   *  스크립트가 담은 실데이터(고객센터 번호 등)가 누락되는 실사례가 있었다 */
+  script?: { tone?: string; sections: Array<Record<string, unknown>> }
 }
 
 export interface BlocksComposerResult {
@@ -1044,7 +1047,13 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
 
   dropEmptyPhotoBlocks(spec)
 
-  const groundingCorpus = JSON.stringify(input.brief) + JSON.stringify(input.imageNotes ?? {})
+  // 근거 코퍼스 = 브리프 + 이미지노트 + 승인 스크립트 전문 + 청사진 요지 — 스크립트가 홈페이지에서
+  // 가져온 실데이터(고객센터 번호 등)를 가드가 오제거하지 않도록 (평가자 반려↔가드 제거 루프 실사례)
+  const groundingCorpus =
+    JSON.stringify(input.brief) +
+    JSON.stringify(input.imageNotes ?? {}) +
+    (input.script ? JSON.stringify(input.script.sections) : '') +
+    (input.blueprint ? JSON.stringify(input.blueprint.sections.map((s) => s.copyBrief)) : '')
 
   // 배치 결함 가드 — 표계열 이미지·이모지·누끼 오배치를 코드로 봉쇄 (깨진 스키마는 수리 패스가 수습)
   applyPlacementGuards(

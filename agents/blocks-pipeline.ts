@@ -85,6 +85,7 @@ export async function runBlocksPipeline(
     blueprint,
     logoUrls: opts.logoUrls,
     styleGuide: opts.styleGuide,
+    script: opts.script,
     images: {
       hero: opts.heroImageUrl,
       lifestyle:
