@@ -930,11 +930,12 @@ function dropEmptyPhotoBlocks(spec: PageSpec): void {
     const v = getVariant(b.variantId)
     if (!v || v.imageSlots < 1) return true
     if (hasHttp(b.data)) return true
+    // 무이미지 강등 렌더(noimg-safe)를 갖춘 변형은 슬롯 수와 무관하게 안전 — 드롭 대신 강등에 맡긴다
+    if (v.styleTags?.includes('noimg-safe')) return true
     // 사진 주도형(imageSlots>=2)은 이미지 0장이면 거대한 빈 공간 — 드롭
     if (v.imageSlots >= 2) return false
     // 오버레이형(absolute 배치 CSS)은 이미지 0장이면 높이가 붕괴해 캡션이 이웃 섹션 위로
-    // 떠오른다(feature-fullbleed 텍스트 겹침 실사례) — 무이미지 강등 렌더(noimg-safe)가 없는 변형은 드롭
-    if (v.styleTags?.includes('noimg-safe')) return true
+    // 떠오른다(feature-fullbleed 텍스트 겹침 실사례) — 강등 렌더가 없는 변형은 드롭
     if (/position:\s*absolute/.test(v.css ?? '')) return false
     return true
   })
@@ -1052,8 +1053,6 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   if (sanStats.removedFabricated || sanStats.removedOverBudget)
     console.warn(`[Blocks Composer] 이미지 새니타이즈 — 지어낸URL ${sanStats.removedFabricated}건, 예산초과 ${sanStats.removedOverBudget}건 제거`)
 
-  dropEmptyPhotoBlocks(spec)
-
   // 근거 코퍼스 = 브리프 + 이미지노트 + 승인 스크립트 전문 + 청사진 요지 — 스크립트가 홈페이지에서
   // 가져온 실데이터(고객센터 번호 등)를 가드가 오제거하지 않도록 (평가자 반려↔가드 제거 루프 실사례)
   const groundingCorpus =
@@ -1077,6 +1076,10 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
 
   // 근거 없는 단위 수치(g/kcal/% 등) 봉쇄 — 브리프·이미지노트에 없는 수치를 실은 블록은 드롭
   dropUngroundedNumericBlocks(spec, groundingCorpus)
+
+  // 빈 사진 블록 드롭은 반드시 이미지를 제거하는 가드들(새니타이즈·배치 가드·수리) 이후에 —
+  // 배치 가드(스텝 균일화)가 걷어낸 뒤 빈 원형 플레이스홀더가 그대로 렌더된 실사례(황태 uzz, 시각 감사 검출)
+  dropEmptyPhotoBlocks(spec)
 
   const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
   return { spec, html: rendered.html, usedVariants: rendered.usedVariants }
