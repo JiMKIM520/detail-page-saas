@@ -426,6 +426,16 @@ export const CONTRACTED_IDS: ReadonlySet<string> = new Set(
     .filter((id): id is string => Boolean(id)),
 )
 
+/** variantId → 계약 라인 — 청사진 경로에서 선택 변형의 계약만 전달(343→N 프롬프트 축소, Sprint 2) */
+const CONTRACT_LINE_BY_ID: ReadonlyMap<string, string> = new Map(
+  DATA_CONTRACTS.split('\n')
+    .map((line) => {
+      const id = line.trim().match(/^([a-z0-9-]+)\s*\{/i)?.[1]
+      return id ? ([id, line.trim()] as const) : null
+    })
+    .filter((e): e is readonly [string, string] => Boolean(e)),
+)
+
 // 계약/카탈로그 드리프트 가시화 — 등록됐지만 계약 없는 변형은 제외되며 1회 경고.
 const UNCONTRACTED_IDS = catalog()
   .filter((c) => !CONTRACTED_IDS.has(c.id))
@@ -963,15 +973,29 @@ async function applyPairingQA(spec: PageSpec): Promise<number> {
 
 async function callOnce(input: BlocksComposerInput, repairNote?: string): Promise<BlocksComposerResult> {
   // max_tokens 24576은 SDK 논스트리밍 10분 제한을 초과 추정 → 스트리밍 필수 (SDK가 create를 거부)
+  // 청사진 경로(Sprint 2): 변형 선택이 끝났으므로 카탈로그 불필요 — 선택 변형의 계약만 전달(343→N).
+  // 프롬프트가 ~100k→~10k 토큰으로 줄어 비용·주의분산 모두 감소. 무청사진 경로는 기존 캐시 블록 유지.
+  const system: Array<Record<string, unknown>> = input.blueprint
+    ? [
+        { type: 'text', text: SYSTEM_PROMPT },
+        {
+          type: 'text',
+          text: `각 블록 데이터 계약(청사진 변형만):\n${input.blueprint.sections
+            .map((s) => CONTRACT_LINE_BY_ID.get(s.variantId))
+            .filter(Boolean)
+            .join('\n')}`,
+        },
+      ]
+    : [
+        { type: 'text', text: SYSTEM_PROMPT },
+        // 정적 카탈로그+계약 — 캐시 히트 시 이 구간 입력 단가 90% 절감 (5분 TTL: 재시도·체인 실행에서 히트)
+        { type: 'text', text: getStaticCatalogBlock(), cache_control: { type: 'ephemeral' } },
+      ]
   const message = await anthropicClient.messages
     .stream({
       model: MODELS.CLAUDE_SONNET,
       max_tokens: 40000, // S5는 페이지 JSON에 28~32k+ 출력(32000 캡 도달 실사례) — 여유 확보
-      system: [
-        { type: 'text', text: SYSTEM_PROMPT },
-        // 정적 카탈로그+계약 — 캐시 히트 시 이 구간 입력 단가 90% 절감 (5분 TTL: 재시도·체인 실행에서 히트)
-        { type: 'text', text: getStaticCatalogBlock(), cache_control: { type: 'ephemeral' } },
-      ],
+      system: system as never,
       messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
     })
     .finalMessage()
@@ -1064,6 +1088,32 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       }
     } catch (e) {
       console.warn('[Blocks Composer] 페어링 QA 스킵:', (e as Error).message?.slice(0, 120))
+    }
+
+    // 페이지 평가자 (Sprint 3) — 생성자-평가자 분리. 명백한 결함만 반려, 재작업 1회 한도.
+    // 재작업 실패 시 원안 유지(무중단) — 평가는 품질 게이트지 가용성 게이트가 아니다.
+    try {
+      const { runPageEvaluator } = await import('./page-evaluator')
+      const verdict = await runPageEvaluator({ brief: input.brief, blueprint: input.blueprint, spec: result.spec })
+      if (verdict.success && verdict.data && !verdict.data.pass && verdict.data.issues.length) {
+        const note = `페이지 평가자 반려 — 아래 결함을 모두 고쳐 유효한 전체 JSON을 다시 출력:\n${verdict.data.issues.join('\n')}`
+        try {
+          let rework = await callOnce(input, note)
+          const removed2 = await applyPairingQA(rework.spec).catch(() => 0)
+          if (removed2 > 0) {
+            dropEmptyPhotoBlocks(rework.spec)
+            repairAndSalvageBlocks(rework.spec)
+            const re2 = renderPage(rework.spec)
+            rework = { spec: rework.spec, html: re2.html, usedVariants: re2.usedVariants }
+          }
+          result = rework
+          console.log('[Blocks Composer] 평가자 반려 재작업 반영')
+        } catch (reworkErr: unknown) {
+          console.warn('[Blocks Composer] 반려 재작업 실패 — 원안 유지:', (reworkErr as Error).message?.slice(0, 120))
+        }
+      }
+    } catch (e) {
+      console.warn('[Blocks Composer] 평가자 스킵:', (e as Error).message?.slice(0, 120))
     }
 
     saveJson(result.spec, `${input.outputDir}/page-spec.json`)
