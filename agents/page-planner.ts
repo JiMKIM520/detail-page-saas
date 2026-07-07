@@ -12,6 +12,17 @@ import { SCRIPT_TYPE_TO_ARCHETYPES } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
 import type { AgentResult, ProjectBrief } from './types'
 
+export interface ImageNeed {
+  /** 파일명이 되는 안정 id (예: need_hero, need_ingredient_beans) — 영문 스네이크 */
+  id: string
+  /** 무엇이 찍혀야 하는가 — 한 문장 (예: '생두와 원두가 나란히 놓인 원료 매크로') */
+  subject: string
+  /** styled=제품 연출 / raw-material=원료·소재 실물 / texture=질감 / usage=사용 장면 / mood=무드 */
+  style: 'styled' | 'raw-material' | 'texture' | 'usage' | 'mood'
+  /** 제품(패키지)이 프레임에 필요한가 — false면 레퍼런스 없이 순수 생성(원료·소재컷) */
+  withProduct: boolean
+}
+
 export interface BlueprintSection {
   order: number
   variantId: string
@@ -19,8 +30,10 @@ export interface BlueprintSection {
   scriptType?: string
   /** 이 블록이 다룰 승인 스크립트 내용 요지 (필러의 카피 원천) */
   copyBrief: string
-  /** 배정 이미지 (0~2, 제공 풀 URL만) */
+  /** 배정 이미지 (0~2, 제공 풀 URL만) — 인벤토리 모드 */
   imageUrls: string[]
+  /** 이 블록이 필요로 하는 이미지 명세 (0~2) — 니즈 모드(Sprint 5, 기획 단계에서 인벤토리 없이) */
+  imageNeeds?: ImageNeed[]
 }
 export interface PageBlueprint {
   sections: BlueprintSection[]
@@ -50,6 +63,20 @@ const blueprintSchema = z.object({
             (v) => (Array.isArray(v) ? v.slice(0, 3) : v),
             z.array(z.string()).max(3).default([]),
           ),
+          imageNeeds: z.preprocess(
+            (v) => (Array.isArray(v) ? v.slice(0, 2) : v),
+            z
+              .array(
+                z.object({
+                  id: z.string().min(1).regex(/^[a-z0-9_]+$/i),
+                  subject: z.string().min(1),
+                  style: z.enum(['styled', 'raw-material', 'texture', 'usage', 'mood']),
+                  withProduct: z.boolean(),
+                }),
+              )
+              .max(2)
+              .optional(),
+          ),
         }),
       )
       .min(8)
@@ -64,19 +91,31 @@ Inputs you receive: the client-APPROVED script (narrative sections), a verified 
 (each entry describes what is ACTUALLY in the image — trust it), and the block catalog (in this
 system prompt). Your job:
 
-1. NARRATIVE: follow the approved script's section order as the spine of the page. Merge or split
-   script sections only when the catalog demands it. Every page starts with one hero-family block
-   and ends with one closing-family block. 10~16 blocks total.
+1. NARRATIVE: follow the approved script's section order as the spine of the page. Merge script
+   sections only when the catalog demands it; SPLIT rich sections into multiple blocks (e.g.
+   ingredients → spotlight + grid, usage → steps + tips) so the page reads full and generous.
+   Every page starts with one hero-family block and ends with one closing-family block.
+   14~20 blocks total — a Korean detail page should feel substantial.
 2. BLOCK CHOICE: pick variantIds ONLY from the catalog below. Match each script section's intent
    to the block archetype (story→story/point, 성분→ingredient, 사용법→usage, FAQ→faq, 배송→cs/shipping).
    Do not use the same variant twice. Avoid three consecutive blocks of the same archetype.
-3. IMAGE ASSIGNMENT: assign images from the inventory ONLY where the image's actual content
-   supports the section (읽어라 — 노트가 실물이다). Rules:
+3. IMAGES — two modes:
+   [INVENTORY MODE] (이미지 인벤토리가 주어짐): assign from inventory ONLY where the image's actual
+   content supports the section (읽어라 — 노트가 실물이다). Rules:
    - [세로] images never go to wide full-bleed/panorama blocks.
-   - "차선" images only in small thumbnail slots.
+   - "차선" images only in small/background slots.
    - product-label/누끼 shots fit hero, detail, feature, ingredient — not story/mood backgrounds.
-   - Each image at most 2 sections. Leave imageUrls [] when nothing fits — text blocks are fine.
+   - Each image at most 2 sections. USE EVERY ok image at least once when a fitting section exists —
+     unused good images are wasted production.
    - Blocks with imageSlots>=2 need at least 1 assigned image or must not be chosen.
+   [NEEDS MODE] (인벤토리가 '(이미지 없음)' — 이미지를 아직 만들기 전): imageUrls는 반드시 []로 두고,
+   이미지가 필요한 블록마다 imageNeeds(0~2)를 명세하라:
+   - id: 영문 snake_case 고유값(파일명이 된다, 예: need_hero_main, need_bean_macro)
+   - subject: 무엇이 찍혀야 하는지 구체적 한 문장 — 브리프/스크립트에 명시된 원료·사용법·장면만
+     (없는 원료·소품·행위를 지어내지 말 것)
+   - style: styled(제품 연출)/raw-material(원료·소재 실물)/texture(질감)/usage(사용 장면)/mood(무드)
+   - withProduct: 제품 패키지가 프레임에 필요한가 — 원료·소재·질감컷은 false 권장(라벨 재현 위험 0)
+   - 페이지 전체 니즈 총합 8~12개. imageSlots>=2 블록은 니즈 필수. hero는 withProduct=true 1개 필수.
 4. copyBrief: ONE terse Korean sentence (max 80 chars) stating WHAT the filler must say there,
    quoting key facts from the script (numbers, claims). The filler may not invent beyond this.
 
@@ -173,6 +212,23 @@ function validateBlueprint(
   const closingIdx = bp.sections.findIndex((s) => arch(s.variantId) === 'closing')
   if (closingIdx >= 0 && closingIdx !== bp.sections.length - 1)
     bp.sections.push(...bp.sections.splice(closingIdx, 1))
+
+  // 니즈 모드(인벤토리 없음) 검증·수리 — id 중복 제거, 총량 12 상한 절단, 최소량 미달은 재시도
+  if (allowedUrls.size === 0) {
+    const seenIds = new Set<string>()
+    let total = 0
+    for (const s of bp.sections) {
+      s.imageUrls = []
+      if (!s.imageNeeds?.length) continue
+      s.imageNeeds = s.imageNeeds.filter((n) => {
+        if (seenIds.has(n.id) || total >= 12) return false
+        seenIds.add(n.id)
+        total++
+        return true
+      })
+    }
+    if (total < 4) issues.push(`이미지 니즈 ${total}개(<4) — 이미지가 필요한 블록마다 imageNeeds를 명세하라`)
+  }
 
   // 수리 불가 위반만 재시도 사유로
   if (bp.sections.length < 8) issues.push(`수리 후 블록 ${bp.sections.length}개(<8)`)

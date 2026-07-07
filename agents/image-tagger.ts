@@ -23,8 +23,9 @@ export interface ImageTag {
 
 export interface TaggerInput {
   url: string
-  /** 'cutout'=업로드 원본 누끼(품질 신뢰, 설명만), 'styling'=생성 컷(전수 검수) */
-  kind: 'cutout' | 'styling' | 'section'
+  /** 'cutout'=업로드 원본 누끼(품질 신뢰, 설명만), 'styling'=제품 포함 생성 컷(라벨 대조 검수),
+   *  'asset'=제품 미포함 생성 컷(원료·소재·질감 — 라벨 대조 없음), 'section'=보조 이미지 */
+  kind: 'cutout' | 'styling' | 'section' | 'asset'
   /** 아트 디렉터의 컷 의도 (실물과 대조용) */
   intendedNote?: string
 }
@@ -39,17 +40,25 @@ CHARACTER BY CHARACTER against the reference. AI-generated shots frequently alte
 (e.g. MOMOS→NONOS, 500g→800g, garbled Korean). Any mismatch in brand name, product name,
 or quantity = quality "reject". Do not assume text is correct because it looks plausible — READ it.
 
+KIND-SPECIFIC RULES:
+- kind "asset": the shot is INTENDED to contain no product/packaging (raw ingredients, texture,
+  scene). Skip reference comparison. Reject ONLY for gross artifacts/distortion, any rendered text,
+  or if a product package appears when it should not. Judge whether the subject matches the intent.
+- kind "cutout": client original — describe only, do not reject.
+
 Judging rules:
 - desc: ONE short Korean sentence (max 80 chars) describing the actual content. If a product label
   is visible, state whether its text matches the reference or how it deviates. Be terse — no prose.
 - roles: which page roles this image actually fits (choose from: hero, lifestyle, mood, texture,
   ingredient, product-label, usage, detail, gallery). Base this on what you SEE.
 - orientation: portrait / landscape / square by visual aspect.
-- quality:
-  - "reject" if ANY of: brand name misspelled or altered, label text severely garbled where prominent,
-    wrong quantity/claims rendered on packaging, large empty bands/artifacts, heavy distortion.
-  - "degraded" if minor artifacts or label slightly soft but usable when small.
-  - "ok" otherwise.
+- quality — judge as a SHOPPER at page scale, not a forensic zoom (컷은 대부분 축소되어 배치된다):
+  - "reject" ONLY for defects a shopper would notice: brand name misspelled/altered (e.g. MOMOS→NONOS),
+    wrong quantity on packaging, large empty bands, gross distortion, garbled text that is LARGE and
+    prominent in frame.
+  - "degraded" for label text that is merely soft/small/angled, minor artifacts — these images are
+    still valuable as lifestyle/mood/background scenes. Do NOT reject them.
+  - "ok" otherwise. Bias: when torn between reject and degraded, choose degraded.
 - defects: short Korean note of the specific defect when quality is not "ok".
 - If an intended note is provided and the actual content does NOT match it, say so in desc
   (e.g. "의도는 크림 텍스처였으나 실제로는 패키지 라벨 확대").

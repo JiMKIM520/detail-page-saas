@@ -37,6 +37,8 @@ export interface BlocksPipelineOptions {
   logoUrls?: string[]
   /** 아트디렉터 스타일가이드(planning/style-guide.json) — 토큰 오버라이드용 (Sprint 4-D) */
   styleGuide?: import('./templates/blocks/tokens').StyleGuideTokenInput
+  /** 기획 단계에서 저장된 청사진(Sprint 5) — 있으면 조립 시 플래너 재실행 생략 */
+  blueprint?: import('./page-planner').PageBlueprint
 }
 
 export async function runBlocksPipeline(
@@ -66,9 +68,10 @@ export async function runBlocksPipeline(
   const brief = buildProjectBrief(input, projectId)
   console.log('[Blocks PM] Step 1: 브리프 생성')
 
-  // ── Step 1.5: 페이지 플래너 (승인 스크립트가 있을 때) — 서사·블록·이미지 배정 청사진 ──
-  let blueprint: import('./page-planner').PageBlueprint | undefined
-  if (opts.script?.sections?.length) {
+  // ── Step 1.5: 페이지 플래너 — 기획 단계 저장 청사진이 있으면 재실행 생략(Sprint 5) ──
+  let blueprint: import('./page-planner').PageBlueprint | undefined = opts.blueprint
+  if (blueprint) console.log(`[Blocks PM] Step 1.5: 저장 청사진 사용 (${blueprint.sections.length}블록)`)
+  if (!blueprint && opts.script?.sections?.length) {
     const { runPagePlanner } = await import('./page-planner')
     const planned = await runPagePlanner({
       brief,

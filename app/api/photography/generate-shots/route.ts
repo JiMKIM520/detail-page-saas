@@ -56,12 +56,14 @@ export async function POST(request: Request) {
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', brandColorHex: '#A8682E', aspectRatio: '3:4' }
   const out: { name: string; url: string }[] = []
   const errors: string[] = []
-  for (const shot of shots.slice(0, 8)) {
+  for (const shot of shots.slice(0, 12)) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt)
         ? shot.finalPrompt
         : buildShotPrompt(shot, rules, meta as any)
-      const buf = await generateDesignImage({ prompt: fp, referenceImages: nukki.slice(0, 3), aspectRatio: '3:4', model: 'pro' })
+      // withProduct=false(원료·소재컷)는 레퍼런스 없이 순수 생성 (Sprint 5)
+      const refs = (shot as any).withProduct === false ? [] : nukki.slice(0, 3)
+      const buf = await generateDesignImage({ prompt: fp, referenceImages: refs, aspectRatio: '3:4', model: 'pro' })
       const path = `projects/${project_id}/styling_real/${shot.filename || (shot.name + '.png')}`
       const { error } = await svc.storage.from('designs').upload(path, buf, { contentType: 'image/png', upsert: true })
       if (error) throw new Error(error.message)
@@ -78,7 +80,7 @@ export async function POST(request: Request) {
 
   // 재생성 성공 시 이전 기획의 컷 정리 — 파일명이 기획마다 달라 방치하면 구 컷이 새 컷과 섞여 초안에 들어간다
   try {
-    const valid = new Set(shots.slice(0, 8).map((s) => s.filename || (s.name + '.png')))
+    const valid = new Set(shots.slice(0, 12).map((s) => s.filename || (s.name + '.png')))
     const { data: existing } = await svc.storage.from('designs').list(`projects/${project_id}/styling_real`)
     const stale = (existing ?? []).filter((f) => f.name && !valid.has(f.name)).map((f) => `projects/${project_id}/styling_real/${f.name}`)
     if (stale.length) {

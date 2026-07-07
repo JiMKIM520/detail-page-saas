@@ -164,19 +164,18 @@ export async function runPipelineForProject(projectId: string): Promise<{
         }
       }
 
-      // 스타일링샷 의도 매핑 — 파일명만으로는 컷의 역할(성분/사용/무드)을 알 수 없어
-      // 기획 산출물(styling-final-prompts.json)의 shot name을 imageNotes로 전달한다
-      const shotNameByFile = new Map<string, string>()
+      // 스타일링샷 의도 매핑 — 기획 산출물(styling-final-prompts.json)의 shot 메타를 승격 보관
+      // (name→imageNotes, finalPrompt/withProduct→재생성 루프·태거 kind 판정에 사용)
+      type ShotMeta = { name?: string; filename?: string; finalPrompt?: string; withProduct?: boolean }
+      const shotByFile = new Map<string, ShotMeta>()
       try {
         const { data: promptsBlob } = await supabase.storage
           .from('designs')
           .download(`projects/${projectId}/planning/styling-final-prompts.json`)
         if (promptsBlob) {
-          const promptsJson = JSON.parse(await promptsBlob.text()) as {
-            shots?: Array<{ name?: string; filename?: string }>
-          }
+          const promptsJson = JSON.parse(await promptsBlob.text()) as { shots?: ShotMeta[] }
           for (const s of promptsJson.shots ?? []) {
-            if (s.filename && s.name) shotNameByFile.set(s.filename, s.name)
+            if (s.filename) shotByFile.set(s.filename, s)
           }
         }
       } catch {
@@ -196,7 +195,8 @@ export async function runPipelineForProject(projectId: string): Promise<{
             .getPublicUrl(`projects/${projectId}/styling_real/${obj.name}`)
           if (pub?.publicUrl) {
             stylingUrls.push(pub.publicUrl)
-            const intent = shotNameByFile.get(obj.name) ?? obj.name.replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ')
+            const meta = shotByFile.get(obj.name) ?? shotByFile.get(obj.name.replace(/^regen_/, ''))
+            const intent = meta?.name ?? obj.name.replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ')
             imageNotes[pub.publicUrl] = `연출 스타일링샷: ${intent}`
           }
         }
@@ -225,10 +225,15 @@ export async function runPipelineForProject(projectId: string): Promise<{
       // 원본 누끼를 정답 레퍼런스로 대조(브랜드명·용량 변조 검출). 실패 시 기존 노트 유지.
       for (const u of cutoutUrls) imageNotes[u] = '제품 누끼/단독 컷 (업로드 원본)'
       let rejectedUrls = new Set<string>()
+      const defectsByUrl = new Map<string, string>()
       try {
         const { runImageTagger } = await import('@/agents/image-tagger')
+        const kindOf = (u: string): 'styling' | 'asset' => {
+          const base = (u.split('/').pop() ?? '').split('?')[0].replace(/^regen_/, '')
+          return shotByFile.get(base)?.withProduct === false ? 'asset' : 'styling'
+        }
         const taggerInputs = [
-          ...stylingUrls.map((u) => ({ url: u, kind: 'styling' as const, intendedNote: imageNotes[u] })),
+          ...stylingUrls.map((u) => ({ url: u, kind: kindOf(u), intendedNote: imageNotes[u] })),
           ...sectionUrls.map((u) => ({ url: u, kind: 'section' as const, intendedNote: imageNotes[u] })),
           ...cutoutUrls.map((u) => ({ url: u, kind: 'cutout' as const })),
         ]
@@ -237,10 +242,11 @@ export async function runPipelineForProject(projectId: string): Promise<{
           for (const [u, t] of Object.entries(tagged.data)) {
             if (t.quality === 'reject') {
               rejectedUrls.add(u)
+              defectsByUrl.set(u, t.defects ?? t.desc)
               continue
             }
             const marks = [t.orientation === 'portrait' ? '세로' : t.orientation === 'landscape' ? '가로' : '정방']
-            if (t.quality === 'degraded') marks.push('차선 — 소형 슬롯에만')
+            if (t.quality === 'degraded') marks.push('차선 — 배경·원경·소형 슬롯용')
             const prefix = cutoutUrls.includes(u) ? '제품 누끼(원본)' : '실물 확인'
             imageNotes[u] = `${prefix}[${marks.join('·')}]: ${t.desc}`
           }
@@ -252,8 +258,98 @@ export async function runPipelineForProject(projectId: string): Promise<{
       } catch (e) {
         console.warn('[pipeline-bridge] 이미지 태거 실패(파일명 노트 유지):', (e as Error).message?.slice(0, 120))
       }
+
+      // 컷 재생성 루프 (Sprint 5) — reject 사유를 역주입해 1회 재생성, 재검수 통과분만 풀 복귀.
+      // 버리는 컷을 회수해 페이지 야윔(이미지 감쇠 체인)을 막는다. 상한 4건.
+      if (rejectedUrls.size > 0 && shotByFile.size > 0) {
+        try {
+          const { generateDesignImage } = await import('@/lib/ai/gemini-image')
+          const { runImageTagger } = await import('@/agents/image-tagger')
+          const nukkiB64: string[] = []
+          for (const file of (files ?? []).slice(0, 3)) {
+            const { data: blob } = await supabase.storage.from('intake-files').download(file.storage_path)
+            if (blob) nukkiB64.push(Buffer.from(await blob.arrayBuffer()).toString('base64'))
+          }
+          const targets = [...rejectedUrls]
+            .map((u) => ({ url: u, base: (u.split('/').pop() ?? '').split('?')[0] }))
+            .filter((t) => !t.base.startsWith('regen_'))
+            .map((t) => ({ ...t, meta: shotByFile.get(t.base) }))
+            .filter((t) => Boolean(t.meta?.finalPrompt))
+            .slice(0, 4)
+          const regenerated: Array<{ url: string; kind: 'styling' | 'asset' }> = []
+          for (const t of targets) {
+            const defect = defectsByUrl.get(t.url) ?? '라벨/피사체 훼손'
+            const noProduct = t.meta!.withProduct === false
+            const prompt = `${t.meta!.finalPrompt}\n\n[QA FEEDBACK — MUST FIX] ${defect}. ${noProduct ? 'No product, no packaging, no text anywhere in frame.' : 'Product label text MUST match the reference photos EXACTLY, character by character.'}`
+            try {
+              const buf = await generateDesignImage({ prompt, referenceImages: noProduct ? [] : nukkiB64, aspectRatio: '3:4', model: 'pro' })
+              const newName = `regen_${t.base}`
+              const { error: upErr } = await supabase.storage
+                .from('designs')
+                .upload(`projects/${projectId}/styling_real/${newName}`, buf, { contentType: 'image/png', upsert: true })
+              if (upErr) throw new Error(upErr.message)
+              const { data: pub } = supabase.storage.from('designs').getPublicUrl(`projects/${projectId}/styling_real/${newName}`)
+              if (pub?.publicUrl) regenerated.push({ url: pub.publicUrl, kind: noProduct ? 'asset' : 'styling' })
+            } catch (ge) {
+              console.warn(`[pipeline-bridge] 재생성 실패 ${t.base}:`, (ge as Error).message?.slice(0, 100))
+            }
+          }
+          if (regenerated.length) {
+            const retag = await runImageTagger(
+              regenerated.map((r) => ({ url: r.url, kind: r.kind })),
+              cutoutUrls[0],
+            )
+            let revived = 0
+            if (retag.success && retag.data) {
+              for (const [u, t2] of Object.entries(retag.data)) {
+                if (t2.quality === 'reject') continue
+                stylingUrls.push(u)
+                const marks = [t2.orientation === 'portrait' ? '세로' : t2.orientation === 'landscape' ? '가로' : '정방']
+                if (t2.quality === 'degraded') marks.push('차선 — 배경·원경·소형 슬롯용')
+                imageNotes[u] = `실물 확인[재생성·${marks.join('·')}]: ${t2.desc}`
+                revived++
+              }
+            }
+            console.log(`[pipeline-bridge] 컷 재생성 루프 — ${targets.length}건 재생성 · ${revived}건 복귀`)
+          }
+        } catch (e) {
+          console.warn('[pipeline-bridge] 재생성 루프 스킵:', (e as Error).message?.slice(0, 120))
+        }
+      }
+
       const okStyling = stylingUrls.filter((u) => !rejectedUrls.has(u))
       const okSection = sectionUrls.filter((u) => !rejectedUrls.has(u))
+
+      // 저장된 청사진(기획 단계 산출, Sprint 5) — 조립 시 플래너 재실행 생략 + 니즈 id→컷 URL 매핑
+      let storedBlueprint: import('@/agents/page-planner').PageBlueprint | undefined
+      try {
+        const { data: bpBlob } = await supabase.storage
+          .from('designs')
+          .download(`projects/${projectId}/planning/blueprint.json`)
+        if (bpBlob) storedBlueprint = JSON.parse(await bpBlob.text()) as import('@/agents/page-planner').PageBlueprint
+      } catch {
+        /* 청사진 없음 — 조립 단계 플래너(레거시 경로) */
+      }
+      if (storedBlueprint?.sections?.length) {
+        const byBase = new Map<string, string>()
+        for (const u of okStyling) byBase.set((u.split('/').pop() ?? '').split('?')[0], u)
+        let mapped = 0
+        let missing = 0
+        for (const s of storedBlueprint.sections) {
+          const urls: string[] = []
+          for (const n of s.imageNeeds ?? []) {
+            const u = byBase.get(`${n.id}.png`) ?? byBase.get(`regen_${n.id}.png`)
+            if (u) {
+              urls.push(u)
+              mapped++
+            } else missing++
+          }
+          if (urls.length) s.imageUrls = urls.slice(0, 2)
+        }
+        console.log(
+          `[pipeline-bridge] 저장 청사진 사용 — ${storedBlueprint.sections.length}블록 · 니즈 매핑 ${mapped}건 · 미충족 ${missing}건`,
+        )
+      }
 
       // 승인 스크립트 로드 — scripts 테이블 최신본 우선, 없으면 기획 산출물 script.json 폴백 (재설계 Sprint 1a)
       let approvedScript: { tone?: string; sections: Array<Record<string, unknown>> } | undefined
@@ -342,6 +438,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
         script: approvedScript,
         logoUrls,
         styleGuide: styleGuideTokens,
+        blueprint: storedBlueprint,
       })
     } else if (isFood) {
       // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)
@@ -516,6 +613,76 @@ export async function runPlanningForProject(projectId: string): Promise<{
       result.artifacts.stylingPrompts,
       `projects/${projectId}/planning/styling-final-prompts.json`
     )
+
+    // 5.5. 수요 기반 이미지 계획 (Sprint 5) — 승인 스크립트로 청사진(블록+이미지 니즈)을 먼저 만들고,
+    // 컷 목록(shots)을 니즈 기반으로 교체한다. 실패 시 아트디렉터의 8컷 공식 유지(무중단).
+    try {
+      let approvedScript: { tone?: string; sections: Array<Record<string, unknown>> } | undefined
+      const { data: scriptRow } = await supabase
+        .from('scripts')
+        .select('content')
+        .eq('project_id', projectId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      const rowContent = (scriptRow?.content ?? null) as { tone?: string; sections?: unknown[] } | null
+      if (Array.isArray(rowContent?.sections) && rowContent.sections.length) {
+        approvedScript = rowContent as { tone?: string; sections: Array<Record<string, unknown>> }
+      } else if (result.artifacts.script && fs.existsSync(result.artifacts.script)) {
+        const js = JSON.parse(fs.readFileSync(result.artifacts.script, 'utf8')) as { sections?: unknown[] }
+        if (Array.isArray(js?.sections) && js.sections.length)
+          approvedScript = js as { tone?: string; sections: Array<Record<string, unknown>> }
+      }
+      if (approvedScript) {
+        const { runPagePlanner } = await import('@/agents/page-planner')
+        const { runShotPrompter } = await import('@/agents/shot-prompter')
+        const { buildProjectBrief } = await import('@/agents/pm')
+        const brief = buildProjectBrief(input, projectId)
+        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {} })
+        if (planned.success && planned.data) {
+          const needs = planned.data.sections.flatMap((s) => s.imageNeeds ?? [])
+          let sg: unknown
+          try {
+            if (result.artifacts.styleGuide) sg = JSON.parse(fs.readFileSync(result.artifacts.styleGuide, 'utf8'))
+          } catch { /* 스타일가이드 없이 진행 */ }
+          const prompted = await runShotPrompter({
+            needs,
+            styleGuide: sg as never,
+            productName: input.productName,
+            category: input.category,
+          })
+          if (prompted.success && prompted.data && prompted.data.length >= 4) {
+            let existing: Record<string, unknown> = {}
+            try {
+              if (result.artifacts.stylingPrompts)
+                existing = JSON.parse(fs.readFileSync(result.artifacts.stylingPrompts, 'utf8'))
+            } catch { /* 기존 파일 없으면 새로 구성 */ }
+            const merged = { ...existing, shots: prompted.data, shotsSource: 'blueprint-needs' }
+            await uploadToStorage(
+              `projects/${projectId}/planning/styling-final-prompts.json`,
+              Buffer.from(JSON.stringify(merged, null, 2)),
+              'application/json',
+            )
+            await uploadToStorage(
+              `projects/${projectId}/planning/blueprint.json`,
+              Buffer.from(JSON.stringify(planned.data, null, 2)),
+              'application/json',
+            )
+            console.log(
+              `[pipeline-bridge/planning] 수요 기반 이미지 계획 — 청사진 ${planned.data.sections.length}블록 · 니즈 컷 ${prompted.data.length}건(제품 미포함 ${prompted.data.filter((s) => !s.withProduct).length}건)`,
+            )
+          } else {
+            console.warn('[pipeline-bridge/planning] 샷 프롬프터 미달 — 아트디렉터 8컷 공식 유지')
+          }
+        } else {
+          console.warn('[pipeline-bridge/planning] 청사진 실패 — 아트디렉터 8컷 공식 유지')
+        }
+      } else {
+        console.warn('[pipeline-bridge/planning] 승인 스크립트 없음 — 수요 기반 계획 생략')
+      }
+    } catch (e) {
+      console.warn('[pipeline-bridge/planning] 수요 기반 계획 스킵:', (e as Error).message?.slice(0, 140))
+    }
 
     // 6. 상태 전이: → design_plan_review
     await transitionStatus(supabase, projectId, 'design_plan_review')
