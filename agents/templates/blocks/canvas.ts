@@ -12,7 +12,9 @@ export interface ArchetypeCanvas {
 }
 
 export const ARCHETYPE_CANVAS: Record<string, ArchetypeCanvas> = {
-  hero: { form: '제품명+핵심 카피 1~2줄+체크포인트 2~4개, 대표 이미지 1' },
+  hero: {
+    form: '제품 성격에 맞는 아형 하나를 heroStyle 필드로 명시 — points(카피+체크포인트 2~4: 기능·신뢰 소구) / mood(감성 카피 1~2줄+무드 비주얼, 포인트 없음: 감성·프리미엄) / badge(수상·인증 뱃지+한 줄 훅: 권위·친근 소구). 대표 이미지 1',
+  },
   point: { form: '포인트 제목+본문 1~3문장, 이미지 0~1' },
   feature: { form: '특장점 2~4개(제목+1문장), 이미지 0~2' },
   story: { form: '브랜드/제품 서사 2~4문단(문단당 1~2문장), 이미지 0~2' },
@@ -83,6 +85,26 @@ export const SCRIPT_TYPE_TO_ARCHETYPES: Record<string, string[]> = {
 /** 미등재 type의 폴백 계열 — 범용 표현이 가능한 아키타입 */
 export const FALLBACK_ARCHETYPES: string[] = ['story', 'point', 'banner']
 
+/** 히어로 아형 → 변형 후보 (의미 기반 분화 — 스크립트 heroStyle이 결정, 로테이션 아님).
+ *  points=포인트/체크 구조, mood=사진·무드 중심(포인트 없음), badge=뱃지·원형·친근 훅. */
+export const HERO_STYLE_TO_VARIANTS: Record<string, string[]> = {
+  points: [
+    'hero-points', 'hero-arch', 'hero-icon-rows', 'hero-check-rows', 'hero-thumb-list',
+    'hero-stripe-points', 'hero-numbered-cols', 'hero-bubble-points', 'hero-split-list',
+    'hero-card-stack', 'hero-pedestal',
+  ],
+  mood: [
+    'hero-editorial', 'intro-cover', 'hero-photo', 'hero-photo-fullbg', 'hero-photo-quote',
+    'hero-photo-dual-stack', 'hero-photo-dual-offset', 'hero-photo-bottom', 'hero-photo-blob-split',
+    'hero-photo-glass-card', 'hero-dark-stack',
+  ],
+  badge: [
+    'hero-centered', 'hero-overlay-bubble', 'hero-circle-check', 'hero-circle-bg',
+    'hero-photo-circle', 'hero-photo-pinned', 'hero-card-wrapper', 'hero-photo-inset',
+    'hero-connector-split',
+  ],
+}
+
 /** 스크립트 생성 프롬프트에 주입할 "표현 가능 공간" 사전 (Sprint 4-A).
  *  섹션 type과 형태 제약을 함께 제시 — 이 밖의 형태는 조립 불가이므로 쓰지 않게 한다. */
 export function buildCanvasPrompt(): string {
@@ -93,5 +115,8 @@ export function buildCanvasPrompt(): string {
   return `표현 가능 섹션 사전 (CRITICAL — 아래 type만 사용하고, 각 형태 제약(개수 상한)을 반드시 지켜라.
 이 사전은 상세페이지 조립 블록이 실제로 표현할 수 있는 것의 전부다 — 상한을 넘겨 쓰면
 조립 단계에서 잘리거나 변형되므로, 내용이 많으면 상한 안으로 요약하거나 섹션을 나눠라):
-${lines.join('\n')}`
+${lines.join('\n')}
+
+hero 섹션 필수 규칙: 제품·타겟 성격을 판단해 heroStyle 필드에 points/mood/badge 중 하나를
+기록하라 — 이 선택이 페이지 첫인상의 형태를 결정한다. 근거 없는 기본값 선택 금지.`
 }

@@ -8,7 +8,7 @@
 import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, timer, MODELS, extractText } from './utils'
 import { catalog } from './templates/blocks'
-import { SCRIPT_TYPE_TO_ARCHETYPES } from './templates/blocks/canvas'
+import { SCRIPT_TYPE_TO_ARCHETYPES, HERO_STYLE_TO_VARIANTS } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
 import type { AgentResult, ProjectBrief } from './types'
 
@@ -37,6 +37,8 @@ export interface BlueprintSection {
 }
 export interface PageBlueprint {
   sections: BlueprintSection[]
+  /** 히어로 선택 근거 — 의미 없는 다양화 방지: 왜 이 히어로 형태인지 데이터로 남긴다 */
+  heroRationale?: string
 }
 
 export interface PagePlannerInput {
@@ -46,6 +48,8 @@ export interface PagePlannerInput {
   /** 이미지 인벤토리: URL → 태거 실물 노트(설명·방향·품질) */
   imageNotes: Record<string, string>
   avoidVariants?: string[]
+  /** 아트디렉터 무드 키워드 — 히어로 아형 내 변형 선택의 보조 신호 */
+  moodKeywords?: string[]
 }
 
 // 상한 초과는 기계적으로 수리 가능한 위반 — 실패 대신 절단(컴포저 수리 패스와 같은 철학)
@@ -82,6 +86,7 @@ const blueprintSchema = z.object({
       .min(8)
       .max(20),
   ),
+  heroRationale: z.string().optional(),
 })
 
 const SYSTEM_PROMPT = `You are the PAGE PLANNER for a Korean e-commerce detail page system.
@@ -122,6 +127,12 @@ system prompt). Your job:
 5. scriptType: for each block, state which script section type it serves (use the script's own type
    string, e.g. "how_to_use"). The system enforces a type→archetype table — choosing a block family
    outside the allowed archetypes for that type will be rejected.
+6. HERO CHOICE (meaningful, not rotational): the script's hero section carries heroStyle
+   (points/mood/badge) — pick the hero variant from that style's candidate list (given in the user
+   prompt). Within the list, choose by the brand's mood keywords and the hero image plan — read the
+   variant descriptions and match the brand's personality. Record WHY in top-level "heroRationale"
+   (one Korean sentence: 제품 성격→아형→변형 근거). Same-style products SHOULD get similar heroes —
+   difference must come from the product, never from novelty.
 
 Output raw compact JSON only (no prose, no markdown, minimal whitespace):
 {"sections":[{"order":0,"variantId":"hero-arch","scriptType":"hero","copyBrief":"...","imageUrls":["https://..."]}]}`
@@ -155,6 +166,15 @@ function buildUserPrompt(input: PagePlannerInput, repairNote?: string): string {
   const avoid = input.avoidVariants?.length
     ? `\n\nDO NOT USE variants: ${input.avoidVariants.join(', ')}`
     : ''
+  // 히어로 아형 후보 — 스크립트 hero 섹션의 heroStyle에 해당하는 목록만 제시(의미 기반 선택)
+  const heroSection = input.script.sections.find((s) => String(s.type ?? s.sectionType ?? '') === 'hero')
+  const heroStyle = String((heroSection as { heroStyle?: string } | undefined)?.heroStyle ?? '').toLowerCase()
+  const heroCandidates = HERO_STYLE_TO_VARIANTS[heroStyle]
+  const heroBlock = heroCandidates
+    ? `\n\nHERO 후보 (스크립트 heroStyle="${heroStyle}" — 이 목록에서만 선택, 무드에 맞게):\n${heroCandidates.join(', ')}\n무드 키워드: ${(input.moodKeywords ?? []).join(', ') || '(없음)'}`
+    : input.moodKeywords?.length
+      ? `\n\n무드 키워드(히어로 선택 참고): ${input.moodKeywords.join(', ')}`
+      : ''
   const repair = repairNote ? `\n\n⚠️ 직전 청사진 검증 실패 — 고쳐서 다시: ${repairNote}` : ''
   return `제품명: ${input.brief.productName}
 카테고리: ${input.brief.category} / 플랫폼: ${input.brief.platform}
@@ -165,7 +185,7 @@ function buildUserPrompt(input: PagePlannerInput, repairNote?: string): string {
 ${summarizeScriptSections(input.script.sections)}
 
 이미지 인벤토리(실물 검수 완료 — 노트 기준으로만 배정):
-${imgLines || '(이미지 없음)'}${avoid}${repair}
+${imgLines || '(이미지 없음)'}${heroBlock}${avoid}${repair}
 
 위 스크립트 서사에 맞는 페이지 청사진 JSON만 출력하세요.`
 }
@@ -275,6 +295,7 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
       console.warn('[Page Planner] 1차 검증 실패 → 재시도:', note.slice(0, 140))
       bp = await callOnce(note)
     }
+    if (bp.heroRationale) console.log(`[Page Planner] 히어로 근거 — ${bp.heroRationale.slice(0, 160)}`)
     console.log(`[Page Planner] 완료 (${elapsed()}ms) — ${bp.sections.length}블록: ${bp.sections.map((s) => s.variantId).join(', ')}`)
     return { success: true, data: bp, durationMs: elapsed() }
   } catch (err: unknown) {

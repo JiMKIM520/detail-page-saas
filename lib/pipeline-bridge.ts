@@ -638,7 +638,17 @@ export async function runPlanningForProject(projectId: string): Promise<{
         const { runShotPrompter } = await import('@/agents/shot-prompter')
         const { buildProjectBrief } = await import('@/agents/pm')
         const brief = buildProjectBrief(input, projectId)
-        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {} })
+        // 무드 키워드(아트디렉터) — 히어로 아형 내 변형 선택의 보조 신호
+        let moodKeywords: string[] | undefined
+        try {
+          if (result.artifacts.styleGuide) {
+            const sgm = JSON.parse(fs.readFileSync(result.artifacts.styleGuide, 'utf8')) as {
+              brand?: { moodKeywords?: string[] }
+            }
+            moodKeywords = sgm.brand?.moodKeywords
+          }
+        } catch { /* 무드 없이 진행 */ }
+        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {}, moodKeywords })
         if (planned.success && planned.data) {
           const needs = planned.data.sections.flatMap((s) => s.imageNeeds ?? [])
           let sg: unknown
