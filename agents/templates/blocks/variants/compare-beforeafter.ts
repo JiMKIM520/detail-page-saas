@@ -29,12 +29,12 @@ export const compareBeforeAfter = defineBlock<Data>({
     '차별화 비교(비포/애프터). 대제목+서브 + BEFORE(그레이 카드)/AFTER(accent 카드) 2단 + 행별 대비(이미지+텍스트) + 마무리. 사용 전후 대조.',
   schema,
   css: `
-.cba{background:var(--bg);padding:54px 56px 56px}
+.cba{background:var(--bg);padding:54px var(--pad-x,56px) 56px}
 .cba-hd{margin-bottom:30px}
 .cba-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:var(--ink);letter-spacing:-.02em;line-height:1.12}
 .cba-sub{margin-top:10px;font-size:16px;font-weight:600;color:var(--ink-2)}
 .cba-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.cba-col{border-radius:18px;overflow:hidden;background:var(--paper);box-shadow:0 16px 34px -22px rgba(0,0,0,.35)}
+.cba-col{border-radius:var(--shape-photo, calc(var(--r-scale,1)*18px));overflow:hidden;background:var(--paper);box-shadow:0 16px 34px -22px rgba(0,0,0,.35)}
 .cba-h{text-align:center;font-family:var(--font-display);font-weight:800;font-size:20px;padding:16px;letter-spacing:.06em}
 .cba-h.b{background:#EAEAEE;color:#8A8A93}
 .cba-h.a{background:var(--accent);color:#fff}

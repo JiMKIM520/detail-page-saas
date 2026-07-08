@@ -42,7 +42,7 @@ export const storyCurvePanel = defineBlock<Data>({
 .scp-panel{
   position:relative;
   background:var(--paper);
-  border-radius:48px 0 0 0;
+  border-radius:calc(var(--r-scale,1)*48px) 0 0 0;
   margin-top:-60px;
   padding:52px 44px 64px;
   z-index:2;

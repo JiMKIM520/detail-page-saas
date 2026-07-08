@@ -37,17 +37,17 @@ export const certClipboard = defineBlock<Data>({
 .ccb-title{font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.01em;line-height:1.05;font-style:italic}
 .ccb-sub{margin-top:12px;font-size:16px;font-weight:500;color:var(--ink-2);line-height:1.65}
 .ccb-sub .em{color:var(--accent);font-weight:700}
-.ccb-board{position:relative;margin:36px auto 0;max-width:620px;background:color-mix(in srgb,var(--paper) 85%,#888 15%);border-radius:6px 6px 8px 8px;box-shadow:0 12px 40px -14px rgba(0,0,0,.28),0 2px 8px rgba(0,0,0,.08);padding:0 0 32px}
-.ccb-clip{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:64px;height:42px;background:#2e2e2e;border-radius:8px 8px 4px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 10px rgba(0,0,0,.35)}
-.ccb-clip::before{content:"";display:block;width:34px;height:14px;border:3px solid #555;border-bottom:none;border-radius:4px 4px 0 0}
-.ccb-clip::after{content:"";display:block;width:20px;height:7px;background:#444;border-radius:2px;margin-top:-2px}
-.ccb-card{margin:40px 28px 0;background:#fff;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.1);overflow:visible;position:relative;text-align:left}
+.ccb-board{position:relative;margin:36px auto 0;max-width:620px;background:color-mix(in srgb,var(--paper) 85%,#888 15%);border-radius:calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*8px) calc(var(--r-scale,1)*8px);box-shadow:0 12px 40px -14px rgba(0,0,0,.28),0 2px 8px rgba(0,0,0,.08);padding:0 0 32px}
+.ccb-clip{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:64px;height:42px;background:#2e2e2e;border-radius:calc(var(--r-scale,1)*8px) calc(var(--r-scale,1)*8px) calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 10px rgba(0,0,0,.35)}
+.ccb-clip::before{content:"";display:block;width:34px;height:14px;border:3px solid #555;border-bottom:none;border-radius:calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px) 0 0}
+.ccb-clip::after{content:"";display:block;width:20px;height:7px;background:#444;border-radius:calc(var(--r-scale,1)*2px);margin-top:-2px}
+.ccb-card{margin:40px 28px 0;background:#fff;border-radius:calc(var(--r-scale,1)*6px);box-shadow:0 4px 14px rgba(0,0,0,.1);overflow:visible;position:relative;text-align:left}
 .ccb-card+.ccb-card{margin-top:20px}
 .ccb-card-title{font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--ink);padding:18px 20px 14px;line-height:1.3}
 .ccb-card-title .em{color:var(--accent)}
 .ccb-card-divider{height:1px;background:color-mix(in srgb,var(--line) 70%,transparent);margin:0 20px}
 .ccb-card-media{position:relative;margin:14px 20px}
-.ccb-img{width:100%;height:220px;object-fit:cover;border-radius:4px;display:block}
+.ccb-img{width:100%;height:220px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));display:block}
 .ccb-seal{position:absolute;top:-14px;right:-14px;width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff9ec 0%,#f5c842 42%,#c8860a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.3);transform:rotate(8deg);z-index:2}
 .ccb-seal-text{font-family:var(--font-display);font-weight:800;font-size:8px;letter-spacing:.06em;color:#5c3c00;line-height:1.2;text-align:center}
 .ccb-seal::before{content:"";position:absolute;inset:5px;border:1.5px solid rgba(92,60,0,.35);border-radius:50%}

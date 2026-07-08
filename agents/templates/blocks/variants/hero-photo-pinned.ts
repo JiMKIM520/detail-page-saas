@@ -120,7 +120,7 @@ export const heroPhotoPinned = defineBlock<Data>({
   width: 100%;
   height: 100%;
   border: 2px solid rgba(255,255,255,.55);
-  border-radius: 8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   overflow: hidden;
   background: rgba(255,255,255,.08);
 }
@@ -137,7 +137,7 @@ export const heroPhotoPinned = defineBlock<Data>({
 .hpp-why {
   width: 100%;
   background: color-mix(in srgb, var(--accent) 72%, #000);
-  padding: 52px 56px 60px;
+  padding:52px var(--pad-x,56px) 60px;
   text-align: center;
   margin-top: 40px;
 }

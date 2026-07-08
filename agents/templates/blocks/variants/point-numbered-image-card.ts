@@ -43,7 +43,7 @@ export const pointNumberedImageCard = defineBlock<Data>({
 .pnic{background:var(--bg);padding:48px 28px 60px;word-break:keep-all;overflow-wrap:break-word}
 .pnic-eyebrow{text-align:center;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-d);margin-bottom:32px}
 /* 카드 — 다크 표면 */
-.pnic-card{background:var(--ink);border-radius:6px;overflow:hidden;margin-bottom:18px}
+.pnic-card{background:var(--ink);border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));overflow:hidden;margin-bottom:18px}
 .pnic-card:last-child{margin-bottom:0}
 /* 텍스트 존 */
 .pnic-txt{padding:28px 28px 22px;position:relative}

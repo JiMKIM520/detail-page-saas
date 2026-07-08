@@ -35,7 +35,7 @@ export const shippingIconHero = defineBlock<Data>({
 /* ── shipping-icon-hero: sih prefix ── */
 
 /* ─ 히어로 다크 구역 ─ */
-.sih-hero{background:var(--ink);color:#fff;padding:64px 56px 72px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0}
+.sih-hero{background:var(--ink);color:#fff;padding:64px var(--pad-x,56px) 72px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0}
 .sih-icon{width:120px;height:120px;color:var(--accent);margin-bottom:28px;display:flex;align-items:center;justify-content:center}
 .sih-icon svg{width:100%;height:100%}
 .sih-title{font-family:var(--font-display);font-weight:800;font-size:64px;color:#fff;letter-spacing:-.02em;line-height:1.05;margin-bottom:20px}
@@ -44,7 +44,7 @@ export const shippingIconHero = defineBlock<Data>({
 .sih-caption{font-size:16px;color:rgba(255,255,255,.5);line-height:1.5;letter-spacing:.01em}
 
 /* ─ 라이트 불릿 구역 ─ */
-.sih-body{background:var(--bg);padding:52px 56px 56px}
+.sih-body{background:var(--bg);padding:52px var(--pad-x,56px) 56px}
 .sih-list{display:flex;flex-direction:column;gap:20px}
 .sih-item{display:flex;align-items:flex-start;gap:14px;font-size:17px;color:var(--ink);line-height:1.7}
 .sih-bullet{flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:10px}
@@ -52,7 +52,7 @@ export const shippingIconHero = defineBlock<Data>({
 .sih-text .em{color:var(--ink);font-weight:700}
 
 /* ─ 풀폭 다크 CTA 밴드 ─ */
-.sih-footer{background:var(--ink);padding:44px 56px;text-align:center}
+.sih-footer{background:var(--ink);padding:44px var(--pad-x,56px);text-align:center}
 .sih-closing{font-family:var(--font-display);font-weight:800;font-size:28px;color:#fff;letter-spacing:-.01em;line-height:1.3}
 .sih-closing .em{color:var(--accent)}
 `,

@@ -66,7 +66,7 @@ export const packageNumberedSplitRows = defineBlock<Data>({
 .pnsr{background:var(--bg);padding:0 0 48px;word-break:keep-all}
 
 /* ── 히어로 카드 ── */
-.pnsr-hero{margin:0 16px 20px;border-radius:18px;overflow:hidden;background:var(--paper);box-shadow:0 4px 18px -6px rgba(0,0,0,.14)}
+.pnsr-hero{margin:0 16px 20px;border-radius:calc(var(--r-scale,1)*18px);overflow:hidden;background:var(--paper);box-shadow:0 4px 18px -6px rgba(0,0,0,.14)}
 .pnsr-hero-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 .pnsr-hero-img.ph{width:100%;aspect-ratio:16/9}
 .pnsr-hero-body{padding:20px 24px 24px;text-align:center}
@@ -75,7 +75,7 @@ export const packageNumberedSplitRows = defineBlock<Data>({
 .pnsr-hero-title .em{color:var(--accent-d)}
 
 /* ── 번호 분할 행 ── */
-.pnsr-row{margin:0 16px 14px;border-radius:18px;overflow:hidden;background:var(--paper);box-shadow:0 4px 14px -6px rgba(0,0,0,.12);display:grid;grid-template-columns:44% 56%}
+.pnsr-row{margin:0 16px 14px;border-radius:calc(var(--r-scale,1)*18px);overflow:hidden;background:var(--paper);box-shadow:0 4px 14px -6px rgba(0,0,0,.12);display:grid;grid-template-columns:44% 56%}
 .pnsr-row:last-of-type{margin-bottom:0}
 
 /* 좌 패널: 번호 + 상품 이미지 */

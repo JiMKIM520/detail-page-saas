@@ -24,7 +24,7 @@ export const certFrame = defineBlock<Data>({
     '인증/시험성적서. 대제목(Certificate) + pill 라벨 + 흰 액자 안 인증서 이미지 + CERTIFIED 씰 + 캡션 반복. 인증/시험 내용은 brief 근거만(지어내지 말 것).',
   schema,
   css: `
-.cf{background:var(--bg);padding:54px 56px 58px;text-align:center}
+.cf{background:var(--bg);padding:54px var(--pad-x,56px) 58px;text-align:center}
 .cf-title{font-family:var(--font-display);font-weight:800;font-size:56px;color:var(--accent);letter-spacing:-.01em;line-height:1.05}
 .cf-sub{margin-top:10px;font-size:16px;font-weight:600;color:var(--ink-2)}
 .cf-item{margin-top:42px}

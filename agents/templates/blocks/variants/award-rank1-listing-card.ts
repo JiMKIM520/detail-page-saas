@@ -226,7 +226,7 @@ export const awardRank1ListingCard = defineBlock<Data>({
 
 /* 마켓플레이스 리스팅 카드 목업 */
 .arlc-card{
-  background:#fff;color:#1a1a1a;border-radius:14px;
+  background:#fff;color:#1a1a1a;border-radius:calc(var(--r-scale,1)*14px);
   overflow:hidden;margin:0 0 32px;
   box-shadow:0 4px 32px rgba(0,0,0,.4);
   text-align:left;min-height:160px;

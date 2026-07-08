@@ -56,7 +56,7 @@ export const packageDarkComponentGrid = defineBlock<Data>({
 .pdcg-pedestal::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:180px;height:22px;border-radius:50%;background:radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.12) 0%,transparent 70%)}
 /* 히어로 제품 이미지 */
 .pdcg-hero-img{position:relative;z-index:1;width:220px;height:220px;object-fit:contain;display:block}
-.pdcg-hero-img.ph{width:220px;height:220px;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.pdcg-hero-img.ph{width:220px;height:220px;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));display:flex;align-items:center;justify-content:center;font-size:13px}
 
 /* ── 텍스트 헤더 ── */
 .pdcg-hd{padding:28px 48px 32px}
@@ -66,10 +66,10 @@ export const packageDarkComponentGrid = defineBlock<Data>({
 
 /* ── 2열 그리드 ── */
 .pdcg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px}
-.pdcg-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:14px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:10px}
+.pdcg-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:calc(var(--r-scale,1)*10px);padding:14px 14px 16px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:10px}
 /* 카드 썸네일 */
-.pdcg-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px;display:block}
-.pdcg-thumb.ph{width:100%;aspect-ratio:1/1;border:1.5px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.pdcg-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));display:block}
+.pdcg-thumb.ph{width:100%;aspect-ratio:1/1;border:1.5px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));display:flex;align-items:center;justify-content:center;font-size:12px}
 /* 카드 텍스트 */
 .pdcg-card-body{width:100%}
 .pdcg-card-h{font-family:var(--font-display);font-weight:700;font-size:clamp(13px,3.2vw,15px);line-height:1.4;color:#fff;letter-spacing:-.01em}

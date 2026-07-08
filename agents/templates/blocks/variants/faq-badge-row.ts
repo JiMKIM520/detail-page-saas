@@ -52,7 +52,7 @@ export const faqBadgeRow = defineBlock<Data>({
 .fbr-card{
   background:var(--paper);
   border:1px solid var(--line);
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   overflow:hidden;
   margin-bottom:20px;
 }

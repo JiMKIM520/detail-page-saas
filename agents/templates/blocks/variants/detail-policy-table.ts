@@ -52,7 +52,7 @@ export const detailPolicyTable = defineBlock<Data>({
 .dpt-compare-cell .em{color:var(--accent)}
 
 /* 주의사항 박스 */
-.dpt-notice{margin:14px 40px 0;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:4px;padding:14px 18px;font-size:13px;color:var(--ink-2);line-height:1.7}
+.dpt-notice{margin:14px 40px 0;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:calc(var(--r-scale,1)*4px);padding:14px 18px;font-size:13px;color:var(--ink-2);line-height:1.7}
 .dpt-notice .em{color:var(--accent);font-weight:600}
 
 /* 구분선 */

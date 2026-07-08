@@ -17,10 +17,11 @@ export const calloutBanner = defineBlock<BannerData>({
   describe: '다크 라운드 강조 배너. 큰 문장(키워드 강조) + 보조 한 줄. 메시지를 박스로 강조.',
   schema: bannerSchema,
   css: `
-.cb{background:var(--bg);padding:20px 56px 64px;text-align:center}
-.cb-box{position:relative;background:var(--brand);color:#F3E9DA;border-radius:30px;padding:38px 40px;box-shadow:0 20px 40px -22px rgba(42,33,24,.6)}
+.cb{background:var(--bg);padding:20px var(--pad-x,56px) 64px;text-align:center}
+.cb-box{position:relative;background:var(--brand);color:#F3E9DA;border-radius:calc(var(--r-scale,1)*30px);padding:38px 40px;box-shadow:0 20px 40px -22px rgba(42,33,24,.6)}
 .cb-box::before{content:"• •";position:absolute;top:14px;left:50%;transform:translateX(-50%);color:var(--accent);letter-spacing:4px;font-size:14px}
 .cb-big{font-size:28px;font-weight:800;line-height:1.45}
+.cb-box .em,.cb-box .acc{color:var(--em-dark,#FFF7EA)}
 .cb-small{margin-top:8px;font-size:17px;color:#CBB79C;font-weight:600}
 `,
   render: (d, { richSafe, esc }) => `

@@ -33,13 +33,13 @@ export const ingredientChecklistPhoto = defineBlock<Data>({
   schema,
   css: `
 .icp{background:var(--bg);color:var(--ink);padding:56px 0 0}
-.icp-hd{padding:0 56px 32px}
+.icp-hd{padding:0 var(--pad-x,56px) 32px}
 .icp-eye{display:block;font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--ink-2);text-transform:uppercase;margin-bottom:10px}
 .icp-title{font-family:var(--font-display);font-weight:800;font-size:58px;letter-spacing:-.02em;line-height:1.1;color:var(--accent)}
 .icp-title .em{color:var(--accent)}
 .icp-sub{margin-top:16px;font-size:17px;color:var(--ink);line-height:1.6}
-.icp-rule{width:3px;height:48px;background:var(--accent);border-radius:2px;margin:20px 56px 0;opacity:.5}
-.icp-card{background:var(--paper);border-radius:20px;margin:24px 24px 0;padding:10px 0}
+.icp-rule{width:3px;height:48px;background:var(--accent);border-radius:calc(var(--r-scale,1)*2px);margin:20px 56px 0;opacity:.5}
+.icp-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*20px);margin:24px 24px 0;padding:10px 0}
 .icp-row{display:flex;align-items:flex-start;gap:14px;padding:22px 28px}
 .icp-row+.icp-row{border-top:1px dashed color-mix(in srgb,var(--ink) 14%,transparent)}
 .icp-icon{flex:0 0 28px;width:28px;height:28px;color:var(--accent);margin-top:1px}

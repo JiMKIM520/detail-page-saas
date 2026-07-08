@@ -38,7 +38,7 @@ export const bannerSeasonalWreath = defineBlock<Data>({
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:80px 56px;
+  padding:80px var(--pad-x,56px);
 }
 
 /* 화환 이미지 — 4 모서리 절대배치 슬롯

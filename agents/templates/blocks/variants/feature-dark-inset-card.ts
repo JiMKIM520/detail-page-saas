@@ -37,17 +37,17 @@ export const featureDarkInsetCard = defineBlock<Data>({
 .fdic-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:var(--accent);letter-spacing:-.02em;line-height:1.12}
 .fdic-title .em{color:#fff}
 .fdic-sub{margin-top:14px;font-size:16px;color:rgba(255,255,255,.65);line-height:1.6}
-.fdic-card{background:color-mix(in srgb,var(--accent) 18%,#fff);border-radius:20px;padding:36px 32px 28px;text-align:left;margin-bottom:36px}
+.fdic-card{background:color-mix(in srgb,var(--accent) 18%,#fff);border-radius:calc(var(--r-scale,1)*20px);padding:36px 32px 28px;text-align:left;margin-bottom:36px}
 .fdic-row{display:flex;align-items:flex-start;gap:20px}
 .fdic-row + .fdic-row{margin-top:28px;padding-top:28px;border-top:1px solid rgba(0,0,0,.08)}
-.fdic-badge{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:28px;border-radius:4px;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.04em;line-height:1;margin-top:3px}
+.fdic-badge{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:28px;border-radius:calc(var(--r-scale,1)*4px);background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.04em;line-height:1;margin-top:3px}
 .fdic-tx{flex:1}
 .fdic-h{font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--ink);line-height:1.25}
 .fdic-h .em{color:var(--accent)}
 .fdic-d{margin-top:8px;font-size:14px;color:var(--ink-2);line-height:1.65}
 .fdic-d .em{color:var(--accent);font-weight:700}
 .fdic-img-wrap{display:flex;justify-content:center}
-.fdic-img{width:84%;border-radius:12px;object-fit:cover;display:block}
+.fdic-img{width:84%;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));object-fit:cover;display:block}
 `,
   render: (d, { esc, richSafe }) => `
 <section class="fdic">

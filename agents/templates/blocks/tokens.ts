@@ -149,7 +149,7 @@ function contrastRatio(a: { r: number; g: number; b: number }, b: { r: number; g
 }
 const WHITE = { r: 255, g: 255, b: 255 }
 
-/** 아트디렉터 스타일가이드 → 토큰 오버라이드 입력 (Sprint 4-D) */
+/** 아트디렉터 스타일가이드 → 토큰 오버라이드 입력 (Sprint 4-D; 형태 축은 Sprint 6) */
 export interface StyleGuideTokenInput {
   colors?: {
     primary?: string
@@ -164,6 +164,47 @@ export interface StyleGuideTokenInput {
     bodyFont?: string
     accentFont?: string
   }
+  /** 아트디렉터가 명시한 형태 언어 (SHAPE_PRESETS 키). 미지정 시 moodKeywords로 결정 */
+  shapeLanguage?: string
+  /** 형태 언어 폴백 결정용 무드 키워드 (brand.moodKeywords) */
+  moodKeywords?: string[]
+}
+
+/** ── 형태 언어 프리셋 (Sprint 6) ─────────────────────────────────────────────
+ *  팔레트·폰트만 바뀌고 기하학이 고정이라 "색만 다른 같은 템플릿"이 되는 문제의 해법.
+ *  같은 343개 변형이 브랜드마다 다른 곡률·사진 프레임·여백 리듬으로 렌더된다.
+ *  photoShape는 지정 시 페이지의 시그니처 사진 프레임을 하나의 형태 언어로 통일
+ *  (미지정 프리셋은 변형 고유 모양 유지 — fallback 체인). */
+export interface ShapeTokens {
+  rScale: number
+  photoShape?: string
+  padX: number
+}
+
+export const SHAPE_PRESETS: Record<string, ShapeTokens> = {
+  /** 직각·타이트 곡률·넓은 여백 — 미니멀/에디토리얼/모던 */
+  'sharp-editorial': { rScale: 0.25, photoShape: '0', padX: 64 },
+  /** 큰 곡률·둥근 프레임 — 부드러움/포근함/키즈/반려 */
+  'soft-round': { rScale: 1.7, photoShape: '30px', padX: 52 },
+  /** 유기적 블롭 프레임·그레인 곡률 — 자연/수제/유기농 */
+  organic: { rScale: 1.25, photoShape: '46% 54% 52% 48% / 44% 46% 56% 54%', padX: 52 },
+  /** 아치 프레임·절제 곡률 — 클래식/전통/명조 감성 */
+  'arch-serif': { rScale: 0.7, photoShape: '50% 50% 6px 6px / 34% 34% 6px 6px', padX: 60 },
+  /** 현행 기하학 유지(곡률·프레임 그대로) — 균형/범용 */
+  neutral: { rScale: 1, padX: 56 },
+}
+
+export type ShapeKey = keyof typeof SHAPE_PRESETS
+
+/** 무드 키워드 → 형태 언어 결정 테이블 — 아트디렉터 shapeLanguage 부재 시 폴백.
+ *  기존 프로젝트(스타일가이드에 형태 축이 없던 시절)도 즉시 분화되게 한다. */
+export function shapeForMood(moodKeywords?: string[], category?: string): ShapeKey {
+  const m = (moodKeywords ?? []).join(' ').toLowerCase() + ' ' + (category ?? '').toLowerCase()
+  if (/(미니멀|모던|시크|절제|도시|프로페셔널|minimal|modern|sleek|urban)/.test(m)) return 'sharp-editorial'
+  if (/(귀여|포근|부드러|사랑스|발랄|키즈|유아|반려|강아지|고양이|cute|soft|playful|friendly)/.test(m)) return 'soft-round'
+  if (/(자연|유기농|수제|핸드메이드|건강한|신선|대지|숲|오가닉|natural|organic|handmade|earthy)/.test(m)) return 'organic'
+  if (/(클래식|전통|헤리티지|장인|프리미엄|고급|우아|classic|heritage|elegant|luxury)/.test(m)) return 'arch-serif'
+  return 'neutral'
 }
 
 export function deriveTokens(
@@ -256,6 +297,34 @@ export function deriveTokens(
 
     if (applied.length || skipped.length)
       console.log(`[tokens] 스타일가이드 반영 — 적용: ${applied.join(',') || '없음'} · 폴백: ${skipped.join(',') || '없음'}`)
+  }
+
+  // ── 다크 섹션 강조색 (--em-dark) — 전역 .em은 accent-d(밝은 배경용)라 brand 다크 배경에서
+  // 저대비로 뭉개진다(황태 callout "꾸준한 섭취" 실사례, 시각 감사 검출). accent를 흰색 쪽으로
+  // 밝혀 brand 대비 4.5:1을 보장하는 색을 항상 도출 — 다크 변형들이 스코프 오버라이드로 소비.
+  {
+    const brandRgbNow = parseHex(next.brand) ?? BLACK
+    let emRgb = parseHex(next.accent) ?? WHITE
+    for (let t = 0; t <= 1.0001 && contrastRatio(emRgb, brandRgbNow) < 4.5; t += 0.15) {
+      const mixed = parseHex(mix(parseHex(next.accent) ?? WHITE, WHITE, t))
+      if (mixed) emRgb = mixed
+    }
+    if (contrastRatio(emRgb, brandRgbNow) < 4.5) emRgb = { r: 255, g: 247, b: 234 } // 웜 화이트 폴백
+    next.emDark = toHex(emRgb.r, emRgb.g, emRgb.b)
+  }
+
+  // ── 형태 언어 (Sprint 6) — shapeLanguage(아트디렉터 명시) 우선, 없으면 무드 키워드 결정.
+  // 스타일가이드 자체가 없으면 형태 토큰 미지정 → 현행 렌더와 픽셀 동일(하위 호환).
+  if (sg) {
+    const explicit = (sg.shapeLanguage ?? '').trim()
+    const shapeKey: ShapeKey = explicit in SHAPE_PRESETS ? (explicit as ShapeKey) : shapeForMood(sg.moodKeywords)
+    const shape = SHAPE_PRESETS[shapeKey]
+    next.rScale = shape.rScale
+    next.photoShape = shape.photoShape
+    next.padX = shape.padX
+    console.log(
+      `[tokens] 형태 언어 — ${shapeKey}${explicit && !(explicit in SHAPE_PRESETS) ? ` (미지원 "${explicit}" → 무드 폴백)` : explicit ? ' (아트디렉터 명시)' : ' (무드 폴백)'} · rScale ${shape.rScale} · padX ${shape.padX}`,
+    )
   }
   return next
 }

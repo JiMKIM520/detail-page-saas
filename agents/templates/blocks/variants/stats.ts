@@ -22,8 +22,8 @@ export const statsHighlight = defineBlock<Data>({
   describe: '수치 강조. (제품 이미지) + pill 라벨 + 대형 숫자 헤드라인 + 아이콘 통계행(라벨+값).',
   schema,
   css: `
-.sn{position:relative;padding:48px 56px 60px;background:var(--bg);text-align:center}
-.sn-media{display:block;width:100%;max-width:460px;height:360px;object-fit:cover;border-radius:20px;margin:0 auto 28px}
+.sn{position:relative;padding:48px var(--pad-x,56px) 60px;background:var(--bg);text-align:center}
+.sn-media{display:block;width:100%;max-width:460px;height:360px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*20px));margin:0 auto 28px}
 .sn-lab{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:20px;padding:10px 28px;border-radius:999px}
 .sn-head{margin-top:18px;font-size:72px;color:var(--ink)}
 .sn-head .em{color:var(--accent)}

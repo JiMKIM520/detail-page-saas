@@ -35,7 +35,7 @@ export const reviewStackedPairs = defineBlock<Data>({
 .rsp{background:var(--bg);color:var(--ink)}
 
 /* 헤더 */
-.rsp-hd{padding:52px 56px 12px;text-align:center}
+.rsp-hd{padding:52px var(--pad-x,56px) 12px;text-align:center}
 .rsp-eye-wrap{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:14px}
 .rsp-eye-line{flex:0 0 56px;height:1px;background:var(--accent)}
 .rsp-eye{font-size:15px;font-weight:700;letter-spacing:.1em;color:var(--accent);padding:0 12px}
@@ -51,7 +51,7 @@ export const reviewStackedPairs = defineBlock<Data>({
 .rsp-stars svg{width:22px;height:22px}
 
 /* 텍스트 카드 */
-.rsp-card{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:20px 24px}
+.rsp-card{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:calc(var(--r-scale,1)*6px);padding:20px 24px}
 .rsp-body{font-size:15px;color:var(--ink-2);line-height:1.75}
 .rsp-body .em{color:var(--accent);font-weight:700}
 

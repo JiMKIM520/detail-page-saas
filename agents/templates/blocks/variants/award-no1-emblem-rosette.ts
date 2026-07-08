@@ -243,7 +243,7 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
   width:min(340px,88vw);
   background:linear-gradient(160deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,.05) 60%,rgba(120,100,60,.10) 100%);
   border:1px solid rgba(232,201,106,.30);
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
   box-shadow:
     0 8px 32px rgba(0,0,0,.55),
     0 0 0 1px rgba(201,168,76,.12) inset,
@@ -271,7 +271,7 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
   width:90px;
   aspect-ratio:3/4;
   object-fit:cover;
-  border-radius:3px;
+  border-radius:calc(var(--r-scale,1)*3px);
   flex-shrink:0;
   display:block;
   filter:brightness(.88) sepia(.1);
@@ -283,7 +283,7 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
   background:rgba(201,168,76,.06);
   color:rgba(201,168,76,.48);
   font-size:10px;
-  border-radius:3px;
+  border-radius:calc(var(--r-scale,1)*3px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -379,7 +379,7 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
   width:min(280px,72vw);
   height:24px;
   background:linear-gradient(180deg,#F5D77E 0%,#C9A84C 40%,#9A6C1A 100%);
-  border-radius:4px 4px 0 0;
+  border-radius:calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px) 0 0;
   box-shadow:0 -3px 10px rgba(201,168,76,.40),0 6px 18px rgba(0,0,0,.55);
 }
 .aner-pod-t2{
@@ -391,7 +391,7 @@ export const awardNo1EmblemRosette = defineBlock<Data>({
   width:min(340px,88vw);
   height:14px;
   background:linear-gradient(180deg,#A8881A 0%,#5A3A08 100%);
-  border-radius:0 0 8px 8px;
+  border-radius:0 0 calc(var(--r-scale,1)*8px) calc(var(--r-scale,1)*8px);
   /* 반타원 바닥 연출 */
   clip-path:ellipse(50% 100% at 50% 0%);
 }

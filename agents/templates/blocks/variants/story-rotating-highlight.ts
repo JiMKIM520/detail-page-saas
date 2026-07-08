@@ -82,7 +82,7 @@ export const storyRotatingHighlight = defineBlock<Data>({
   background:var(--accent);
   color:var(--ink);
   padding:0 6px 2px;
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
   font-weight:800;
   /* accent 배경 위이므로 텍스트는 --ink(다크) */
   box-decoration-break:clone;
@@ -106,7 +106,7 @@ export const storyRotatingHighlight = defineBlock<Data>({
   aspect-ratio:4/3;
   object-fit:cover;
   display:block;
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
 }
 .srh-img.ph{
   width:100%;
@@ -114,7 +114,7 @@ export const storyRotatingHighlight = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.2);
   background:rgba(255,255,255,.06);
   color:rgba(255,255,255,.38);
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
 }
 
 /* 이미지 캡션 */

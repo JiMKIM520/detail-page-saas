@@ -63,20 +63,20 @@ export const packageBundleGiftRows = defineBlock<Data>({
 .pbgr-title .em{color:var(--accent-d)}
 /* 번들 행 래퍼 */
 .pbgr-rows{display:flex;flex-direction:column;gap:20px;margin-top:28px}
-.pbgr-row{background:#fff;border-radius:22px;padding:22px 18px 20px;box-shadow:0 6px 24px -8px rgba(160,80,160,.18)}
+.pbgr-row{background:#fff;border-radius:calc(var(--r-scale,1)*22px);padding:22px 18px 20px;box-shadow:0 6px 24px -8px rgba(160,80,160,.18)}
 /* 행 소제목 */
 .pbgr-heading{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin-bottom:14px}
 .pbgr-heading .em{color:var(--accent-d)}
 /* 번들 등식 행 */
 .pbgr-equation{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 /* 메인 상품 이미지 */
-.pbgr-main-img{width:120px;height:120px;object-fit:cover;border-radius:14px;flex-shrink:0}
-.pbgr-main-img.ph{width:120px;height:120px;border-radius:14px;flex-shrink:0}
+.pbgr-main-img{width:120px;height:120px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));flex-shrink:0}
+.pbgr-main-img.ph{width:120px;height:120px;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));flex-shrink:0}
 /* + 원형 커넥터 */
 .pbgr-plus{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px -2px rgba(0,0,0,.22)}
 .pbgr-plus-icon{font-size:18px;font-weight:900;color:#fff;line-height:1;user-select:none}
 /* 사은품 카드 */
-.pbgr-gift-card{flex:1;min-width:0;background:linear-gradient(135deg,#f8f0ff 0%,#fce4f0 100%);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pbgr-gift-card{flex:1;min-width:0;background:linear-gradient(135deg,#f8f0ff 0%,#fce4f0 100%);border-radius:calc(var(--r-scale,1)*14px);overflow:hidden;display:flex;flex-direction:column}
 .pbgr-gift-label{font-size:11px;font-weight:800;color:var(--accent-d);letter-spacing:.06em;padding:7px 10px 4px;line-height:1}
 .pbgr-gift-img{width:100%;flex:1;min-height:72px;object-fit:cover}
 .pbgr-gift-img.ph{width:100%;min-height:72px;flex:1}

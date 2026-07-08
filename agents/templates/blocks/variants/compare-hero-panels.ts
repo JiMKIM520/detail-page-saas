@@ -49,9 +49,9 @@ export const compareHeroPanels = defineBlock<Data>({
 /* 패널 컨테이너 — 오프셋 배치 */
 .chp-stage{position:relative;display:flex;align-items:flex-start;gap:0;padding:0 28px;justify-content:center}
 /* AFTER 패널 (좌·강조·높음) */
-.chp-after{flex:0 0 44%;background:color-mix(in srgb,var(--accent) 12%,var(--paper));border:2px solid color-mix(in srgb,var(--accent) 28%,transparent);border-radius:18px;overflow:hidden;box-shadow:0 20px 44px -16px rgba(0,0,0,.22);z-index:2;position:relative}
+.chp-after{flex:0 0 44%;background:color-mix(in srgb,var(--accent) 12%,var(--paper));border:2px solid color-mix(in srgb,var(--accent) 28%,transparent);border-radius:calc(var(--r-scale,1)*18px);overflow:hidden;box-shadow:0 20px 44px -16px rgba(0,0,0,.22);z-index:2;position:relative}
 /* BEFORE 패널 (우·무채색·오프셋 아래) */
-.chp-before{flex:0 0 44%;background:var(--paper);border:1.5px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 28px -14px rgba(0,0,0,.12);margin-top:48px;z-index:1;position:relative}
+.chp-before{flex:0 0 44%;background:var(--paper);border:1.5px solid var(--line);border-radius:calc(var(--r-scale,1)*18px);overflow:hidden;box-shadow:0 10px 28px -14px rgba(0,0,0,.12);margin-top:48px;z-index:1;position:relative}
 /* VS 원형 뱃지 */
 .chp-vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.22);letter-spacing:.04em;border:3px solid #fff}
 /* 패널 공통 */

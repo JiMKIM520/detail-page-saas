@@ -49,7 +49,7 @@ export const faqSatisfactionBar = defineBlock<Data>({
 .fsb-list{display:flex;flex-direction:column;gap:14px}
 .fsb-row{
   display:flex;align-items:center;justify-content:space-between;
-  padding:18px 24px 18px 28px;border-radius:6px;
+  padding:18px 24px 18px 28px;border-radius:calc(var(--r-scale,1)*6px);
   background:linear-gradient(90deg,#c8962a 0%,#e8b84b 35%,#f5d070 70%,#e8b84b 100%);
   box-shadow:0 4px 18px -6px rgba(200,150,42,.45)}
 .fsb-label{font-family:var(--font-body);font-size:clamp(15px,3.2vw,18px);font-weight:500;color:#1a1208;line-height:1.4;flex:1;padding-right:16px}

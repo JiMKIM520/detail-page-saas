@@ -46,13 +46,13 @@ export const galleryBarframeCard = defineBlock<Data>({
 .gbfc-card:nth-child(even){background:var(--paper);padding-top:32px}
 .gbfc-card:nth-child(odd):not(:first-child){padding-top:0}
 /* ── 상단 바 (라벨) ── */
-.gbfc-top-bar{background:var(--accent);color:#fff;text-align:center;padding:14px 24px;border-radius:6px 6px 0 0}
+.gbfc-top-bar{background:var(--accent);color:#fff;text-align:center;padding:14px 24px;border-radius:calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*6px) 0 0}
 .gbfc-label{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-.01em;line-height:1.25}
 .gbfc-label .em{color:color-mix(in srgb,#fff 70%,var(--accent))}
 /* ── 풀폭 이미지 ── */
 .gbfc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
 /* ── 하단 바 (캡션) ── */
-.gbfc-bot-bar{background:color-mix(in srgb,var(--accent) 78%,#000);color:#fff;text-align:center;padding:18px 28px;border-radius:0 0 6px 6px}
+.gbfc-bot-bar{background:color-mix(in srgb,var(--accent) 78%,#000);color:#fff;text-align:center;padding:18px 28px;border-radius:0 0 calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*6px)}
 .gbfc-caption{font-size:15px;line-height:1.65;font-weight:500}
 .gbfc-caption .em{font-weight:800;color:color-mix(in srgb,#fff 75%,var(--accent))}
 `,

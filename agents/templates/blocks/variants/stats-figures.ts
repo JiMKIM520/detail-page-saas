@@ -72,6 +72,7 @@ export const statsFigures = defineBlock<Data>({
 .sf-row-label{font-size:14px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.03em;margin-bottom:4px}
 .sf-row-value{font-family:'Cafe24 ClassicType',var(--font-display),sans-serif;font-size:32px;color:#ffffff;line-height:1.1;letter-spacing:-.01em}
 .sf-row-sub{font-size:12px;color:rgba(255,255,255,.4);margin-top:4px}
+.sf-row-value .em,.sf-row-sub .em{color:var(--em-dark,#FFF7EA)}
 `,
   render: (d, { esc, richSafe }) => {
     const starCount = d.stars ?? 3

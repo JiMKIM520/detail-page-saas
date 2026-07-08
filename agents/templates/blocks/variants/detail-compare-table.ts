@@ -34,7 +34,7 @@ export const detailCompareTable = defineBlock<Data>({
 .dct{background:var(--bg);color:var(--ink);padding:60px 0 64px}
 
 /* ─ 헤더 ─ */
-.dct-hd{padding:0 56px 48px}
+.dct-hd{padding:0 var(--pad-x,56px) 48px}
 .dct-eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin-bottom:18px}
 .dct-title{font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:-.025em;line-height:1.12;color:var(--ink);margin-bottom:20px}
 .dct-title .em{color:var(--accent)}

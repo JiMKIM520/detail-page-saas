@@ -39,7 +39,7 @@ export const comparePhoneMockup = defineBlock<Data>({
 .cpm-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:var(--ink);letter-spacing:-.02em;line-height:1.12}
 .cpm-sub{margin-top:12px;font-size:15px;color:var(--ink-2)}
 .cpm-stage{position:relative;padding:60px 44px 0;min-height:520px;display:flex;align-items:flex-start;justify-content:center;gap:16px}
-.cpm-card{flex:1;max-width:380px;border-radius:28px;overflow:visible;position:relative}
+.cpm-card{flex:1;max-width:380px;border-radius:calc(var(--r-scale,1)*28px);overflow:visible;position:relative}
 .cpm-card-before{margin-top:0;z-index:1}
 .cpm-card-after{margin-top:40px;z-index:2}
 .cpm-icon-wrap{position:absolute;top:-44px;left:50%;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--paper);box-shadow:0 8px 24px -6px rgba(0,0,0,.22)}
@@ -48,7 +48,7 @@ export const comparePhoneMockup = defineBlock<Data>({
 .cpm-icon-wrap svg{width:40px;height:40px}
 .cpm-card-before .cpm-icon-wrap svg{color:#9A9AA8}
 .cpm-card-after .cpm-icon-wrap svg{color:var(--accent)}
-.cpm-inner{border-radius:28px;overflow:hidden;box-shadow:0 16px 40px -12px rgba(0,0,0,.28)}
+.cpm-inner{border-radius:calc(var(--r-scale,1)*28px);overflow:hidden;box-shadow:0 16px 40px -12px rgba(0,0,0,.28)}
 .cpm-head{text-align:center;font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.1em;padding:18px 20px}
 .cpm-head-b{background:#DADADF;color:#8A8A96}
 .cpm-head-a{background:var(--accent);color:#fff}
@@ -60,7 +60,7 @@ export const comparePhoneMockup = defineBlock<Data>({
 .cpm-bullet-a{flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--accent) 18%,transparent);display:flex;align-items:center;justify-content:center;margin-top:2px}
 .cpm-bullet-a svg{width:11px;height:11px;color:var(--accent)}
 .cpm-card-after .cpm-item{color:var(--ink);font-weight:500}
-.cpm-cta-btn{display:block;width:100%;margin-top:20px;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.04em;text-align:center;padding:16px 20px;border-radius:14px;border:none;cursor:pointer}
+.cpm-cta-btn{display:block;width:100%;margin-top:20px;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.04em;text-align:center;padding:16px 20px;border-radius:calc(var(--r-scale,1)*14px);border:none;cursor:pointer}
 .cpm-footer{background:var(--brand);color:#fff;text-align:center;padding:48px 44px 52px;margin-top:52px}
 .cpm-footer-text{font-family:var(--font-display);font-weight:800;font-size:40px;line-height:1.3;letter-spacing:-.01em}
 .cpm-footer-text .em{color:var(--accent)}

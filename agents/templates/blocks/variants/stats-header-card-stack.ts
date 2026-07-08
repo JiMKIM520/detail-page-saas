@@ -45,7 +45,7 @@ export const statsHeaderCardStack = defineBlock<Data>({
 .shcs-stack{display:flex;flex-direction:column;gap:16px}
 
 /* 개별 카드 */
-.shcs-card{border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.shcs-card{border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
 
 /* 컬러 헤더바 */
 .shcs-card-header{background:color-mix(in srgb,var(--accent) 72%,var(--brand));padding:12px 24px;text-align:center}

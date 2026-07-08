@@ -60,6 +60,11 @@ export interface Tokens {
   fontBody: string // 본문
   fontSerif: string // 명조/세리프
   fontHand: string // 손글씨(말풍선/태그)
+  // ── 형태 토큰 (Sprint 6) — 전부 선택적. 미지정 시 현행 렌더와 픽셀 동일.
+  rScale?: number // 곡률 배율: 0=직각 · 1=현행 · 1.6=라운드. 변형 CSS의 calc(var(--r-scale,1)*Npx)가 소비
+  photoShape?: string // 시그니처 대형 사진 프레임 border-radius 값 — 지정 시 페이지 전체 형태 언어 통일
+  padX?: number // 섹션 가로 패딩(px). 현행 56 — 여백 리듬(48 밀도 ↔ 64 에디토리얼)
+  emDark?: string // 다크(brand 배경) 섹션 안 .em 강조색 — accent를 밝혀 brand 대비 4.5:1 보장 (황태 callout 저대비 실사례)
 }
 
 /** 변형 render에 주입되는 컨텍스트(escape 유틸 + 토큰 + 아이콘). */

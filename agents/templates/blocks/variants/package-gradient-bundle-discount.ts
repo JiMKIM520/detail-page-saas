@@ -70,11 +70,11 @@ export const packageGradientBundleDiscount = defineBlock<Data>({
 
 /* 번들 이미지 */
 .pgbd-img{width:100%;max-width:380px;aspect-ratio:4/3;object-fit:contain;display:block;margin:0 auto 22px}
-.pgbd-img.ph{width:100%;max-width:380px;aspect-ratio:4/3;border:2px dashed rgba(0,0,0,.12);background:rgba(255,255,255,.45);color:var(--muted);border-radius:12px;margin:0 auto 22px}
+.pgbd-img.ph{width:100%;max-width:380px;aspect-ratio:4/3;border:2px dashed rgba(0,0,0,.12);background:rgba(255,255,255,.45);color:var(--muted);border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));margin:0 auto 22px}
 
 /* 구성품 리스트 */
 .pgbd-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;text-align:left}
-.pgbd-li{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.6);border-radius:10px;padding:10px 14px;backdrop-filter:blur(2px)}
+.pgbd-li{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.6);border-radius:calc(var(--r-scale,1)*10px);padding:10px 14px;backdrop-filter:blur(2px)}
 .pgbd-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--accent-d);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .pgbd-li-texts{display:flex;flex-direction:column;gap:2px}
 .pgbd-li-name{font-family:var(--font-body);font-weight:700;font-size:14px;color:var(--ink);line-height:1.4}

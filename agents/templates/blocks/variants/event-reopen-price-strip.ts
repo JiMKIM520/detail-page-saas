@@ -72,7 +72,7 @@ export const eventReopenPriceStrip = defineBlock<Data>({
   max-width:580px;
   height:auto;
   min-height:320px;
-  border-radius:20px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*20px));
   object-fit:cover;
   display:block;
 }
@@ -112,7 +112,7 @@ export const eventReopenPriceStrip = defineBlock<Data>({
   gap:8px;
   background:color-mix(in srgb,var(--accent) 14%,transparent);
   border:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent);
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   padding:8px 18px;
   font-size:14px;
   font-weight:700;

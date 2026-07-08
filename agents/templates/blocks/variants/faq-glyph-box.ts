@@ -30,13 +30,13 @@ export const faqGlyphBox = defineBlock<Data>({
 .fgb{background:color-mix(in srgb,var(--accent) 14%,#fff);padding:56px 0 70px}
 .fgb-banner-row{display:flex;align-items:center;gap:0;margin:0 48px 52px}
 .fgb-rule{flex:1;height:2px;background:var(--ink)}
-.fgb-banner{flex:0 0 auto;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:.04em;line-height:1;padding:14px 56px}
+.fgb-banner{flex:0 0 auto;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:.04em;line-height:1;padding:14px var(--pad-x,56px)}
 .fgb-item{padding:0 48px;margin-bottom:36px}
 .fgb-item:last-child{margin-bottom:0}
 .fgb-q-row{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .fgb-glyph{flex:0 0 auto;font-family:var(--font-serif),'Georgia',serif;font-weight:400;font-size:68px;line-height:1;color:var(--accent);letter-spacing:-.02em}
 .fgb-question{font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--ink);line-height:1.35}
-.fgb-answer{background:#fff;border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);border-radius:12px;padding:22px 26px;font-size:15px;color:var(--ink-2);line-height:1.75}
+.fgb-answer{background:#fff;border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);border-radius:calc(var(--r-scale,1)*12px);padding:22px 26px;font-size:15px;color:var(--ink-2);line-height:1.75}
 .fgb-answer .em{color:var(--accent);font-weight:700}
 `,
   render: (d, { esc, richSafe }) => `

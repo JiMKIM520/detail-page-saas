@@ -162,7 +162,7 @@ export const awardNo1EmblemBadges = defineBlock<Data>({
 /* 포디움 원기둥 몸체 */
 .aneb-pod-body{width:160px;height:44px;
   background:linear-gradient(90deg,#8B6914 0%,#C9A84C 30%,#F5D77E 50%,#C9A84C 70%,#8B6914 100%);
-  border-radius:4px 4px 0 0}
+  border-radius:calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px) 0 0}
 /* 포디움 상단 타원 (원통 위 면) */
 .aneb-pod-top{width:160px;height:24px;
   background:linear-gradient(180deg,#F5D77E 0%,#C9A84C 100%);
@@ -170,11 +170,11 @@ export const awardNo1EmblemBadges = defineBlock<Data>({
 /* 포디움 하단 받침 */
 .aneb-pod-base{width:188px;height:20px;
   background:linear-gradient(90deg,#6B4E0E 0%,#A8822C 30%,#D4A830 50%,#A8822C 70%,#6B4E0E 100%);
-  border-radius:2px;margin-left:-14px}
+  border-radius:calc(var(--r-scale,1)*2px);margin-left:-14px}
 /* 포디움 하단 최하단 넓은 받침 */
 .aneb-pod-foot{width:220px;height:16px;
   background:linear-gradient(90deg,#4A3608 0%,#8B6914 30%,#C9A84C 50%,#8B6914 70%,#4A3608 100%);
-  border-radius:2px;margin-left:-30px}
+  border-radius:calc(var(--r-scale,1)*2px);margin-left:-30px}
 
 /* ── 마무리 카피 ── */
 .aneb-closer{margin-top:44px;font-family:var(--font-display);font-weight:800;font-size:clamp(22px,5vw,32px);line-height:1.4;color:#fff;position:relative;z-index:1}

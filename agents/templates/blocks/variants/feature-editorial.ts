@@ -33,14 +33,14 @@ export const featureEditorial = defineBlock<Data>({
   schema,
   css: `
 .fen{background:var(--bg);padding:58px 0 60px}
-.fen-hd{text-align:center;padding:0 56px;margin-bottom:46px}
+.fen-hd{text-align:center;padding:0 var(--pad-x,56px);margin-bottom:46px}
 .fen-badge{width:62px;height:62px;margin:0 auto 20px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff}
 .fen-badge svg{width:32px;height:32px}
 .fen-title{font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.02em;line-height:1.12}
 .fen-sub{margin-top:14px;font-size:18px;font-weight:600;color:var(--ink-2)}
-.fen-div{width:64px;height:3px;border-radius:2px;background:var(--accent);margin:22px auto 0}
+.fen-div{width:64px;height:3px;border-radius:calc(var(--r-scale,1)*2px);background:var(--accent);margin:22px auto 0}
 .fen-item + .fen-item{margin-top:10px}
-.fen-txt{position:relative;padding:34px 56px 22px;min-height:120px}
+.fen-txt{position:relative;padding:34px var(--pad-x,56px) 22px;min-height:120px}
 .fen-no{position:absolute;left:42px;top:2px;font-family:'Cafe24 ClassicType',serif;font-size:132px;line-height:1;color:var(--accent);opacity:.20}
 .fen-h{position:relative;padding-left:106px;padding-top:30px;font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.25}
 .fen-h .em{color:var(--accent)}
@@ -93,14 +93,14 @@ export const featureCards = defineBlock<CardsData>({
     '특장점 그라데이션 카드. 둥근 코발트 타이틀(Dangdanghae) + 제품 이미지 위 코발트 그라데이션 타원 + 그라데이션 보더 라운드 카드 반복 + 마무리 카피. 밝고 부드러운 프리미엄.',
   schema: cardsSchema,
   css: `
-.fc{position:relative;background:var(--paper);padding:58px 56px 60px;text-align:center;overflow:hidden}
+.fc{position:relative;background:var(--paper);padding:58px var(--pad-x,56px) 60px;text-align:center;overflow:hidden}
 .fc-title{font-family:var(--font-hand);font-size:54px;color:var(--accent);line-height:1.1}
 .fc-sub{margin-top:12px;font-size:17px;font-weight:600;color:var(--ink-2)}
 .fc-fig{position:relative;margin:34px auto 30px;width:380px;height:460px}
 .fc-orb{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);width:620px;height:560px;border-radius:50%;background:linear-gradient(180deg,transparent 30%,var(--accent) 100%);opacity:.92;z-index:0}
-.fc-media{position:relative;z-index:1;width:380px;height:460px;object-fit:cover;border-radius:14px}
+.fc-media{position:relative;z-index:1;width:380px;height:460px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px))}
 .fc-cards{position:relative;z-index:1;display:flex;flex-direction:column;gap:18px}
-.fc-card{background:linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(180deg,var(--accent) 0%,color-mix(in srgb,var(--accent) 45%,#ffffff) 100%) border-box;border:3px solid transparent;border-radius:30px;padding:34px 40px}
+.fc-card{background:linear-gradient(var(--paper),var(--paper)) padding-box,linear-gradient(180deg,var(--accent) 0%,color-mix(in srgb,var(--accent) 45%,#ffffff) 100%) border-box;border:3px solid transparent;border-radius:calc(var(--r-scale,1)*30px);padding:34px 40px}
 .fc-ch{font-family:var(--font-hand);font-size:30px;color:var(--accent);line-height:1.2}
 .fc-cd{margin-top:10px;font-size:15px;color:var(--ink-2);line-height:1.7}
 .fc-closer{margin-top:42px;font-family:var(--font-hand);font-size:38px;color:var(--ink);line-height:1.4}
@@ -148,15 +148,15 @@ export const featureDark = defineBlock<DarkData>({
   schema: darkSchema,
   css: `
 .fd{background:var(--ink);padding:62px 0 60px;color:#fff}
-.fd-hd{text-align:center;padding:0 56px;margin-bottom:42px}
-.fd-eyebrow{width:46px;height:3px;border-radius:2px;background:var(--accent);margin:0 auto 22px}
+.fd-hd{text-align:center;padding:0 var(--pad-x,56px);margin-bottom:42px}
+.fd-eyebrow{width:46px;height:3px;border-radius:calc(var(--r-scale,1)*2px);background:var(--accent);margin:0 auto 22px}
 .fd-intro{font-size:16px;color:rgba(255,255,255,.62)}
 .fd-title{margin-top:10px;font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.02em;line-height:1.12}
 .fd-item + .fd-item{margin-top:44px}
 .fd-band{width:100%;height:380px;object-fit:cover;display:block}
-.fd-h{padding:24px 56px 0;text-align:center;font-family:var(--font-display);font-weight:800;font-size:28px;color:var(--accent)}
-.fd-d{padding:10px 56px 0;text-align:center;font-size:15px;color:rgba(255,255,255,.66);line-height:1.65}
-.fd-closer{margin-top:50px;padding:0 56px;text-align:center;font-family:var(--font-display);font-weight:800;font-size:34px;color:#fff;line-height:1.4}
+.fd-h{padding:24px var(--pad-x,56px) 0;text-align:center;font-family:var(--font-display);font-weight:800;font-size:28px;color:var(--accent)}
+.fd-d{padding:10px var(--pad-x,56px) 0;text-align:center;font-size:15px;color:rgba(255,255,255,.66);line-height:1.65}
+.fd-closer{margin-top:50px;padding:0 var(--pad-x,56px);text-align:center;font-family:var(--font-display);font-weight:800;font-size:34px;color:#fff;line-height:1.4}
 .fd-closer .em{color:var(--accent)}
 `,
   render: (d, { esc, richSafe }) => `

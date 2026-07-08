@@ -27,13 +27,13 @@ export const reviewBubbles = defineBlock<BubblesData>({
   describe: '리뷰 쇼케이스. 별점 헤더 + 2톤 타이틀 + 둥근 리뷰 버블 카드(accent 배경·흰 텍스트) + 마무리 통계 문구. 사회적 증거 강조.',
   schema: bubblesSchema,
   css: `
-.rv{position:relative;padding:64px 56px 64px;background:var(--bg);text-align:center}
+.rv{position:relative;padding:64px var(--pad-x,56px) 64px;background:var(--bg);text-align:center}
 .rv-stars{display:inline-flex;gap:6px;color:var(--accent);margin-bottom:18px}
 .rv-stars svg{width:30px;height:30px}
 .rv-h{font-size:40px}
 .rv-sub{margin-top:10px;font-size:17px;color:var(--ink-2)}
 .rv-list{margin:34px auto 0;display:flex;flex-direction:column;gap:18px;max-width:620px}
-.rv-card{background:var(--accent);color:#fff;border-radius:30px;padding:26px 32px;box-shadow:0 14px 30px -16px rgba(0,0,0,.35)}
+.rv-card{background:var(--accent);color:#fff;border-radius:calc(var(--r-scale,1)*30px);padding:26px 32px;box-shadow:0 14px 30px -16px rgba(0,0,0,.35)}
 .rv-card p{font-size:18px;font-weight:600;line-height:1.6}
 .rv-who{display:block;margin-top:10px;font-size:14px;font-weight:700;opacity:.85}
 .rv-stat{margin-top:38px;font-size:32px;line-height:1.4;font-weight:800;color:var(--ink)}
@@ -76,7 +76,7 @@ export const reviewCards = defineBlock<CardsData>({
   describe: '리뷰 카드 그리드 + (선택) 평점 요약(점수·별·건수). 작성자·별점·본문·태그 카드. 깔끔/신뢰형.',
   schema: cardsSchema,
   css: `
-.rvc{position:relative;padding:64px 56px 64px;background:var(--bg)}
+.rvc{position:relative;padding:64px var(--pad-x,56px) 64px;background:var(--bg)}
 .rvc-head{text-align:center;margin-bottom:28px}
 .rvc-kick{font-size:13px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
 .rvc-h{font-family:var(--font-serif);font-weight:700;font-size:36px}
@@ -85,7 +85,7 @@ export const reviewCards = defineBlock<CardsData>({
 .rvc-sstars{color:var(--accent)} .rvc-sstars svg{width:20px;height:20px}
 .rvc-count{font-size:14px;color:var(--muted)}
 .rvc-list{margin-top:26px;display:flex;flex-direction:column;gap:14px}
-.rvc-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 26px;box-shadow:0 10px 28px -20px rgba(0,0,0,.3)}
+.rvc-card{background:var(--paper);border:1px solid var(--line);border-radius:calc(var(--r-scale,1)*18px);padding:24px 26px;box-shadow:0 10px 28px -20px rgba(0,0,0,.3)}
 .rvc-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
 .rvc-who{font-size:15px;font-weight:800;color:var(--ink)}
 .rvc-cstars{color:var(--accent);display:inline-flex;gap:2px} .rvc-cstars svg{width:16px;height:16px}

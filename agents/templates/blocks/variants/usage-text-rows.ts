@@ -41,7 +41,7 @@ export const usageTextRows = defineBlock<Data>({
 .utr-title{font-family:var(--font-display);font-weight:800;font-size:82px;color:var(--accent);letter-spacing:-.03em;line-height:0.96}
 .utr-tagline{margin-top:14px;font-size:14px;font-weight:500;color:var(--ink-2);line-height:1.55}
 .utr-img-wrap{flex:0 0 200px;width:200px;align-self:flex-end}
-.utr-hero-img{width:200px;height:260px;object-fit:cover;border-radius:120px 120px 0 0;display:block}
+.utr-hero-img{width:200px;height:260px;object-fit:cover;border-radius:var(--shape-photo, 120px 120px 0 0);display:block}
 /* ── 헤어라인 (히어로 하단) ── */
 .utr-divider-top{margin:28px 48px 0;border:none;border-top:2px solid var(--ink);opacity:.8}
 /* ── 스텝 행 리스트 ── */

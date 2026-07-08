@@ -31,7 +31,7 @@ export const detailSpecTable = defineBlock<Data>({
 .dst{background:var(--bg);color:var(--ink);padding:54px 0 0}
 
 /* ─ 헤더 ─ */
-.dst-hd{padding:0 56px 40px}
+.dst-hd{padding:0 var(--pad-x,56px) 40px}
 .dst-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .dst-title{font-family:var(--font-display);font-weight:800;font-size:44px;color:var(--ink);letter-spacing:-.02em;line-height:1.1}
 

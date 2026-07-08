@@ -44,14 +44,14 @@ export const featureDarkFloatCutout = defineBlock<Data>({
 .fdfc-title{font-family:var(--font-display);font-weight:800;font-size:clamp(34px,7.8vw,52px);line-height:1.22;letter-spacing:-.025em;color:#fff}
 .fdfc-title .em{color:var(--accent)}
 /* 이미지 카드 래퍼 — 좌우 패딩으로 살짝 안쪽 여백, overflow visible로 플로팅 컷아웃 노출 */
-.fdfc-card{position:relative;margin:0 20px;border-radius:16px;overflow:visible}
+.fdfc-card{position:relative;margin:0 20px;border-radius:calc(var(--r-scale,1)*16px);overflow:visible}
 /* 라이프스타일 이미지 */
-.fdfc-life{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;border-radius:16px}
-.fdfc-life.ph{width:100%;aspect-ratio:3/4;border-radius:16px;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.3)}
+.fdfc-life{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))}
+.fdfc-life.ph{width:100%;aspect-ratio:3/4;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.3)}
 /* 누끼 컷아웃 — 좌상단 오버플로 플로팅 */
 .fdfc-cutout-wrap{position:absolute;top:-28px;left:-16px;z-index:3;width:38%;max-width:160px;pointer-events:none}
 .fdfc-cutout{width:100%;aspect-ratio:3/4;object-fit:contain;display:block;filter:drop-shadow(0 8px 24px rgba(0,0,0,.55))}
-.fdfc-cutout.ph{width:100%;aspect-ratio:3/4;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.3);border-radius:10px}
+.fdfc-cutout.ph{width:100%;aspect-ratio:3/4;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.3);border-radius:calc(var(--r-scale,1)*10px)}
 /* 우하단 burst 할인 뱃지 */
 .fdfc-badge{position:absolute;bottom:14px;right:14px;z-index:4;width:78px;height:78px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#E8002D;color:#fff;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);text-align:center}
 .fdfc-badge-main{font-family:var(--font-display);font-weight:800;font-size:18px;line-height:1;letter-spacing:-.02em}

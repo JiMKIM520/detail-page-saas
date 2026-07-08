@@ -58,9 +58,9 @@ export const statsSatisfactionBars = defineBlock<Data>({
 .ssb-sub{margin-top:10px;font-family:var(--font-body);font-size:15px;color:var(--muted);line-height:1.6}
 
 /* ── 제품 이미지 ── */
-.ssb-fig{position:relative;z-index:1;margin:0 auto 34px;width:220px;height:260px;border-radius:12px;overflow:hidden}
-.ssb-img{width:100%;height:100%;object-fit:cover;display:block;border-radius:12px}
-.ssb-img.ph{width:100%;height:100%;border-radius:12px}
+.ssb-fig{position:relative;z-index:1;margin:0 auto 34px;width:220px;height:260px;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));overflow:hidden}
+.ssb-img{width:100%;height:100%;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px))}
+.ssb-img.ph{width:100%;height:100%;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px))}
 
 /* ── 만족도 바 목록 ── */
 .ssb-bars{position:relative;z-index:1;display:flex;flex-direction:column;gap:18px}

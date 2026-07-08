@@ -63,7 +63,7 @@ export const storyStackedImageNarrative = defineBlock<Data>({
   font-weight:600;
   letter-spacing:.04em;
   padding:6px 18px;
-  border-radius:3px;
+  border-radius:calc(var(--r-scale,1)*3px);
   margin-bottom:22px;
 }
 
@@ -139,7 +139,7 @@ export const storyStackedImageNarrative = defineBlock<Data>({
   aspect-ratio:4/3;
   object-fit:cover;
   display:block;
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
 }
 .ssin-img.ph{
   width:100%;
@@ -147,7 +147,7 @@ export const storyStackedImageNarrative = defineBlock<Data>({
   border:2px dashed var(--line);
   background:var(--bg);
   color:var(--muted);
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
 }
 `,
   render: (d, { esc, richSafe }) => {

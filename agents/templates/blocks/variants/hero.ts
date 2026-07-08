@@ -23,14 +23,14 @@ export const heroCentered = defineBlock<HeroCenteredData>({
   describe: '중앙 정렬 히어로. pill 뱃지 + 2톤 대제목 + 사진 위 말풍선 + 브랜드 로고. 따뜻하고 친근한 푸드 톤.',
   schema: heroCenteredSchema,
   css: `
-.hc{position:relative;padding:64px 56px 56px;text-align:center;background:radial-gradient(120% 80% at 50% -10%,#FFFDF9 0%,var(--bg) 55%)}
+.hc{position:relative;padding:64px var(--pad-x,56px) 56px;text-align:center;background:radial-gradient(120% 80% at 50% -10%,#FFFDF9 0%,var(--bg) 55%)}
 .hc-badge{display:inline-flex;align-items:center;gap:7px;background:var(--brand);color:#F5ECDF;font-size:18px;font-weight:800;padding:9px 22px;border-radius:999px;box-shadow:0 6px 16px rgba(42,33,24,.18)}
 .hc-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .hc-title{margin-top:22px;font-size:62px}
 .hc-sub{margin-top:14px;font-size:21px;font-weight:700;color:var(--ink)}
 .hc-fig{position:relative;margin:38px auto 0;width:600px}
-.hc-media{width:100%;height:430px;object-fit:cover;border-radius:26px;box-shadow:0 26px 50px -18px rgba(42,33,24,.45)}
-.hc-bubble{position:absolute;top:30px;right:-12px;background:#fff;border:2.5px solid var(--brand);border-radius:22px;padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700;transform:rotate(-4deg)}
+.hc-media{width:100%;height:430px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*26px));box-shadow:0 26px 50px -18px rgba(42,33,24,.45)}
+.hc-bubble{position:absolute;top:30px;right:-12px;background:#fff;border:2.5px solid var(--brand);border-radius:calc(var(--r-scale,1)*22px);padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700;transform:rotate(-4deg)}
 .hc-bubble::after{content:"";position:absolute;left:28px;bottom:-14px;width:24px;height:17px;background:#fff;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:rotate(40deg)}
 .hc-cap{margin-top:14px;font-size:13px;color:var(--muted)}
 .hc-brand{margin-top:30px;display:inline-flex;align-items:center;gap:10px}
@@ -124,7 +124,7 @@ export const heroPoints = defineBlock<HeroPointsData>({
 .hp-title{margin-top:6px;font-size:58px}
 .hp-title .em{color:var(--accent)}
 .hp-fig{margin:34px auto 0;width:100%}
-.hp-media{width:100%;height:420px;object-fit:cover;border-radius:24px;box-shadow:0 22px 44px -20px rgba(0,0,0,.32)}
+.hp-media{width:100%;height:420px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*24px));box-shadow:0 22px 44px -20px rgba(0,0,0,.32)}
 .hp-points{margin-top:46px;display:flex;justify-content:center;gap:16px}
 .hp-pt{flex:1 1 0;max-width:200px;text-align:center}
 .hp-ic{width:84px;height:84px;margin:0 auto;border-radius:50%;background:var(--paper);box-shadow:0 10px 24px rgba(0,0,0,.09);display:grid;place-items:center;color:var(--accent)}
@@ -179,9 +179,9 @@ export const heroArch = defineBlock<HeroArchData>({
 .ha-title{margin-top:12px;font-size:54px}
 .ha-title .em{color:var(--accent)}
 .ha-sub{margin-top:12px;font-size:18px;font-weight:600;color:var(--ink-2)}
-.ha-arch{position:relative;margin:42px auto 0;width:74%;background:var(--accent);border-radius:170px 170px 22px 22px;padding:36px 26px 0}
+.ha-arch{position:relative;margin:42px auto 0;width:74%;background:var(--accent);border-radius:170px 170px calc(var(--r-scale,1)*22px) calc(var(--r-scale,1)*22px);padding:36px 26px 0}
 .ha-en{font-family:var(--font-lat);font-size:24px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.94)}
-.ha-media{width:100%;height:360px;object-fit:cover;border-radius:12px;margin-top:18px;display:block}
+.ha-media{width:100%;height:360px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));margin-top:18px;display:block}
 .ha-points{margin-top:42px;display:flex;justify-content:center}
 .ha-pt{flex:1 1 0;max-width:180px;padding:0 14px;text-align:center;border-right:1px solid var(--line)}
 .ha-pt:last-child{border-right:none}

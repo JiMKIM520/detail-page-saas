@@ -73,10 +73,10 @@ export const productHeroDiscountGrid = defineBlock<Data>({
 
 /* ── 3열 카드 그리드 ────────────────────────── */
 .phdg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 12px 20px;background:var(--paper)}
-.phdg-card{position:relative;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 3px 10px -4px rgba(0,0,0,.18)}
+.phdg-card{position:relative;background:#fff;border-radius:calc(var(--r-scale,1)*10px);overflow:hidden;box-shadow:0 3px 10px -4px rgba(0,0,0,.18)}
 
 /* 퍼센트 배지 — 좌상단 burst 근사 (사다리꼴 클립) */
-.phdg-badge{position:absolute;top:0;left:0;min-width:40px;padding:4px 8px 4px 6px;background:#FF3B30;color:#fff;font-family:var(--font-display);font-weight:800;font-size:clamp(11px,2.2vw,14px);line-height:1.1;border-radius:0 0 8px 0;z-index:2;text-align:center}
+.phdg-badge{position:absolute;top:0;left:0;min-width:40px;padding:4px 8px 4px 6px;background:#FF3B30;color:#fff;font-family:var(--font-display);font-weight:800;font-size:clamp(11px,2.2vw,14px);line-height:1.1;border-radius:0 0 calc(var(--r-scale,1)*8px) 0;z-index:2;text-align:center}
 
 /* 카드 이미지 */
 .phdg-card-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}

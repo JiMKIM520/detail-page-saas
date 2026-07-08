@@ -39,7 +39,7 @@ export const detailShowcase = defineBlock<Data>({
 .ds{background:var(--bg);padding:0 0 64px}
 
 /* ─ 헤더 ─ */
-.ds-hd{text-align:center;padding:54px 56px 40px}
+.ds-hd{text-align:center;padding:54px var(--pad-x,56px) 40px}
 .ds-eyebrow{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .ds-title{font-family:var(--font-display);font-weight:800;font-size:42px;color:var(--ink);letter-spacing:-.02em;line-height:1.15}
 
@@ -54,19 +54,19 @@ export const detailShowcase = defineBlock<Data>({
 .ds-spec-val{padding:16px 22px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.5}
 
 /* ─ 에디토리얼 인용 ─ */
-.ds-quote{text-align:center;padding:48px 56px 0}
+.ds-quote{text-align:center;padding:48px var(--pad-x,56px) 0}
 .ds-quote-text{font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.45;letter-spacing:-.01em}
 .ds-quote-text .em{color:var(--accent)}
 
 /* ─ 풀폭 헤드라인 ─ */
-.ds-hl{text-align:center;padding:44px 56px 0}
+.ds-hl{text-align:center;padding:44px var(--pad-x,56px) 0}
 .ds-hl-text{font-size:18px;font-weight:600;color:var(--ink-2);line-height:1.65;letter-spacing:-.01em}
 .ds-hl-text .em{color:var(--accent)}
 
 /* ─ 2열 씬 이미지 ─ */
 .ds-scenes{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:44px 40px 0}
 .ds-scene{}
-.ds-scene-img{width:100%;height:240px;object-fit:cover;border-radius:10px;display:block}
+.ds-scene-img{width:100%;height:240px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));display:block}
 .ds-scene-cap{margin-top:12px;text-align:center;font-size:13px;font-weight:600;color:var(--ink-2);letter-spacing:.01em}
 `,
   render: (d, { esc, richSafe }) => `

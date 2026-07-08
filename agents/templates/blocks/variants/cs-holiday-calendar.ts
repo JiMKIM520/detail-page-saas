@@ -119,7 +119,7 @@ export const csHolidayCalendar = defineBlock<Data>({
 /* 달력 컨테이너 */
 .chl-cal{
   background:var(--brand);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:32px 24px 36px;
   margin-bottom:36px;
   overflow:hidden;

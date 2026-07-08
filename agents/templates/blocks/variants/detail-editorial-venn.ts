@@ -171,7 +171,7 @@ export const detailEditorialVenn = defineBlock<Data>({
   padding:10px 12px;
   /* 반투명 배경으로 사진 위 가독성 확보 */
   background:rgba(0,0,0,.38);
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   max-width:148px;
 }
 

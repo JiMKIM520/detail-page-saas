@@ -84,7 +84,7 @@ export const shippingSpeedHero = defineBlock<Data>({
   letter-spacing:-.03em;
   color:#fff;
   border:4px solid #fff;
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:6px 28px 8px;
 }
 
@@ -102,7 +102,7 @@ export const shippingSpeedHero = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.35);
   background:rgba(255,255,255,.10);
   color:rgba(255,255,255,.55);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   margin-bottom:28px;
 }
 

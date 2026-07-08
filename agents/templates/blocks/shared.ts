@@ -222,7 +222,16 @@ export function buildFontLinks(tokens: Tokens): string {
 /** 토큰 → :root CSS 변수 + 리셋 + 페이지 + 공유 유틸리티(워터마크/라벨/디스플레이). composer가 1회 주입. */
 export function baseCss(tokens: Tokens, width: number): string {
   const t = { ...tokens }
-  for (const k of Object.keys(t) as (keyof Tokens)[]) t[k] = cssSafe(t[k])
+  for (const k of Object.keys(t) as (keyof Tokens)[]) {
+    const v = t[k]
+    if (typeof v === 'string') (t as Record<string, unknown>)[k] = cssSafe(v)
+  }
+  // 형태 토큰 (Sprint 6) — rScale·padX는 상시 방출(기본 = 현행), photoShape는 지정 시만
+  // (미지정이면 변형 CSS의 var(--shape-photo, <고유값>) fallback이 살아 변형 정체성 유지)
+  const rScale = typeof t.rScale === 'number' && isFinite(t.rScale) ? Math.max(0, Math.min(3, t.rScale)) : 1
+  const padX = typeof t.padX === 'number' && isFinite(t.padX) ? Math.max(24, Math.min(96, Math.round(t.padX))) : 56
+  const shapePhoto = typeof t.photoShape === 'string' && t.photoShape.trim() ? `\n  --shape-photo:${cssSafe(t.photoShape)};` : ''
+  const emDark = typeof t.emDark === 'string' && t.emDark.trim() ? cssSafe(t.emDark) : '#FFF7EA'
   return `
 :root{
   --bg:${t.bg}; --paper:${t.paper}; --ink:${t.ink}; --ink-2:${t.ink2};
@@ -231,6 +240,7 @@ export function baseCss(tokens: Tokens, width: number): string {
   --font-display:${t.fontDisplay}; --font-body:${t.fontBody};
   --font-serif:${t.fontSerif}; --font-hand:${t.fontHand};
   --font-lat:'Cormorant Garamond',serif;
+  --r-scale:${rScale}; --pad-x:${padX}px; --em-dark:${emDark};${shapePhoto}
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);background:#cfc6ba;-webkit-font-smoothing:antialiased}

@@ -53,16 +53,16 @@ export const detailPackageFaq = defineBlock<Data>({
 /* ── 메인 구성품 영역 ── */
 .dpfaq-mains{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:0 40px;margin-bottom:28px}
 .dpfaq-main-card{display:flex;flex-direction:column;align-items:center;gap:10px}
-.dpfaq-main-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;background:color-mix(in srgb,var(--ink) 5%,transparent)}
-.dpfaq-main-img.ph{border-radius:14px}
+.dpfaq-main-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.dpfaq-main-img.ph{border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px))}
 .dpfaq-main-name{font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--ink);text-align:center;line-height:1.3}
 .dpfaq-main-weight{font-size:13px;color:var(--ink-2);text-align:center;margin-top:2px}
 
 /* ── 소구성품 그리드 ── */
 .dpfaq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 40px;margin-bottom:36px}
 .dpfaq-comp{display:flex;flex-direction:column;align-items:center;gap:6px}
-.dpfaq-comp-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;background:color-mix(in srgb,var(--ink) 5%,transparent)}
-.dpfaq-comp-img.ph{border-radius:10px;font-size:11px}
+.dpfaq-comp-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:calc(var(--r-scale,1)*10px);background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.dpfaq-comp-img.ph{border-radius:calc(var(--r-scale,1)*10px);font-size:11px}
 .dpfaq-comp-name{font-size:13px;font-weight:600;color:var(--ink);text-align:center;line-height:1.3}
 .dpfaq-comp-weight{font-size:12px;color:var(--muted);text-align:center}
 
@@ -76,7 +76,7 @@ export const detailPackageFaq = defineBlock<Data>({
 
 /* ── FAQ 카드 ── */
 .dpfaq-list{display:flex;flex-direction:column;gap:14px;padding:0 40px}
-.dpfaq-card{border-radius:12px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.dpfaq-card{border-radius:calc(var(--r-scale,1)*12px);overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
 .dpfaq-q{background:color-mix(in srgb,var(--accent) 15%,transparent);padding:14px 20px;font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--ink);line-height:1.5}
 .dpfaq-q .em{color:var(--accent-d)}
 .dpfaq-a{background:var(--paper);padding:14px 20px;font-size:14px;color:var(--ink-2);line-height:1.75}

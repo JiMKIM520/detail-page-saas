@@ -55,7 +55,7 @@ export const shippingIllustHero = defineBlock<Data>({
 .sih-cloud{
   position:absolute;
   background:#fff;
-  border-radius:50px;
+  border-radius:calc(var(--r-scale,1)*50px);
   opacity:.55;
 }
 .sih-cloud::before,.sih-cloud::after{
@@ -122,7 +122,7 @@ export const shippingIllustHero = defineBlock<Data>({
   background:#FFE033;
   color:var(--accent-d);
   padding:4px 18px 6px;
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
 }
 
 /* 일러스트 슬롯 */

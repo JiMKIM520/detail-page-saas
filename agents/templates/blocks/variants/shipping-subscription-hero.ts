@@ -104,7 +104,7 @@ export const shippingSubscriptionHero = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.4);
   background:rgba(255,255,255,.12);
   color:rgba(255,255,255,.5);
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
 }
 
 /* ─ 3단 혜택 스트립 ─ */

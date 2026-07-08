@@ -50,7 +50,7 @@ export const compareGridTable = defineBlock<Data>({
 .cgt-pill{display:inline-block;font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:.04em;padding:8px 32px;border-radius:999px;border:2px solid var(--accent);color:var(--accent);background:transparent;line-height:1}
 /* 이미지 행 */
 .cgt-row--img .cgt-cell{padding:16px 20px}
-.cgt-img{width:100%;height:220px;object-fit:cover;display:block;border-radius:4px}
+.cgt-img{width:100%;height:220px;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px))}
 /* 텍스트 비교 행 */
 .cgt-row--text .cgt-cell{padding:26px 32px;text-align:center;font-size:16px;line-height:1.6}
 .cgt-cell--before{color:var(--ink-2)}

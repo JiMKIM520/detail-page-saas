@@ -37,7 +37,7 @@ export const statsBentoGrid = defineBlock<Data>({
 .sbg-headline{font-family:var(--font-display);font-weight:800;font-size:58px;color:#fff;line-height:1.1;letter-spacing:-.02em}
 .sbg-headline .em{color:color-mix(in srgb,#fff 70%,var(--accent))}
 .sbg-cards{padding:28px 28px 36px;display:flex;flex-direction:column;gap:20px}
-.sbg-card{background:#fff;border-radius:22px;box-shadow:0 4px 20px rgba(0,0,0,.07);overflow:hidden;display:flex;align-items:stretch;min-height:170px;position:relative}
+.sbg-card{background:#fff;border-radius:calc(var(--r-scale,1)*22px);box-shadow:0 4px 20px rgba(0,0,0,.07);overflow:hidden;display:flex;align-items:stretch;min-height:170px;position:relative}
 .sbg-card:nth-child(even){flex-direction:row-reverse}
 .sbg-card-body{flex:1;padding:30px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px;min-width:0}
 .sbg-label{font-family:var(--font-body);font-size:16px;color:var(--ink-2);font-weight:500;line-height:1.3}

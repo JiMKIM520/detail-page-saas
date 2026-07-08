@@ -51,7 +51,7 @@ export const shippingNotice = defineBlock<Data>({
 .sn-vline{width:1px;height:42px;background:var(--ink);margin:18px 0}
 .sn-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:var(--ink);letter-spacing:-.02em;line-height:1.1;text-align:center}
 .sn-sub{margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-align:center}
-.sn-card{margin-top:32px;width:100%;background:var(--paper);border-radius:14px;padding:38px 44px;display:flex;flex-direction:column;gap:26px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.sn-card{margin-top:32px;width:100%;background:var(--paper);border-radius:calc(var(--r-scale,1)*14px);padding:38px 44px;display:flex;flex-direction:column;gap:26px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
 .sn-row{display:flex;align-items:flex-start;gap:14px;font-size:16px;color:var(--ink);line-height:1.65}
 .sn-check{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;margin-top:2px}
 .sn-check svg{width:12px;height:12px;color:#fff}
@@ -64,7 +64,7 @@ export const shippingNotice = defineBlock<Data>({
 /* ─ 고객센터 섹션 ─ */
 .sn-bot{padding:52px 64px 60px;display:flex;flex-direction:column;align-items:center;border-top:1px solid var(--line)}
 .sn-phone{font-family:var(--font-display);font-weight:800;font-size:44px;color:var(--ink);letter-spacing:-.02em;text-align:center;margin-top:18px}
-.sn-hours{margin-top:24px;width:100%;background:var(--brand);border-radius:12px;padding:28px 36px;display:flex;align-items:center;gap:28px}
+.sn-hours{margin-top:24px;width:100%;background:var(--brand);border-radius:calc(var(--r-scale,1)*12px);padding:28px 36px;display:flex;align-items:center;gap:28px}
 .sn-hicon{flex-shrink:0;width:44px;height:44px;color:rgba(255,255,255,.7)}
 .sn-hicon svg{width:100%;height:100%}
 .sn-hlist{flex:1;display:flex;flex-direction:column;gap:6px}

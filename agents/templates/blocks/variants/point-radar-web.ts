@@ -132,9 +132,9 @@ export const pointRadarWeb = defineBlock<Data>({
 /* 제품 이미지 — 레이더 중앙 오버레이 */
 .prw-img-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38%;pointer-events:none}
 .prw-img{width:100%;height:auto;object-fit:contain;display:block}
-.prw-img.ph{width:100%;aspect-ratio:2/3;border:2px dashed var(--line);background:rgba(0,0,0,.04);color:var(--muted);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.prw-img.ph{width:100%;aspect-ratio:2/3;border:2px dashed var(--line);background:rgba(0,0,0,.04);color:var(--muted);border-radius:calc(var(--r-scale,1)*4px);display:flex;align-items:center;justify-content:center;font-size:12px}
 /* callout 박스 */
-.prw-callout{margin-top:36px;border:2px solid var(--accent-d);border-radius:12px;padding:0 0 8px;overflow:hidden;text-align:center}
+.prw-callout{margin-top:36px;border:2px solid var(--accent-d);border-radius:calc(var(--r-scale,1)*12px);padding:0 0 8px;overflow:hidden;text-align:center}
 /* pill 배지 헤드라인 */
 .prw-pill-row{display:flex;justify-content:center;margin-top:-1px}
 .prw-pill{display:inline-block;border:2px solid var(--accent-d);border-radius:999px;padding:9px 24px;background:var(--bg);font-family:var(--font-display);font-weight:800;font-size:clamp(13px,3.2vw,16px);color:var(--accent-d);letter-spacing:-.01em;margin-top:-17px}

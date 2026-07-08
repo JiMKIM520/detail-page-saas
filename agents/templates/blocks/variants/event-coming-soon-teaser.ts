@@ -94,7 +94,7 @@ export const eventComingSoonTeaser = defineBlock<Data>({
   object-fit:contain;
   position:relative;
   z-index:1;
-  border-radius:16px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));
 }
 
 /* 예고 블릿 카드 */
@@ -102,7 +102,7 @@ export const eventComingSoonTeaser = defineBlock<Data>({
   margin:0 36px;
   background:rgba(255,255,255,.08);
   border:1.5px solid rgba(255,255,255,.14);
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   padding:26px 28px;
   display:flex;
   flex-direction:column;

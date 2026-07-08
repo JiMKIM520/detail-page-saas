@@ -42,8 +42,8 @@ export const eventPromo = defineBlock<Data>({
 @keyframes ev-slide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* image */
-.ev-img-wrap{display:flex;justify-content:center;padding:42px 56px 0;position:relative}
-.ev-img{width:320px;height:320px;object-fit:contain;border-radius:16px}
+.ev-img-wrap{display:flex;justify-content:center;padding:42px var(--pad-x,56px) 0;position:relative}
+.ev-img{width:320px;height:320px;object-fit:contain;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))}
 
 /* title block */
 .ev-title-block{text-align:center;padding:28px 40px 0}
@@ -61,7 +61,7 @@ export const eventPromo = defineBlock<Data>({
 .ev-section-label{display:inline-block;border:2px solid var(--accent);color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.12em;padding:8px 28px;border-radius:999px}
 
 /* points card */
-.ev-card{margin:22px 36px 0;background:rgba(255,255,255,.10);border:1.5px solid rgba(255,255,255,.15);border-radius:24px;padding:32px 36px;display:flex;flex-direction:column;gap:18px}
+.ev-card{margin:22px 36px 0;background:rgba(255,255,255,.10);border:1.5px solid rgba(255,255,255,.15);border-radius:calc(var(--r-scale,1)*24px);padding:32px 36px;display:flex;flex-direction:column;gap:18px}
 .ev-point{display:flex;align-items:center;gap:16px}
 .ev-check{width:36px;height:36px;flex-shrink:0;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff}
 .ev-check svg{width:18px;height:18px}

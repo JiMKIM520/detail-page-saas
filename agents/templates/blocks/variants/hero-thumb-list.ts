@@ -85,11 +85,11 @@ export const heroThumbList = defineBlock<Data>({
   object-fit:cover;
   display:block;
   margin:0 auto;
-  border-radius:16px
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))
 }
 .htl-hero-img.ph{
   width:380px;height:380px;
-  border-radius:16px
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))
 }
 
 /* ─ 제품명 배너 (accent 풀배경) ─ */
@@ -133,13 +133,13 @@ export const heroThumbList = defineBlock<Data>({
 .htl-thumb{
   flex:0 0 140px;
   width:140px;height:140px;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   object-fit:cover
 }
 .htl-thumb.ph{
   flex:0 0 140px;
   width:140px;height:140px;
-  border-radius:10px
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px))
 }
 `,
   render: (d, { esc, richSafe }) => {

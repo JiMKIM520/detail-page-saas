@@ -61,14 +61,14 @@ export const featureProductFloatIconGrid = defineBlock<Data>({
 .fpfig-orb{position:absolute;bottom:-50px;left:50%;transform:translateX(-50%);width:320px;height:220px;border-radius:50%;background:rgba(255,255,255,.09);pointer-events:none;z-index:1}
 /* 메인 제품 이미지 — 컨테이너 없음, 배경 위 자유 부유 */
 .fpfig-img1{width:130px;height:190px;object-fit:contain;display:block;position:relative;z-index:3;filter:drop-shadow(0 8px 20px rgba(0,0,0,.18))}
-.fpfig-img1.ph{width:130px;height:190px;border:2px dashed rgba(255,255,255,.35);background:rgba(255,255,255,.10);color:rgba(255,255,255,.55);border-radius:8px;z-index:3}
+.fpfig-img1.ph{width:130px;height:190px;border:2px dashed rgba(255,255,255,.35);background:rgba(255,255,255,.10);color:rgba(255,255,255,.55);border-radius:calc(var(--r-scale,1)*8px);z-index:3}
 /* 서브 제품 이미지 — 메인 왼쪽에 살짝 겹침 */
 .fpfig-img2{width:82px;height:130px;object-fit:contain;display:block;position:relative;z-index:2;margin-right:-14px;margin-bottom:10px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.13))}
-.fpfig-img2.ph{width:82px;height:130px;border:2px dashed rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:rgba(255,255,255,.45);border-radius:6px;z-index:2}
+.fpfig-img2.ph{width:82px;height:130px;border:2px dashed rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:rgba(255,255,255,.45);border-radius:calc(var(--r-scale,1)*6px);z-index:2}
 
 /* ── 카드 그리드 존 ── */
 .fpfig-grid{background:var(--bg);padding:26px 18px 40px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fpfig-card{background:var(--paper);border-radius:18px;padding:20px 16px 18px;display:flex;flex-direction:column;box-shadow:0 2px 10px -3px rgba(0,0,0,.07)}
+.fpfig-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*18px);padding:20px 16px 18px;display:flex;flex-direction:column;box-shadow:0 2px 10px -3px rgba(0,0,0,.07)}
 /* 아이콘 원형 배지 */
 .fpfig-icon{width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff;margin-bottom:10px;flex-shrink:0}
 .fpfig-icon svg{width:15px;height:15px}

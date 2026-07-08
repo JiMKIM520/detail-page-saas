@@ -104,7 +104,7 @@ export const shippingDateTimeline = defineBlock<Data>({
   flex-shrink:0;
   width:56px;
   height:10px;
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
   margin-right:18px;
   /* color는 인라인 style로 주입 */
 }

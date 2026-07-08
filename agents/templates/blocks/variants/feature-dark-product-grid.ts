@@ -54,12 +54,12 @@ export const featureDarkProductGrid = defineBlock<Data>({
 /* ── 2-col 그리드 ── */
 .fdpg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 /* ── 카드 ── */
-.fdpg-card{position:relative;border-radius:16px;overflow:hidden;background:#1a1a1a;aspect-ratio:3/4;display:flex;flex-direction:column}
+.fdpg-card{position:relative;border-radius:calc(var(--r-scale,1)*16px);overflow:hidden;background:#1a1a1a;aspect-ratio:3/4;display:flex;flex-direction:column}
 /* 이미지 풀채움 */
-.fdpg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px}
-.fdpg-img.ph{position:absolute;inset:0;width:100%;height:100%;border-radius:16px;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);font-size:12px;display:flex;align-items:center;justify-content:center}
+.fdpg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))}
+.fdpg-img.ph{position:absolute;inset:0;width:100%;height:100%;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);font-size:12px;display:flex;align-items:center;justify-content:center}
 /* 카드 위 그라데이션 오버레이 — 배지와 CTA 가독성 */
-.fdpg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.0) 38%,rgba(0,0,0,.0) 62%,rgba(0,0,0,.52) 100%);border-radius:16px;z-index:1}
+.fdpg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.0) 38%,rgba(0,0,0,.0) 62%,rgba(0,0,0,.52) 100%);border-radius:calc(var(--r-scale,1)*16px);z-index:1}
 /* ── 카드 내부 레이아웃 ── */
 .fdpg-top{position:relative;z-index:2;padding:10px 10px 0;display:flex;flex-wrap:wrap;gap:5px}
 .fdpg-bottom{position:relative;z-index:2;margin-top:auto;padding:0 10px 10px;display:flex;align-items:center}

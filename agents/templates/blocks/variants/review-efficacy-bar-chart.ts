@@ -72,8 +72,8 @@ export const reviewEfficacyBarChart = defineBlock<Data>({
 .rebc-row{display:grid;grid-template-columns:72px 1fr auto;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
 .rebc-row:last-child{border-bottom:none}
 .rebc-label{font-family:var(--font-body);font-size:15px;font-weight:600;color:var(--ink);white-space:nowrap}
-.rebc-track{position:relative;height:18px;border-radius:2px;background:rgba(0,0,0,.10);overflow:hidden}
-.rebc-fill{position:absolute;inset:0 auto 0 0;background:var(--ink);border-radius:2px;transition:width .4s ease}
+.rebc-track{position:relative;height:18px;border-radius:calc(var(--r-scale,1)*2px);background:rgba(0,0,0,.10);overflow:hidden}
+.rebc-fill{position:absolute;inset:0 auto 0 0;background:var(--ink);border-radius:calc(var(--r-scale,1)*2px);transition:width .4s ease}
 .rebc-pct{font-family:var(--font-body);font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;min-width:44px;text-align:right}
 .rebc-pct sup{font-size:10px;font-weight:600;vertical-align:super}
 

@@ -62,18 +62,18 @@ export const reviewPhotoBubbleStaggered = defineBlock<Data>({
 .rpbs-col-l{display:flex;flex-direction:column;gap:0}
 .rpbs-col-r{display:flex;flex-direction:column;gap:14px;padding-top:0}
 /* 포토 공통 */
-.rpbs-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;display:block}
-.rpbs-photo.ph{width:100%;aspect-ratio:3/4;border-radius:16px;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);font-size:13px}
+.rpbs-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));display:block}
+.rpbs-photo.ph{width:100%;aspect-ratio:3/4;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);font-size:13px}
 /* 오렌지 bubble */
-.rpbs-bubble{background:var(--accent);border-radius:18px;padding:18px 22px}
+.rpbs-bubble{background:var(--accent);border-radius:calc(var(--r-scale,1)*18px);padding:18px 22px}
 .rpbs-bubble-hl{font-family:var(--font-display);font-weight:800;font-size:clamp(14px,3.2vw,17px);line-height:1.35;color:#fff;margin-bottom:6px}
 .rpbs-bubble-hl .em{color:#fff;text-decoration:underline;text-underline-offset:2px}
 .rpbs-bubble-body{font-family:var(--font-body);font-size:clamp(13px,2.8vw,15px);line-height:1.6;color:rgba(255,255,255,.9)}
 .rpbs-bubble-body .em{font-weight:700;color:#fff}
 /* 세 번째 리뷰(선택) — 풀폭 하단 */
 .rpbs-third{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
-.rpbs-third-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;display:block}
-.rpbs-third-photo.ph{width:100%;aspect-ratio:3/4;border-radius:16px;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);font-size:13px}
+.rpbs-third-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));display:block}
+.rpbs-third-photo.ph{width:100%;aspect-ratio:3/4;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);font-size:13px}
 `,
   render: (d, { esc, richSafe }) => {
     /* 별점 렌더 — 채워진 별(골드)/빈 별 구분 */

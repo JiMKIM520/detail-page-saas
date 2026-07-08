@@ -33,7 +33,7 @@ export const compareCooking = defineBlock<CompareData>({
 .cc-cols{position:relative;margin-top:46px;display:grid;grid-template-columns:1fr 1fr}
 .cc-cols::before{content:"";position:absolute;top:8px;bottom:8px;left:50%;border-left:2px dashed var(--line)}
 .cc-col{padding:0 22px}
-.cc-tag{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-hand);font-weight:700;font-size:20px;padding:5px 16px;border-radius:14px;transform:rotate(-3deg);position:relative;z-index:1}
+.cc-tag{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-hand);font-weight:700;font-size:20px;padding:5px 16px;border-radius:calc(var(--r-scale,1)*14px);transform:rotate(-3deg);position:relative;z-index:1}
 .cc-big{height:120px;display:grid;place-items:center;margin:10px 0 6px;color:var(--brand)}
 .cc-big svg{width:104px;height:104px}
 .cc-nm{font-family:var(--font-display);font-size:24px;color:var(--brand);margin-bottom:22px}

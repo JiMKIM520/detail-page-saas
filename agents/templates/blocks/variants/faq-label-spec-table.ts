@@ -120,7 +120,7 @@ export const faqLabelSpecTable = defineBlock<Data>({
   font-weight:700;
   font-size:13px;
   letter-spacing:.02em;
-  border-radius:5px;
+  border-radius:calc(var(--r-scale,1)*5px);
   padding:5px 0;
   width:80px;
   text-align:center;
@@ -183,7 +183,7 @@ export const faqLabelSpecTable = defineBlock<Data>({
   width:14px;
   height:2px;
   background:var(--line);
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
   margin-right:0;
   flex-shrink:0;
 }

@@ -53,7 +53,7 @@ export const reviewPhotoBgDashedCards = defineBlock<Data>({
 /* 다크 배경 — .em은 밝은 accent로 override */
 .rpbdc-title .em{color:var(--accent)}
 .rpbdc-cards{display:flex;flex-direction:column;gap:14px}
-.rpbdc-card{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.18);border:1.5px dashed rgba(255,255,255,.55);border-radius:12px;padding:16px 18px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.rpbdc-card{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.18);border:1.5px dashed rgba(255,255,255,.55);border-radius:calc(var(--r-scale,1)*12px);padding:16px 18px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .rpbdc-avatar{flex:0 0 52px;width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.45)}
 .rpbdc-avatar.ph{flex:0 0 52px;width:52px;height:52px;border-radius:50%;border:2px dashed rgba(255,255,255,.45);background:rgba(255,255,255,.12);font-size:11px;color:rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;box-shadow:none}
 .rpbdc-text{flex:1;min-width:0}

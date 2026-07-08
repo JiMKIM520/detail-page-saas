@@ -42,7 +42,7 @@ export const detailDimensionFaq = defineBlock<Data>({
 .ddf{background:var(--bg);font-family:var(--font-body),'Pretendard',sans-serif}
 
 /* ─ 상단: 사이즈 도면 ─ */
-.ddf-dim{padding:52px 56px 60px;background:var(--bg)}
+.ddf-dim{padding:52px var(--pad-x,56px) 60px;background:var(--bg)}
 .ddf-dim-title{text-align:center;font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);letter-spacing:-.01em;margin-bottom:42px}
 .ddf-dim-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
 
@@ -71,7 +71,7 @@ export const detailDimensionFaq = defineBlock<Data>({
 .ddf-dim-img{width:100%;height:260px;object-fit:cover;display:block}
 
 /* ─ 하단: FAQ 섹션 ─ */
-.ddf-faq{position:relative;background:color-mix(in srgb,var(--accent) 14%,white);padding:56px 56px 64px;overflow:hidden}
+.ddf-faq{position:relative;background:color-mix(in srgb,var(--accent) 14%,white);padding:56px var(--pad-x,56px) 64px;overflow:hidden}
 
 /* FAQ 워터마크 */
 .ddf-faq-wm{position:absolute;right:-24px;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-weight:800;font-size:200px;color:color-mix(in srgb,var(--accent) 22%,transparent);line-height:1;letter-spacing:-.04em;pointer-events:none;user-select:none;white-space:nowrap}

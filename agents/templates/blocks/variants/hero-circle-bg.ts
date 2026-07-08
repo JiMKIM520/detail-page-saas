@@ -103,7 +103,7 @@ export const heroCircleBg = defineBlock<Data>({
 }
 
 /* ─ 번호형 포인트 리스트 ─ */
-.hcb-points{padding:8px 56px 0}
+.hcb-points{padding:8px var(--pad-x,56px) 0}
 .hcb-pt{
   padding:32px 0 0;
   text-align:center

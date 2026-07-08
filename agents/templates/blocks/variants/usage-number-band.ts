@@ -38,11 +38,11 @@ export const usageNumberBand = defineBlock<Data>({
 .unb-ic svg{width:48px;height:48px}
 .unb-title{font-family:var(--font-display);font-weight:800;font-size:72px;color:var(--accent);letter-spacing:-.01em;line-height:1.0}
 .unb-sub{margin-top:10px;font-size:16px;color:var(--ink-2);font-weight:500}
-.unb-div{width:44px;height:3px;background:var(--accent);margin:18px auto 36px;border-radius:2px}
+.unb-div{width:44px;height:3px;background:var(--accent);margin:18px auto 36px;border-radius:calc(var(--r-scale,1)*2px)}
 .unb-steps{padding:0 44px;text-align:left}
 .unb-step{position:relative;margin-bottom:44px}
 .unb-num{position:absolute;right:-6px;top:-28px;font-family:'Cafe24 ClassicType',var(--font-display),sans-serif;font-weight:700;font-size:130px;line-height:1;color:color-mix(in srgb,var(--accent) 18%,transparent);pointer-events:none;z-index:0;letter-spacing:-.04em;user-select:none}
-.unb-band{position:relative;z-index:1;background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:8px;padding:22px 28px;display:flex;align-items:flex-start;gap:10px}
+.unb-band{position:relative;z-index:1;background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:calc(var(--r-scale,1)*8px);padding:22px 28px;display:flex;align-items:flex-start;gap:10px}
 .unb-arrow{flex:0 0 auto;color:var(--accent);font-size:18px;font-weight:800;margin-top:1px}
 .unb-label{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--ink);line-height:1.3}
 .unb-label .em{color:var(--accent)}

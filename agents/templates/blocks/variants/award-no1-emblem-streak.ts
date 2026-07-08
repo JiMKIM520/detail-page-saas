@@ -131,7 +131,7 @@ export const awardNo1EmblemStreak = defineBlock<Data>({
   object-fit:contain;
   display:inline-block;
   background:#fff;
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
 }
 .anes-logo.ph{
   display:inline-flex;align-items:center;justify-content:center;
@@ -139,7 +139,7 @@ export const awardNo1EmblemStreak = defineBlock<Data>({
   background:rgba(255,255,255,.92);
   color:rgba(0,0,0,.45);
   font-size:11px;letter-spacing:.04em;
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   border:none;
   box-shadow:0 2px 12px rgba(0,0,0,.3);
 }
@@ -230,7 +230,7 @@ export const awardNo1EmblemStreak = defineBlock<Data>({
 .anes-podium-cap{
   height:16px;
   background:linear-gradient(180deg,#F5D77E 0%,#C9A020 100%);
-  border-radius:6px 6px 0 0;
+  border-radius:calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*6px) 0 0;
   margin:0 8px;
 }
 /* 포디움 바디 */
@@ -243,7 +243,7 @@ export const awardNo1EmblemStreak = defineBlock<Data>({
 .anes-podium-base{
   height:14px;
   background:linear-gradient(180deg,#A87818 0%,#6A4A08 100%);
-  border-radius:0 0 4px 4px;
+  border-radius:0 0 calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px);
   margin:0 -6px;
 }
 

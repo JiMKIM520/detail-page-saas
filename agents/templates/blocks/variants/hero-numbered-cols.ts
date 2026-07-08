@@ -80,7 +80,7 @@ export const heroNumberedCols = defineBlock<Data>({
 /* ─ 제품 이미지 ─ */
 .hnc-img-wrap{
   margin:0 32px 0;
-  border-radius:18px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*18px));
   overflow:hidden;
   background:rgba(255,255,255,.18);
   border:2px solid rgba(255,255,255,.28)

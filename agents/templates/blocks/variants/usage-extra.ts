@@ -36,9 +36,9 @@ export const usageFlow = defineBlock<FlowData>({
 .uf-step{padding-top:42px}
 .uf-step + .uf-step{margin-top:30px;border-top:1px solid var(--line)}
 .uf-no{width:90px;height:56px;margin:0 auto;border:1.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-weight:700;font-size:26px;color:var(--ink)}
-.uf-img{width:calc(100% - 48px);height:200px;object-fit:cover;margin:22px 24px 0;border-radius:4px}
-.uf-t{margin-top:20px;padding:0 56px;font-size:16px;color:var(--muted);line-height:1.7}
-.uf-closer{margin-top:48px;padding:0 56px;font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.45}
+.uf-img{width:calc(100% - 48px);height:200px;object-fit:cover;margin:22px 24px 0;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px))}
+.uf-t{margin-top:20px;padding:0 var(--pad-x,56px);font-size:16px;color:var(--muted);line-height:1.7}
+.uf-closer{margin-top:48px;padding:0 var(--pad-x,56px);font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.45}
 .uf-closer .em{color:var(--accent)}
 `,
   render: (d, { esc, richSafe }) => `
@@ -91,7 +91,7 @@ export const usageDark = defineBlock<DarkData>({
   css: `
 .ud{background:var(--ink);color:#fff;padding:0 0 54px}
 .ud-ribbon{background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.14em;padding:11px 0;text-align:center;overflow:hidden;white-space:nowrap}
-.ud-hd{text-align:center;padding:38px 56px 4px}
+.ud-hd{text-align:center;padding:38px var(--pad-x,56px) 4px}
 .ud-title{font-family:var(--font-display);font-weight:800;font-size:60px;color:#fff;letter-spacing:-.01em;line-height:1.02}
 .ud-sub{margin-top:10px;font-size:15px;color:rgba(255,255,255,.7)}
 .ud-steps{margin-top:24px}
@@ -106,7 +106,7 @@ export const usageDark = defineBlock<DarkData>({
 .ud-t .em{color:#fff;font-weight:700}
 .ud-ic{flex:0 0 44px;padding-right:40px;color:var(--accent);display:grid;place-items:center}
 .ud-ic svg{width:30px;height:30px}
-.ud-closer{margin-top:44px;text-align:center;padding:0 56px;font-family:var(--font-display);font-weight:800;font-size:28px;color:#fff;line-height:1.45}
+.ud-closer{margin-top:44px;text-align:center;padding:0 var(--pad-x,56px);font-family:var(--font-display);font-weight:800;font-size:28px;color:#fff;line-height:1.45}
 .ud-closer .em{color:var(--accent)}
 `,
   render: (d, { esc, richSafe, icon }) => {

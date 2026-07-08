@@ -52,11 +52,11 @@ export const productDiscountBadgeRows = defineBlock<Data>({
 .pdbr-title .em{color:var(--accent-d)}
 /* 행 레이아웃 */
 .pdbr-list{display:flex;flex-direction:column;gap:16px}
-.pdbr-row{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:flex-start;background:var(--bg);border-radius:12px;padding:14px;box-shadow:0 2px 8px -4px rgba(0,0,0,.10)}
+.pdbr-row{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:flex-start;background:var(--bg);border-radius:calc(var(--r-scale,1)*12px);padding:14px;box-shadow:0 2px 8px -4px rgba(0,0,0,.10)}
 /* 썸네일 래퍼 — 배지 절대 위치 기준 */
 .pdbr-thumb-wrap{position:relative;flex-shrink:0}
-.pdbr-thumb{width:120px;height:120px;object-fit:cover;border-radius:8px;display:block}
-.pdbr-thumb.ph{width:120px;height:120px;border-radius:8px}
+.pdbr-thumb{width:120px;height:120px;object-fit:cover;border-radius:calc(var(--r-scale,1)*8px);display:block}
+.pdbr-thumb.ph{width:120px;height:120px;border-radius:calc(var(--r-scale,1)*8px)}
 /* % OFF pill 배지 */
 .pdbr-badge{position:absolute;top:6px;left:6px;background:#E63946;color:#fff;font-family:var(--font-display);font-weight:800;font-size:12px;line-height:1;letter-spacing:.01em;padding:4px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 2px 6px rgba(230,57,70,.35)}
 /* 텍스트 영역 */

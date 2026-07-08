@@ -40,7 +40,7 @@ export const ingredientEllipseZigzag = defineBlock<IezData>({
 .iez-title{margin-top:10px;font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:-.02em;line-height:1.1;color:var(--accent)}
 .iez-sub{margin-top:14px;font-size:16px;color:var(--ink);opacity:.7;line-height:1.6}
 .iez-list{display:flex;flex-direction:column;gap:0}
-.iez-card{background:var(--paper);border-radius:20px;padding:32px 28px;display:flex;align-items:center;gap:28px;margin-bottom:0}
+.iez-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*20px);padding:32px 28px;display:flex;align-items:center;gap:28px;margin-bottom:0}
 .iez-card+.iez-card{margin-top:0;border-top:none}
 .iez-sep{height:1px;border:none;border-top:2px dashed var(--line);margin:0}
 .iez-card.even{flex-direction:row-reverse}

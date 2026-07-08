@@ -54,13 +54,13 @@ export const productLineupDarkCards = defineBlock<Data>({
 .pldc-title .em{color:var(--accent)}
 .pldc-badge{display:inline-block;border:1.5px solid rgba(255,255,255,.55);border-radius:999px;padding:8px 22px;font-size:15px;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.01em;margin-bottom:36px}
 .pldc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pldc-card{background:var(--paper);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;text-align:left}
+.pldc-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);overflow:hidden;display:flex;flex-direction:column;text-align:left}
 .pldc-card-top{padding:14px 16px 0}
 .pldc-hashtags{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.01em;margin-bottom:10px}
 .pldc-divider{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .pldc-divider-line{flex:1;height:1px;background:var(--line)}
 .pldc-divider-num{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.06em;flex-shrink:0}
-.pldc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:8px;margin-bottom:14px}
+.pldc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));margin-bottom:14px}
 .pldc-name{font-family:var(--font-display);font-weight:800;font-size:17px;line-height:1.3;color:var(--ink);padding:0 16px 4px}
 .pldc-name .em{color:var(--accent-d)}
 .pldc-desc{font-size:13px;line-height:1.55;color:var(--muted);padding:0 16px 14px}

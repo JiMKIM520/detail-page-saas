@@ -61,7 +61,7 @@ export const statsHeroAnchorCardGrid = defineBlock<Data>({
 .shacg-copy .em{color:var(--accent-d);font-weight:700}
 /* ── 우측 제품 이미지 군집(오버랩) ── */
 .shacg-imgs{position:relative;width:160px;flex-shrink:0;height:220px}
-.shacg-img-0,.shacg-img-1,.shacg-img-2{position:absolute;object-fit:cover;border-radius:10px;box-shadow:0 8px 24px -8px rgba(0,0,0,.22)}
+.shacg-img-0,.shacg-img-1,.shacg-img-2{position:absolute;object-fit:cover;border-radius:calc(var(--r-scale,1)*10px);box-shadow:0 8px 24px -8px rgba(0,0,0,.22)}
 .shacg-img-0{width:96px;height:120px;top:0;right:0;z-index:3}
 .shacg-img-1{width:82px;height:104px;top:50px;right:88px;z-index:2}
 .shacg-img-2{width:76px;height:96px;top:110px;right:30px;z-index:1;opacity:.85}
@@ -69,7 +69,7 @@ export const statsHeroAnchorCardGrid = defineBlock<Data>({
 .shacg-img-0.ph,.shacg-img-1.ph,.shacg-img-2.ph{display:flex;align-items:center;justify-content:center;font-size:11px}
 /* ── 하단 카드 그리드 ── */
 .shacg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.shacg-card{background:var(--bg);border-radius:14px;padding:18px 16px 20px;position:relative}
+.shacg-card{background:var(--bg);border-radius:calc(var(--r-scale,1)*14px);padding:18px 16px 20px;position:relative}
 .shacg-card-label{font-family:var(--font-body);font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
 .shacg-card-stat{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,7vw,36px);line-height:1.1;letter-spacing:-.025em;color:var(--accent-d);margin-bottom:8px}
 .shacg-card-stat .em{color:var(--accent)}

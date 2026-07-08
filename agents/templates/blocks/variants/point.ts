@@ -22,11 +22,11 @@ export const pointBubble = defineBlock<PointData>({
   describe: '포인트 헤더(라벨+2톤 제목) + 사진 위 말풍선 2개 + 강조 본문. 핵심 특징을 사진으로 강조.',
   schema: pointSchema,
   css: `
-.pb{position:relative;padding:72px 56px 56px;text-align:center;background:var(--bg)}
+.pb{position:relative;padding:72px var(--pad-x,56px) 56px;text-align:center;background:var(--bg)}
 .pb-h{margin-top:18px;font-size:40px}
 .pb-fig{position:relative;width:560px;margin:40px auto 0}
-.pb-media{width:100%;height:380px;object-fit:cover;border-radius:24px;box-shadow:0 22px 44px -20px rgba(42,33,24,.45)}
-.pb-bub{position:absolute;background:#fff;border:2.5px solid var(--brand);border-radius:22px;padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700}
+.pb-media{width:100%;height:380px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*24px));box-shadow:0 22px 44px -20px rgba(42,33,24,.45)}
+.pb-bub{position:absolute;background:#fff;border:2.5px solid var(--brand);border-radius:calc(var(--r-scale,1)*22px);padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700}
 .pb-bub.t{top:24px;right:-14px;transform:rotate(-4deg)}
 .pb-bub.b{bottom:30px;left:-16px;transform:rotate(3deg)}
 .pb-bub::after{content:"";position:absolute;width:24px;height:17px;background:#fff;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand)}

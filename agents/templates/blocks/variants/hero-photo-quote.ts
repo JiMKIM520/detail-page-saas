@@ -176,7 +176,7 @@ export const heroPhotoQuote = defineBlock<Data>({
 
 .hpq-quote-box{
   border:1.5px solid rgba(255,255,255,.6);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:22px 36px 22px 32px;
   margin:0 12px;
 }

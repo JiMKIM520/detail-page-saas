@@ -46,7 +46,7 @@ export const packageOffsetImageRows = defineBlock<Data>({
 .poir-row{display:grid;grid-template-columns:46% 1fr;align-items:center;padding:0 0 0 40px;min-height:260px}
 .poir-row+.poir-row{border-top:1px solid color-mix(in srgb,var(--accent) 30%,transparent);margin-top:2px;padding-top:2px}
 .poir-img-wrap{position:relative;padding:16px 0 16px}
-.poir-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px 0 60px 12px;display:block}
+.poir-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px) 0 calc(var(--r-scale,1)*60px) calc(var(--r-scale,1)*12px));display:block}
 .poir-body{padding:24px 36px 24px 20px;text-align:right;display:flex;flex-direction:column;gap:0;justify-content:center}
 .poir-name{font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--accent);line-height:1.2}
 .poir-name .em{color:var(--accent-d)}

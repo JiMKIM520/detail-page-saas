@@ -108,7 +108,7 @@ export const bannerEventTwozone = defineBlock<Data>({
 }
 
 .betz-product.ph{
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   height:260px;
 }
 

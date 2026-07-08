@@ -35,7 +35,7 @@ export const featureWaveTable = defineBlock<Data>({
 .fwt-hero-img{width:100%;height:520px;object-fit:cover;display:block}
 .fwt-wave{position:absolute;bottom:-1px;left:0;width:100%;overflow:hidden;line-height:0}
 .fwt-wave svg{display:block;width:100%;height:72px}
-.fwt-body{padding:48px 56px 60px}
+.fwt-body{padding:48px var(--pad-x,56px) 60px}
 .fwt-sub{text-align:center;font-size:16px;font-weight:500;color:var(--ink);opacity:.72;margin-bottom:12px}
 .fwt-title{text-align:center;font-family:var(--font-display);font-weight:800;font-size:56px;color:var(--accent-d);letter-spacing:-.02em;line-height:1.1;margin-bottom:42px}
 .fwt-title .em{color:var(--ink)}

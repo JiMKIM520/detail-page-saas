@@ -76,7 +76,7 @@ export const reviewAggregateScoreStack = defineBlock<Data>({
 .rass-score-unit{font-family:var(--font-display);font-weight:600;font-size:clamp(22px,5vw,32px);color:rgba(255,255,255,.58);letter-spacing:-.01em;padding-left:8px;padding-bottom:6px}
 /* 리뷰 카드 스택 */
 .rass-cards{display:flex;flex-direction:column;gap:16px;text-align:left}
-.rass-card{background:var(--paper);border-radius:16px;padding:22px 24px 20px}
+.rass-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);padding:22px 24px 20px}
 /* 별점 행 */
 .rass-star-row{display:flex;align-items:center;gap:3px;margin-bottom:14px}
 .rass-star{width:20px;height:20px;flex-shrink:0}

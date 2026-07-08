@@ -335,7 +335,7 @@ export const awardNo1EmblemHero = defineBlock<Data>({
 .aneh-podium-t1{
   width:188px;height:22px;
   background:linear-gradient(180deg,#E8C96A 0%,#9A6C1A 100%);
-  border-radius:4px 4px 0 0;
+  border-radius:calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px) 0 0;
   box-shadow:0 -2px 8px rgba(201,168,76,.4);
 }
 .aneh-podium-t2{
@@ -345,7 +345,7 @@ export const awardNo1EmblemHero = defineBlock<Data>({
 .aneh-podium-t3{
   width:256px;height:12px;
   background:linear-gradient(180deg,#A8881A 0%,#5A3A08 100%);
-  border-radius:0 0 2px 2px;
+  border-radius:0 0 calc(var(--r-scale,1)*2px) calc(var(--r-scale,1)*2px);
 }
 
 /* ── 하단 여백 ── */

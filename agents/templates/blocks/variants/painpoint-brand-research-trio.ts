@@ -96,7 +96,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
 /* 고민 1행 아웃라인 박스 */
 .pbrt-item{
   border:1.5px solid rgba(255,255,255,.38);
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   padding:18px 20px;
   text-align:left;
   background:rgba(255,255,255,.05);
@@ -143,7 +143,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   aspect-ratio:3/4;
   object-fit:cover;
   display:block;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   margin:0 auto 32px;
 }
 .pbrt-product.ph{
@@ -152,7 +152,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.22);
   background:rgba(255,255,255,.06);
   color:rgba(255,255,255,.36);
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   margin-bottom:32px;
 }
 
@@ -165,7 +165,7 @@ export const painpointBrandResearchTrio = defineBlock<Data>({
   letter-spacing:.02em;
   color:#fff;
   border:2px solid rgba(255,255,255,.55);
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
   padding:10px 28px;
 }
 `,

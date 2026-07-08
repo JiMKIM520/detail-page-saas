@@ -35,7 +35,7 @@ export const faqNumbered = defineBlock<Data>({
 .fn{background:var(--brand,var(--accent));color:#fff;padding:60px 0 0}
 
 /* ─ 헤더 ─ */
-.fn-hd{text-align:center;padding:0 56px 40px}
+.fn-hd{text-align:center;padding:0 var(--pad-x,56px) 40px}
 .fn-eyebrow{font-size:18px;font-weight:400;color:rgba(255,255,255,.7);letter-spacing:.04em;line-height:1.3}
 .fn-title{font-family:var(--font-display);font-weight:800;font-size:80px;letter-spacing:-.02em;line-height:1;color:#fff;margin-top:4px}
 
@@ -43,7 +43,7 @@ export const faqNumbered = defineBlock<Data>({
 .fn-rule{border:none;border-top:1px solid rgba(255,255,255,.28);margin:0 56px}
 
 /* ─ FAQ 아이템 ─ */
-.fn-list{padding:0 56px}
+.fn-list{padding:0 var(--pad-x,56px)}
 .fn-item{padding:36px 0 0;position:relative}
 .fn-item-inner{padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.28)}
 

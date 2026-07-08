@@ -94,7 +94,7 @@ export const compareUpgradeProductCards = defineBlock<Data>({
 
 /* ── 공통 카드 ── */
 .cupc-card{
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   overflow:hidden;
   background:var(--bg);
   box-shadow:0 12px 28px -16px rgba(0,0,0,.22);

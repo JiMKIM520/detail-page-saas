@@ -45,10 +45,10 @@ export const discountPhotoPrice = defineBlock<Data>({
 .dpp-headline .em{color:var(--accent)}
 .dpp-rate-row{display:flex;align-items:center;gap:12px;margin-top:4px}
 .dpp-rate{font-family:var(--font-display);font-weight:800;font-size:clamp(44px,9vw,80px);line-height:1.05;letter-spacing:-.03em;color:#E8002D;text-shadow:0 2px 16px rgba(232,0,45,.35)}
-.dpp-sub-badge{display:inline-flex;align-items:center;background:var(--accent);color:#fff;font-size:17px;font-weight:800;padding:6px 16px;border-radius:6px;letter-spacing:.01em;font-family:var(--font-body)}
+.dpp-sub-badge{display:inline-flex;align-items:center;background:var(--accent);color:#fff;font-size:17px;font-weight:800;padding:6px 16px;border-radius:calc(var(--r-scale,1)*6px);letter-spacing:.01em;font-family:var(--font-body)}
 
 /* ── 가격 비교 행 ── */
-.dpp-price-row{width:100%;display:flex;align-items:center;gap:0;background:rgba(255,255,255,.12);border-radius:10px;padding:16px 24px;margin-bottom:22px;backdrop-filter:blur(4px)}
+.dpp-price-row{width:100%;display:flex;align-items:center;gap:0;background:rgba(255,255,255,.12);border-radius:calc(var(--r-scale,1)*10px);padding:16px 24px;margin-bottom:22px;backdrop-filter:blur(4px)}
 .dpp-orig-label{font-size:15px;font-weight:400;color:rgba(255,255,255,.65);font-family:var(--font-body);letter-spacing:-.01em;text-decoration:line-through}
 .dpp-arrow{font-size:17px;color:rgba(255,255,255,.5);margin:0 12px;line-height:1}
 .dpp-sale-price{font-family:'Paperlogy',var(--font-display),sans-serif;font-weight:800;font-size:clamp(30px,5.5vw,46px);color:#fff;letter-spacing:-.03em;line-height:1}
@@ -59,7 +59,7 @@ export const discountPhotoPrice = defineBlock<Data>({
 .dpp-cta-txt{font-family:var(--font-body);font-weight:700;font-size:clamp(15px,2.8vw,20px);color:#fff;letter-spacing:-.01em;line-height:1.3}
 
 /* ── 하단 법적고지 박스 ── */
-.dpp-legal{width:100%;background:rgba(0,0,0,.44);border-radius:12px;padding:20px 24px;backdrop-filter:blur(6px)}
+.dpp-legal{width:100%;background:rgba(0,0,0,.44);border-radius:calc(var(--r-scale,1)*12px);padding:20px 24px;backdrop-filter:blur(6px)}
 .dpp-legal-line{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;font-family:var(--font-body);letter-spacing:-.005em}
 .dpp-legal-line+.dpp-legal-line{margin-top:4px}
 `,

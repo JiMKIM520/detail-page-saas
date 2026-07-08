@@ -62,7 +62,7 @@ export const packageSplitImagePriceRows = defineBlock<Data>({
 /* ── 카드 목록 ── */
 .psipr-list{display:flex;flex-direction:column;gap:0;padding:28px 20px 32px}
 /* ── 개별 카드 ── */
-.psipr-card{position:relative;display:grid;grid-template-columns:1fr auto;align-items:stretch;background:var(--paper);border-radius:16px;overflow:visible;box-shadow:0 6px 24px -8px rgba(0,0,0,.18);margin-bottom:18px}
+.psipr-card{position:relative;display:grid;grid-template-columns:1fr auto;align-items:stretch;background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);overflow:visible;box-shadow:0 6px 24px -8px rgba(0,0,0,.18);margin-bottom:18px}
 .psipr-card:last-child{margin-bottom:0}
 /* ── 카드 — 좌텍스트 영역 ── */
 .psipr-txt{padding:22px 16px 22px 22px;display:flex;flex-direction:column;justify-content:center;gap:0;overflow:hidden}
@@ -77,9 +77,9 @@ export const packageSplitImagePriceRows = defineBlock<Data>({
 .psipr-lbl-best{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent-d);white-space:nowrap}
 .psipr-price-best{font-family:var(--font-display);font-weight:800;font-size:clamp(18px,4.2vw,24px);color:var(--ink);letter-spacing:-.02em;white-space:nowrap}
 /* ── 카드 — 우이미지 영역 ── */
-.psipr-img-wrap{position:relative;width:140px;flex-shrink:0;border-radius:0 16px 16px 0;overflow:hidden}
+.psipr-img-wrap{position:relative;width:140px;flex-shrink:0;border-radius:0 calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*16px) 0;overflow:hidden}
 .psipr-img{width:140px;height:100%;min-height:160px;object-fit:cover;display:block}
-.psipr-img.ph{width:140px;min-height:160px;height:100%;border-radius:0 16px 16px 0}
+.psipr-img.ph{width:140px;min-height:160px;height:100%;border-radius:0 calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*16px) 0}
 /* ── 플로팅 원형 할인 배지 ── */
 .psipr-badge{position:absolute;top:50%;right:-18px;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;background:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 12px -3px rgba(0,0,0,.28);z-index:10;gap:0;line-height:1}
 .psipr-badge-num{font-family:var(--font-display);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.02em}

@@ -62,7 +62,7 @@ export const pointPromoAsymcard = defineBlock<Data>({
 /* 2열 레이아웃 */
 .ppa-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
 /* 좌: tall 메인 카드 */
-.ppa-main{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 12px 28px -8px rgba(0,0,0,.38)}
+.ppa-main{position:relative;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));overflow:hidden;box-shadow:0 12px 28px -8px rgba(0,0,0,.38)}
 .ppa-main-img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}
 .ppa-main-img.ph{width:100%;aspect-ratio:9/16;background:rgba(255,255,255,.14);border:2px dashed rgba(255,255,255,.30);color:rgba(255,255,255,.55);font-size:12px}
 /* pill 라벨 (좌상단 오버레이) */
@@ -70,7 +70,7 @@ export const pointPromoAsymcard = defineBlock<Data>({
 .ppa-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
 /* 우: 스택 컬럼 */
 .ppa-stack{display:flex;flex-direction:column;gap:10px}
-.ppa-unit{border-radius:12px;overflow:hidden;background:rgba(255,255,255,.12);box-shadow:0 6px 16px -6px rgba(0,0,0,.25)}
+.ppa-unit{border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));overflow:hidden;background:rgba(255,255,255,.12);box-shadow:0 6px 16px -6px rgba(0,0,0,.25)}
 .ppa-unit-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
 .ppa-unit-img.ph{width:100%;aspect-ratio:4/3;background:rgba(255,255,255,.10);border:2px dashed rgba(255,255,255,.25);color:rgba(255,255,255,.50);font-size:11px}
 .ppa-unit-label{padding:8px 12px;font-family:var(--font-body),'Pretendard',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.90);letter-spacing:.04em;line-height:1.3}

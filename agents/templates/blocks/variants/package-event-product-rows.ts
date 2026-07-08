@@ -91,7 +91,7 @@ export const packageEventProductRows = defineBlock<Data>({
 .pepr-confetti::before,.pepr-confetti::after{
   content:'';
   position:absolute;
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
 }
 /* 파티 느낌 컬러 점들 */
 .pepr-confetti::before{
@@ -165,13 +165,13 @@ export const packageEventProductRows = defineBlock<Data>({
   width:108px;
   height:108px;
   object-fit:cover;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   flex-shrink:0;
 }
 .pepr-thumb.ph{
   width:108px;
   height:108px;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   font-size:12px;
 }
 
@@ -253,7 +253,7 @@ export const packageEventProductRows = defineBlock<Data>({
   inset:0;
   background:var(--accent);
   clip-path:polygon(0 0, 100% 0, 50% 100%);
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
 }
 .pepr-burst-txt{
   position:relative;

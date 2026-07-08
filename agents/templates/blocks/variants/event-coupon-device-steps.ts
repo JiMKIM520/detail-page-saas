@@ -56,17 +56,17 @@ export const eventCouponDeviceSteps = defineBlock<Data>({
 
 /* device mockup wrapper */
 .ecds-device-wrap{position:relative;margin:36px auto 0;width:280px}
-.ecds-phone-frame{position:relative;width:280px;height:500px;border-radius:44px;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 70%,#fff),var(--accent));box-shadow:0 20px 60px color-mix(in srgb,var(--accent) 30%,transparent),0 4px 16px rgba(0,0,0,.12);overflow:hidden}
-.ecds-phone-img{width:100%;height:100%;object-fit:cover;border-radius:44px;display:block}
+.ecds-phone-frame{position:relative;width:280px;height:500px;border-radius:calc(var(--r-scale,1)*44px);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 70%,#fff),var(--accent));box-shadow:0 20px 60px color-mix(in srgb,var(--accent) 30%,transparent),0 4px 16px rgba(0,0,0,.12);overflow:hidden}
+.ecds-phone-img{width:100%;height:100%;object-fit:cover;border-radius:calc(var(--r-scale,1)*44px);display:block}
 .ecds-phone-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px 24px}
 .ecds-coupon-amt{font-family:var(--font-display);font-weight:800;font-size:52px;color:#fff;letter-spacing:-.03em;line-height:1;text-shadow:0 2px 16px rgba(0,0,0,.18)}
 .ecds-coupon-lbl{font-size:15px;color:rgba(255,255,255,.85);font-weight:500;letter-spacing:.02em}
 /* notch */
-.ecds-notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:72px;height:20px;background:rgba(0,0,0,.18);border-radius:10px;z-index:2}
+.ecds-notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:72px;height:20px;background:rgba(0,0,0,.18);border-radius:calc(var(--r-scale,1)*10px);z-index:2}
 
 /* steps section */
 .ecds-steps{margin:36px 36px 0;display:flex;flex-direction:column;gap:14px}
-.ecds-step{background:var(--paper);border-radius:18px;padding:24px 28px;display:flex;align-items:center;gap:18px;text-align:left;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.ecds-step{background:var(--paper);border-radius:calc(var(--r-scale,1)*18px);padding:24px 28px;display:flex;align-items:center;gap:18px;text-align:left;box-shadow:0 2px 12px rgba(0,0,0,.04)}
 .ecds-step-no{flex-shrink:0;font-family:'Cafe24 ClassicType',serif;font-size:32px;font-weight:400;color:color-mix(in srgb,var(--accent) 55%,transparent);line-height:1;min-width:42px}
 .ecds-step-text{font-size:17px;font-weight:600;color:var(--ink);line-height:1.5}
 .ecds-step-text .em{color:var(--accent);font-weight:700}

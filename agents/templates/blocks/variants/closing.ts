@@ -68,7 +68,7 @@ export const closingLight = defineBlock<LightData>({
 .cll-h{font-family:var(--font-serif);font-weight:700;font-size:50px;line-height:1.2}
 .cll-h .em{color:var(--accent)}
 .cll-sub{margin-top:20px;font-size:16px;color:var(--ink-2);letter-spacing:.02em}
-.cll-cta{display:inline-block;margin-top:40px;background:var(--accent-d);border:none;border-radius:6px;padding:16px 48px;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#fff;font-weight:700;box-shadow:0 6px 18px color-mix(in srgb,var(--accent-d) 35%,transparent)}
+.cll-cta{display:inline-block;margin-top:40px;background:var(--accent-d);border:none;border-radius:calc(var(--r-scale,1)*6px);padding:16px 48px;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#fff;font-weight:700;box-shadow:0 6px 18px color-mix(in srgb,var(--accent-d) 35%,transparent)}
 `,
   render: (d, { esc, richSafe }) => `
 <section class="cll">

@@ -54,7 +54,7 @@ export const packageSplitIconCards = defineBlock<Data>({
 .psic-sub .em{color:var(--accent);font-weight:700}
 .psic-cards-wrap{background:var(--paper);padding:36px 28px 40px}
 .psic-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.psic-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 18px -6px rgba(0,0,0,.12);display:flex;flex-direction:column}
+.psic-card{background:#fff;border-radius:calc(var(--r-scale,1)*16px);overflow:hidden;box-shadow:0 4px 18px -6px rgba(0,0,0,.12);display:flex;flex-direction:column}
 .psic-card-top{padding:18px 18px 6px;text-align:center}
 .psic-card-label{font-size:13px;font-weight:700;color:var(--accent-d);letter-spacing:.03em;margin-bottom:14px}
 .psic-card-icon{width:56px;height:56px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;color:var(--accent)}

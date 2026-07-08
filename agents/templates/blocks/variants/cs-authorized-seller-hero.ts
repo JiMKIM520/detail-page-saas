@@ -117,7 +117,7 @@ export const csAuthorizedSellerHero = defineBlock<Data>({
 }
 .cash-card{
   background:#fff;
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   padding:28px 28px 28px 24px;
   display:flex;
   align-items:flex-start;

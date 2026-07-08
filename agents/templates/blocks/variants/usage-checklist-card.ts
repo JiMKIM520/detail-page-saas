@@ -43,7 +43,7 @@ export const usageChecklistCard = defineBlock<Data>({
 .ucc-title{font-family:var(--font-display);font-weight:800;font-size:68px;letter-spacing:-.01em;line-height:1.0;color:#fff}
 .ucc-sub{margin-top:14px;font-size:18px;color:rgba(255,255,255,.88);line-height:1.5}
 .ucc-sub .em{color:#fff;font-weight:700}
-.ucc-card{margin:0 28px;background:#fff;border-radius:20px;padding:0 36px;overflow:hidden}
+.ucc-card{margin:0 28px;background:#fff;border-radius:calc(var(--r-scale,1)*20px);padding:0 36px;overflow:hidden}
 .ucc-row{display:flex;align-items:flex-start;gap:18px;padding:32px 0}
 .ucc-row+.ucc-row{border-top:1.5px dashed var(--line)}
 .ucc-icon{flex:0 0 36px;width:36px;height:36px;color:var(--accent);margin-top:2px}

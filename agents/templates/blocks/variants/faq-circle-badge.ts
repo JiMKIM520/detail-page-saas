@@ -35,7 +35,7 @@ export const faqCircleBadge = defineBlock<Data>({
 .fcb{background:var(--bg);padding:60px 40px 64px;word-break:keep-all;overflow-wrap:break-word}
 .fcb-title{font-family:var(--font-display);font-weight:800;font-size:clamp(36px,8vw,52px);color:var(--accent-d);text-align:center;letter-spacing:-.02em;line-height:1.12;margin-bottom:36px}
 .fcb-title .em{color:var(--accent)}
-.fcb-card{background:#fff;border-radius:12px;padding:0 28px}
+.fcb-card{background:#fff;border-radius:calc(var(--r-scale,1)*12px);padding:0 28px}
 .fcb-item{padding:28px 0 26px;display:flex;flex-direction:column;gap:14px}
 .fcb-item+.fcb-item{border-top:1px solid var(--line)}
 .fcb-q-row{display:flex;align-items:flex-start;gap:14px}

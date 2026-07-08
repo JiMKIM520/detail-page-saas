@@ -71,8 +71,8 @@ export const detailStepsSupport = defineBlock<Data>({
 /* ── 단계 그리드 (2열) ── */
 .dss-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:0 44px 56px}
 .dss-step{position:relative}
-.dss-badge{position:absolute;top:12px;left:12px;z-index:2;width:34px;height:34px;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;border-radius:4px}
-.dss-step-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-radius:8px}
+.dss-badge{position:absolute;top:12px;left:12px;z-index:2;width:34px;height:34px;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;border-radius:calc(var(--r-scale,1)*4px)}
+.dss-step-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px))}
 .dss-step-label{margin-top:10px;font-size:14px;font-weight:600;color:var(--ink-2);text-align:center;letter-spacing:.01em}
 
 /* ── 지원 정보 영역 ── */

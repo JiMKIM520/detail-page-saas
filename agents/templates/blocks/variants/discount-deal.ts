@@ -43,7 +43,7 @@ export const discountDeal = defineBlock<Data>({
 
 /* ── pill 태그 배너 그룹 ── */
 .dd-tags{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 48px 0}
-.dd-tag{display:inline-flex;align-items:center;justify-content:center;background:#141414;border-radius:5px;padding:11px 24px;max-width:100%}
+.dd-tag{display:inline-flex;align-items:center;justify-content:center;background:#141414;border-radius:calc(var(--r-scale,1)*5px);padding:11px 24px;max-width:100%}
 .dd-tag-eyebrow{font-size:16px;font-weight:400;color:rgba(255,255,255,.7);letter-spacing:-.02em;line-height:1.3;font-family:var(--font-body)}
 .dd-tag-headline{font-size:clamp(20px,4.2vw,33px);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.25;font-family:var(--font-body)}
 .dd-tag-headline .em{color:#FF3B3B}
@@ -62,7 +62,7 @@ export const discountDeal = defineBlock<Data>({
 .dd-rate{font-family:'Cafe24 ClassicType',var(--font-display),sans-serif;font-size:clamp(72px,14vw,118px);font-weight:400;color:#fff;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.28);letter-spacing:-.02em}
 
 /* ── 마감임박 황색 뱃지 (버스트 우상단) ── */
-.dd-badge{position:absolute;top:18px;right:-10px;background:#FFC300;color:#1a1a1a;font-size:16px;font-weight:700;padding:8px 16px;border-radius:5px;box-shadow:0 5px 12px rgba(0,0,0,.18);white-space:nowrap;font-family:var(--font-body)}
+.dd-badge{position:absolute;top:18px;right:-10px;background:#FFC300;color:#1a1a1a;font-size:16px;font-weight:700;padding:8px 16px;border-radius:calc(var(--r-scale,1)*5px);box-shadow:0 5px 12px rgba(0,0,0,.18);white-space:nowrap;font-family:var(--font-body)}
 
 /* ── 가격 영역 (옵션) ── */
 .dd-price-row{display:flex;align-items:baseline;justify-content:center;gap:18px;padding:24px 48px 0;flex-wrap:wrap}

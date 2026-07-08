@@ -97,7 +97,7 @@ export const comparePriceBarChart = defineBlock<Data>({
 /* ── 차트 카드 ── */
 .cpbc-card{
   background:rgba(255,255,255,.13);
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   padding:28px 24px 20px;
 }
 
@@ -120,7 +120,7 @@ export const comparePriceBarChart = defineBlock<Data>({
   font-weight:800;
   font-size:15px;
   padding:3px 10px;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   letter-spacing:-.01em;
 }
 
@@ -162,7 +162,7 @@ export const comparePriceBarChart = defineBlock<Data>({
 .cpbc-price-label{
   display:inline-block;
   border:1px solid rgba(255,255,255,.4);
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   padding:2px 8px;
   font-family:var(--font-body);
   font-size:12px;
@@ -173,7 +173,7 @@ export const comparePriceBarChart = defineBlock<Data>({
 /* 막대 본체 */
 .cpbc-bar{
   width:100%;
-  border-radius:6px 6px 0 0;
+  border-radius:calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*6px) 0 0;
   background:rgba(200,200,220,.35);
   position:relative;
   overflow:hidden;

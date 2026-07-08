@@ -33,7 +33,7 @@ export const galleryNumberedStrip = defineBlock<Data>({
   css: `
 .gns{background:var(--accent);color:#fff}
 /* ── 헤더 ── */
-.gns-hd{padding:56px 56px 64px}
+.gns-hd{padding:56px var(--pad-x,56px) 64px}
 .gns-title{font-family:var(--font-display);font-weight:800;font-size:80px;letter-spacing:-.03em;line-height:1;color:#fff}
 .gns-title .em{color:color-mix(in srgb,#fff 60%,var(--accent-d))}
 .gns-sub{margin-top:14px;font-size:16px;font-weight:400;color:rgba(255,255,255,.78);letter-spacing:.01em}

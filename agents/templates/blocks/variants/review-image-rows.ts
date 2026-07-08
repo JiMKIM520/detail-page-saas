@@ -56,8 +56,8 @@ export const reviewImageRows = defineBlock<Data>({
 .rir-body{font-family:var(--font-body);font-size:14px;line-height:1.7;color:var(--ink);opacity:.8}
 .rir-body .em{color:var(--accent-d);font-weight:700}
 .rir-author{font-family:var(--font-body);font-size:12px;color:var(--muted);letter-spacing:.01em}
-.rir-thumb{flex:0 0 88px;width:88px;height:88px;object-fit:cover;border-radius:8px;display:block}
-.rir-thumb.ph{flex:0 0 88px;width:88px;height:88px;border-radius:8px;border:2px dashed var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
+.rir-thumb{flex:0 0 88px;width:88px;height:88px;object-fit:cover;border-radius:calc(var(--r-scale,1)*8px);display:block}
+.rir-thumb.ph{flex:0 0 88px;width:88px;height:88px;border-radius:calc(var(--r-scale,1)*8px);border:2px dashed var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
 `,
   render: (d, { esc, richSafe }) => {
     const rows = d.items

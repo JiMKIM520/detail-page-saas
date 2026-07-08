@@ -100,7 +100,7 @@ export const detailNumberedPointStack = defineBlock<Data>({
   aspect-ratio:4/3;
   object-fit:cover;
   display:block;
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
 }
 .dnps-img.ph{
   width:100%;
@@ -108,7 +108,7 @@ export const detailNumberedPointStack = defineBlock<Data>({
   border:2px dashed var(--line);
   background:rgba(0,0,0,.03);
   color:var(--muted);
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
 }
 `,
   render: (d, { esc, richSafe }) => {

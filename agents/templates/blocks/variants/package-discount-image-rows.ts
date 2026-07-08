@@ -61,13 +61,13 @@ export const packageDiscountImageRows = defineBlock<Data>({
 .pdir-title{font-family:var(--font-display);font-weight:800;font-size:clamp(34px,7vw,52px);line-height:1.14;letter-spacing:-.02em;color:#fff}
 .pdir-title .em{color:var(--accent)}
 .pdir-hd-img{position:absolute;right:-8px;bottom:0;height:100%;max-height:220px;object-fit:cover;object-position:top center}
-.pdir-hd-img.ph{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:120px;height:140px;border-radius:8px}
+.pdir-hd-img.ph{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:120px;height:140px;border-radius:calc(var(--r-scale,1)*8px)}
 
 /* ── rows list ──────────────────────────── */
 .pdir-rows{padding:0 20px 24px;display:flex;flex-direction:column;gap:0}
 
 /* ── single row card ─────────────────────── */
-.pdir-row{display:grid;grid-template-columns:130px 1fr;gap:0;background:var(--paper);border-radius:14px;overflow:hidden;margin-top:16px;box-shadow:0 6px 20px -10px rgba(0,0,0,.18)}
+.pdir-row{display:grid;grid-template-columns:130px 1fr;gap:0;background:var(--paper);border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));overflow:hidden;margin-top:16px;box-shadow:0 6px 20px -10px rgba(0,0,0,.18)}
 
 /* product image cell */
 .pdir-thumb{width:130px;height:130px;object-fit:cover;display:block;flex-shrink:0}

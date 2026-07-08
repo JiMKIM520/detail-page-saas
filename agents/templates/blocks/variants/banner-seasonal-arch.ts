@@ -65,7 +65,7 @@ export const bannerSeasonalArch = defineBlock<Data>({
   background:rgba(255,255,255,0.58);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
-  border-radius:170px 170px 28px 28px;
+  border-radius:170px 170px calc(var(--r-scale,1)*28px) calc(var(--r-scale,1)*28px);
   border:2px solid rgba(255,255,255,0.72);
   box-shadow:0 8px 48px rgba(0,0,0,0.08);
   display:flex;
@@ -138,7 +138,7 @@ export const bannerSeasonalArch = defineBlock<Data>({
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
   border:2px solid rgba(255,255,255,0.9);
-  border-radius:18px;
+  border-radius:calc(var(--r-scale,1)*18px);
   padding:14px 22px;
   display:flex;
   flex-direction:column;

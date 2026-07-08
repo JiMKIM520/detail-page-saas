@@ -119,7 +119,7 @@ export const compareProductCardVs = defineBlock<Data>({
 
 /* 공통 카드 베이스 */
 .cpcv-card{
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   overflow:hidden;
   background:var(--paper);
   display:flex;
@@ -226,7 +226,7 @@ export const compareProductCardVs = defineBlock<Data>({
 /* 유저 보이스 인용 블록 (승자 카드) */
 .cpcv-quote{
   background:rgba(0,0,0,.034);
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   padding:12px 14px;
   margin-top:2px;
 }

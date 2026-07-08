@@ -32,7 +32,7 @@ export const certPedestal = defineBlock<Data>({
   schema,
   css: `
 .cpd{background:var(--ink);color:#fff;padding:64px 0 72px;text-align:center;overflow:hidden}
-.cpd-hd{padding:0 56px;margin-bottom:52px}
+.cpd-hd{padding:0 var(--pad-x,56px);margin-bottom:52px}
 .cpd-heading{font-family:var(--font-display);font-weight:800;font-size:62px;letter-spacing:-.02em;line-height:1.05;color:var(--accent)}
 .cpd-subtitle{margin-top:12px;font-size:17px;color:rgba(255,255,255,.7);line-height:1.6}
 
@@ -41,9 +41,9 @@ export const certPedestal = defineBlock<Data>({
 .cpd-row:last-child{margin-bottom:0}
 
 /* 짝수(0-indexed): 인증서 오른쪽, 라벨 왼쪽 */
-.cpd-row.cpd-even{flex-direction:row;justify-content:flex-end;padding-right:56px}
+.cpd-row.cpd-even{flex-direction:row;justify-content:flex-end;padding-right:var(--pad-x,56px)}
 /* 홀수: 인증서 왼쪽, 라벨 오른쪽 */
-.cpd-row.cpd-odd{flex-direction:row-reverse;justify-content:flex-end;padding-left:56px}
+.cpd-row.cpd-odd{flex-direction:row-reverse;justify-content:flex-end;padding-left:var(--pad-x,56px)}
 
 /* 받침대 + 액자 묶음 */
 .cpd-stage{position:relative;flex:0 0 auto;display:flex;flex-direction:column;align-items:center}

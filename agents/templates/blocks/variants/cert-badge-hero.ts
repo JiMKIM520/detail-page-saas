@@ -48,7 +48,7 @@ export const certBadgeHero = defineBlock<Data>({
 .cbh-sub{margin-top:12px;font-size:14px;color:var(--muted);letter-spacing:.02em;padding:0 40px;line-height:1.6}
 .cbh-badge-wrap{margin:38px auto 0;width:220px;height:220px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--accent) 8%,transparent);box-shadow:0 16px 48px -18px rgba(0,0,0,.22)}
 .cbh-badge-wrap img,.cbh-badge-wrap .ph{width:100%;height:100%;border-radius:50%;object-fit:cover}
-.cbh-highlight{margin:38px 40px 0;background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:10px;padding:16px 24px;font-family:var(--font-display);font-weight:800;font-size:26px;line-height:1.3;color:var(--ink)}
+.cbh-highlight{margin:38px 40px 0;background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:calc(var(--r-scale,1)*10px);padding:16px 24px;font-family:var(--font-display);font-weight:800;font-size:26px;line-height:1.3;color:var(--ink)}
 .cbh-highlight .em{color:var(--accent)}
 .cbh-banner{margin:18px 0 0;background:var(--accent);color:#fff;padding:16px 40px;font-family:var(--font-display);font-weight:800;font-size:18px;line-height:1.4;display:flex;align-items:center;gap:10px;justify-content:center}
 .cbh-banner .em{color:#fff;text-decoration:underline}
@@ -61,13 +61,13 @@ export const certBadgeHero = defineBlock<Data>({
 .cbh-check-text .em{font-weight:800;color:var(--ink)}
 .cbh-check-label{font-weight:800;color:var(--ink)}
 .cbh-check-colon{color:var(--muted)}
-.cbh-summary{margin:28px 40px 0;background:color-mix(in srgb,var(--accent) 6%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:12px;padding:22px 26px}
+.cbh-summary{margin:28px 40px 0;background:color-mix(in srgb,var(--accent) 6%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:calc(var(--r-scale,1)*12px);padding:22px 26px}
 .cbh-summary-line{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:var(--ink);line-height:1.5}
 .cbh-summary-line+.cbh-summary-line{margin-top:12px}
 .cbh-summary-bullet{flex:0 0 18px;width:18px;height:18px;color:var(--accent)}
 .cbh-summary-line .em{color:var(--accent);font-weight:800}
-.cbh-doc-wrap{margin:32px 40px 0 40px;border-radius:14px;overflow:hidden;box-shadow:0 10px 32px -14px rgba(0,0,0,.25)}
-.cbh-doc-wrap img,.cbh-doc-wrap .ph{width:100%;height:260px;object-fit:cover;display:block;border-radius:14px}
+.cbh-doc-wrap{margin:32px 40px 0 40px;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));overflow:hidden;box-shadow:0 10px 32px -14px rgba(0,0,0,.25)}
+.cbh-doc-wrap img,.cbh-doc-wrap .ph{width:100%;height:260px;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px))}
 .cbh-bottom-pad{height:56px}
 `,
   render: (d, { esc, richSafe, icon }) => `

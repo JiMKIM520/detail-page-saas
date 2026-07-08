@@ -227,7 +227,7 @@ export const awardGovSealHero = defineBlock<Data>({
 /* 대리석 사각 베이스 */
 .agsh-base{
   margin:0 auto;
-  width:250px;height:38px;border-radius:6px;margin-top:-1px;
+  width:250px;height:38px;border-radius:calc(var(--r-scale,1)*6px);margin-top:-1px;
   background:linear-gradient(180deg,#E8E0D4 0%,#C8BFB0 50%,#A89880 100%);
   box-shadow:0 6px 20px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.5);
   position:relative;overflow:hidden

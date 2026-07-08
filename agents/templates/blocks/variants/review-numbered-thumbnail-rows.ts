@@ -61,8 +61,8 @@ export const reviewNumberedThumbnailRows = defineBlock<Data>({
 .rntr-body{font-family:var(--font-body);font-size:14px;color:var(--muted);line-height:1.65}
 .rntr-body .em{color:var(--accent-d);font-weight:700}
 /* 우측 썸네일 */
-.rntr-thumb{width:96px;height:96px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--bg)}
-.rntr-thumb.ph{width:96px;height:96px;border-radius:10px;flex-shrink:0}
+.rntr-thumb{width:96px;height:96px;object-fit:cover;border-radius:calc(var(--r-scale,1)*10px);flex-shrink:0;background:var(--bg)}
+.rntr-thumb.ph{width:96px;height:96px;border-radius:calc(var(--r-scale,1)*10px);flex-shrink:0}
 `,
   render: (d, { esc, richSafe }) => {
     const rows = d.items

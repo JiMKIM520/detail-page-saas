@@ -44,12 +44,12 @@ export const faqPillCardSplit = defineBlock<Data>({
 .fpcs-pair{margin-bottom:24px}
 .fpcs-pair:last-child{margin-bottom:0}
 /* Q pill — 다크 풀폭, 큰 border-radius로 pill 형태 */
-.fpcs-q{display:flex;align-items:center;gap:14px;background:var(--ink);border-radius:20px;padding:20px 28px;min-height:68px}
+.fpcs-q{display:flex;align-items:center;gap:14px;background:var(--ink);border-radius:calc(var(--r-scale,1)*20px);padding:20px 28px;min-height:68px}
 .fpcs-qlabel{font-family:var(--font-display);font-weight:800;font-size:clamp(22px,5vw,28px);color:var(--accent);line-height:1;flex-shrink:0;letter-spacing:-.01em}
 .fpcs-qtext{font-family:var(--font-body);font-weight:700;font-size:clamp(15px,3.8vw,18px);color:#fff;line-height:1.45;letter-spacing:-.01em}
 .fpcs-qtext .em{color:var(--accent)}
 /* A card — 흰 카드, rounded */
-.fpcs-a{display:flex;align-items:flex-start;gap:16px;background:var(--paper);border-radius:18px;padding:22px 28px;margin-top:8px;box-shadow:0 6px 18px -8px rgba(0,0,0,.12)}
+.fpcs-a{display:flex;align-items:flex-start;gap:16px;background:var(--paper);border-radius:calc(var(--r-scale,1)*18px);padding:22px 28px;margin-top:8px;box-shadow:0 6px 18px -8px rgba(0,0,0,.12)}
 .fpcs-alabel{font-family:var(--font-display);font-weight:800;font-size:clamp(24px,5.5vw,32px);color:var(--accent);line-height:1;flex-shrink:0;letter-spacing:-.01em;padding-top:2px}
 .fpcs-atext{font-family:var(--font-body);font-weight:400;font-size:clamp(14px,3.4vw,16px);color:var(--ink);line-height:1.75;letter-spacing:-.005em}
 .fpcs-atext .em{color:var(--accent);font-weight:700}

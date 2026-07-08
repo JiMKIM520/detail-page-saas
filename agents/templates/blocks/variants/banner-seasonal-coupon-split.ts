@@ -63,7 +63,7 @@ export const bannerSeasonalCouponSplit = defineBlock<Data>({
 .bscs-coupons{display:flex;gap:20px;width:100%}
 
 /* 개별 쿠폰 카드 — 티켓 노치 스타일 */
-.bscs-coupon{flex:1;background:var(--paper);border:2.5px dashed color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 16px 24px;position:relative;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.07)}
+.bscs-coupon{flex:1;background:var(--paper);border:2.5px dashed color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:calc(var(--r-scale,1)*16px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 16px 24px;position:relative;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.07)}
 
 /* 쿠폰 노치 — 좌우 반원 절취선 */
 .bscs-coupon::before,.bscs-coupon::after{content:"";position:absolute;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--paper) 88%,var(--accent));border:2.5px dashed color-mix(in srgb,var(--accent) 55%,var(--line))}

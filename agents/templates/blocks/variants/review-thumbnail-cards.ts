@@ -39,13 +39,13 @@ export const reviewThumbnailCards = defineBlock<Data>({
   css: `
 .rtc{background:var(--ink);color:#fff;padding:60px 48px 72px}
 .rtc-hd{text-align:center;margin-bottom:40px}
-.rtc-eye{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.28);border-radius:4px;padding:5px 14px;margin-bottom:22px}
+.rtc-eye{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.28);border-radius:calc(var(--r-scale,1)*4px);padding:5px 14px;margin-bottom:22px}
 .rtc-qmark{display:block;font-family:var(--font-lat);font-size:48px;color:var(--accent);line-height:1;margin-bottom:10px}
 .rtc-quote{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:8px;line-height:1.5}
 .rtc-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:#fff;line-height:1.1;letter-spacing:-.02em}
 .rtc-title .em{color:var(--accent)}
 .rtc-list{display:flex;flex-direction:column;gap:16px}
-.rtc-card{display:flex;align-items:stretch;gap:0;background:var(--paper);border-radius:20px;overflow:hidden;box-shadow:0 12px 30px -18px rgba(0,0,0,.55)}
+.rtc-card{display:flex;align-items:stretch;gap:0;background:var(--paper);border-radius:calc(var(--r-scale,1)*20px);overflow:hidden;box-shadow:0 12px 30px -18px rgba(0,0,0,.55)}
 .rtc-thumb{flex:0 0 140px;width:140px;height:140px;object-fit:cover;display:block}
 .rtc-body{flex:1;padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
 .rtc-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px}

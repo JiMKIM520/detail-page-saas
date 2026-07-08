@@ -20,14 +20,14 @@ export const galleryOptions = defineBlock<Data>({
   describe: '옵션/갤러리. eyebrow + 다크 OPTION pill + 캡션 + 연결선 + 풀폭 이미지 (옵션별 반복).',
   schema,
   css: `
-.gl{position:relative;padding:56px 56px 60px;background:var(--bg)}
+.gl{position:relative;padding:56px var(--pad-x,56px) 60px;background:var(--bg)}
 .gl-item{text-align:center}
 .gl-item + .gl-item{margin-top:48px}
 .gl-eye{font-family:var(--font-serif);font-weight:700;font-size:18px;letter-spacing:.2em;color:var(--ink);text-transform:uppercase}
-.gl-pill{display:inline-block;margin-top:14px;background:var(--brand);color:#fff;font-family:var(--font-display);font-size:26px;padding:8px 30px;border-radius:8px}
+.gl-pill{display:inline-block;margin-top:14px;background:var(--brand);color:#fff;font-family:var(--font-display);font-size:26px;padding:8px 30px;border-radius:calc(var(--r-scale,1)*8px)}
 .gl-cap{margin-top:12px;font-size:16px;color:var(--ink-2)}
 .gl-line{width:1px;height:40px;background:var(--line);margin:18px auto 0}
-.gl-media{width:100%;height:520px;object-fit:cover;border-radius:14px;margin-top:18px}
+.gl-media{width:100%;height:520px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));margin-top:18px}
 `,
   render: (d, { esc }) => `
 <section class="gl">

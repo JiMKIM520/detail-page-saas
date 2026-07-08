@@ -61,7 +61,7 @@ export const reviewInstagramDmMockup = defineBlock<Data>({
 .ridm-title{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,5.5vw,38px);line-height:1.22;letter-spacing:-.02em;color:var(--ink);margin-bottom:32px}
 .ridm-title .em{color:var(--accent-d)}
 /* 폰 목업 */
-.ridm-phone{position:relative;margin:0 auto;width:284px;background:var(--paper);border-radius:36px;overflow:hidden;box-shadow:0 28px 56px -18px rgba(0,0,0,.42),0 0 0 2.5px rgba(0,0,0,.14),inset 0 0 0 1px rgba(255,255,255,.55)}
+.ridm-phone{position:relative;margin:0 auto;width:284px;background:var(--paper);border-radius:calc(var(--r-scale,1)*36px);overflow:hidden;box-shadow:0 28px 56px -18px rgba(0,0,0,.42),0 0 0 2.5px rgba(0,0,0,.14),inset 0 0 0 1px rgba(255,255,255,.55)}
 /* 상단 상태바 영역 */
 .ridm-statusbar{height:36px;background:var(--paper);display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 22px}
 .ridm-statusbar-time{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
@@ -88,7 +88,7 @@ export const reviewInstagramDmMockup = defineBlock<Data>({
 .ridm-msg-avatar img,.ridm-msg-avatar .ridm-avatar-ph{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--muted);display:block}
 .ridm-bubble-wrap{flex:1;max-width:220px}
 .ridm-reviewer{font-size:9.5px;color:var(--muted);margin-bottom:3px;padding-left:2px;font-weight:600;letter-spacing:.01em}
-.ridm-bubble{background:#fff;border-radius:16px 16px 16px 4px;padding:10px 13px;font-size:12px;line-height:1.6;color:var(--ink);word-break:keep-all;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.ridm-bubble{background:#fff;border-radius:calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*4px);padding:10px 13px;font-size:12px;line-height:1.6;color:var(--ink);word-break:keep-all;box-shadow:0 2px 8px rgba(0,0,0,.07)}
 .ridm-bubble .em{color:var(--accent-d);font-weight:700}
 /* 더보기 점 (읽음 표시 흉내) */
 .ridm-msg-dots{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;padding-bottom:3px}

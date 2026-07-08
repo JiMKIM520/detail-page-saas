@@ -71,8 +71,8 @@ export const reviewThumbnailRows = defineBlock<Data>({
 .rtr-row{display:grid;grid-template-columns:72px 1fr;gap:14px;padding:20px 0;border-top:1px solid var(--line)}
 .rtr-list>.rtr-row:last-child{border-bottom:1px solid var(--line)}
 /* 썸네일 */
-.rtr-thumb{width:72px;height:72px;object-fit:cover;border-radius:8px;flex-shrink:0}
-.rtr-thumb.ph{width:72px;height:72px;border-radius:8px;font-size:11px}
+.rtr-thumb{width:72px;height:72px;object-fit:cover;border-radius:calc(var(--r-scale,1)*8px);flex-shrink:0}
+.rtr-thumb.ph{width:72px;height:72px;border-radius:calc(var(--r-scale,1)*8px);font-size:11px}
 /* 우측 텍스트 영역 */
 .rtr-body{display:flex;flex-direction:column;justify-content:center;gap:4px}
 /* 리뷰어 메타 라인 */

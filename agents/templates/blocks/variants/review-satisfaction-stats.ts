@@ -91,9 +91,10 @@ export const reviewSatisfactionStats = defineBlock<Data>({
 .rss-table-header{text-align:right;font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;padding-right:4px}
 .rss-table{width:100%;border-collapse:separate;border-spacing:0 6px}
 .rss-row td{background:var(--brand);color:#fff;padding:16px 20px;vertical-align:middle}
-.rss-row td:first-child{border-radius:6px 0 0 6px;font-family:var(--font-display);font-size:16px;font-weight:400;line-height:1.45;width:100%}
+.rss-row td:first-child{border-radius:calc(var(--r-scale,1)*6px) 0 0 calc(var(--r-scale,1)*6px);font-family:var(--font-display);font-size:16px;font-weight:400;line-height:1.45;width:100%}
 .rss-row td:first-child strong{font-weight:800}
-.rss-row td:last-child{border-radius:0 6px 6px 0;font-family:var(--font-display);font-size:18px;font-weight:800;white-space:nowrap;text-align:right;padding-left:12px;padding-right:20px;color:#fff}
+.rss-row td:last-child{border-radius:0 calc(var(--r-scale,1)*6px) calc(var(--r-scale,1)*6px) 0;font-family:var(--font-display);font-size:18px;font-weight:800;white-space:nowrap;text-align:right;padding-left:12px;padding-right:20px;color:#fff}
+.rss-row td .em{color:var(--em-dark,#FFF7EA)}
 `,
   render: (d, { esc, richSafe }) => {
     const rows = d.rows

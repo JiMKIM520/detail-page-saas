@@ -70,7 +70,7 @@ export const reviewAggregateScoreCards = defineBlock<Data>({
 .rasc-divider{height:1px;background:var(--line);margin-bottom:24px}
 /* 카드 스택 */
 .rasc-cards{display:flex;flex-direction:column;gap:14px}
-.rasc-card{background:var(--paper);border-radius:14px;padding:22px 24px 18px;box-shadow:0 2px 8px -3px rgba(0,0,0,.10)}
+.rasc-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*14px);padding:22px 24px 18px;box-shadow:0 2px 8px -3px rgba(0,0,0,.10)}
 .rasc-card-head{font-family:var(--font-display);font-size:17px;font-weight:800;color:var(--ink);line-height:1.4;margin-bottom:6px}
 .rasc-card-head .em{color:var(--accent-d)}
 .rasc-card-body{font-family:var(--font-body);font-size:15px;color:var(--ink);line-height:1.65;margin-bottom:12px}

@@ -35,11 +35,11 @@ export const featureSplitPanels = defineBlock<Data>({
   css: `
 .fsp{background:var(--bg);color:var(--ink)}
 /* ── 헤더 ── */
-.fsp-hd{text-align:center;padding:56px 56px 46px}
+.fsp-hd{text-align:center;padding:56px var(--pad-x,56px) 46px}
 .fsp-eye{font-size:16px;font-weight:500;color:var(--ink-2);margin-bottom:12px}
 .fsp-title{font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.02em;line-height:1.1}
 .fsp-title .em{color:var(--ink)}
-.fsp-div{width:52px;height:4px;border-radius:2px;background:var(--accent);margin:18px auto 0}
+.fsp-div{width:52px;height:4px;border-radius:calc(var(--r-scale,1)*2px);background:var(--accent);margin:18px auto 0}
 /* ── 지그재그 행 ── */
 .fsp-rows{display:flex;flex-direction:column}
 .fsp-row{display:flex;width:100%;min-height:320px}

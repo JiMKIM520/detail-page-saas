@@ -59,7 +59,7 @@ export const ingredientRadar = defineBlock<Data>({
 .irdr-v4{left:1%;top:38%}
 .irdr-radar-outer{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 4;opacity:.55}
 .irdr-radar-inner{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:1.5;opacity:.8}
-.irdr-card{margin:0 32px 56px;background:var(--paper);border-radius:20px;overflow:hidden}
+.irdr-card{margin:0 32px 56px;background:var(--paper);border-radius:calc(var(--r-scale,1)*20px);overflow:hidden}
 .irdr-row{display:flex;align-items:flex-start;gap:18px;padding:26px 32px}
 .irdr-row+.irdr-row{border-top:1px solid var(--line)}
 .irdr-icon{flex:0 0 36px;width:36px;height:36px;color:var(--accent)}

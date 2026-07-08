@@ -103,7 +103,7 @@ export const baMultiEffectStacked = defineBlock<Data>({
 /* 외부 카드 */
 .bmes-card{
   background:var(--paper);
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   padding:28px 20px 32px;
   display:flex;
   flex-direction:column;
@@ -125,7 +125,7 @@ export const baMultiEffectStacked = defineBlock<Data>({
   font-weight:800;
   font-size:clamp(13px,2.6vw,15px);
   padding:6px 16px;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   letter-spacing:.01em;
   line-height:1.4;
 }
@@ -143,7 +143,7 @@ export const baMultiEffectStacked = defineBlock<Data>({
 .bmes-side{
   position:relative;
   overflow:hidden;
-  border-radius:6px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));
 }
 
 /* 이미지 */

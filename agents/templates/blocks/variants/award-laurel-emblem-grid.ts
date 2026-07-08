@@ -181,7 +181,7 @@ export const awardLaurelEmblemGrid = defineBlock<Data>({
 
 /* ④ 수상 카드 그리드 */
 .aleg-grid{background:#111;padding:0 16px 36px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.aleg-card{background:linear-gradient(145deg,#3A2A0A,#2A1E06);border:1px solid #C9A84C33;border-radius:10px;padding:20px 14px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.aleg-card{background:linear-gradient(145deg,#3A2A0A,#2A1E06);border:1px solid #C9A84C33;border-radius:calc(var(--r-scale,1)*10px);padding:20px 14px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 /* 미니 원형 로렐 엠블럼 */
 .aleg-mini-emb{width:60px;height:60px;flex-shrink:0}
 .aleg-card-org{font-size:11px;font-weight:600;color:rgba(255,255,255,.55);line-height:1.45;letter-spacing:.02em}

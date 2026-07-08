@@ -72,7 +72,7 @@ export const heroPhotoGlassCard = defineBlock<Data>({
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:52px 56px 60px;
+  padding:52px var(--pad-x,56px) 60px;
 }
 
 /* ─ 상단: 브랜드 로고 ─ */
@@ -92,7 +92,7 @@ export const heroPhotoGlassCard = defineBlock<Data>({
   backdrop-filter:blur(18px) saturate(140%);
   -webkit-backdrop-filter:blur(18px) saturate(140%);
   border:1px solid rgba(255,255,255,.32);
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   padding:44px 48px 44px;
   max-width:580px;
   align-self:flex-start;
@@ -118,7 +118,7 @@ export const heroPhotoGlassCard = defineBlock<Data>({
   height:72px;
   background:rgba(255,255,255,.55);
   margin:28px 0 24px;
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
 }
 
 /* WHY 서브헤드 ─ */
@@ -155,7 +155,7 @@ export const heroPhotoGlassCard = defineBlock<Data>({
   width:260px;
   height:200px;
   object-fit:cover;
-  border-radius:18px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*18px));
   border:2px solid rgba(255,255,255,.30);
   box-shadow:0 16px 40px rgba(0,0,0,.38);
   display:block;

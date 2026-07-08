@@ -146,7 +146,7 @@ export const heroPedestal = defineBlock<Data>({
   padding:8px 0 16px
 }
 .hped-pt{
-  padding:28px 56px
+  padding:28px var(--pad-x,56px)
 }
 .hped-pt+.hped-pt{
   border-top:1px solid rgba(255,255,255,.18)

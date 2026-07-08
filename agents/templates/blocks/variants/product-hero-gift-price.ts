@@ -68,8 +68,8 @@ export const productHeroGiftPrice = defineBlock<Data>({
 
 /* 제품 이미지 영역 */
 .phgp-fig{position:relative;margin-bottom:20px}
-.phgp-product{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:block}
-.phgp-product.ph{width:100%;aspect-ratio:1/1;border-radius:12px}
+.phgp-product{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));display:block}
+.phgp-product.ph{width:100%;aspect-ratio:1/1;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px))}
 
 /* 플로팅 증정품 pill — 우상단 앵커 */
 .phgp-gift-pill{
@@ -86,8 +86,8 @@ export const productHeroGiftPrice = defineBlock<Data>({
 .phgp-gift-icon{display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0;color:var(--accent-d)}
 .phgp-gift-icon svg{width:18px;height:18px}
 .phgp-gift-label{font-family:var(--font-body);font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.01em;white-space:nowrap}
-.phgp-gift-thumb{width:36px;height:36px;object-fit:cover;border-radius:6px;flex-shrink:0}
-.phgp-gift-thumb.ph{width:36px;height:36px;border-radius:6px;font-size:9px}
+.phgp-gift-thumb{width:36px;height:36px;object-fit:cover;border-radius:calc(var(--r-scale,1)*6px);flex-shrink:0}
+.phgp-gift-thumb.ph{width:36px;height:36px;border-radius:calc(var(--r-scale,1)*6px);font-size:9px}
 
 /* 카테고리 라벨 pill */
 .phgp-cat-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
@@ -104,11 +104,11 @@ export const productHeroGiftPrice = defineBlock<Data>({
 .phgp-price-val.sale{font-family:var(--font-display);font-size:clamp(22px,5vw,28px);font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
 
 /* 추가할인 행 */
-.phgp-discount-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:10px;padding:12px 16px;margin-top:10px}
+.phgp-discount-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:calc(var(--r-scale,1)*10px);padding:12px 16px;margin-top:10px}
 .phgp-discount-row + .phgp-discount-row{margin-top:6px}
 .phgp-discount-desc{font-size:13px;line-height:1.5;color:var(--ink)}
 .phgp-discount-desc .em{color:var(--accent-d);font-weight:700}
-.phgp-discount-badge{flex-shrink:0;background:#e5343a;color:#fff;font-family:var(--font-display);font-size:14px;font-weight:800;border-radius:6px;padding:4px 10px;white-space:nowrap;letter-spacing:-.01em}
+.phgp-discount-badge{flex-shrink:0;background:#e5343a;color:#fff;font-family:var(--font-display);font-size:14px;font-weight:800;border-radius:calc(var(--r-scale,1)*6px);padding:4px 10px;white-space:nowrap;letter-spacing:-.01em}
 `,
   render: (d, { esc, richSafe, icon }) => {
     // 플로팅 증정품 pill

@@ -40,7 +40,7 @@ export const shippingChapterHero = defineBlock<Data>({
 
 /* ─ 상단 라이트 구역 ─ */
 .sch{background:var(--bg);color:var(--ink)}
-.sch-light{padding:48px 56px 0}
+.sch-light{padding:48px var(--pad-x,56px) 0}
 .sch-chapter{font-size:15px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:18px}
 .sch-title{font-family:var(--font-display);font-weight:800;font-size:46px;letter-spacing:-.02em;line-height:1.2;color:var(--ink);margin-bottom:16px}
 .sch-title .em{color:var(--accent)}
@@ -50,7 +50,7 @@ export const shippingChapterHero = defineBlock<Data>({
 .sch-photo{width:100%;height:320px;object-fit:cover;display:block}
 
 /* ─ 하단 다크 패널 ─ */
-.sch-dark{background:var(--ink);color:#fff;padding:52px 56px 60px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.sch-dark{background:var(--ink);color:#fff;padding:52px var(--pad-x,56px) 60px;display:flex;flex-direction:column;align-items:center;text-align:center}
 
 /* 아이콘 배지 */
 .sch-badge{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;margin-bottom:24px;color:var(--accent)}

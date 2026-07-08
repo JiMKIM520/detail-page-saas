@@ -285,14 +285,14 @@ export const awardRankingPodiumSale = defineBlock<Data>({
   height:14px;
   margin-top:4px;
   background:linear-gradient(180deg,${GOLD_MID} 0%,#7a5210 100%);
-  border-radius:2px 2px 0 0;
+  border-radius:calc(var(--r-scale,1)*2px) calc(var(--r-scale,1)*2px) 0 0;
   box-shadow:0 -2px 8px rgba(201,168,76,.3);
 }
 .arps-emblem-base2{
   width:90px;
   height:10px;
   background:linear-gradient(180deg,${GOLD} 0%,#5a3a08 100%);
-  border-radius:0 0 2px 2px;
+  border-radius:0 0 calc(var(--r-scale,1)*2px) calc(var(--r-scale,1)*2px);
 }
 
 /* 오른쪽: 헤드라인 영역 */
@@ -508,7 +508,7 @@ export const awardRankingPodiumSale = defineBlock<Data>({
 
 .arps-grid-card{
   border:1px solid rgba(201,168,76,.45);
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   background:${BLACK_CARD};
   padding:16px 18px 14px;
 }
@@ -580,7 +580,7 @@ export const awardRankingPodiumSale = defineBlock<Data>({
 
 .arps-bottom-card{
   border:1px solid rgba(201,168,76,.38);
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   background:${BLACK_CARD};
   padding:16px 12px 14px;
   display:flex;

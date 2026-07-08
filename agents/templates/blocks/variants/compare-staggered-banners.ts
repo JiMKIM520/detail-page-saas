@@ -37,12 +37,12 @@ export const compareStaggeredBanners = defineBlock<Data>({
 .csb-sub{margin-top:12px;font-size:17px;color:var(--ink-2);font-weight:500}
 .csb-pairs{display:flex;flex-direction:column;gap:0;position:relative}
 .csb-pair{position:relative;display:flex;flex-direction:column;margin-bottom:8px}
-.csb-before{width:78%;background:var(--paper);border-radius:16px;padding:28px 32px 30px;margin-left:0;box-shadow:0 2px 12px -4px rgba(0,0,0,.10)}
+.csb-before{width:78%;background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);padding:28px 32px 30px;margin-left:0;box-shadow:0 2px 12px -4px rgba(0,0,0,.10)}
 .csb-before-lbl{font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--muted);letter-spacing:.06em;margin-bottom:10px}
 .csb-before-txt{font-size:15px;color:var(--muted);line-height:1.7}
 .csb-before-txt .em{color:var(--accent);font-weight:700}
 .csb-vs{position:absolute;left:50%;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px -4px color-mix(in srgb,var(--accent) 60%,transparent);z-index:2;top:50%;margin-top:-27px}
-.csb-after{width:78%;background:var(--paper);border-radius:16px;padding:28px 32px 30px;margin-left:auto;margin-right:0;box-shadow:0 4px 20px -6px rgba(0,0,0,.15);border:2px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.csb-after{width:78%;background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);padding:28px 32px 30px;margin-left:auto;margin-right:0;box-shadow:0 4px 20px -6px rgba(0,0,0,.15);border:2px solid color-mix(in srgb,var(--accent) 22%,transparent)}
 .csb-after-lbl{font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--accent);letter-spacing:.06em;margin-bottom:10px}
 .csb-after-txt{font-size:15px;font-weight:700;color:var(--ink);line-height:1.7}
 .csb-after-txt .em{color:var(--accent);font-weight:800}

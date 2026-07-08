@@ -81,8 +81,8 @@ export const reviewDividerImageRows = defineBlock<Data>({
 .rdir-body .em{color:var(--accent-d);font-weight:700}
 /* 썸네일 2장 */
 .rdir-imgs{display:flex;gap:8px;flex-shrink:0}
-.rdir-thumb{width:100px;height:100px;object-fit:cover;border-radius:6px;display:block}
-.rdir-thumb.ph{width:100px;height:100px;border-radius:6px;border:2px dashed var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
+.rdir-thumb{width:100px;height:100px;object-fit:cover;border-radius:calc(var(--r-scale,1)*6px);display:block}
+.rdir-thumb.ph{width:100px;height:100px;border-radius:calc(var(--r-scale,1)*6px);border:2px dashed var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
 /* 구분선 */
 .rdir-hr{border:none;border-top:1px solid var(--line);margin:0}
 `,

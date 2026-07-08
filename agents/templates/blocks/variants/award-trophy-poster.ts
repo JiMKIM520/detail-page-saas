@@ -195,7 +195,7 @@ export const awardTrophyPoster = defineBlock<Data>({
   left:2px;top:2px;
   width:10px;height:52px;
   background:linear-gradient(160deg,#F5D77E 0%,#C9A030 55%,#8C6010 100%);
-  border-radius:3px;
+  border-radius:calc(var(--r-scale,1)*3px);
   transform:rotate(22deg);
   transform-origin:top left;
   opacity:.92;
@@ -207,7 +207,7 @@ export const awardTrophyPoster = defineBlock<Data>({
   left:22px;top:0;
   width:6px;height:38px;
   background:linear-gradient(150deg,#FFFBE0 0%,#E8B84B 100%);
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
   transform:rotate(10deg);
   transform-origin:top left;
   opacity:.80;

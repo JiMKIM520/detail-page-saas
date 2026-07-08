@@ -60,7 +60,7 @@ export const reviewStatHeaderCard = defineBlock<Data>({
 .rshc-product{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,5.6vw,38px);line-height:1.2;letter-spacing:-.02em;color:var(--ink);margin-top:2px}
 .rshc-product .em{color:var(--accent-d)}
 /* KPI 통계 바 */
-.rshc-stats{display:grid;grid-template-columns:1fr 1px 1fr;align-items:center;margin:28px 0 32px;padding:20px 16px;background:var(--bg);border-radius:12px;gap:0}
+.rshc-stats{display:grid;grid-template-columns:1fr 1px 1fr;align-items:center;margin:28px 0 32px;padding:20px 16px;background:var(--bg);border-radius:calc(var(--r-scale,1)*12px);gap:0}
 .rshc-divider{width:1px;height:44px;background:var(--line);justify-self:center}
 .rshc-stat{display:flex;flex-direction:column;align-items:center;gap:6px}
 .rshc-stat-label{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted)}
@@ -69,7 +69,7 @@ export const reviewStatHeaderCard = defineBlock<Data>({
 /* 리뷰 섹션 pill */
 .rshc-section-pill{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.04em;padding:10px 28px;border-radius:999px;margin-bottom:20px}
 /* 리뷰 카드 */
-.rshc-card{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:28px 24px 22px;text-align:left;box-shadow:0 4px 18px -8px rgba(0,0,0,.10)}
+.rshc-card{background:var(--paper);border:1.5px solid var(--line);border-radius:calc(var(--r-scale,1)*14px);padding:28px 24px 22px;text-align:left;box-shadow:0 4px 18px -8px rgba(0,0,0,.10)}
 .rshc-quote{font-family:var(--font-body);font-size:15px;line-height:1.75;color:var(--ink);font-weight:500}
 .rshc-quote .em{color:var(--accent-d);font-weight:700}
 .rshc-reviewer-row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;flex-wrap:wrap;gap:8px}

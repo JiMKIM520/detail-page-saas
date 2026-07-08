@@ -35,7 +35,7 @@ export const ingredientHeroRows = defineBlock<Data>({
   schema,
   css: `
 .ihr{background:color-mix(in srgb,var(--accent) 14%,var(--bg));color:var(--ink)}
-.ihr-head{padding:52px 56px 36px;text-align:center}
+.ihr-head{padding:52px var(--pad-x,56px) 36px;text-align:center}
 .ihr-sub{font-size:16px;font-weight:500;color:var(--ink-2);margin-bottom:12px;letter-spacing:.01em}
 .ihr-title{font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
 .ihr-title .em{color:var(--accent)}
@@ -50,9 +50,9 @@ export const ingredientHeroRows = defineBlock<Data>({
 .ihr-label .em{color:var(--accent)}
 .ihr-desc{margin-top:7px;font-size:14px;line-height:1.7;color:var(--ink-2)}
 .ihr-desc .em{color:var(--accent);font-weight:700}
-.ihr-thumb{flex:0 0 150px;width:150px;max-width:150px;height:120px;object-fit:cover;display:block;align-self:center;overflow:hidden;border-radius:10px;margin:18px 24px 18px 0}
-.ihr-thumb.ph{height:120px;flex:0 0 150px;max-width:150px;margin:18px 24px 18px 0;border-radius:10px}
-.ihr-closer{padding:44px 56px 52px;text-align:center;font-family:var(--font-display);font-weight:700;font-size:28px;line-height:1.55;color:var(--ink)}
+.ihr-thumb{flex:0 0 150px;width:150px;max-width:150px;height:120px;object-fit:cover;display:block;align-self:center;overflow:hidden;border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));margin:18px 24px 18px 0}
+.ihr-thumb.ph{height:120px;flex:0 0 150px;max-width:150px;margin:18px 24px 18px 0;border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px))}
+.ihr-closer{padding:44px var(--pad-x,56px) 52px;text-align:center;font-family:var(--font-display);font-weight:700;font-size:28px;line-height:1.55;color:var(--ink)}
 .ihr-closer .em{color:var(--accent);font-weight:800}
 `,
   render: (d, { esc, richSafe }) => `

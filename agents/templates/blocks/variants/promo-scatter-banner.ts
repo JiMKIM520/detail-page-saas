@@ -150,7 +150,7 @@ export const promoScatterBanner = defineBlock<Data>({
 .psb-obj.ph{
   width:150px;
   height:150px;
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   font-size:12px;
   opacity:.35;
 }

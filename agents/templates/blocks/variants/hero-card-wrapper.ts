@@ -48,7 +48,7 @@ export const heroCardWrapper = defineBlock<Data>({
 /* ─ 메인 라운드 카드 ─ */
 .hcw-card{
   background:var(--accent);
-  border-radius:32px 32px 0 0;
+  border-radius:calc(var(--r-scale,1)*32px) calc(var(--r-scale,1)*32px) 0 0;
   padding:44px 40px 0;
   overflow:hidden;
   position:relative
@@ -86,7 +86,7 @@ export const heroCardWrapper = defineBlock<Data>({
   aspect-ratio:3/4;
   object-fit:contain;
   display:block;
-  border-radius:16px
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))
 }
 
 /* ─ 불릿 리스트 ─ */

@@ -62,14 +62,14 @@ export const csContactBanner = defineBlock<Data>({
   width:160px;
   height:160px;
   object-fit:cover;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   flex-shrink:0;
 }
 .ccb-img.ph{
   width:160px;
   height:160px;
   flex-shrink:0;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   border:2px dashed rgba(255,255,255,.35);
   background:rgba(255,255,255,.12);
   color:rgba(255,255,255,.55);

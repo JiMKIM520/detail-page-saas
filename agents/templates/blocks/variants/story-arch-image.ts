@@ -46,7 +46,7 @@ export const storyArchImage = defineBlock<Data>({
   width:100%;
   max-width:600px;
   margin:0 auto;
-  border-radius:999px 999px 0 0;
+  border-radius:var(--shape-photo, 999px 999px 0 0);
   overflow:hidden;
   /* 세로:가로 = 약 4:3, 이미지가 아치 공간 채움 */
   aspect-ratio:3/4;

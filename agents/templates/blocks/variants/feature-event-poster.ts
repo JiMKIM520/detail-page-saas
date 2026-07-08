@@ -62,7 +62,7 @@ export const featureEventPoster = defineBlock<Data>({
 .fep-pill-time{display:inline-block;border:1.5px solid rgba(255,255,255,.75);border-radius:999px;padding:8px 20px;font-family:var(--font-body);font-size:13px;font-weight:600;letter-spacing:.06em;color:#fff;white-space:nowrap}
 .fep-pill-date{display:inline-block;background:var(--accent);border-radius:999px;padding:8px 20px;font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.04em;color:#fff;white-space:nowrap}
 /* 우하단 앵커 콜아웃 카드 */
-.fep-callout{position:absolute;bottom:28px;right:28px;z-index:3;background:rgba(20,16,12,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 18px;text-align:left;min-width:130px;max-width:180px}
+.fep-callout{position:absolute;bottom:28px;right:28px;z-index:3;background:rgba(20,16,12,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:calc(var(--r-scale,1)*12px);padding:14px 18px;text-align:left;min-width:130px;max-width:180px}
 .fep-callout-title{font-family:var(--font-display);font-weight:800;font-size:13px;color:#fff;line-height:1.35;margin-bottom:3px}
 .fep-callout-sub{font-size:11px;color:rgba(255,255,255,.52);line-height:1.4;margin-bottom:6px}
 .fep-callout-price{font-family:var(--font-display);font-weight:800;font-size:15px;color:var(--accent);letter-spacing:.01em}

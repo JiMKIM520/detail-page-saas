@@ -93,7 +93,7 @@ export const featureBentoMosaic = defineBlock<Data>({
 .fbm-scatter-img,
 .fbm-scatter-img.ph{
   position:absolute;
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   object-fit:cover;
   box-shadow:0 6px 18px -6px rgba(0,0,0,.22);
 }
@@ -140,7 +140,7 @@ export const featureBentoMosaic = defineBlock<Data>({
 /* 좌: 대표 이미지 셀 */
 .fbm-bento-img-cell{
   background:var(--paper);
-  border-radius:14px;
+  border-radius:calc(var(--r-scale,1)*14px);
   overflow:hidden;
   /* 우측 불릿 스택 전체 높이에 맞게 늘어나도록 */
   display:flex;
@@ -152,13 +152,13 @@ export const featureBentoMosaic = defineBlock<Data>({
   aspect-ratio:3/4;
   object-fit:cover;
   display:block;
-  border-radius:14px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));
 }
 .fbm-bento-img.ph{
   background:rgba(0,0,0,.04);
   border:2px dashed var(--line);
   color:var(--muted);
-  border-radius:14px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));
 }
 
 /* 우: 불릿 스택 컨테이너 */
@@ -171,7 +171,7 @@ export const featureBentoMosaic = defineBlock<Data>({
 /* 개별 불릿 셀 */
 .fbm-bullet-cell{
   background:var(--paper);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:16px 16px 14px;
   flex:1;
   min-height:0;
@@ -215,7 +215,7 @@ export const featureBentoMosaic = defineBlock<Data>({
 }
 .fbm-lineup-card{
   background:var(--paper);
-  border-radius:14px;
+  border-radius:calc(var(--r-scale,1)*14px);
   padding:20px 14px 18px;
   text-align:center;
   border:2px solid transparent;

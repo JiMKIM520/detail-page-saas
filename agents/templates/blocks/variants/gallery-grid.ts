@@ -38,12 +38,12 @@ export const galleryGrid = defineBlock<Data>({
   css: `
 .gg{background:var(--bg);padding:0 0 64px}
 /* ── 헤더 ── */
-.gg-hd{padding:52px 56px 0;text-align:center}
+.gg-hd{padding:52px var(--pad-x,56px) 0;text-align:center}
 .gg-eye{font-family:var(--font-display);font-weight:800;font-size:14px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:14px}
 .gg-title{font-family:'Cafe24 ClassicType',serif;font-size:88px;line-height:1;color:var(--ink);letter-spacing:-.03em}
 .gg-sub{margin-top:14px;font-size:16px;font-weight:500;color:var(--ink-2);letter-spacing:.01em}
 /* 헤더 구분선 */
-.gg-rule{width:56px;height:3px;border-radius:2px;background:var(--accent);margin:22px auto 0}
+.gg-rule{width:56px;height:3px;border-radius:calc(var(--r-scale,1)*2px);background:var(--accent);margin:22px auto 0}
 /* ── 히어로 밴드 ── */
 .gg-hero{width:100%;height:480px;object-fit:cover;display:block;margin-top:44px}
 /* ── 그리드 ── */
@@ -61,7 +61,7 @@ export const galleryGrid = defineBlock<Data>({
 .gg-frame--full .gg-idx{font-size:96px;top:-24px}
 /* 캡션 영역 */
 .gg-cap{padding:16px 40px 0}
-.gg-cap--full{padding:16px 56px 0}
+.gg-cap--full{padding:16px var(--pad-x,56px) 0}
 .gg-lbl{font-family:var(--font-display);font-weight:800;font-size:18px;color:var(--ink);letter-spacing:.04em}
 .gg-desc{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.6}
 `,

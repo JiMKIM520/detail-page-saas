@@ -49,7 +49,7 @@ export const packageDiscountBadgeGrid = defineBlock<Data>({
 /* 카드 그리드 */
 .pdbg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;align-items:start}
 /* 카드 래퍼 — 배지 오버랩을 위해 position:relative + 상단 패딩 */
-.pdbg-card{position:relative;background:var(--paper);border-radius:16px;padding:42px 14px 22px;display:flex;flex-direction:column;align-items:center;box-shadow:0 8px 24px -10px rgba(0,0,0,.28)}
+.pdbg-card{position:relative;background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);padding:42px 14px 22px;display:flex;flex-direction:column;align-items:center;box-shadow:0 8px 24px -10px rgba(0,0,0,.28)}
 /* 원형 할인율 배지 (카드 상단 중앙 오버랩) */
 .pdbg-badge{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:52px;height:52px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -4px rgba(0,0,0,.38)}
 .pdbg-pct{font-family:var(--font-display);font-weight:800;font-size:15px;line-height:1;color:#fff;letter-spacing:-.01em}
@@ -59,8 +59,8 @@ export const packageDiscountBadgeGrid = defineBlock<Data>({
 .pdbg-name{font-family:var(--font-display);font-weight:700;font-size:14px;line-height:1.3;color:var(--ink);margin-bottom:10px;text-align:center}
 .pdbg-name .em{color:var(--accent-d)}
 /* 제품 이미지 영역 */
-.pdbg-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block}
-.pdbg-img.ph{width:100%;aspect-ratio:1/1;border-radius:8px;border:2px dashed var(--line);background:var(--bg)}
+.pdbg-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));display:block}
+.pdbg-img.ph{width:100%;aspect-ratio:1/1;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));border:2px dashed var(--line);background:var(--bg)}
 /* 가격 영역 */
 .pdbg-prices{margin-top:12px;display:flex;flex-direction:column;align-items:center;gap:2px;width:100%}
 /* 취소선 원가 */

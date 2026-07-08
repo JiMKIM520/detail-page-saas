@@ -41,14 +41,14 @@ export const featureRibbonCards = defineBlock<Data>({
 .frc-title .em{color:var(--accent)}
 .frc-eyebrow{margin-top:12px;font-size:16px;color:var(--ink-2);line-height:1.6}
 .frc-stack{display:flex;flex-direction:column;gap:24px}
-.frc-card{position:relative;background:var(--paper);border-radius:20px;padding-top:30px;overflow:visible;text-align:left;border:1.5px solid color-mix(in srgb,var(--line) 60%,transparent)}
+.frc-card{position:relative;background:var(--paper);border-radius:calc(var(--r-scale,1)*20px);padding-top:30px;overflow:visible;text-align:left;border:1.5px solid color-mix(in srgb,var(--line) 60%,transparent)}
 .frc-ribbon{position:absolute;top:-18px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}
 .frc-ribbon-body{background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.08em;padding:6px 28px;clip-path:polygon(8px 0%,calc(100% - 8px) 0%,100% 50%,calc(100% - 8px) 100%,8px 100%,0% 50%);white-space:nowrap}
 .frc-ribbon-tail-l{width:0;height:0;border-left:10px solid transparent;border-right:0 solid transparent;border-top:7px solid var(--accent-dark);position:absolute;top:100%;left:calc(50% - 54px)}
 .frc-ribbon-tail-r{width:0;height:0;border-right:10px solid transparent;border-left:0 solid transparent;border-top:7px solid var(--accent-dark);position:absolute;top:100%;right:calc(50% - 54px)}
 .frc-subtitle{font-family:var(--font-hand);font-size:26px;color:var(--accent);text-align:center;padding:20px 24px 16px;line-height:1.4}
 .frc-subtitle .em{color:var(--ink)}
-.frc-img{width:calc(100% - 32px);margin:0 16px;height:200px;object-fit:cover;border-radius:12px;overflow:hidden}
+.frc-img{width:calc(100% - 32px);margin:0 16px;height:200px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));overflow:hidden}
 .frc-desc{padding:18px 24px 24px;font-size:15px;color:var(--ink-2);line-height:1.75;text-align:center}
 .frc-desc .em{color:var(--accent);font-weight:700}
 .frc-divider{border:none;border-top:1.5px dashed color-mix(in srgb,var(--line) 50%,transparent);margin:0 24px}

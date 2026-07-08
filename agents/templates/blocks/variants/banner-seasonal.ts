@@ -47,7 +47,7 @@ export const bannerSeasonal = defineBlock<Data>({
 .bs-deco.ph{display:none!important}
 
 /* 콘텐츠 래퍼 */
-.bs-body{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;width:100%;padding:60px 56px}
+.bs-body{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;width:100%;padding:60px var(--pad-x,56px)}
 
 /* 눈썹 라인 + 라벨 */
 .bs-eyebrow{display:flex;align-items:center;gap:16px;margin-bottom:22px;width:100%;max-width:440px}

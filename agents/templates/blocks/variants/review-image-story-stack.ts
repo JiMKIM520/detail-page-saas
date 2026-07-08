@@ -69,11 +69,11 @@ export const reviewImageStoryStack = defineBlock<Data>({
 .riss-item:last-child{margin-bottom:0}
 
 /* 풀와이드 라운드 이미지 */
-.riss-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:16px}
-.riss-img.ph{width:100%;aspect-ratio:4/3;border-radius:16px;border:2px dashed var(--line);background:var(--bg);color:var(--muted)}
+.riss-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))}
+.riss-img.ph{width:100%;aspect-ratio:4/3;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));border:2px dashed var(--line);background:var(--bg);color:var(--muted)}
 
 /* 하단 플로팅 카드 — 이미지 아래에 밀착, 약간 올라온 그림자 */
-.riss-card{background:#ffffff;border-radius:16px;margin-top:-4px;padding:20px 22px 24px;box-shadow:0 6px 28px -10px rgba(0,0,0,.18),0 2px 8px -4px rgba(0,0,0,.10)}
+.riss-card{background:#ffffff;border-radius:calc(var(--r-scale,1)*16px);margin-top:-4px;padding:20px 22px 24px;box-shadow:0 6px 28px -10px rgba(0,0,0,.18),0 2px 8px -4px rgba(0,0,0,.10)}
 
 /* 별점 행 */
 .riss-rating-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:10px}

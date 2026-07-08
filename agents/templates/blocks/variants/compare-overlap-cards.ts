@@ -85,7 +85,7 @@ export const compareOverlapCards = defineBlock<Data>({
 .coc-card{
   position:absolute;
   width:58%;
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   overflow:hidden;
   display:flex;
   flex-direction:column;
@@ -133,14 +133,14 @@ export const compareOverlapCards = defineBlock<Data>({
   margin:0 12px;
   aspect-ratio:4/3;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   display:block;
 }
 .coc-img.ph{
   width:calc(100% - 24px);
   margin:0 12px;
   aspect-ratio:4/3;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
 }
 /* 타사 placeholder */
 .coc-card-comp .coc-img.ph{

@@ -31,18 +31,18 @@ export const featureCaptionbar = defineBlock<Data>({
   schema,
   css: `
 .fcb{background:var(--bg);padding:58px 0 64px}
-.fcb-hd{text-align:center;padding:0 56px;margin-bottom:44px}
+.fcb-hd{text-align:center;padding:0 var(--pad-x,56px);margin-bottom:44px}
 .fcb-eyebrow{font-size:15px;font-weight:600;color:var(--ink-2);letter-spacing:.04em;margin-bottom:10px}
 .fcb-title{font-family:var(--font-display);font-weight:800;font-size:58px;color:var(--accent);letter-spacing:-.02em;line-height:1.12}
 .fcb-title .em{color:var(--accent-d)}
-.fcb-div{width:64px;height:3px;border-radius:2px;background:var(--accent);margin:20px auto 0}
+.fcb-div{width:64px;height:3px;border-radius:calc(var(--r-scale,1)*2px);background:var(--accent);margin:20px auto 0}
 .fcb-item{margin-bottom:36px}
 .fcb-item:last-child{margin-bottom:0}
-.fcb-sub-wrap{padding:0 56px;margin-bottom:14px}
-.fcb-sub{display:inline-block;background:var(--ink);color:#fff;font-family:var(--font-display);font-weight:800;font-size:24px;padding:10px 28px;border-radius:4px;line-height:1.2}
+.fcb-sub-wrap{padding:0 var(--pad-x,56px);margin-bottom:14px}
+.fcb-sub{display:inline-block;background:var(--ink);color:#fff;font-family:var(--font-display);font-weight:800;font-size:24px;padding:10px 28px;border-radius:calc(var(--r-scale,1)*4px);line-height:1.2}
 .fcb-sub .em{color:var(--accent)}
 .fcb-img{width:100%;height:420px;object-fit:cover;display:block}
-.fcb-cap{background:color-mix(in srgb,var(--ink) 90%,transparent);color:#fff;padding:20px 56px;text-align:center;font-size:16px;line-height:1.72;font-weight:500}
+.fcb-cap{background:color-mix(in srgb,var(--ink) 90%,transparent);color:#fff;padding:20px var(--pad-x,56px);text-align:center;font-size:16px;line-height:1.72;font-weight:500}
 .fcb-cap .em{color:var(--accent);font-weight:700}
 `,
   render: (d, { esc, richSafe }) => `

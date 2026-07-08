@@ -50,7 +50,7 @@ export const pointProductAnnotation = defineBlock<Data>({
 /* 제품 영역: 좌측 공간(작은 여백) + 중앙 제품 */
 .ppa-product{flex:0 0 52%;position:relative;display:flex;align-items:center;justify-content:center}
 .ppa-img{width:72%;max-width:220px;aspect-ratio:2/5;object-fit:contain;display:block;position:relative;z-index:1}
-.ppa-img.ph{width:72%;max-width:220px;aspect-ratio:2/5;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.ppa-img.ph{width:72%;max-width:220px;aspect-ratio:2/5;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px))}
 /* 어노테이션 열 */
 .ppa-annots{flex:1 1 0;display:flex;flex-direction:column;justify-content:space-around;gap:8px;padding-left:0;position:relative}
 /* 각 callout 행 — 점선 커넥터(::before) + 불릿(::after) + 텍스트 */

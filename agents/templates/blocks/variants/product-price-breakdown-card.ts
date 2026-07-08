@@ -73,8 +73,8 @@ export const productPriceBreakdownCard = defineBlock<Data>({
 .ppbc-top{background:var(--paper);padding:28px 24px 32px}
 
 /* 제품 이미지 */
-.ppbc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:8px;margin-bottom:24px}
-.ppbc-img.ph{width:100%;aspect-ratio:4/3;border-radius:8px;margin-bottom:24px}
+.ppbc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));margin-bottom:24px}
+.ppbc-img.ph{width:100%;aspect-ratio:4/3;border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));margin-bottom:24px}
 
 /* 제품명 + 설명 (센터 정렬) */
 .ppbc-name-wrap{text-align:center;margin-bottom:24px}
@@ -105,7 +105,7 @@ export const productPriceBreakdownCard = defineBlock<Data>({
 .ppbc-bottom{background:var(--bg);padding:28px 20px 36px;display:flex;flex-direction:column;gap:16px}
 
 /* 혜택 카드 공통 */
-.ppbc-card{position:relative;background:var(--paper);border-radius:10px;padding:36px 20px 28px;box-shadow:0 2px 12px -4px rgba(0,0,0,.10);overflow:visible}
+.ppbc-card{position:relative;background:var(--paper);border-radius:calc(var(--r-scale,1)*10px);padding:36px 20px 28px;box-shadow:0 2px 12px -4px rgba(0,0,0,.10);overflow:visible}
 
 /* pill 배지 — 카드 상단 가운데 오버행 */
 .ppbc-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-family:var(--font-body);font-weight:700;font-size:12px;padding:4px 14px;border-radius:999px;white-space:nowrap;letter-spacing:.04em}
@@ -117,8 +117,8 @@ export const productPriceBreakdownCard = defineBlock<Data>({
 .ppbc-card-desc{font-family:var(--font-body);font-size:14px;color:var(--muted);line-height:1.65}
 
 /* 카드 이미지 (선택) */
-.ppbc-card-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:6px;margin-bottom:16px}
-.ppbc-card-img.ph{width:100%;aspect-ratio:16/9;border-radius:6px;margin-bottom:16px}
+.ppbc-card-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));margin-bottom:16px}
+.ppbc-card-img.ph{width:100%;aspect-ratio:16/9;border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));margin-bottom:16px}
 
 /* 2열 그리드 래퍼 */
 .ppbc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}

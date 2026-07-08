@@ -72,7 +72,7 @@ export const comparePriceCardPair = defineBlock<Data>({
   font-size:15px;
   letter-spacing:.04em;
   padding:7px 20px;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   margin-bottom:18px;
 }
 
@@ -99,7 +99,7 @@ export const comparePriceCardPair = defineBlock<Data>({
 
 /* 공통 카드 */
 .cpcp-card{
-  border-radius:12px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));
   overflow:hidden;
   background:var(--paper);
 }

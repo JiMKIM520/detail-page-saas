@@ -53,7 +53,7 @@ export const packageNumberedOptionSelector = defineBlock<Data>({
 /* 4-col equal grid */
 .pnos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 /* Card base */
-.pnos-card{border-radius:14px;overflow:hidden;background:var(--bg);border:2px solid var(--line);display:flex;flex-direction:column;transition:box-shadow .18s}
+.pnos-card{border-radius:calc(var(--r-scale,1)*14px);overflow:hidden;background:var(--bg);border:2px solid var(--line);display:flex;flex-direction:column;transition:box-shadow .18s}
 /* Active card — filled accent */
 .pnos-card.is-active{background:var(--accent);border-color:var(--accent)}
 /* Number badge row */

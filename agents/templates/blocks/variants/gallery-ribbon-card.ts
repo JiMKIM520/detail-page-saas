@@ -42,7 +42,7 @@ export const galleryRibbonCard = defineBlock<Data>({
 .grc-sub{margin-top:10px;font-size:17px;color:color-mix(in srgb,var(--ink) 70%,transparent);line-height:1.5}
 .grc-sub .em{color:var(--accent);font-weight:700}
 /* ── 카드 ── */
-.grc-card{background:#fff;border-radius:20px;padding:0 0 36px;margin-bottom:28px;overflow:visible;position:relative;box-shadow:0 2px 16px rgba(0,0,0,.07)}
+.grc-card{background:#fff;border-radius:calc(var(--r-scale,1)*20px);padding:0 0 36px;margin-bottom:28px;overflow:visible;position:relative;box-shadow:0 2px 16px rgba(0,0,0,.07)}
 .grc-card:last-child{margin-bottom:0}
 /* ── 리본 배지 ── */
 .grc-ribbon-wrap{display:flex;justify-content:center;margin-bottom:0;position:relative;top:-1px}
@@ -51,11 +51,11 @@ export const galleryRibbonCard = defineBlock<Data>({
   padding:10px 40px 10px;
   /* 사다리꼴 리본: 양쪽이 살짝 좁아지는 리본 모양 */
   clip-path:polygon(8% 0%,92% 0%,100% 100%,0% 100%);
-  min-width:120px;text-align:center;border-radius:0 0 4px 4px}
+  min-width:120px;text-align:center;border-radius:0 0 calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*4px)}
 /* ── 카드 내부 ── */
 .grc-title{font-family:var(--font-hand);font-size:28px;color:var(--accent);margin:18px 28px 16px;line-height:1.3}
 .grc-title .em{color:var(--accent-d)}
-.grc-img{width:calc(100% - 40px);margin:0 20px;height:200px;object-fit:cover;border-radius:10px;display:block;background:rgba(0,0,0,.04)}
+.grc-img{width:calc(100% - 40px);margin:0 20px;height:200px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));display:block;background:rgba(0,0,0,.04)}
 .grc-desc{margin:20px 24px 0;font-size:15px;color:var(--ink-2);line-height:1.75;text-align:center}
 .grc-desc .em{color:var(--accent);font-weight:700}
 `,

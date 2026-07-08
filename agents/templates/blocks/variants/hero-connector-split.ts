@@ -61,7 +61,7 @@ export const heroConnectorSplit = defineBlock<Data>({
   margin-top:32px;
   width:100%;
   overflow:hidden;
-  border-radius:12px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));
   background:color-mix(in srgb,var(--accent) 12%,transparent)
 }
 .hcs-hero-img{

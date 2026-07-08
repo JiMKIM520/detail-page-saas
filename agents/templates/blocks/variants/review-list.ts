@@ -35,14 +35,14 @@ export const reviewList = defineBlock<Data>({
     '고객 리뷰 리스트. 코발트 뱃지+대제목 + 원형 아바타·별점·리뷰 텍스트 카드 리스트 + 인정 카운트 마무리. 신뢰형 사회적 증거.',
   schema,
   css: `
-.rl{background:var(--bg);padding:54px 56px 56px}
+.rl{background:var(--bg);padding:54px var(--pad-x,56px) 56px}
 .rl-hd{text-align:center;margin-bottom:28px}
 .rl-badge{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff}
 .rl-badge svg{width:30px;height:30px}
 .rl-title{font-family:var(--font-display);font-weight:800;font-size:46px;color:var(--accent);line-height:1.1}
 .rl-sub{margin-top:10px;font-size:15px;color:var(--ink-2)}
 .rl-list{display:flex;flex-direction:column;gap:14px}
-.rl-card{display:flex;align-items:center;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 24px;box-shadow:0 10px 26px -20px rgba(0,0,0,.28)}
+.rl-card{display:flex;align-items:center;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:calc(var(--r-scale,1)*18px);padding:22px 24px;box-shadow:0 10px 26px -20px rgba(0,0,0,.28)}
 .rl-av{flex:0 0 76px;width:76px;height:76px;border-radius:50%;object-fit:cover}
 .rl-body{flex:1}
 .rl-stars{display:inline-flex;gap:3px;color:var(--accent);margin-bottom:8px}

@@ -66,7 +66,7 @@ export const packageOptionGrid = defineBlock<Data>({
 .pog-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 12px 32px}
 
 /* ── 카드 ── */
-.pog-card{background:var(--paper);border-radius:10px;overflow:hidden;box-shadow:0 6px 20px -8px rgba(0,0,0,.22);display:flex;flex-direction:column}
+.pog-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*10px);overflow:hidden;box-shadow:0 6px 20px -8px rgba(0,0,0,.22);display:flex;flex-direction:column}
 
 /* 카드 이미지 영역 (상단 ~60%) */
 .pog-card-img{width:100%;aspect-ratio:4/3.2;object-fit:cover;display:block;position:relative}
@@ -74,7 +74,7 @@ export const packageOptionGrid = defineBlock<Data>({
 
 /* 옵션 번호 배지 — 이미지 좌하단에 겹침 */
 .pog-card-fig{position:relative;flex-shrink:0}
-.pog-opt-badge{position:absolute;bottom:0;left:0;background:var(--accent);color:#fff;font-family:var(--font-body);font-size:11px;font-weight:800;padding:4px 10px;border-radius:0 6px 0 0;letter-spacing:.04em;line-height:1.3}
+.pog-opt-badge{position:absolute;bottom:0;left:0;background:var(--accent);color:#fff;font-family:var(--font-body);font-size:11px;font-weight:800;padding:4px 10px;border-radius:0 calc(var(--r-scale,1)*6px) 0 0;letter-spacing:.04em;line-height:1.3}
 
 /* 카드 본문 */
 .pog-card-body{padding:12px 12px 0;flex:1;display:flex;flex-direction:column;gap:4px}

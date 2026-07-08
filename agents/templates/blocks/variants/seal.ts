@@ -18,9 +18,9 @@ export const featureSeal = defineBlock<Data>({
   describe: '강조 사진 우하단에 빨간 원형 도장 씰(품질/수제 인증 느낌). 신뢰감 부여.',
   schema,
   css: `
-.fs{position:relative;padding:24px 56px 60px;background:var(--bg);text-align:center}
+.fs{position:relative;padding:24px var(--pad-x,56px) 60px;background:var(--bg);text-align:center}
 .fs-fig{position:relative;width:480px;margin:0 auto}
-.fs-media{width:100%;height:360px;object-fit:cover;border-radius:24px;box-shadow:0 20px 40px -20px rgba(42,33,24,.4)}
+.fs-media{width:100%;height:360px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*24px));box-shadow:0 20px 40px -20px rgba(42,33,24,.4)}
 .fs-stamp{position:absolute;right:-22px;bottom:-22px;width:120px;height:120px;transform:rotate(-12deg)}
 `,
   render: (d, { esc }) => {

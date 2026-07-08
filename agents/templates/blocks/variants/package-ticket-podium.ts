@@ -98,7 +98,7 @@ export const packageTicketPodium = defineBlock<Data>({
 .ptp-ticket{
   background:#fff;
   border:2px dashed color-mix(in srgb,var(--accent) 40%,var(--line));
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   position:relative;
   overflow:visible;
 }

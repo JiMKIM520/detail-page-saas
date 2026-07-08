@@ -215,7 +215,7 @@ export const specNutritionMacroTable = defineBlock<Data>({
   width:88px;
   aspect-ratio:2/3;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   display:block;
   margin-top:4px;
 }
@@ -225,7 +225,7 @@ export const specNutritionMacroTable = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.2);
   background:rgba(255,255,255,.06);
   color:rgba(255,255,255,.3);
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   font-size:11px;
 }
 

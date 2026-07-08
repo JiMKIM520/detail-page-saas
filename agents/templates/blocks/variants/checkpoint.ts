@@ -23,18 +23,18 @@ export const checkpointRows = defineBlock<RowsData>({
   describe: '체크포인트 카드. 원형 라인 아이콘 + 키워드 강조 텍스트 5행, 점선 구분. 아래 연출 사진. 따뜻한 톤.',
   schema: rowsSchema,
   css: `
-.cpr{position:relative;padding:70px 56px 64px;background:var(--bg)}
+.cpr{position:relative;padding:70px var(--pad-x,56px) 64px;background:var(--bg)}
 .cpr-head{text-align:center}
 .cpr-h{font-size:38px}
 .cpr-pill{display:inline-block;margin-top:20px;background:var(--accent);color:#fff;font-weight:800;font-size:20px;padding:11px 34px;border-radius:999px;letter-spacing:.06em;box-shadow:0 8px 18px rgba(232,128,31,.35)}
-.cpr-card{margin-top:30px;background:var(--paper);border:1.5px solid var(--line);border-radius:24px;padding:14px 36px;box-shadow:0 18px 40px -22px rgba(42,33,24,.35)}
+.cpr-card{margin-top:30px;background:var(--paper);border:1.5px solid var(--line);border-radius:calc(var(--r-scale,1)*24px);padding:14px 36px;box-shadow:0 18px 40px -22px rgba(42,33,24,.35)}
 .cpr-row{display:flex;align-items:center;gap:22px;padding:24px 4px}
 .cpr-row + .cpr-row{border-top:2px dashed var(--line)}
 .cpr-ico{flex:0 0 60px;width:60px;height:60px;border-radius:50%;border:2.5px solid var(--accent);display:grid;place-items:center;background:#FFF8F0;color:var(--accent)}
 .cpr-ico svg{width:32px;height:32px}
 .cpr-row p{font-size:21px;font-weight:600;color:var(--ink-2)}
 .cpr-row p .em{font-weight:800}
-.cpr-photo{margin-top:30px;width:100%;height:330px;object-fit:cover;border-radius:22px;box-shadow:0 18px 38px -20px rgba(42,33,24,.4)}
+.cpr-photo{margin-top:30px;width:100%;height:330px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*22px));box-shadow:0 18px 38px -20px rgba(42,33,24,.4)}
 `,
   render: (d, { esc, richSafe, icon }) => `
 <section class="cpr">

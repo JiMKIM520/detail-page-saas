@@ -30,17 +30,17 @@ export const ingredientAccent = defineBlock<AccentData>({
   schema: accentSchema,
   css: `
 .ia{background:var(--accent);color:#fff;padding:54px 0 58px}
-.ia-hd{padding:0 56px;margin-bottom:28px}
+.ia-hd{padding:0 var(--pad-x,56px);margin-bottom:28px}
 .ia-sub{font-size:17px;font-weight:600;color:rgba(255,255,255,.85)}
 .ia-title{margin-top:8px;font-family:var(--font-display);font-weight:800;font-size:60px;letter-spacing:-.02em;line-height:1.1}
 .ia-band{width:100%;height:300px;object-fit:cover;display:block;margin-bottom:26px}
-.ia-row{display:flex;align-items:center;gap:24px;padding:16px 56px}
+.ia-row{display:flex;align-items:center;gap:24px;padding:16px var(--pad-x,56px)}
 .ia-ic{flex:0 0 104px;width:104px;height:104px;border-radius:50%;object-fit:cover}
 .ia-tx{flex:1}
 .ia-no{font-family:'Cafe24 ClassicType',serif;font-size:38px;color:rgba(255,255,255,.75);line-height:1}
 .ia-l{font-family:var(--font-display);font-weight:800;font-size:22px;margin-top:2px}
 .ia-d{margin-top:6px;font-size:14px;color:rgba(255,255,255,.82);line-height:1.6}
-.ia-closer{margin-top:34px;padding:0 56px;font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1.4}
+.ia-closer{margin-top:34px;padding:0 var(--pad-x,56px);font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1.4}
 .ia .em{color:var(--ink)}
 `,
   render: (d, { esc, richSafe }) => `
@@ -89,16 +89,16 @@ export const ingredientGrid = defineBlock<GridData>({
     '원료 소개(다크 그리드). 다크 배경 + 아이브로/대제목 + 2열 카드(라벨·설명·이미지) + 마무리. 다크 럭셔리.',
   schema: gridSchema,
   css: `
-.ig{background:var(--ink);color:#fff;padding:56px 56px 58px}
+.ig{background:var(--ink);color:#fff;padding:56px var(--pad-x,56px) 58px}
 .ig-hd{text-align:center;margin-bottom:30px}
 .ig-eye{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.2em;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:5px}
 .ig-title{margin-top:14px;font-family:var(--font-display);font-weight:800;font-size:48px;color:#fff;line-height:1.1}
 .ig-sub{margin-top:10px;font-size:15px;color:rgba(255,255,255,.82)}
 .ig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.ig-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px}
+.ig-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:calc(var(--r-scale,1)*18px);padding:22px}
 .ig-l{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--accent)}
 .ig-d{margin-top:8px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.6}
-.ig-media{width:100%;height:150px;object-fit:cover;border-radius:12px;margin-top:14px}
+.ig-media{width:100%;height:150px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));margin-top:14px}
 .ig-closer{margin-top:36px;text-align:center;font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1.4}
 .ig-closer .em{color:var(--accent)}
 `,

@@ -42,10 +42,10 @@ export const compareStackedRows = defineBlock<Data>({
 .csr-band:last-child{border-bottom:1px solid var(--line)}
 .csr-left{flex:0 0 50%;min-width:0;box-sizing:border-box;position:relative;padding:20px 10px 20px 20px;display:flex;flex-direction:column;gap:12px;border-right:1px solid var(--line)}
 .csr-right{flex:0 0 50%;min-width:0;box-sizing:border-box;position:relative;padding:20px 20px 20px 10px;display:flex;flex-direction:column;gap:12px}
-.csr-img-wrap{position:relative;width:100%;flex-shrink:0;overflow:hidden;border-radius:10px}
-.csr-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;display:block;max-width:100%}
-.csr-bl{position:absolute;bottom:10px;left:10px;display:inline-block;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.1em;color:#fff;background:rgba(0,0,0,.52);padding:4px 12px;border-radius:4px}
-.csr-al{position:absolute;top:10px;left:10px;display:inline-block;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.1em;color:#fff;background:color-mix(in srgb,var(--accent) 85%,#000);padding:4px 12px;border-radius:4px}
+.csr-img-wrap{position:relative;width:100%;flex-shrink:0;overflow:hidden;border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px))}
+.csr-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));display:block;max-width:100%}
+.csr-bl{position:absolute;bottom:10px;left:10px;display:inline-block;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.1em;color:#fff;background:rgba(0,0,0,.52);padding:4px 12px;border-radius:calc(var(--r-scale,1)*4px)}
+.csr-al{position:absolute;top:10px;left:10px;display:inline-block;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.1em;color:#fff;background:color-mix(in srgb,var(--accent) 85%,#000);padding:4px 12px;border-radius:calc(var(--r-scale,1)*4px)}
 .csr-btext{font-size:14px;color:var(--muted);line-height:1.65}
 .csr-btext .em{color:var(--accent);font-weight:700}
 .csr-atext{font-size:15px;font-weight:600;color:var(--ink);line-height:1.65}

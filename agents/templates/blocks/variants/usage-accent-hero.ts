@@ -46,7 +46,7 @@ export const usageAccentHero = defineBlock<Data>({
 .uah-hero-img{width:120px;height:120px;object-fit:contain}
 /* ── 스텝 카드 ── */
 .uah-cards{display:flex;flex-direction:column;gap:14px;padding:0 24px}
-.uah-card{background:var(--paper);border-radius:18px;display:flex;align-items:center;overflow:hidden;position:relative;min-height:130px}
+.uah-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*18px);display:flex;align-items:center;overflow:hidden;position:relative;min-height:130px}
 /* 홀수(0-indexed 짝수): 텍스트 왼쪽 / 이미지 오른쪽 */
 .uah-card .uah-body{flex:1;padding:24px 20px 24px 28px}
 .uah-card .uah-thumb{flex:0 0 150px;width:150px;height:130px;object-fit:cover}

@@ -60,12 +60,12 @@ export const packageNumberedBandRows = defineBlock<Data>({
 .pnbr-list{display:flex;flex-direction:column;gap:10px}
 
 /* 단일 행 밴드 */
-.pnbr-row{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:10px;overflow:hidden}
+.pnbr-row{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:calc(var(--r-scale,1)*10px);overflow:hidden}
 .pnbr-row.pnbr-hl{background:rgba(255,255,255,.08);border-color:rgba(220,40,40,.55)}
 
 /* 상단 뱃지 줄 */
 .pnbr-badge-line{display:flex;align-items:center;gap:10px;padding:10px 18px 8px}
-.pnbr-badge{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:22px;padding:0 8px;border-radius:4px;font-size:12px;font-weight:800;letter-spacing:.04em;font-family:var(--font-display)}
+.pnbr-badge{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:22px;padding:0 8px;border-radius:calc(var(--r-scale,1)*4px);font-size:12px;font-weight:800;letter-spacing:.04em;font-family:var(--font-display)}
 .pnbr-badge.pnbr-badge-default{background:#fff;color:var(--ink)}
 .pnbr-badge.pnbr-badge-accent{background:#DC2828;color:#fff}
 .pnbr-badge-label{font-size:13px;color:rgba(255,255,255,.55)}

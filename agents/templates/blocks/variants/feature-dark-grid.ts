@@ -78,7 +78,7 @@ export const featureDarkGrid = defineBlock<Data>({
   display:inline-block;
   background:var(--ink);
   color:#fff;
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:14px 36px 16px;
 }
 .fdg-price{

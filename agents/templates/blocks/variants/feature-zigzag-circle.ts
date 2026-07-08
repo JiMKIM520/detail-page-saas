@@ -37,7 +37,7 @@ export const featureZigzagCircle = defineBlock<Data>({
 .fzc-title{margin-top:10px;font-family:var(--font-display);font-weight:800;font-size:62px;color:var(--accent);letter-spacing:-.02em;line-height:1.1}
 .fzc-title .em{color:var(--ink)}
 .fzc-rows{display:flex;flex-direction:column;gap:0}
-.fzc-row{background:var(--paper);border-radius:28px;padding:28px 24px;display:flex;align-items:center;gap:22px}
+.fzc-row{background:var(--paper);border-radius:calc(var(--r-scale,1)*28px);padding:28px 24px;display:flex;align-items:center;gap:22px}
 .fzc-row+.fzc-row{margin-top:0;border-top:none}
 .fzc-sep{height:1px;margin:0 24px;border:none;border-top:2px dashed color-mix(in srgb,var(--accent) 28%,transparent)}
 .fzc-row.reverse{flex-direction:row-reverse}

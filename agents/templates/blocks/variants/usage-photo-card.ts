@@ -54,7 +54,7 @@ export const usagePhotoCard = defineBlock<Data>({
 .upc-banner-txt{font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink);line-height:1.4}
 .upc-banner-txt .em{color:var(--accent)}
 /* 카드 패널 영역 */
-.upc-panel{margin:28px 24px 0;background:rgba(255,255,255,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:20px;border:1px solid rgba(255,255,255,.85);overflow:hidden}
+.upc-panel{margin:28px 24px 0;background:rgba(255,255,255,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:calc(var(--r-scale,1)*20px);border:1px solid rgba(255,255,255,.85);overflow:hidden}
 /* 스텝 행 */
 .upc-row{display:flex;align-items:center;gap:20px;padding:22px 28px}
 .upc-row+.upc-row{border-top:1px solid rgba(0,0,0,.07)}

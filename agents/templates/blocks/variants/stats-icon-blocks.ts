@@ -41,7 +41,7 @@ export const statsIconBlocks = defineBlock<Data>({
 .sib-list{display:flex;flex-direction:column;gap:16px;padding:0 16px 52px}
 
 /* 개별 블록 */
-.sib-block{background:var(--paper);border-radius:12px;overflow:hidden}
+.sib-block{background:var(--paper);border-radius:calc(var(--r-scale,1)*12px);overflow:hidden}
 
 /* 이미지/번호 영역 */
 .sib-top{position:relative;width:100%}

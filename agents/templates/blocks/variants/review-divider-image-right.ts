@@ -72,8 +72,8 @@ export const reviewDividerImageRight = defineBlock<Data>({
 .rdir-attr{font-family:var(--font-body);font-size:13px;color:var(--muted);line-height:1.5;margin-top:14px}
 .rdir-attr .em{color:var(--accent-d)}
 /* 우측 이미지 */
-.rdir-img{width:220px;height:180px;object-fit:cover;display:block;border-radius:4px;background:var(--paper)}
-.rdir-img.ph{width:220px;height:180px;border:2px dashed var(--line);background:var(--paper);border-radius:4px}
+.rdir-img{width:220px;height:180px;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));background:var(--paper)}
+.rdir-img.ph{width:220px;height:180px;border:2px dashed var(--line);background:var(--paper);border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px))}
 `,
   render: (d, { esc, richSafe }) => {
     const units = d.items

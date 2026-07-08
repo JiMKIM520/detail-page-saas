@@ -36,7 +36,7 @@ export const detailHeroInfoTable = defineBlock<Data>({
   css: `
 /* ── 히어로 존 ── */
 .dhit{background:var(--bg);color:var(--ink)}
-.dhit-hero{position:relative;width:100%;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:72px 56px 96px}
+.dhit-hero{position:relative;width:100%;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:72px var(--pad-x,56px) 96px}
 .dhit-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .dhit-hero-bg.ph{position:absolute;inset:0;width:100%;height:100%;font-size:0;color:transparent;border:none;background:rgba(0,0,0,.18)}
 .dhit-overlay{position:absolute;inset:0;background:rgba(0,0,0,.28)}

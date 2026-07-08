@@ -88,7 +88,7 @@ export const compareProductSpecMatrix = defineBlock<Data>({
 /* 매트릭스 래퍼 */
 .cpsm-table{
   width:100%;
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   overflow:hidden;
   border:1.5px solid var(--line);
   background:var(--paper);
@@ -133,12 +133,12 @@ export const compareProductSpecMatrix = defineBlock<Data>({
   height:96px;
   object-fit:contain;
   display:block;
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
 }
 .cpsm-prod-img.ph{
   width:72px;
   height:96px;
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
   border:1.5px dashed var(--line);
   background:rgba(0,0,0,.04);
   color:var(--muted);

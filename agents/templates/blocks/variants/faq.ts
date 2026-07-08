@@ -17,13 +17,13 @@ export const faqChat = defineBlock<Data>({
   describe: '채팅 버블형 FAQ. "FAQ" 헤더 + 질문(accent 버블)/답변(화이트 버블) 쌍 반복.',
   schema,
   css: `
-.fq{position:relative;padding:60px 56px 64px;background:var(--bg)}
+.fq{position:relative;padding:60px var(--pad-x,56px) 64px;background:var(--bg)}
 .fq-head{margin-bottom:30px}
 .fq-title{font-size:64px;color:var(--accent)}
 .fq-sub{margin-top:6px;font-size:20px;font-weight:700;color:var(--ink-2)}
 .fq-item + .fq-item{margin-top:22px}
-.fq-q{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:19px;border-radius:18px 18px 18px 4px;padding:16px 26px}
-.fq-a{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:4px 18px 18px 18px;padding:22px 26px;font-size:16.5px;color:var(--ink-2);line-height:1.7}
+.fq-q{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:19px;border-radius:calc(var(--r-scale,1)*18px) calc(var(--r-scale,1)*18px) calc(var(--r-scale,1)*18px) calc(var(--r-scale,1)*4px);padding:16px 26px}
+.fq-a{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*18px) calc(var(--r-scale,1)*18px) calc(var(--r-scale,1)*18px);padding:22px 26px;font-size:16.5px;color:var(--ink-2);line-height:1.7}
 .fq-a .em{color:var(--accent);font-weight:700}
 `,
   render: (d, { esc, richSafe }) => `

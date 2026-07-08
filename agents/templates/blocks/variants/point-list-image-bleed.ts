@@ -92,7 +92,7 @@ export const pointListImageBleed = defineBlock<Data>({
 .plib-pill::before,.plib-pill::after{
   content:'';position:absolute;inset:0;
   border:1.5px solid var(--accent-d);
-  border-radius:2px
+  border-radius:calc(var(--r-scale,1)*2px)
 }
 .plib-pill::before{
   clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 50%,100% 100%,10px 100%,0% 50%);

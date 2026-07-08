@@ -52,7 +52,7 @@ export const reviewIconAlternatingRows = defineBlock<Data>({
 /* 카드 리스트 */
 .riar-list{display:flex;flex-direction:column;gap:16px}
 /* 단일 카드 행 */
-.riar-row{position:relative;background:#fff;border-radius:20px;padding:20px 20px 20px 20px;box-shadow:0 4px 18px -6px rgba(0,0,0,.14);display:flex;align-items:center;gap:0;min-height:92px}
+.riar-row{position:relative;background:#fff;border-radius:calc(var(--r-scale,1)*20px);padding:20px 20px 20px 20px;box-shadow:0 4px 18px -6px rgba(0,0,0,.14);display:flex;align-items:center;gap:0;min-height:92px}
 /* 아이콘 영역 — 카드 밖 약간 돌출(홀수=좌, 짝수=우) */
 .riar-icon-wrap{flex-shrink:0;width:80px;height:80px;display:flex;align-items:center;justify-content:center}
 .riar-icon-wrap.left{margin-left:-12px;margin-right:8px}

@@ -28,7 +28,7 @@ export const faqPlain = defineBlock<Data>({
     '극미니멀 플랫 텍스트 FAQ. 중앙 정렬 "자주 묻는 질문" + 대형 accent "FAQ." 헤더 → Q(accent 라벨+굵은 질문) / A(잉크 라벨+본문) 행을 얇은 수평선만으로 구분. 카드·버블·테두리 없음.',
   schema,
   css: `
-.fpn{background:var(--bg);color:var(--ink);padding:70px 56px 80px}
+.fpn{background:var(--bg);color:var(--ink);padding:70px var(--pad-x,56px) 80px}
 
 /* ─ 헤더 ─ */
 .fpn-hd{text-align:center;margin-bottom:52px}

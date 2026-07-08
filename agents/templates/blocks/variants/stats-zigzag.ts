@@ -35,7 +35,7 @@ export const statsZigzag = defineBlock<Data>({
 .sz-row{display:flex;align-items:center;gap:24px}
 .sz-row:nth-child(even){flex-direction:row-reverse}
 .sz-row:nth-child(even) .sz-body{text-align:right}
-.sz-img{flex:0 0 150px;width:150px;height:150px;object-fit:cover;border-radius:14px}
+.sz-img{flex:0 0 150px;width:150px;height:150px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px))}
 .sz-body{flex:1;min-width:0}
 .sz-label{font-family:var(--font-display);font-weight:800;font-size:15px;color:var(--accent);margin-bottom:8px;letter-spacing:.02em}
 .sz-value{font-family:var(--font-display);font-weight:800;font-size:34px;color:var(--ink);line-height:1.12}

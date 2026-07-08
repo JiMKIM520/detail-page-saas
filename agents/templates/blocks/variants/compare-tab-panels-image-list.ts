@@ -66,7 +66,7 @@ export const compareTabPanelsImageList = defineBlock<Data>({
   background:var(--accent);
   color:#fff;
   padding:0 6px 2px;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   display:inline;
 }
 
@@ -109,7 +109,7 @@ export const compareTabPanelsImageList = defineBlock<Data>({
 }
 .ctpil-col{
   background:var(--paper);
-  border-radius:14px;
+  border-radius:calc(var(--r-scale,1)*14px);
   overflow:hidden;
   box-shadow:0 8px 24px -12px rgba(0,0,0,.18);
 }
@@ -141,7 +141,7 @@ export const compareTabPanelsImageList = defineBlock<Data>({
   aspect-ratio:1/1;
   object-fit:cover;
   display:block;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
 }
 .ctpil-img.ph{
   width:calc(100% - 20px);
@@ -151,7 +151,7 @@ export const compareTabPanelsImageList = defineBlock<Data>({
   background:rgba(0,0,0,.03);
   color:var(--muted);
   font-size:13px;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
 }
 
 /* 항목 목록 */

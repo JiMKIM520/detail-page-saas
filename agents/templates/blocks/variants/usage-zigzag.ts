@@ -37,16 +37,16 @@ export const usageZigzag = defineBlock<Data>({
   schema,
   css: `
 .uzz{background:var(--bg);color:var(--ink);padding:54px 0 60px}
-.uzz-hd{text-align:left;padding:0 56px 10px}
+.uzz-hd{text-align:left;padding:0 var(--pad-x,56px) 10px}
 .uzz-title{font-family:var(--font-display);font-weight:800;font-size:70px;color:var(--accent);letter-spacing:-.02em;line-height:1.02}
 .uzz-sub{margin-top:14px;font-size:17px;font-weight:500;color:var(--ink-2)}
 .uzz-steps{margin-top:32px}
-.uzz-step{display:flex;align-items:center;gap:0;padding:32px 56px;position:relative}
+.uzz-step{display:flex;align-items:center;gap:0;padding:32px var(--pad-x,56px);position:relative}
 .uzz-step.rev{flex-direction:row-reverse}
-.uzz-step--noimg{padding:22px 56px}
+.uzz-step--noimg{padding:22px var(--pad-x,56px)}
 .uzz-step--noimg .uzz-body{padding:0}
 .uzz-blob-wrap{flex:0 0 48%;width:48%}
-.uzz-blob{width:100%;aspect-ratio:1/0.78;border-radius:42% 58% 54% 46% / 44% 42% 58% 56%;overflow:hidden;background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.uzz-blob{width:100%;aspect-ratio:1/0.78;border-radius:var(--shape-photo, 42% 58% 54% 46% / 44% 42% 58% 56%);overflow:hidden;background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .uzz-blob img,.uzz-blob .ph{width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .uzz-body{flex:1;padding:0 36px}
 .uzz-step.rev .uzz-body{padding:0 36px 0 0}
@@ -55,9 +55,9 @@ export const usageZigzag = defineBlock<Data>({
 .uzz-div{flex:1;height:2px;background:var(--accent);opacity:.35}
 .uzz-text{font-size:16px;color:var(--ink-2);line-height:1.72}
 .uzz-text .em{color:var(--accent);font-weight:700}
-.uzz-closer{margin-top:50px;text-align:center;padding:0 56px;font-family:var(--font-display);font-weight:800;font-size:36px;color:var(--ink);line-height:1.35}
+.uzz-closer{margin-top:50px;text-align:center;padding:0 var(--pad-x,56px);font-family:var(--font-display);font-weight:800;font-size:36px;color:var(--ink);line-height:1.35}
 .uzz-closer .em{color:var(--accent)}
-.uzz-closer-sub{margin-top:8px;text-align:center;padding:0 56px;font-family:var(--font-display);font-weight:700;font-size:28px;color:var(--accent);line-height:1.3}
+.uzz-closer-sub{margin-top:8px;text-align:center;padding:0 var(--pad-x,56px);font-family:var(--font-display);font-weight:700;font-size:28px;color:var(--accent);line-height:1.3}
 .uzz-closer-sub .em{color:var(--ink)}
 `,
   render: (d, { esc, richSafe }) => {

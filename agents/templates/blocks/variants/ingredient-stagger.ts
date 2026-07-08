@@ -49,7 +49,7 @@ export const ingredientStagger = defineBlock<Data>({
 .istag-slot--even .istag-card{margin-left:0;width:80%}
 .istag-slot--even .istag-no{left:0;right:auto}
 /* 카드 */
-.istag-card{background:var(--paper);border-radius:16px;padding:28px 28px 28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.istag-card{background:var(--paper);border-radius:calc(var(--r-scale,1)*16px);padding:28px 28px 28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
 .istag-tx{flex:1;min-width:0}
 .istag-label{font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:6px}
 .istag-label .em{color:var(--accent)}

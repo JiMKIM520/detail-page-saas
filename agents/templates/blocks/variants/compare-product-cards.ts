@@ -99,7 +99,7 @@ export const compareProductCards = defineBlock<Data>({
 
 /* 공통 카드 */
 .cpc-card{
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   overflow:hidden;
   display:flex;
   flex-direction:column;
@@ -125,7 +125,7 @@ export const compareProductCards = defineBlock<Data>({
   letter-spacing:-.01em;
   margin-bottom:16px;
   padding:5px 12px 5px 0;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
 }
 .cpc-card--rival .cpc-label{
   color:#8A8A93;
@@ -137,7 +137,7 @@ export const compareProductCards = defineBlock<Data>({
   color:#fff;
   background:var(--accent);
   padding:5px 14px;
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
 }
 
 /* 설명 텍스트 줄 */
@@ -163,14 +163,14 @@ export const compareProductCards = defineBlock<Data>({
   width:100%;
   aspect-ratio:1/1;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   margin-bottom:18px;
   display:block;
 }
 .cpc-media.ph{
   width:100%;
   aspect-ratio:1/1;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   margin-bottom:18px;
 }
 .cpc-card--rival .cpc-media.ph{

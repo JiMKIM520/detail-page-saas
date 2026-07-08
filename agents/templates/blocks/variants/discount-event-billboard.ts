@@ -147,7 +147,7 @@ export const discountEventBillboard = defineBlock<Data>({
 .deb-prop1.ph,.deb-prop2.ph{
   background:rgba(255,255,255,.06);
   border:2px dashed rgba(255,255,255,.2);
-  border-radius:16px
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))
 }
 
 /* ── 혜택 pill 영역 ── */
@@ -163,7 +163,7 @@ export const discountEventBillboard = defineBlock<Data>({
   gap:16px;
   background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.13);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:20px 26px
 }
 .deb-pill-dot{

@@ -33,13 +33,13 @@ export const packageList = defineBlock<Data>({
     '상품 구성/패키지. 대제목 + 이미지·패키지명·설명·가격(정가 취소선+최종가) 행 리스트. 가격/구성은 brief 근거만(지어내지 말 것).',
   schema,
   css: `
-.pk{background:var(--bg);padding:54px 56px 56px}
+.pk{background:var(--bg);padding:54px var(--pad-x,56px) 56px}
 .pk-hd{margin-bottom:30px}
 .pk-title{font-family:var(--font-display);font-weight:800;font-size:56px;color:var(--accent);letter-spacing:-.01em;line-height:1.06}
 .pk-sub{margin-top:12px;font-size:16px;font-weight:600;color:var(--ink-2)}
 .pk-row{display:flex;gap:26px;align-items:center;padding:22px 0}
 .pk-row + .pk-row{border-top:1px solid var(--line)}
-.pk-media{flex:0 0 220px;width:220px;height:220px;object-fit:cover;border-radius:14px}
+.pk-media{flex:0 0 220px;width:220px;height:220px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px))}
 .pk-body{flex:1}
 .pk-best{display:inline-block;margin-bottom:8px;font-size:12px;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--accent);border-radius:999px;padding:4px 14px}
 .pk-name{font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--accent);line-height:1.2}

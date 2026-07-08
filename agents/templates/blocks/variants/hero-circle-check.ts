@@ -74,7 +74,7 @@ export const heroCircleCheck = defineBlock<Data>({
 /* 말풍선 */
 .hcc-bubble{
   background:#fff;
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   padding:14px 36px;
   font-family:var(--font-display);
   font-weight:800;
@@ -127,7 +127,7 @@ export const heroCircleCheck = defineBlock<Data>({
   align-items:center;
   gap:18px;
   background:#fff;
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   padding:18px 24px;
   margin-bottom:14px;
   box-shadow:0 2px 12px rgba(0,0,0,.07)

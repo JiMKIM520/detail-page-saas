@@ -72,13 +72,13 @@ export const detailImageCaptionStack = defineBlock<Data>({
 .dics-item:first-of-type{margin-top:40px}
 
 /* 풀폭 이미지 */
-.dics-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:4px;margin-bottom:28px}
+.dics-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));margin-bottom:28px}
 .dics-img.ph{
   width:100%;aspect-ratio:4/3;
   border:2px dashed rgba(255,255,255,.2);
   background:rgba(255,255,255,.06);
   color:rgba(255,255,255,.4);
-  border-radius:4px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));
   margin-bottom:28px;
 }
 

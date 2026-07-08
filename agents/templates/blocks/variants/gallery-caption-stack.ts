@@ -43,7 +43,7 @@ export const galleryCaptionStack = defineBlock<Data>({
 /* 풀폭 이미지 */
 .gcs-img{width:100%;height:480px;object-fit:cover;display:block}
 /* 이미지 아래 캡션 블록 (중앙 정렬) */
-.gcs-body{text-align:center;padding:28px 56px 0}
+.gcs-body{text-align:center;padding:28px var(--pad-x,56px) 0}
 .gcs-item-title{font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--ink);letter-spacing:-.01em;line-height:1.35}
 .gcs-item-title .em{color:var(--accent)}
 .gcs-caption{margin-top:10px;font-size:15px;color:var(--ink-2);line-height:1.75}

@@ -84,7 +84,7 @@ export const recommendPersonaGrid = defineBlock<Data>({
 /* 개별 카드 */
 .rpg-card{
   background:var(--paper);
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   padding:24px 12px 20px;
   display:flex;
   flex-direction:column;

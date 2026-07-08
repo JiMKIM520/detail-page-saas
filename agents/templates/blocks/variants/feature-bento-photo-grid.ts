@@ -88,7 +88,7 @@ export const featureBentoPhotoGrid = defineBlock<Data>({
   font-size:clamp(20px,4.2vw,28px);
   letter-spacing:-.02em;
   padding:10px 22px 10px 20px;
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
 }
 
 /* ── 벤토 그리드 ── */
@@ -102,7 +102,7 @@ export const featureBentoPhotoGrid = defineBlock<Data>({
 /* 카드 공통 */
 .fbpg-card{
   position:relative;
-  border-radius:14px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));
   overflow:hidden;
   background:var(--ink);
   min-height:180px;

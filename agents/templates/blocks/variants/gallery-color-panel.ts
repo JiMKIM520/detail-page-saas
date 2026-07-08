@@ -44,7 +44,7 @@ export const galleryColorPanel = defineBlock<Data>({
 .gcp-sub{margin-top:14px;font-size:18px;font-weight:500;color:rgba(255,255,255,.88);line-height:1.6}
 .gcp-sub .em{font-weight:800;color:#fff}
 /* ── 정사각 이미지 ── */
-.gcp-sq{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;margin-top:36px;border-radius:4px}
+.gcp-sq{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;margin-top:36px;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px))}
 `,
   render: (d, { esc, richSafe }) => `
 <section class="gcp">

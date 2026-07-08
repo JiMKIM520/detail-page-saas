@@ -66,7 +66,7 @@ export const storyCenteredSecondaryImage = defineBlock<Data>({
 
 /* 하단 보조 이미지 */
 .scsi-img-wrap{position:relative;z-index:1;width:100%;padding:0 36px 52px}
-.scsi-secondary{width:100%;height:280px;object-fit:cover;border-radius:4px;display:block}
+.scsi-secondary{width:100%;height:280px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px));display:block}
 `,
   render: (d, { esc, richSafe }) => `
 <section class="scsi">

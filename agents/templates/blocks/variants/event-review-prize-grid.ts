@@ -73,7 +73,7 @@ export const eventReviewPrizeGrid = defineBlock<Data>({
 .erpg-prizes-section{background:var(--paper);padding:36px 28px 32px}
 .erpg-section-label{font-family:var(--font-display);font-weight:800;font-size:14px;letter-spacing:.14em;color:var(--accent);margin-bottom:18px;text-align:center;opacity:.9}
 .erpg-prize-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.erpg-prize-card{background:var(--bg);border:1.5px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding-bottom:16px}
+.erpg-prize-card{background:var(--bg);border:1.5px solid var(--line);border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding-bottom:16px}
 .erpg-prize-img{width:100%;height:120px;object-fit:cover}
 .erpg-prize-img.ph{height:120px;border-radius:0}
 .erpg-prize-name{font-size:13px;font-weight:700;color:var(--ink);line-height:1.35;margin-top:12px;padding:0 10px}
@@ -95,7 +95,7 @@ export const eventReviewPrizeGrid = defineBlock<Data>({
 .erpg-notes-label{font-size:14px;font-weight:800;color:rgba(255,255,255,.55);letter-spacing:.06em;margin-bottom:12px}
 .erpg-note{display:flex;gap:9px;font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:6px}
 .erpg-note::before{content:'·';flex-shrink:0;color:var(--accent)}
-.erpg-footer{margin-top:18px;padding:12px 18px;background:color-mix(in srgb,var(--accent) 18%,transparent);border:1.5px solid var(--accent);border-radius:10px;font-size:14px;font-weight:700;color:var(--accent);text-align:center;letter-spacing:.02em}
+.erpg-footer{margin-top:18px;padding:12px 18px;background:color-mix(in srgb,var(--accent) 18%,transparent);border:1.5px solid var(--accent);border-radius:calc(var(--r-scale,1)*10px);font-size:14px;font-weight:700;color:var(--accent);text-align:center;letter-spacing:.02em}
 `,
   render: (d, { esc, richSafe }) => `
 <section class="erpg">

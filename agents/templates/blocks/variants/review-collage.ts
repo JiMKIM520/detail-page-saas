@@ -43,8 +43,8 @@ export const reviewCollage = defineBlock<Data>({
 .rco-sub{margin-top:8px;font-size:15px;color:var(--ink-2);line-height:1.6}
 .rco-stage{position:relative;width:100%;margin-top:32px;padding-bottom:480px}
 .rco-product{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:440px;height:420px;object-fit:contain;z-index:0;opacity:.92}
-.rco-product.ph{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:440px;height:420px;z-index:0;border-radius:16px}
-.rco-bubble{position:absolute;background:var(--paper);border-radius:18px;padding:18px 20px 20px;box-shadow:0 8px 28px -6px rgba(0,0,0,.18);z-index:2;max-width:220px}
+.rco-product.ph{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:440px;height:420px;z-index:0;border-radius:calc(var(--r-scale,1)*16px)}
+.rco-bubble{position:absolute;background:var(--paper);border-radius:calc(var(--r-scale,1)*18px);padding:18px 20px 20px;box-shadow:0 8px 28px -6px rgba(0,0,0,.18);z-index:2;max-width:220px}
 .rco-bubble::after{content:"";position:absolute;bottom:-13px;left:22px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid var(--paper);filter:drop-shadow(0 4px 4px rgba(0,0,0,.08))}
 .rco-btext{font-size:13px;font-weight:600;color:var(--ink);line-height:1.65}
 .rco-btext .em{color:var(--accent)}

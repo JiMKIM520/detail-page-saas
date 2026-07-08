@@ -179,7 +179,7 @@ export const csAuthorizedRetailerBadge = defineBlock<Data>({
 .carb-warning{
   background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.12);
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   padding:22px 24px;
   margin-bottom:20px;
   text-align:center;

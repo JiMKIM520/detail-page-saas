@@ -83,7 +83,7 @@ export const heroCheckRows = defineBlock<Data>({
   gap:20px;
   background:rgba(255,255,255,.13);
   border:1px solid rgba(255,255,255,.22);
-  border-radius:14px;
+  border-radius:calc(var(--r-scale,1)*14px);
   padding:22px 28px;
   margin-bottom:12px
 }
@@ -92,7 +92,7 @@ export const heroCheckRows = defineBlock<Data>({
 /* 체크박스 아이콘 */
 .hcr-chk{
   flex:0 0 36px;width:36px;height:36px;
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   background:var(--accent);
   display:flex;align-items:center;justify-content:center;
   color:#fff;
@@ -124,7 +124,7 @@ export const heroCheckRows = defineBlock<Data>({
   height:480px;
   object-fit:cover;
   display:block;
-  border-radius:18px 18px 0 0
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*18px) calc(var(--r-scale,1)*18px) 0 0)
 }
 `,
   render: (d, { esc, richSafe }) => `

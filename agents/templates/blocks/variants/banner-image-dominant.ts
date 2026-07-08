@@ -125,7 +125,7 @@ export const bannerImageDominant = defineBlock<Data>({
   z-index:3;
   background:#fff;
   border:2px dashed rgba(0,0,0,.13);
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   padding:10px 16px 12px;
   min-width:100px;
   text-align:center;

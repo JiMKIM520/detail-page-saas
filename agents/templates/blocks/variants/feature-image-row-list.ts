@@ -57,8 +57,8 @@ export const featureImageRowList = defineBlock<Data>({
 .firl-list{padding:0 20px}
 .firl-row{display:grid;grid-template-columns:88px 1fr;gap:16px;align-items:center;padding:20px 0}
 .firl-row + .firl-row{border-top:1px solid var(--line)}
-.firl-thumb{width:88px;height:88px;object-fit:cover;border-radius:8px;flex-shrink:0;display:block}
-.firl-thumb.ph{width:88px;height:88px;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font-size:12px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.firl-thumb{width:88px;height:88px;object-fit:cover;border-radius:calc(var(--r-scale,1)*8px);flex-shrink:0;display:block}
+.firl-thumb.ph{width:88px;height:88px;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font-size:12px;border-radius:calc(var(--r-scale,1)*8px);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .firl-text{}
 .firl-heading{font-family:var(--font-display);font-weight:800;font-size:clamp(16px,3.6vw,20px);line-height:1.4;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em}
 .firl-heading .em{color:var(--accent-d)}

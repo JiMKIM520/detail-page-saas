@@ -77,7 +77,7 @@ export const storyBrand = defineBlock<Data>({
 .sb-p{font-family:var(--font-body);font-size:17px;font-weight:400;color:var(--ink-2);line-height:1.78;letter-spacing:-.015em}
 
 /* 하단 장식 라인 */
-.sb-foot{margin-top:28px;height:2px;width:48px;background:var(--accent);border-radius:2px}
+.sb-foot{margin-top:28px;height:2px;width:48px;background:var(--accent);border-radius:calc(var(--r-scale,1)*2px)}
 `,
   render: (d, { esc }) => {
     const paragraphsHtml = d.paragraphs

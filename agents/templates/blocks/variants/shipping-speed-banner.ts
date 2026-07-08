@@ -44,7 +44,7 @@ export const shippingSpeedBanner = defineBlock<Data>({
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:52px 56px 52px 64px;
+  padding:52px var(--pad-x,56px) 52px 64px;
   gap:24px;
 }
 
@@ -121,7 +121,7 @@ export const shippingSpeedBanner = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.25);
   background:rgba(255,255,255,.08);
   color:rgba(255,255,255,.45);
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
 }
 `,
   render: (d, { esc, richSafe }) => {

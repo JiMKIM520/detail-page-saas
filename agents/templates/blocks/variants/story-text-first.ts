@@ -55,7 +55,7 @@ export const storyTextFirst = defineBlock<Data>({
 .stf-title .em{color:var(--accent)}
 
 /* 수직 강조선 구분 */
-.stf-divider{display:block;width:3px;height:56px;background:var(--accent);margin-bottom:28px;border-radius:2px}
+.stf-divider{display:block;width:3px;height:56px;background:var(--accent);margin-bottom:28px;border-radius:calc(var(--r-scale,1)*2px)}
 
 /* 본문 문단 */
 .stf-copy{display:flex;flex-direction:column;gap:20px;max-width:520px}

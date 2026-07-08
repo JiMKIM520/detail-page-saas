@@ -101,7 +101,7 @@ export const heroPhotoDualOffset = defineBlock<Data>({
   width:4px;
   height:22px;
   background:var(--accent);
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
   flex-shrink:0
 }
 .hpdo-point-label{

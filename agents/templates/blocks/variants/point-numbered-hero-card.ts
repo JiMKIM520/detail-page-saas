@@ -43,7 +43,7 @@ export const pointNumberedHeroCard = defineBlock<Data>({
 /* point-numbered-hero-card — 접두사 pnhc- */
 .pnhc{background:var(--bg);padding:40px 32px 48px;display:flex;flex-direction:column;gap:28px;word-break:keep-all;overflow-wrap:break-word}
 /* 카드 래퍼 */
-.pnhc-card{background:var(--ink);border-radius:20px;overflow:hidden}
+.pnhc-card{background:var(--ink);border-radius:calc(var(--r-scale,1)*20px);overflow:hidden}
 /* 헤더 존: 번호 뱃지 + 헤드라인 — 이미지 위 별도 구역 */
 .pnhc-hd{padding:28px 28px 20px;display:flex;flex-direction:column;gap:12px}
 /* 번호 pill 뱃지 */
@@ -53,8 +53,8 @@ export const pointNumberedHeroCard = defineBlock<Data>({
 .pnhc-heading .em{color:var(--accent)}
 /* contained 이미지 존: 카드 내 패딩으로 둘러싸임 */
 .pnhc-img-wrap{padding:0 24px 24px}
-.pnhc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:12px}
-.pnhc-img.ph{width:100%;aspect-ratio:4/3;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:rgba(255,255,255,.38);border-radius:12px}
+.pnhc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px))}
+.pnhc-img.ph{width:100%;aspect-ratio:4/3;border:2px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:rgba(255,255,255,.38);border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px))}
 /* 하단 캡션 스트립 — 별도 배경으로 분리 */
 .pnhc-strip{background:rgba(255,255,255,.08);border-top:1px solid rgba(255,255,255,.10);padding:18px 28px 22px;text-align:center}
 .pnhc-caption{font-family:var(--font-body),'Pretendard',sans-serif;font-size:15px;line-height:1.65;color:rgba(255,255,255,.72)}

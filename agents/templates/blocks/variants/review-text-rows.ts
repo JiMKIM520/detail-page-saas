@@ -59,7 +59,7 @@ export const reviewTextRows = defineBlock<Data>({
   object-fit:cover;
   display:block;
   margin:0 auto;
-  border-radius:6px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px));
 }
 .rtr-hd{
   position:relative;
@@ -91,7 +91,7 @@ export const reviewTextRows = defineBlock<Data>({
 }
 .rtr-row{
   background:rgba(255,255,255,.07);
-  border-radius:14px;
+  border-radius:calc(var(--r-scale,1)*14px);
   padding:18px 28px;
   text-align:center;
 }

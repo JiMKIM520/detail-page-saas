@@ -72,7 +72,7 @@ export const baClinicalBarChart = defineBlock<Data>({
 .bcbc-stat-suffix{font-family:var(--font-body);font-size:clamp(14px,2.8vw,18px);font-weight:500;color:rgba(255,255,255,.72);margin-left:2px}
 
 /* 차트 카드 */
-.bcbc-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:20px 20px 16px}
+.bcbc-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:calc(var(--r-scale,1)*12px);padding:20px 20px 16px}
 
 /* 바 행 */
 .bcbc-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}

@@ -38,7 +38,7 @@ export const statsCircleStagger = defineBlock<Data>({
 .scs-head{font-family:var(--font-display);font-weight:800;font-size:68px;letter-spacing:-.02em;line-height:1.08;color:#fff}
 .scs-head .em{color:var(--accent)}
 .scs-cards{display:flex;flex-direction:column;gap:0;padding:0 0 0 0}
-.scs-card{position:relative;background:var(--paper);border-radius:24px;margin:0 24px 18px;padding:26px 28px 26px 150px;min-height:130px;display:flex;flex-direction:column;justify-content:center;overflow:visible}
+.scs-card{position:relative;background:var(--paper);border-radius:calc(var(--r-scale,1)*24px);margin:0 24px 18px;padding:26px 28px 26px 150px;min-height:130px;display:flex;flex-direction:column;justify-content:center;overflow:visible}
 .scs-card:nth-child(even){padding:26px 150px 26px 28px;text-align:right;margin-left:24px;margin-right:24px}
 .scs-circle{position:absolute;top:50%;transform:translateY(-50%);left:-36px;width:130px;height:130px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 4px 18px rgba(0,0,0,.22)}
 .scs-card:nth-child(even) .scs-circle{left:auto;right:-36px}

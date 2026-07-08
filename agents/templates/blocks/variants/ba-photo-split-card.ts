@@ -73,7 +73,7 @@ export const baPhotoSplitCard = defineBlock<Data>({
 .bpsc-badge{
   display:inline-block;
   border:1.5px solid var(--ink);
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
   padding:7px 20px;
   font-family:var(--font-body);
   font-size:14px;
@@ -86,7 +86,7 @@ export const baPhotoSplitCard = defineBlock<Data>({
 /* 흰 라운드 카드 */
 .bpsc-card{
   background:var(--paper);
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   padding:28px 24px 0;
   box-shadow:0 8px 32px -10px rgba(0,0,0,.12);
   overflow:hidden;
@@ -126,7 +126,7 @@ export const baPhotoSplitCard = defineBlock<Data>({
 .bpsc-col{
   display:flex;
   flex-direction:column;
-  border-radius:10px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*10px));
   overflow:hidden;
 }
 

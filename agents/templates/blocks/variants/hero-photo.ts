@@ -49,7 +49,7 @@ export const heroPhoto = defineBlock<Data>({
 /* 사진 위 텍스트 블록 — 하단 앵커 */
 .hp2-photo-copy{
   position:absolute;bottom:0;left:0;right:0;
-  padding:0 56px 44px;
+  padding:0 var(--pad-x,56px) 44px;
   text-align:center
 }
 .hp2-eyebrow{

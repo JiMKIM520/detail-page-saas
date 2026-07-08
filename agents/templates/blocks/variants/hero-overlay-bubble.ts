@@ -60,7 +60,7 @@ export const heroOverlayBubble = defineBlock<Data>({
   object-fit:cover;
   display:block;
   margin:0 auto;
-  border-radius:16px 16px 0 0
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*16px) 0 0)
 }
 
 /* 이미지 없을 때 placeholder */
@@ -68,7 +68,7 @@ export const heroOverlayBubble = defineBlock<Data>({
   width:calc(100% - 80px);
   height:480px;
   margin:0 auto;
-  border-radius:16px 16px 0 0
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px) calc(var(--r-scale,1)*16px) 0 0)
 }
 
 /* ─ 제목 오버레이 영역(이미지 하단부 ~accent배경 위) ─ */
@@ -101,7 +101,7 @@ export const heroOverlayBubble = defineBlock<Data>({
   font-size:20px;
   line-height:1.55;
   padding:18px 28px;
-  border-radius:22px;
+  border-radius:calc(var(--r-scale,1)*22px);
   position:relative;
   max-width:88%
 }

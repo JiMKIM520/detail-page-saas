@@ -31,7 +31,7 @@ export const galleryNumberedBadge = defineBlock<Data>({
   css: `
 .gnb{background:var(--paper);color:var(--ink);padding:56px 0 60px}
 /* ── 헤더 ── */
-.gnb-hd{text-align:center;padding:0 56px;margin-bottom:40px}
+.gnb-hd{text-align:center;padding:0 var(--pad-x,56px);margin-bottom:40px}
 .gnb-eye{font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:.04em;line-height:1}
 .gnb-title{margin-top:8px;font-family:var(--font-display);font-weight:800;font-size:72px;letter-spacing:-.02em;line-height:1;color:var(--ink)}
 .gnb-title .em{color:var(--accent)}
@@ -52,7 +52,7 @@ export const galleryNumberedBadge = defineBlock<Data>({
   color:var(--ink);
   background:transparent}
 /* ── 풀폭 이미지 ── */
-.gnb-img{width:calc(100% - 112px);margin:0 56px;height:280px;object-fit:cover;border-radius:12px;display:block}
+.gnb-img{width:calc(100% - 112px);margin:0 56px;height:280px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*12px));display:block}
 /* 항목 하단 여백 */
 .gnb-item-inner{padding-bottom:36px}
 `,

@@ -66,7 +66,7 @@ export const productTabFilterRows = defineBlock<Data>({
 .ptfr-tab.active,.ptfr-tab:focus{background:var(--accent-d);border-color:var(--accent-d);color:#fff;outline:none}
 /* ── 카드 목록 ── */
 .ptfr-list{display:flex;flex-direction:column;gap:16px}
-.ptfr-card{display:grid;grid-template-columns:160px 1fr;gap:0;background:var(--paper);border-radius:18px;overflow:hidden;position:relative}
+.ptfr-card{display:grid;grid-template-columns:160px 1fr;gap:0;background:var(--paper);border-radius:calc(var(--r-scale,1)*18px);overflow:hidden;position:relative}
 /* 이미지 영역 */
 .ptfr-img-wrap{position:relative;flex-shrink:0}
 .ptfr-img{width:160px;height:160px;object-fit:cover;display:block}

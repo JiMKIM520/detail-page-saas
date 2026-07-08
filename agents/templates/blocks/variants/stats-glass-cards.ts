@@ -50,13 +50,13 @@ export const statsGlassCards = defineBlock<Data>({
 
 /* 히어로 이미지 */
 .sgc-hero{width:260px;height:260px;object-fit:contain;display:block;margin:30px auto 32px;filter:drop-shadow(0 10px 28px rgba(0,0,0,.28))}
-.sgc-hero.ph{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.3);font-size:12px;border-radius:16px}
+.sgc-hero.ph{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.3);font-size:12px;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))}
 
 /* 글래스 카드 스택 */
 .sgc-cards{display:flex;flex-direction:column;gap:14px}
 
 /* 개별 글래스 카드 */
-.sgc-card{background:color-mix(in srgb,#fff 16%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid rgba(255,255,255,.30);border-radius:20px;padding:20px 24px 22px;text-align:center}
+.sgc-card{background:color-mix(in srgb,#fff 16%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid rgba(255,255,255,.30);border-radius:calc(var(--r-scale,1)*20px);padding:20px 24px 22px;text-align:center}
 
 /* 카드 구분선 */
 .sgc-card-divider{width:80%;height:1px;background:rgba(255,255,255,.22);margin:0 auto 14px}

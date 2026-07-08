@@ -102,7 +102,7 @@ export const eventCommentPrizeGrid = defineBlock<Data>({
 .ecpg-phone{
   width:260px;
   background:#fff;
-  border-radius:36px;
+  border-radius:calc(var(--r-scale,1)*36px);
   border:2.5px solid #E2E2E8;
   box-shadow:0 8px 32px -8px rgba(0,0,0,.18);
   padding:24px 20px 20px;
@@ -126,7 +126,7 @@ export const eventCommentPrizeGrid = defineBlock<Data>({
 /* 댓글 버블 */
 .ecpg-bubble{
   background:var(--bg);
-  border-radius:14px;
+  border-radius:calc(var(--r-scale,1)*14px);
   padding:12px 14px;
   text-align:left;
 }
@@ -183,7 +183,7 @@ export const eventCommentPrizeGrid = defineBlock<Data>({
 /* 경품 카드 */
 .ecpg-card{
   background:#fff;
-  border-radius:16px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px));
   overflow:hidden;
   box-shadow:0 4px 18px -6px rgba(0,0,0,.14);
   position:relative;

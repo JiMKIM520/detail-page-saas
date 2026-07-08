@@ -60,7 +60,7 @@ export const reasonZebraRows = defineBlock<Data>({
   bottom:4px;
   width:4px;
   background:var(--accent-d);
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
 }
 .rzr-chapter{
   font-family:var(--font-display);
@@ -84,7 +84,7 @@ export const reasonZebraRows = defineBlock<Data>({
 /* 오프셋 흰카드 (우하단으로 시작, 좌측 여백으로 오프셋 느낌) */
 .rzr-card{
   background:#fff;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
   overflow:hidden;
   margin-left:16px;
   box-shadow:0 2px 12px rgba(0,0,0,.06);

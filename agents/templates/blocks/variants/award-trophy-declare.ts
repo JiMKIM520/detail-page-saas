@@ -156,7 +156,7 @@ export const awardTrophyDeclare = defineBlock<Data>({
 .atd-ribbon-r::before,.atd-ribbon-r::after{
   content:'';
   position:absolute;
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
 }
 .atd-ribbon-l::before{
   left:4px;top:4px;

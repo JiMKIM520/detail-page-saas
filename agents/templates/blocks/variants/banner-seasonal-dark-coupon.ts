@@ -59,7 +59,7 @@ export const bannerSeasonalDarkCoupon = defineBlock<Data>({
 
 /* ── 단일 쿠폰 티켓 ── */
 .bsdc-coupon-wrap{position:relative;z-index:2;margin-top:36px;width:100%;max-width:440px}
-.bsdc-coupon{display:flex;align-items:stretch;background:color-mix(in srgb,var(--brand) 80%,#000);border:2px dashed rgba(255,255,255,.38);border-radius:14px;overflow:visible;position:relative}
+.bsdc-coupon{display:flex;align-items:stretch;background:color-mix(in srgb,var(--brand) 80%,#000);border:2px dashed rgba(255,255,255,.38);border-radius:calc(var(--r-scale,1)*14px);overflow:visible;position:relative}
 
 /* 좌우 노치(절취선) */
 .bsdc-coupon::before,.bsdc-coupon::after{content:"";position:absolute;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--brand)}

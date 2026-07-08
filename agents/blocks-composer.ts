@@ -811,12 +811,18 @@ function walkStringFields(
 
 const LOGO_OK_ARCHETYPES = new Set(['hero', 'closing', 'cs'])
 
+/** 명백한 텍스트 필드 키 — URL이 이 필드에 들어가면 화면에 경로 문자열이 그대로 노출된다
+ *  (럽앤 히어로 brand 필드에 로고 서명 URL 실사례, 시각 감사 검출). 이미지 키 화이트리스트는
+ *  변형별 명명이 제각각(prop, hero, wreathTL…)이라 오탐 위험 — 텍스트 키 블록리스트가 오탐 0. */
+const TEXT_ONLY_KEY_RE =
+  /^(title|subtitle|headline|big|small|text|desc|description|label|name|brand|brandLogo|brandName|quote|by|caption|line|closer|closerSub|sub|copy|body|note|question|answer|head|kicker|tagline|cta)$/i
+
 export function applyPlacementGuards(
   spec: PageSpec,
   cutoutSet: ReadonlySet<string>,
   logoSet: ReadonlySet<string> = new Set(),
 ): void {
-  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0 }
+  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0 }
   for (const b of spec.blocks) {
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     const data = (b.data ?? {}) as Record<string, unknown>
@@ -835,6 +841,12 @@ export function applyPlacementGuards(
     }
     walkStringFields(data, (parent, key, value) => {
       const isUrl = /^https?:\/\//.test(value)
+      // URL이 명백한 텍스트 필드에 들어가면 경로 문자열이 화면에 노출 — 필드 수술
+      if (isUrl && TEXT_ONLY_KEY_RE.test(key)) {
+        delete parent[key]
+        stats.urlInText++
+        return
+      }
       if (isUrl && TEXT_LED_ARCHETYPES.has(arch)) {
         delete parent[key]
         stats.textLedImg++
@@ -859,9 +871,9 @@ export function applyPlacementGuards(
       }
     })
   }
-  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform)
+  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText}`,
     )
 }
 

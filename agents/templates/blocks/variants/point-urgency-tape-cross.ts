@@ -46,7 +46,7 @@ export const pointUrgencyTapeCross = defineBlock<Data>({
 .putc{background:var(--ink);color:#fff;padding:56px 0 60px;text-align:center;overflow:hidden;word-break:keep-all}
 
 /* ── 상단 헤더 ── */
-.putc-eyebrow{display:inline-block;background:#e8174a;color:#fff;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.18em;text-transform:uppercase;padding:5px 18px;border-radius:2px;margin-bottom:16px}
+.putc-eyebrow{display:inline-block;background:#e8174a;color:#fff;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.18em;text-transform:uppercase;padding:5px 18px;border-radius:calc(var(--r-scale,1)*2px);margin-bottom:16px}
 .putc-dday{font-family:var(--font-display);font-weight:700;font-size:clamp(16px,3.6vw,22px);color:rgba(255,255,255,.72);letter-spacing:.04em;margin-bottom:8px}
 .putc-title{font-family:var(--font-display);font-weight:800;font-size:clamp(44px,10vw,72px);line-height:1.08;letter-spacing:-.03em;color:#fff;padding:0 40px;margin-bottom:36px}
 .putc-title .em{color:#e8174a}
@@ -75,7 +75,7 @@ export const pointUrgencyTapeCross = defineBlock<Data>({
 /* ── 하단 카피 + CTA ── */
 .putc-body{margin-top:36px;padding:0 40px;font-family:var(--font-display);font-weight:700;font-size:clamp(18px,4vw,26px);line-height:1.5;color:#fff}
 .putc-body .em{color:#e8174a}
-.putc-cta{display:inline-block;margin-top:26px;background:#e8174a;color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;padding:16px 48px;border-radius:4px;letter-spacing:.04em;box-shadow:0 6px 24px rgba(232,23,74,.5)}
+.putc-cta{display:inline-block;margin-top:26px;background:#e8174a;color:#fff;font-family:var(--font-display);font-weight:800;font-size:17px;padding:16px 48px;border-radius:calc(var(--r-scale,1)*4px);letter-spacing:.04em;box-shadow:0 6px 24px rgba(232,23,74,.5)}
 `,
   render: (d, { esc, richSafe }) => {
     // 테이프 텍스트: 12회 반복 → 복제 한 번 더 붙여 seamless -50% loop

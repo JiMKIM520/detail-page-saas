@@ -67,7 +67,7 @@ export const faqBox = defineBlock<Data>({
 /* ─ 단일 외곽선 컨테이너 ─ */
 .faqbox-card{
   border:2px solid color-mix(in srgb,var(--accent) 35%,var(--line));
-  border-radius:20px;
+  border-radius:calc(var(--r-scale,1)*20px);
   overflow:hidden;
   background:var(--paper);
 }

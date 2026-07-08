@@ -43,13 +43,13 @@ export const faqStaggerOffset = defineBlock<Data>({
 .fso-pair{margin-bottom:32px}
 .fso-pair:last-child{margin-bottom:0}
 /* Q 카드 — 풀폭 좌정렬 */
-.fso-q{display:flex;align-items:center;gap:14px;background:var(--bg);border-radius:16px;padding:20px 24px;box-shadow:0 4px 18px -8px rgba(0,0,0,.10)}
+.fso-q{display:flex;align-items:center;gap:14px;background:var(--bg);border-radius:calc(var(--r-scale,1)*16px);padding:20px 24px;box-shadow:0 4px 18px -8px rgba(0,0,0,.10)}
 .fso-q-glyph{flex-shrink:0;font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--ink);line-height:1}
 .fso-q-text{font-family:var(--font-body);font-size:16px;font-weight:500;color:var(--ink);line-height:1.55}
 .fso-q-text .em{color:var(--accent-d);font-weight:700}
 /* A 카드 — 우측 인덴트(좌측 44px 오프셋), trailing A 글리프 우측 외곽 */
 .fso-a-wrap{position:relative;margin-top:10px;margin-left:44px}
-.fso-a{background:var(--bg);border-radius:16px;padding:22px 56px 22px 24px;box-shadow:0 4px 18px -8px rgba(0,0,0,.08)}
+.fso-a{background:var(--bg);border-radius:calc(var(--r-scale,1)*16px);padding:22px var(--pad-x,56px) 22px 24px;box-shadow:0 4px 18px -8px rgba(0,0,0,.08)}
 .fso-a-text{font-family:var(--font-body);font-size:15px;color:var(--ink);line-height:1.7;text-align:center}
 .fso-a-text .em{color:var(--accent-d);font-weight:700}
 /* trailing "A" glyph — 우측 외곽에 큰 글리프 */

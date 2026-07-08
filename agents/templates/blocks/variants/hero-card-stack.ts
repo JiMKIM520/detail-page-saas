@@ -54,7 +54,7 @@ export const heroCardStack = defineBlock<Data>({
 
 /* 카드 스택 */
 .hcs-cards{padding:28px 24px 0;display:flex;flex-direction:column;gap:14px}
-.hcs-card{border:1.5px solid var(--line);border-radius:14px;padding:26px 28px 22px;background:var(--paper)}
+.hcs-card{border:1.5px solid var(--line);border-radius:calc(var(--r-scale,1)*14px);padding:26px 28px 22px;background:var(--paper)}
 .hcs-card-label{font-family:var(--font-hand),'Gaegu',cursive;font-size:22px;font-weight:700;color:var(--accent);margin-bottom:10px;border-bottom:2px solid color-mix(in srgb,var(--accent) 25%,transparent);padding-bottom:8px;display:inline-block}
 .hcs-card-desc{font-size:15px;line-height:1.75;color:var(--ink-2)}
 .hcs-card-desc .em{color:var(--accent);font-weight:700}

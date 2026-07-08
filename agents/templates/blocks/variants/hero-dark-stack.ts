@@ -45,11 +45,11 @@ export const heroDarkStack = defineBlock<Data>({
 .hds-spark-br{bottom:-12px;right:-22px;font-size:22px;transform:rotate(12deg)}
 /* 텍스트 헤더 */
 .hds-sub{margin-top:28px;font-size:16px;color:rgba(255,255,255,.62);letter-spacing:.04em}
-.hds-title{margin:10px 36px 0;font-family:var(--font-display);font-weight:800;font-size:48px;line-height:1.15;letter-spacing:-.01em;background:var(--accent);display:inline-block;padding:6px 24px;border-radius:6px;color:#fff}
+.hds-title{margin:10px 36px 0;font-family:var(--font-display);font-weight:800;font-size:48px;line-height:1.15;letter-spacing:-.01em;background:var(--accent);display:inline-block;padding:6px 24px;border-radius:calc(var(--r-scale,1)*6px);color:#fff}
 .hds-title .em{color:var(--ink)}
 /* 포인트 박스 스택 */
 .hds-stack{margin:40px 36px 0;display:flex;flex-direction:column;gap:16px}
-.hds-box{border:1.5px solid color-mix(in srgb,var(--accent) 55%,rgba(255,255,255,.18));border-radius:12px;padding:22px 28px 24px;background:rgba(255,255,255,.03)}
+.hds-box{border:1.5px solid color-mix(in srgb,var(--accent) 55%,rgba(255,255,255,.18));border-radius:calc(var(--r-scale,1)*12px);padding:22px 28px 24px;background:rgba(255,255,255,.03)}
 .hds-pt-label{font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.06em;color:var(--accent);margin-bottom:10px}
 .hds-pt-desc{font-size:15px;line-height:1.7;color:rgba(255,255,255,.75)}
 .hds-pt-desc .em{color:var(--accent);font-weight:700}

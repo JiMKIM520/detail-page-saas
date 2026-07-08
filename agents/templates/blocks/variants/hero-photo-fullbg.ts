@@ -74,7 +74,7 @@ export const heroPhotoFullbg = defineBlock<Data>({
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:60px 56px 64px;
+  padding:60px var(--pad-x,56px) 64px;
 }
 
 /* ─ 상단 텍스트 존 ─ */

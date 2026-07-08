@@ -46,10 +46,10 @@ export const eventLaunchChecklist = defineBlock<Data>({
 
 /* 히어로 이미지 */
 .elc-hero-wrap{display:flex;justify-content:center;margin:28px 0 0}
-.elc-hero{width:100%;height:320px;object-fit:contain;border-radius:20px}
+.elc-hero{width:100%;height:320px;object-fit:contain;border-radius:var(--shape-photo, calc(var(--r-scale,1)*20px))}
 
 /* 선착순 혜택 pill */
-.elc-pill-row{display:flex;align-items:stretch;gap:0;margin-top:24px;border-radius:14px;overflow:hidden;border:1.5px solid rgba(255,255,255,.22)}
+.elc-pill-row{display:flex;align-items:stretch;gap:0;margin-top:24px;border-radius:calc(var(--r-scale,1)*14px);overflow:hidden;border:1.5px solid rgba(255,255,255,.22)}
 .elc-limit{background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:900;font-size:20px;line-height:1.2;padding:18px 20px;white-space:pre-line;text-align:center;min-width:90px;display:flex;align-items:center;justify-content:center;letter-spacing:.01em}
 .elc-benefit{flex:1;background:rgba(255,255,255,.09);padding:16px 20px;font-size:16px;font-weight:500;color:rgba(255,255,255,.92);line-height:1.6;display:flex;align-items:center}
 .elc-benefit .em{color:var(--accent);font-weight:700}

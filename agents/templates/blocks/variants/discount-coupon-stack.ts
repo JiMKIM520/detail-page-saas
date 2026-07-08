@@ -56,7 +56,7 @@ export const discountCouponStack = defineBlock<Data>({
 .dcs-ticket{
   display:flex;align-items:stretch;
   background:#fff;
-  border-radius:14px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));
   overflow:hidden;
   box-shadow:0 8px 32px rgba(0,0,0,.32);
   min-height:108px;

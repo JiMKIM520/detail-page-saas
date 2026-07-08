@@ -49,7 +49,7 @@ export const bannerSeasonalIllustration = defineBlock<Data>({
   font-size:17px;
   font-weight:700;
   letter-spacing:.04em;
-  border-radius:6px;
+  border-radius:calc(var(--r-scale,1)*6px);
   line-height:1.4;
   text-align:center;
   white-space:nowrap;

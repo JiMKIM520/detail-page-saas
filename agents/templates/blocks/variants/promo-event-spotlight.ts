@@ -145,7 +145,7 @@ export const promoEventSpotlight = defineBlock<Data>({
   align-items:center;
   gap:8px;
   border:1px solid rgba(255,255,255,.38);
-  border-radius:2px;
+  border-radius:calc(var(--r-scale,1)*2px);
   padding:10px 24px;
 }
 .pes-date-start,

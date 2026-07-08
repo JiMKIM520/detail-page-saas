@@ -40,7 +40,7 @@ export const compareAsymmetricCta = defineBlock<Data>({
 .cac-cols{display:flex;align-items:stretch;gap:0}
 .cac-before{flex:0 0 38%;background:#EBEBEE;padding:24px 20px 28px}
 .cac-after{flex:1;background:var(--paper);padding:24px 24px 28px;box-shadow:0 12px 32px -10px rgba(0,0,0,.22)}
-.cac-badge{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.1em;padding:8px 20px;border:2px solid currentColor;border-radius:4px;margin-bottom:20px}
+.cac-badge{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.1em;padding:8px 20px;border:2px solid currentColor;border-radius:calc(var(--r-scale,1)*4px);margin-bottom:20px}
 .cac-before .cac-badge{color:#9A9AA3;border-color:#CACACE}
 .cac-after .cac-badge{color:var(--accent);border-color:var(--accent)}
 .cac-brow{font-size:14px;color:#9A9AA3;line-height:1.55;text-align:center;padding:12px 0}

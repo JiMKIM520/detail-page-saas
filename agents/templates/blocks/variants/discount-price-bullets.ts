@@ -57,7 +57,7 @@ export const discountPriceBullets = defineBlock<Data>({
   flex:1;
   background:rgba(255,255,255,.10);
   border:1px solid rgba(255,255,255,.18);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   padding:14px 18px;
   display:flex;flex-direction:column;justify-content:center;
   backdrop-filter:blur(4px);
@@ -69,7 +69,7 @@ export const discountPriceBullets = defineBlock<Data>({
 .dpb-sale-card{
   flex:1.3;
   background:#fff;
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   overflow:hidden;
   display:flex;flex-direction:column;justify-content:center;
   box-shadow:0 8px 28px rgba(0,0,0,.28);
@@ -89,7 +89,7 @@ export const discountPriceBullets = defineBlock<Data>({
   display:flex;align-items:center;gap:14px;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.13);
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   padding:16px 20px;
   backdrop-filter:blur(3px);
 }

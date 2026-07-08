@@ -82,7 +82,7 @@ export const credentialsStatBento = defineBlock<Data>({
 /* ── 공통 타일 ── */
 .csb-tile{
   background:#1a1a1f;
-  border-radius:18px;
+  border-radius:calc(var(--r-scale,1)*18px);
   overflow:hidden;
   position:relative;
 }
@@ -139,7 +139,7 @@ export const credentialsStatBento = defineBlock<Data>({
   justify-content:center;
   background:rgba(255,255,255,.06);
   border:2px dashed rgba(255,255,255,.2);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   color:rgba(255,255,255,.3);
   font-size:13px;
 }
@@ -169,7 +169,7 @@ export const credentialsStatBento = defineBlock<Data>({
   justify-content:center;
   background:rgba(255,255,255,.06);
   border:2px dashed rgba(255,255,255,.2);
-  border-radius:10px;
+  border-radius:calc(var(--r-scale,1)*10px);
   color:rgba(255,255,255,.3);
   font-size:12px;
 }

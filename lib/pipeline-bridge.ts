@@ -407,10 +407,15 @@ export async function runPipelineForProject(projectId: string): Promise<{
           const sg = JSON.parse(await sgBlob.text()) as {
             colors?: Record<string, string>
             typography?: Record<string, unknown>
+            shapeLanguage?: string
+            brand?: { moodKeywords?: string[] }
           }
           styleGuideTokens = {
             colors: sg.colors,
             typography: sg.typography as import('@/agents/templates/blocks/tokens').StyleGuideTokenInput['typography'],
+            // 형태 언어 (Sprint 6) — 아트디렉터 명시값 우선, 무드 키워드는 폴백 결정용
+            shapeLanguage: sg.shapeLanguage,
+            moodKeywords: sg.brand?.moodKeywords,
           }
           console.log('[pipeline-bridge] 스타일가이드 로드 — 토큰 오버라이드 적용 예정')
         }

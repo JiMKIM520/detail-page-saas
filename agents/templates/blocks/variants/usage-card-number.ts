@@ -39,9 +39,9 @@ export const usageCardNumber = defineBlock<Data>({
 .ucn-title{font-family:var(--font-display);font-weight:800;font-size:72px;color:var(--accent);letter-spacing:-.01em;line-height:1.0}
 .ucn-sub{margin-top:10px;font-size:17px;color:var(--ink-2);font-weight:500}
 .ucn-cards{display:flex;flex-direction:column;gap:16px}
-.ucn-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 32px;display:flex;align-items:center;gap:28px;min-height:100px}
+.ucn-card{background:var(--paper);border:1px solid var(--line);border-radius:calc(var(--r-scale,1)*14px);padding:28px 32px;display:flex;align-items:center;gap:28px;min-height:100px}
 .ucn-num{flex:0 0 auto;font-family:'Cafe24 ClassicType',var(--font-display),sans-serif;font-weight:700;font-size:80px;line-height:1;color:var(--accent);letter-spacing:-.03em;min-width:96px;text-align:right;user-select:none}
-.ucn-divider{width:2px;height:64px;background:var(--line);border-radius:2px;flex:0 0 2px}
+.ucn-divider{width:2px;height:64px;background:var(--line);border-radius:calc(var(--r-scale,1)*2px);flex:0 0 2px}
 .ucn-tx{flex:1;min-width:0}
 .ucn-label{font-family:var(--font-display);font-weight:700;font-size:20px;color:var(--ink);line-height:1.45}
 .ucn-label .em{color:var(--accent)}
@@ -53,7 +53,7 @@ export const usageCardNumber = defineBlock<Data>({
 .ucn-closer .em{color:var(--accent);font-weight:800}
 .ucn-closer-em{margin-top:6px;font-family:var(--font-display);font-weight:800;font-size:34px;color:var(--accent);line-height:1.35}
 .ucn-closer-em .em{color:var(--ink)}
-.ucn-img{flex:0 0 280px;width:280px;height:260px;object-fit:cover;border-radius:14px 14px 0 0;align-self:flex-end}
+.ucn-img{flex:0 0 280px;width:280px;height:260px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px) calc(var(--r-scale,1)*14px) 0 0);align-self:flex-end}
 `,
   render: (d, { esc, richSafe }) => `
 <section class="ucn">

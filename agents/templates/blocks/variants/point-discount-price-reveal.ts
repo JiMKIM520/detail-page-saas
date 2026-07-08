@@ -73,7 +73,7 @@ export const pointDiscountPriceReveal = defineBlock<Data>({
 .pdpr-caption{padding:14px 40px 0;font-family:var(--font-body);font-size:14px;line-height:1.65;color:rgba(255,255,255,.55);text-align:center}
 .pdpr-caption .em{color:var(--accent);font-weight:700}
 /* ── 가격 영역 — discount + breakdown grid ── */
-.pdpr-price-zone{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:0;margin:28px 24px 0;background:rgba(255,255,255,.05);border-radius:16px;overflow:hidden}
+.pdpr-price-zone{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:0;margin:28px 24px 0;background:rgba(255,255,255,.05);border-radius:calc(var(--r-scale,1)*16px);overflow:hidden}
 /* 좌측: oversized 할인% */
 .pdpr-pct{padding:28px 20px 28px 28px;display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(255,255,255,.08)}
 .pdpr-pct-num{font-family:var(--font-display);font-weight:800;font-size:clamp(52px,13vw,88px);line-height:1;letter-spacing:-.04em;color:#ff4444;white-space:nowrap}
@@ -88,7 +88,7 @@ export const pointDiscountPriceReveal = defineBlock<Data>({
 .pdpr-row.hl .pdpr-row-value{color:#fff;font-size:19px;font-weight:800}
 /* ── 하단 배지 행 ── */
 .pdpr-badges{display:grid;gap:10px;padding:16px 24px 0;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))}
-.pdpr-badge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:12px 8px;text-align:center}
+.pdpr-badge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:calc(var(--r-scale,1)*10px);padding:12px 8px;text-align:center}
 .pdpr-badge-label{font-size:11px;color:rgba(255,255,255,.52);margin-bottom:4px;line-height:1.3}
 .pdpr-badge-value{font-family:var(--font-display);font-weight:800;font-size:15px;color:#fff}
 `,

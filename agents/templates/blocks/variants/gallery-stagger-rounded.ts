@@ -38,7 +38,7 @@ export const galleryStaggerRounded = defineBlock<Data>({
 /* ── 이미지 스택 ── */
 .gsr-stack{display:flex;flex-direction:column;gap:28px}
 /* 이미지 공통: 큰 라운드 */
-.gsr-img{width:100%;height:420px;object-fit:cover;border-radius:40px;display:block}
+.gsr-img{width:100%;height:420px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*40px));display:block}
 /* 홀수(1,3번째): 왼쪽 고정, 오른쪽만 여백 */
 .gsr-slot-left{padding:0 80px 0 0}
 /* 짝수(2번째): 오른쪽 고정, 왼쪽만 여백 */

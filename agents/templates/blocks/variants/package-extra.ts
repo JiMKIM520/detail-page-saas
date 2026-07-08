@@ -41,7 +41,7 @@ export const packageCards = defineBlock<CardsData>({
 .pc-title{font-family:var(--font-display);font-weight:800;font-size:52px;color:#fff;line-height:1.08;letter-spacing:-.01em}
 .pc-sub{margin-top:12px;font-size:15px;color:rgba(255,255,255,.82)}
 .pc-list{margin-top:30px;display:flex;flex-direction:column;gap:22px}
-.pc-card{position:relative;background:var(--paper);color:var(--ink);border-radius:20px;padding:0 0 26px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.16)}
+.pc-card{position:relative;background:var(--paper);color:var(--ink);border-radius:calc(var(--r-scale,1)*20px);padding:0 0 26px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.16)}
 .pc-img{width:100%;height:210px;object-fit:cover;display:block}
 .pc-name{margin-top:22px;font-family:var(--font-display);font-weight:800;font-size:24px;color:var(--ink)}
 .pc-name .em{color:var(--accent)}
@@ -109,8 +109,8 @@ export const packageDark = defineBlock<DarkData>({
 .pd-sub{margin-top:10px;font-size:15px;color:rgba(255,255,255,.7)}
 .pd-hero{width:100%;height:300px;object-fit:contain;margin:26px 0 30px}
 .pd-list{display:flex;flex-direction:column;gap:16px}
-.pd-card{display:flex;align-items:center;gap:18px;text-align:left;background:linear-gradient(120deg,rgba(255,255,255,.08),color-mix(in srgb,var(--accent) 18%,transparent));border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:22px 24px}
-.pd-no{flex:0 0 auto;font-family:var(--font-display);font-weight:800;font-size:13px;color:#fff;background:var(--accent);border-radius:6px;padding:4px 9px}
+.pd-card{display:flex;align-items:center;gap:18px;text-align:left;background:linear-gradient(120deg,rgba(255,255,255,.08),color-mix(in srgb,var(--accent) 18%,transparent));border:1px solid rgba(255,255,255,.12);border-radius:calc(var(--r-scale,1)*14px);padding:22px 24px}
+.pd-no{flex:0 0 auto;font-family:var(--font-display);font-weight:800;font-size:13px;color:#fff;background:var(--accent);border-radius:calc(var(--r-scale,1)*6px);padding:4px 9px}
 .pd-body{flex:1}
 .pd-name{font-family:var(--font-display);font-weight:800;font-size:20px;color:#fff}
 .pd-name .em{color:var(--accent)}

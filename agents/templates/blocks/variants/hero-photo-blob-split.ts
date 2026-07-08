@@ -91,7 +91,7 @@ export const heroPhotoBlobSplit = defineBlock<Data>({
 
 /* 블롭 내 콘텐츠 */
 .hpbs-content {
-  padding: 64px 56px 0;
+  padding:64px var(--pad-x,56px) 0;
 }
 
 /* 제품명 — 대형 대문자 좌정렬 */

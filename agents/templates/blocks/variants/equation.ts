@@ -20,7 +20,7 @@ export const equationVisual = defineBlock<Data>({
   describe: '비주얼 등식 A + B = C. 원형 마스킹 사진 3개 + 큰 +/= 기호 + 손글씨 인용. 페어링/조합 강조.',
   schema,
   css: `
-.eq{position:relative;padding:46px 56px 60px;background:var(--bg);text-align:center}
+.eq{position:relative;padding:46px var(--pad-x,56px) 60px;background:var(--bg);text-align:center}
 .eq-row{display:flex;align-items:center;justify-content:center;gap:26px}
 .eq-item{text-align:center}
 .eq-media{width:150px;height:150px;border-radius:50%;object-fit:cover;box-shadow:0 14px 28px -12px rgba(42,33,24,.4);border:4px solid #fff}

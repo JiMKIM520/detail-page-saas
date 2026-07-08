@@ -74,15 +74,15 @@ export const promoStoryPriceReveal = defineBlock<Data>({
 
 /* ── 제품 이미지 오버랩 ── */
 .pspr-img-wrap{position:absolute;right:-8px;bottom:0;width:56%;max-width:260px;z-index:1;pointer-events:none}
-.pspr-img{width:100%;height:auto;object-fit:contain;display:block;border-radius:6px}
-.pspr-img.ph{width:100%;aspect-ratio:3/4;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font-size:12px;border-radius:6px}
+.pspr-img{width:100%;height:auto;object-fit:contain;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px))}
+.pspr-img.ph{width:100%;aspect-ratio:3/4;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font-size:12px;border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px))}
 
 /* ── 가격 영역 ── */
 .pspr-price-wrap{padding:24px 22px 0;position:relative;z-index:2}
 /* 정가 취소선 */
 .pspr-orig{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .pspr-orig-label{font-family:var(--font-body);font-size:14px;color:var(--muted);font-weight:500}
-.pspr-orig-val{display:inline-block;background:rgba(0,0,0,.07);color:var(--muted);font-family:var(--font-body);font-size:15px;font-weight:600;padding:3px 12px;border-radius:6px;text-decoration:line-through;text-decoration-color:var(--muted)}
+.pspr-orig-val{display:inline-block;background:rgba(0,0,0,.07);color:var(--muted);font-family:var(--font-body);font-size:15px;font-weight:600;padding:3px 12px;border-radius:calc(var(--r-scale,1)*6px);text-decoration:line-through;text-decoration-color:var(--muted)}
 /* 최종가 */
 .pspr-final-label{font-family:var(--font-body);font-size:clamp(14px,3.6vw,17px);font-weight:700;color:var(--ink);margin-bottom:4px}
 .pspr-final-price{font-family:var(--font-display);font-weight:800;font-size:clamp(38px,9.5vw,58px);letter-spacing:-.03em;line-height:1.1;color:var(--ink)}

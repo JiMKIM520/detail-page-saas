@@ -48,8 +48,8 @@ export const storyVerticalRepeat = defineBlock<Data>({
 .svr-heading .em{color:var(--accent)}
 .svr-body{font-family:var(--font-body);font-size:16px;line-height:1.7;color:rgba(255,255,255,.64);margin-bottom:26px}
 .svr-body .em{color:var(--accent);font-weight:700}
-.svr-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:4px}
-.svr-img.ph{width:100%;aspect-ratio:4/3;border:2px dashed rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border-radius:4px}
+.svr-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px))}
+.svr-img.ph{width:100%;aspect-ratio:4/3;border:2px dashed rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border-radius:var(--shape-photo, calc(var(--r-scale,1)*4px))}
 `,
   render: (d, { esc, richSafe }) => {
     const items = d.items

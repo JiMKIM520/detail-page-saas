@@ -35,7 +35,7 @@ export const usageDarkBands = defineBlock<Data>({
 .udb-title{font-family:var(--font-display);font-weight:800;font-size:64px;color:var(--accent);letter-spacing:-.01em;line-height:1.0;padding:0 48px;text-align:left}
 .udb-sub{margin-top:10px;font-size:16px;color:rgba(255,255,255,.65);padding:0 48px;text-align:left}
 .udb-steps{margin-top:36px;display:flex;flex-direction:column;gap:18px;padding:0 44px}
-.udb-band{background:var(--accent);border-radius:8px;padding:26px 32px;text-align:center}
+.udb-band{background:var(--accent);border-radius:calc(var(--r-scale,1)*8px);padding:26px 32px;text-align:center}
 .udb-heading{font-family:var(--font-display);font-weight:800;font-size:19px;color:#fff;line-height:1.4}
 .udb-heading .em{color:var(--ink)}
 .udb-body{margin-top:6px;font-size:15px;color:rgba(255,255,255,.88);line-height:1.55}

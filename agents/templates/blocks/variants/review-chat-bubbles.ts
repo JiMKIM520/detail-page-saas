@@ -38,16 +38,16 @@ export const reviewChatBubbles = defineBlock<Data>({
 .rcb-sub{font-size:15px;color:var(--ink-2);margin-bottom:6px}
 .rcb-title{font-family:var(--font-display);font-weight:800;font-size:48px;letter-spacing:-.02em;color:var(--ink);line-height:1.1;padding:0 40px}
 .rcb-title .em{color:var(--accent)}
-.rcb-hero{margin:28px 40px;border-radius:16px;overflow:hidden;background:color-mix(in srgb,var(--accent) 8%,transparent)}
-.rcb-hero img,.rcb-hero.ph{width:100%;height:320px;object-fit:cover;border-radius:16px}
+.rcb-hero{margin:28px 40px;border-radius:calc(var(--r-scale,1)*16px);overflow:hidden;background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.rcb-hero img,.rcb-hero.ph{width:100%;height:320px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*16px))}
 .rcb-list{display:flex;flex-direction:column;gap:14px;margin:28px 0 0}
 .rcb-row{display:flex;align-items:flex-end;gap:10px;padding:0 24px;width:100%;box-sizing:border-box}
 .rcb-row--left{flex-direction:row;justify-content:flex-start}
 .rcb-row--right{flex-direction:row-reverse;justify-content:flex-start}
 .rcb-avatar{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%,transparent);display:grid;place-items:center;font-size:22px;line-height:1;border:2px solid color-mix(in srgb,var(--accent) 30%,transparent)}
-.rcb-bubble{background:var(--brand);color:#fff;border-radius:20px;padding:14px 18px;max-width:72%;text-align:left;box-shadow:0 6px 20px -8px rgba(0,0,0,.35)}
-.rcb-row--left .rcb-bubble{border-bottom-left-radius:4px}
-.rcb-row--right .rcb-bubble{border-bottom-right-radius:4px}
+.rcb-bubble{background:var(--brand);color:#fff;border-radius:calc(var(--r-scale,1)*20px);padding:14px 18px;max-width:72%;text-align:left;box-shadow:0 6px 20px -8px rgba(0,0,0,.35)}
+.rcb-row--left .rcb-bubble{border-bottom-left-radius:calc(var(--r-scale,1)*4px)}
+.rcb-row--right .rcb-bubble{border-bottom-right-radius:calc(var(--r-scale,1)*4px)}
 .rcb-bubble p{font-size:15px;font-weight:600;line-height:1.6;color:#fff}
 .rcb-bubble .em{color:color-mix(in srgb,var(--accent) 100%,#fff 30%)}
 .rcb-closer{margin-top:40px;padding:0 40px;font-family:var(--font-display);font-weight:800;font-size:32px;color:var(--ink);line-height:1.4}

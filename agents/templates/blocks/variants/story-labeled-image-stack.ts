@@ -131,7 +131,7 @@ export const storyLabeledImageStack = defineBlock<Data>({
   font-size:13px;
   font-weight:700;
   letter-spacing:.01em;
-  border-radius:4px;
+  border-radius:calc(var(--r-scale,1)*4px);
 }
 
 /* 풀폭 이미지 */

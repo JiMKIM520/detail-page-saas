@@ -41,7 +41,7 @@ export const reviewAlternatingRows = defineBlock<Data>({
 .rar{background:var(--bg);color:var(--ink);text-align:center}
 
 /* 헤더 영역 */
-.rar-hd{padding:56px 56px 0}
+.rar-hd{padding:56px var(--pad-x,56px) 0}
 .rar-title{font-family:var(--font-display);font-weight:800;font-size:52px;letter-spacing:-.02em;line-height:1.1;color:var(--accent)}
 .rar-sub{margin-top:12px;font-size:17px;color:var(--ink-2)}
 .rar .em{color:var(--accent);font-weight:800}
@@ -54,7 +54,7 @@ export const reviewAlternatingRows = defineBlock<Data>({
 .rar-divider{width:1px;height:56px;background:var(--line);margin:0 auto}
 
 /* 피처드 리뷰 */
-.rar-feat{padding:28px 56px 40px}
+.rar-feat{padding:28px var(--pad-x,56px) 40px}
 .rar-feat-label{font-size:15px;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:12px}
 .rar-feat-stars{display:inline-flex;gap:5px;color:var(--accent);margin-bottom:16px}
 .rar-feat-stars svg{width:22px;height:22px}
@@ -62,7 +62,7 @@ export const reviewAlternatingRows = defineBlock<Data>({
 .rar-feat-hi{margin-top:4px;font-size:17px;font-weight:800;color:var(--ink);line-height:1.7}
 
 /* 교차 행 */
-.rar-row{width:100%;padding:36px 56px}
+.rar-row{width:100%;padding:36px var(--pad-x,56px)}
 .rar-row:nth-child(odd){background:color-mix(in srgb,var(--accent) 18%,transparent)}
 .rar-row:nth-child(even){background:var(--bg)}
 .rar-row-stars{display:inline-flex;gap:5px;color:var(--accent);margin-bottom:14px}

@@ -106,7 +106,7 @@ export const featureBentoPhotoTiles = defineBlock<Data>({
   color:rgba(255,255,255,.75);
   background:rgba(255,255,255,.12);
   border:1px solid rgba(255,255,255,.22);
-  border-radius:3px;
+  border-radius:calc(var(--r-scale,1)*3px);
   padding:3px 10px;
   margin-bottom:14px;
 }
@@ -142,7 +142,7 @@ export const featureBentoPhotoTiles = defineBlock<Data>({
 .fbpt-tile{
   position:relative;
   overflow:hidden;
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   aspect-ratio:1/1;
   background:var(--ink);
   min-height:160px;
@@ -158,13 +158,13 @@ export const featureBentoPhotoTiles = defineBlock<Data>({
   height:100%;
   object-fit:cover;
   display:block;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
 }
 .fbpt-tile-img.ph{
   width:100%;
   height:100%;
   border:none;
-  border-radius:8px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*8px));
   background:rgba(0,0,0,.2);
   color:rgba(255,255,255,.35);
   font-size:11px;
@@ -173,7 +173,7 @@ export const featureBentoPhotoTiles = defineBlock<Data>({
 .fbpt-tile-overlay{
   position:absolute;
   inset:0;
-  border-radius:8px;
+  border-radius:calc(var(--r-scale,1)*8px);
   background:linear-gradient(to bottom,rgba(0,0,0,.08) 0%,rgba(0,0,0,.58) 60%,rgba(0,0,0,.80) 100%);
   pointer-events:none;
 }

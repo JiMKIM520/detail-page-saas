@@ -94,7 +94,7 @@ export const recommendPainpointBubbles = defineBlock<Data>({
   display:inline-block;
   background:var(--bg);
   border:1.5px solid var(--line);
-  border-radius:20px 20px 4px 20px;
+  border-radius:calc(var(--r-scale,1)*20px) calc(var(--r-scale,1)*20px) calc(var(--r-scale,1)*4px) calc(var(--r-scale,1)*20px);
   padding:11px 18px;
   font-family:var(--font-body);
   font-size:14px;

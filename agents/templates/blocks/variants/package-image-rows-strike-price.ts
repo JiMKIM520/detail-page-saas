@@ -67,13 +67,13 @@ export const packageImageRowsStrikePrice = defineBlock<Data>({
 .pirsp-title-dark .em{color:var(--accent-d)}
 .pirsp-hashtags{text-align:center;font-size:15px;color:var(--muted);letter-spacing:.01em;margin-bottom:32px}
 /* 회색 컨테이너 */
-.pirsp-box{background:#f0f0f0;border-radius:14px;padding:10px 20px 4px;margin-bottom:36px}
+.pirsp-box{background:#f0f0f0;border-radius:calc(var(--r-scale,1)*14px);padding:10px 20px 4px;margin-bottom:36px}
 /* 각 상품 행 */
 .pirsp-row{display:grid;grid-template-columns:100px 1fr;gap:20px;align-items:center;padding:22px 0}
 .pirsp-row+.pirsp-row{border-top:1.5px dashed #c8c8c8}
 /* 이미지 */
-.pirsp-img{width:100px;height:100px;object-fit:cover;border-radius:8px;display:block;flex-shrink:0}
-.pirsp-img.ph{width:100px;height:100px;border-radius:8px;border:2px dashed #c0c0c0;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa}
+.pirsp-img{width:100px;height:100px;object-fit:cover;border-radius:calc(var(--r-scale,1)*8px);display:block;flex-shrink:0}
+.pirsp-img.ph{width:100px;height:100px;border-radius:calc(var(--r-scale,1)*8px);border:2px dashed #c0c0c0;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa}
 /* 우측 텍스트 영역 */
 .pirsp-info{display:flex;flex-direction:column;gap:6px;min-width:0}
 .pirsp-badge{display:inline-block;background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;letter-spacing:.02em;align-self:flex-start}
@@ -87,7 +87,7 @@ export const packageImageRowsStrikePrice = defineBlock<Data>({
 .pirsp-unit{font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.01em;align-self:flex-end;padding-bottom:2px}
 /* CTA 버튼 */
 .pirsp-cta-wrap{text-align:center}
-.pirsp-cta{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.04em;padding:14px 36px;border-radius:8px;text-decoration:none;cursor:pointer}
+.pirsp-cta{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:.04em;padding:14px 36px;border-radius:calc(var(--r-scale,1)*8px);text-decoration:none;cursor:pointer}
 `,
   render: (d, { esc, richSafe }) => {
     // 브랜드 로고: URL이면 img, 아니면 text badge

@@ -58,7 +58,7 @@ export const featureNumberedCalloutScroll = defineBlock<Data>({
   background:var(--ink);color:var(--paper);
   font-family:var(--font-display);font-weight:800;
   font-size:16px;letter-spacing:.04em;
-  width:48px;height:40px;border-radius:8px;
+  width:48px;height:40px;border-radius:calc(var(--r-scale,1)*8px);
   position:relative;
 }
 /* 말풍선 꼬리(아래 삼각형) */
@@ -85,8 +85,8 @@ export const featureNumberedCalloutScroll = defineBlock<Data>({
 .fncs-body .em{color:var(--accent-d);font-weight:700}
 
 /* 풀폭 이미지 */
-.fncs-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:6px}
-.fncs-img.ph{width:100%;aspect-ratio:4/3;border:2px dashed var(--line);background:rgba(0,0,0,.03);color:var(--muted);border-radius:6px}
+.fncs-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px))}
+.fncs-img.ph{width:100%;aspect-ratio:4/3;border:2px dashed var(--line);background:rgba(0,0,0,.03);color:var(--muted);border-radius:var(--shape-photo, calc(var(--r-scale,1)*6px))}
 `,
   render: (d, { esc, richSafe }) => {
     const sectionTitleHtml = d.sectionTitle

@@ -177,7 +177,7 @@ export const heroBubblePoints = defineBlock<Data>({
   transform:translateX(-50%);
   width:260px;
   height:280px;
-  border-radius:20px;
+  border-radius:var(--shape-photo, calc(var(--r-scale,1)*20px));
   overflow:hidden;
   box-shadow:0 6px 32px rgba(0,0,0,.08)
 }

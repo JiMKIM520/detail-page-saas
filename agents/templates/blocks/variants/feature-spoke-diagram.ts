@@ -64,7 +64,7 @@ export const featureSpokeDiagram = defineBlock<Data>({
 .fsd-desc{margin-top:6px;font-size:13px;color:var(--ink-2);line-height:1.65}
 .fsd-desc .em{color:var(--accent);font-weight:700}
 /* ── 마무리 카피 밴드 ── */
-.fsd-closer{margin:40px 24px 0;background:var(--accent);border-radius:20px;padding:48px 40px;text-align:center;font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.5;color:#fff}
+.fsd-closer{margin:40px 24px 0;background:var(--accent);border-radius:calc(var(--r-scale,1)*20px);padding:48px 40px;text-align:center;font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.5;color:#fff}
 .fsd-closer .em{color:color-mix(in srgb,#fff 70%,var(--accent-d))}
 `,
   render: (d, { esc, richSafe }) => {

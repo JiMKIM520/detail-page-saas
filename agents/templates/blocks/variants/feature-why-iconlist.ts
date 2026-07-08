@@ -39,7 +39,7 @@ export const featureWhyIconlist = defineBlock<Data>({
 .fwi-headline{font-family:var(--font-display);font-weight:900;font-size:72px;letter-spacing:-.01em;line-height:1.08;color:var(--accent);text-transform:uppercase}
 .fwi-headline .em{color:var(--ink)}
 /* ── 와이드 이미지 밴드 ── */
-.fwi-band{width:calc(100% - 48px);margin:28px auto 0;border-radius:14px;overflow:hidden;display:block}
+.fwi-band{width:calc(100% - 48px);margin:28px auto 0;border-radius:var(--shape-photo, calc(var(--r-scale,1)*14px));overflow:hidden;display:block}
 .fwi-band img,.fwi-band .fwi-ph{width:100%;height:260px;object-fit:cover;display:block}
 /* ── 아이브로 + 대제목 ── */
 .fwi-intro{padding:36px 44px 0;text-align:center}
@@ -47,15 +47,15 @@ export const featureWhyIconlist = defineBlock<Data>({
 .fwi-title{margin-top:8px;font-family:var(--font-display);font-weight:800;font-size:48px;letter-spacing:-.02em;color:var(--ink);line-height:1.12}
 .fwi-title .em{color:var(--accent)}
 /* ── 흰 패널(badge + 카드 리스트) ── */
-.fwi-panel{margin:30px 24px 0;background:var(--paper);border-radius:20px;padding:32px 24px 28px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.fwi-panel{margin:30px 24px 0;background:var(--paper);border-radius:calc(var(--r-scale,1)*20px);padding:32px 24px 28px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
 /* 상단 배지 */
 .fwi-badge{width:52px;height:52px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;margin:0 auto 22px}
 .fwi-badge svg{width:26px;height:26px}
 /* 카드 행 */
 .fwi-list{display:flex;flex-direction:column;gap:16px}
-.fwi-card{display:flex;align-items:flex-start;gap:20px;background:color-mix(in srgb,var(--accent) 10%,var(--bg));border:1.5px solid color-mix(in srgb,var(--accent) 20%,transparent);border-radius:14px;padding:20px 22px}
+.fwi-card{display:flex;align-items:flex-start;gap:20px;background:color-mix(in srgb,var(--accent) 10%,var(--bg));border:1.5px solid color-mix(in srgb,var(--accent) 20%,transparent);border-radius:calc(var(--r-scale,1)*14px);padding:20px 22px}
 /* 아이콘 박스 */
-.fwi-icon{flex:0 0 52px;width:52px;height:52px;border-radius:12px;background:color-mix(in srgb,var(--accent) 18%,var(--paper));display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.fwi-icon{flex:0 0 52px;width:52px;height:52px;border-radius:calc(var(--r-scale,1)*12px);background:color-mix(in srgb,var(--accent) 18%,var(--paper));display:flex;align-items:center;justify-content:center;color:var(--accent)}
 .fwi-icon svg{width:28px;height:28px}
 /* 텍스트 */
 .fwi-tx{flex:1;min-width:0}

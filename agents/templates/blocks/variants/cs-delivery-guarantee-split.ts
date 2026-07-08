@@ -102,7 +102,7 @@ export const csDeliveryGuaranteeSplit = defineBlock<Data>({
   border:2px dashed rgba(255,255,255,.3);
   background:rgba(255,255,255,.08);
   color:rgba(255,255,255,.5);
-  border-radius:12px;
+  border-radius:calc(var(--r-scale,1)*12px);
   margin:0 auto 20px;
 }
 
@@ -136,7 +136,7 @@ export const csDeliveryGuaranteeSplit = defineBlock<Data>({
   grid-template-columns:1fr 1fr;
   gap:0;
   margin:52px 20px 32px;
-  border-radius:16px;
+  border-radius:calc(var(--r-scale,1)*16px);
   overflow:hidden;
   box-shadow:0 2px 16px rgba(0,0,0,.08);
 }

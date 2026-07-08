@@ -308,6 +308,7 @@ ${templateCatalog ? templateCatalog + '\n' : ''}${hasReferenceImages ? '## Refer
 ### JSON 1: StyleGuide
 {
   "brand": { "name": string, "moodKeywords": string[], "targetEmotion": string },
+  "shapeLanguage": "sharp-editorial"|"soft-round"|"organic"|"arch-serif"|"neutral",  // 페이지 기하학(곡률·사진 프레임·여백 리듬)을 결정하는 형태 언어 — 브랜드 무드에 근거해 선택. sharp-editorial=미니멀/모던(직각·넓은 여백), soft-round=포근/발랄(큰 곡률), organic=자연/수제(블롭 프레임), arch-serif=클래식/프리미엄(아치 프레임), neutral=균형
   "colors": { "primary": "#HEX", "secondary": "#HEX", "surface1": "#HEX", "surface2": "#HEX", "surface3": "#HEX", "textDark": "#HEX", "textLight": "#HEX", "accent": "#HEX" },
   "typography": {
     "headlineFont": string,

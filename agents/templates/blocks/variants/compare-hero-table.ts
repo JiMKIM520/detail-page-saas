@@ -54,7 +54,7 @@ export const compareHeroTable = defineBlock<Data>({
 .cht-th-wrap{display:grid;grid-template-columns:2fr 3fr;margin:0 52px;gap:0}
 .cht-th{padding:14px 20px;font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.08em;text-align:center}
 .cht-th-b{color:var(--ink-2)}
-.cht-th-a{background:var(--accent);color:#fff;border-radius:10px 10px 0 0}
+.cht-th-a{background:var(--accent);color:#fff;border-radius:calc(var(--r-scale,1)*10px) calc(var(--r-scale,1)*10px) 0 0}
 /* 데이터 행 */
 .cht-rows{margin:0 52px 0}
 .cht-row{display:grid;grid-template-columns:2fr 3fr;border-top:1.5px solid var(--line)}

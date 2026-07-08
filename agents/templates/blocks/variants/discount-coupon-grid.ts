@@ -108,7 +108,7 @@ export const discountCouponGrid = defineBlock<Data>({
 .dcg-card{
   background:color-mix(in srgb,var(--accent) 18%,rgba(200,210,255,.18) 82%);
   border:1.5px solid rgba(180,190,255,.28);
-  border-radius:18px;
+  border-radius:calc(var(--r-scale,1)*18px);
   padding:22px 16px 18px;
   text-align:center;
   display:flex;flex-direction:column;align-items:center;gap:0;

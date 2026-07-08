@@ -60,13 +60,13 @@ export const packageEventPriceRows = defineBlock<Data>({
 .pepr-title{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,6.5vw,38px);color:#fff;letter-spacing:-.02em;line-height:1.18}
 .pepr-title .em{color:var(--accent)}
 /* 카드 컨테이너 */
-.pepr-card{background:#fff;border-radius:18px;overflow:hidden;padding:4px 0}
+.pepr-card{background:#fff;border-radius:calc(var(--r-scale,1)*18px);overflow:hidden;padding:4px 0}
 /* 개별 행 */
 .pepr-row{display:grid;grid-template-columns:88px 1fr;gap:0;padding:18px 20px 18px 18px;align-items:center}
 .pepr-row+.pepr-row{border-top:1px solid #EBEBEB}
 /* 썸네일 */
-.pepr-thumb{width:80px;height:80px;object-fit:cover;border-radius:8px;background:#F0F0F0}
-.pepr-thumb.ph{width:80px;height:80px;border-radius:8px;background:#F0F0F0;border:none;color:#C0C0C0;font-size:11px;display:flex;align-items:center;justify-content:center}
+.pepr-thumb{width:80px;height:80px;object-fit:cover;border-radius:calc(var(--r-scale,1)*8px);background:#F0F0F0}
+.pepr-thumb.ph{width:80px;height:80px;border-radius:calc(var(--r-scale,1)*8px);background:#F0F0F0;border:none;color:#C0C0C0;font-size:11px;display:flex;align-items:center;justify-content:center}
 /* 우측 텍스트 영역 */
 .pepr-info{display:flex;flex-direction:column;gap:0;padding-left:14px}
 .pepr-name{font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--ink);line-height:1.28;margin-bottom:8px}
@@ -82,7 +82,7 @@ export const packageEventPriceRows = defineBlock<Data>({
 /* 오렌지 이벤트가 pill */
 .pepr-elabel{display:inline-flex;align-items:center;background:#FF6B00;color:#fff;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.01em;white-space:nowrap}
 /* % 배지 — 짧은 직사각 pill */
-.pepr-badge{display:inline-flex;align-items:center;background:#fff;border:1.5px solid #FF6B00;color:#FF6B00;font-size:13px;font-weight:700;padding:4px 9px;border-radius:6px;white-space:nowrap}
+.pepr-badge{display:inline-flex;align-items:center;background:#fff;border:1.5px solid #FF6B00;color:#FF6B00;font-size:13px;font-weight:700;padding:4px 9px;border-radius:calc(var(--r-scale,1)*6px);white-space:nowrap}
 /* 최종 이벤트 가격 — 굵고 크게 */
 .pepr-eprice{margin-left:auto;font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--ink);letter-spacing:-.01em}
 /* 하단 주의사항 */
