@@ -1,0 +1,3197 @@
+[
+ {
+  "file": "000_산지직송_감홍_사과주스_.json",
+  "archetype": "banner",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌우 2열로 동일 텍스트 심볼(Stage1 소형 35px / Stage2 대형 70px)이 13행씩 세로 반복 적층되는 타이포그래피 애니메이션 프레임",
+  "absorbValue": 4,
+  "keyFeature": "동일 문구를 좌(소) / 우(대) 두 컬럼에 단계별 심볼로 분할 배치해 스크롤 애니메이션 타이밍 차이를 유도하는 키네틱 타이포 구조"
+ },
+ {
+  "file": "001_100__국내산_고춧가루_함유___.json",
+  "archetype": "banner",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌(Stage1 소형 100px) / 우(Stage2 동형 100px) 2열로 19행 적층되는 대형 Bold 타이포그래피 애니메이션 프레임",
+  "absorbValue": 3,
+  "keyFeature": "Pretendard Bold 100px 문구를 두 컬럼·19단계 심볼로 분리해 글자 등장 타이밍을 단계별로 제어하는 모션 텍스트 장치"
+ },
+ {
+  "file": "002_4_9_5.json",
+  "archetype": "stats",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌(Stage1) / 우(Stage2) 2열로 5행 반복되는 평점 숫자 타이포그래피 애니메이션 프레임",
+  "absorbValue": 3,
+  "keyFeature": "평점 숫자(4.9/5)를 80px Bold로 좌우 두 컬럼·5단계 심볼에 분산해 숫자 카운트업 모션 연출"
+ },
+ {
+  "file": "003_pc_전환6.json",
+  "archetype": "promo",
+  "device": "pc",
+  "tone": "light",
+  "structure": "베이지 배경에 중앙 텍스트 영역(헤드라인+서브+CTA버튼), 좌우 사각 이미지 2장 대칭 배치, 상단 컬러 박스 낱글자 장식 배너",
+  "absorbValue": 3,
+  "keyFeature": "선물세트 4글자를 각각 다른 컬러(핑크/퍼플) 라운드 박스에 한 글자씩 배치한 타이틀 장식 + 블랙 CTA 버튼+화살표"
+ },
+ {
+  "file": "004_pc_전환7.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "전면 이미지 배경에 중앙 텍스트 스택(인용부호+구분선+소제목+대형 노란 헤드라인+서브카피+구분선), 좌우 원형 이미지 2장 대칭 배치",
+  "absorbValue": 4,
+  "keyFeature": "노란색(#fff600) 대형 헤드라인 + 오픈인용부호 벡터 + 상하 회색 여백 라인으로 구성된 인용구 스타일 카피 레이아웃"
+ },
+ {
+  "file": "005_pc_전환8.json",
+  "archetype": "promo",
+  "device": "pc",
+  "tone": "light",
+  "structure": "연살구 배경에 상단 멀티컬러 낱글자 장식 + 색상 띠, 중앙 헤드라인+서브+사전예약 CTA, 좌우 타원 프레임 이미지 2장 배치",
+  "absorbValue": 4,
+  "keyFeature": "최상단 4색 정사각 블록에 선·물·세·트 한 글자씩 + 오렌지 가로 색상 띠 조합으로 선물세트 타이틀을 시각화한 독특한 글자 배지 장치"
+ },
+ {
+  "file": "006_pc_자유배너6.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "파란 배경에 좌 시계 아이콘 + 중앙 당일발송 헤드라인+디지털 시계 숫자 블록 + 우 택배차 일러스트 수평 배치",
+  "absorbValue": 4,
+  "keyFeature": "검정 라운드 박스 4개에 시각 숫자(13:00)를 디지털 시계 스타일로 표현한 당일발송 마감 카운트다운 UI"
+ },
+ {
+  "file": "007_pc_자유배너7.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "파란 배경 중앙에 대형 흰 원 오버레이, 그 위에 당일발송 헤드라인+디지털 시계 숫자 블록 중앙 정렬",
+  "absorbValue": 3,
+  "keyFeature": "배경보다 큰 흰색 정원(684px)을 프레임 중앙에 오버랩시켜 배너 전체에 원형 포커스 마스크 효과 연출"
+ },
+ {
+  "file": "008_pc_자유배너8.json",
+  "archetype": "callout",
+  "device": "pc",
+  "tone": "light",
+  "structure": "노란 배경에 좌 스마트폰 목업(카카오채널 UI), 중앙 브랜드명+카톡친구 헤드라인+적립금 강조 흰 바, 우 쿠폰 컴포넌트(바코드+점선) 수평 배치",
+  "absorbValue": 5,
+  "keyFeature": "스마트폰 목업 안에 카카오채널 검색 UI를 재현하고, 우측에 실물 쿠폰 형태(좌우 분리 라운드+점선+바코드)를 배치한 SNS 친구추가 유도 배너"
+ },
+ {
+  "file": "009_pc_자유배너9.json",
+  "archetype": "callout",
+  "device": "pc",
+  "tone": "light",
+  "structure": "노란 배경에 좌 카톡이벤트 헤드라인+서브 텍스트, 중앙 적립금 안내 흰 박스, 우 스마트폰 목업(카카오채널 UI) + 방사형 벡터 장식",
+  "absorbValue": 4,
+  "keyFeature": "방사형 흰색 투명 벡터 배경 장식 위에 카카오 친구추가 이벤트 메시지와 스마트폰 목업을 좌→우 흐름으로 배치한 이벤트 배너"
+ },
+ {
+  "file": "010_pc_자유배너10.json",
+  "archetype": "reason",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "흰 배경에 좌 헤드라인 텍스트 스택(서브+오렌지 대형 카피), 우 원형 이미지 4개 수평 나열 배치",
+  "absorbValue": 3,
+  "keyFeature": "4개 원형 이미지를 균등 간격으로 가로 나열해 재료·산지 다양성을 시각화하는 갤러리 스트립 + 오렌지 강조 헤드라인"
+ },
+ {
+  "file": "011_pc_자유배너11.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌우 직사각 이미지 2장 사이에 노란 다각형 벡터 배경, 중앙에 배송마감 검정 배지+시간+당일발송 형광펜 강조 텍스트 수직 스택",
+  "absorbValue": 4,
+  "keyFeature": "좌우 이미지 사이 중앙에 노란 불규칙 벡터 도형을 겹쳐 마감 시간(02:00)과 당일발송 문구를 형광펜 오렌지 밑줄과 함께 강조하는 긴장감 유도 구조"
+ },
+ {
+  "file": "012_pc_전환9.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌측 텍스트 스택(타이틀+해시태그 뱃지 행) + 우측 타원형 이미지(이중 원형 라인 장식+별 아이콘 오버랩)",
+  "absorbValue": 4,
+  "keyFeature": "이중 타원 벡터 라인 안에 누끼 이미지를 감싸는 프레임 장치 + 황금별 포인트 3개"
+ },
+ {
+  "file": "013_pc_전환10.json",
+  "archetype": "cert",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌측 전체 이미지 + 중앙 타이틀 2줄 + 하단 인증마크 3열 카드 행 + 우측 접시 이미지 오버랩",
+  "absorbValue": 3,
+  "keyFeature": "인증마크를 흰색 라운드 카드에 담아 3열 나열하는 신뢰 배지 레이아웃"
+ },
+ {
+  "file": "014_모바일_전환_6.json",
+  "archetype": "package",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 좌우 분할 이미지(50:50) + 중앙 타이틀+서브텍스트 + 글자 낱자 컬러박스 로고 행 + 하단 CTA 버튼",
+  "absorbValue": 4,
+  "keyFeature": "선·물·세·트 낱자를 각각 다른 색 사각형 블록에 담아 수평 배열하는 워드마크 장치"
+ },
+ {
+  "file": "015_모바일_전환_7.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "배경 전체 이미지 위 중앙 텍스트 스택 + 하단 좌우 원형 이미지 2개 나란히 + 따옴표 벡터 장식",
+  "absorbValue": 3,
+  "keyFeature": "따옴표 벡터 + 수평선 구분자로 텍스트를 인용구처럼 표현하는 에디토리얼 장치"
+ },
+ {
+  "file": "016_모바일_전환_8.json",
+  "archetype": "package",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 색상띠 + 글자 낱자 컬러박스 로고 행 + 중앙 타이틀+서브텍스트+CTA버튼 + 하단 좌우 분할 이미지",
+  "absorbValue": 3,
+  "keyFeature": "상단 오렌지 색상띠 띠 장치 + 낱자 컬러박스 로고를 헤더에 배치하는 구성"
+ },
+ {
+  "file": "017_모바일_전환_10.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀 2줄 + 인증마크 3열 카드 행 + 하단 전체폭 이미지",
+  "absorbValue": 2,
+  "keyFeature": "인증마크 흰색 라운드 카드 3열 + 하단 풀블리드 제품 사진"
+ },
+ {
+  "file": "018_모바일_전환_9.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌측 텍스트 스택(타이틀+해시태그 뱃지 행) + 우측 타원형 이미지(이중 원형 라인 장식+별 오버랩)",
+  "absorbValue": 4,
+  "keyFeature": "이중 타원 벡터 프레임 안 누끼 이미지 + 황금별 3개 산포 장치"
+ },
+ {
+  "file": "019_모바일_전환_11.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 서브텍스트+체크 아이콘 행 + 굵은 타이틀 + 설명 텍스트 + 하단 라운드 직사각형 이미지",
+  "absorbValue": 2,
+  "keyFeature": "원형 체크 아이콘과 손글씨체 서브텍스트 조합으로 강조하는 인트로 레이아웃"
+ },
+ {
+  "file": "020_모바일_전환_13.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 전체 + 좌정렬 타이틀 2줄(골드 컬러) + 설명 텍스트, 이미지 없음",
+  "absorbValue": 2,
+  "keyFeature": "이미지 없이 다크 배경+골드 타이포만으로 구성한 텍스트 전용 전환 배너"
+ },
+ {
+  "file": "021_모바일_전환_15.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 위 흰색 라운드 박스(타이틀+서브텍스트) + 우측 원형 이미지 + 좌측 오렌지 원 뱃지(Brix 수치)",
+  "absorbValue": 5,
+  "keyFeature": "당도 수치를 오렌지 원형 뱃지(라인 이중 원+텍스트)로 시각화하고 흰 라운드 박스와 오버랩"
+ },
+ {
+  "file": "022_모바일_전환_14.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 위 흰색 라운드 박스 중앙 배치(형광펜 하이라이트+타이틀+설명), 이미지 없음",
+  "absorbValue": 3,
+  "keyFeature": "형광 노란 하이라이트 레이어를 타이틀 뒤에 깔아 강조하는 형광펜 장치"
+ },
+ {
+  "file": "023_모바일_전환_12.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌상단 대형 녹색 원 배경 + 좌정렬 타이틀 스택 + 하단 이중 원선 원형 아이콘 3열 행",
+  "absorbValue": 4,
+  "keyFeature": "캔버스 밖까지 잘린 대형 녹색 원을 배경 장치로 쓰고 이중 원선 아이콘 3개를 포인트 요약으로 배열"
+ },
+ {
+  "file": "024_모바일_자유배너_8.json",
+  "archetype": "event",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌측 카카오채널 모바일 목업 + 중앙 쿠폰 티켓 형태 박스 + 우측 브랜드명·헤드라인·혜택 텍스트 스택",
+  "absorbValue": 4,
+  "keyFeature": "쿠폰 티켓 형태(좌우 분리+점선+바코드)와 카카오채널 검색 UI 목업을 조합한 친구추가 유도 배너"
+ },
+ {
+  "file": "025_모바일_자유배너_9.json",
+  "archetype": "event",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌측 텍스트 스택(서브+헤드라인+혜택 2줄) + 우측 카카오채널 목업, 배경 방사형 반투명 패턴",
+  "absorbValue": 3,
+  "keyFeature": "배경 방사형 흰색 벡터 패턴 위에 카카오채널 UI 목업 배치로 친구추가 이벤트 강조"
+ },
+ {
+  "file": "026_모바일_자유배너_10.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌측 텍스트 스택(서브+대형 헤드라인), 우측 두 원형 이미지 겹침 배치",
+  "absorbValue": 3,
+  "keyFeature": "두 원형 이미지가 부분 오버랩되는 구성으로 시각적 리듬 생성, 헤드라인 오렌지 강조색"
+ },
+ {
+  "file": "027_모바일_자유배너_11.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌우 전면 이미지 2장 + 중앙 마름모/다이아몬드형 벡터 오버레이 + 배송마감·시간·당일발송 텍스트",
+  "absorbValue": 4,
+  "keyFeature": "좌우 사진 위에 노란 다이아몬드형 벡터 프레임 장치로 중앙 타이포그래피 강조, 형광펜 밑줄 효과"
+ },
+ {
+  "file": "028_모바일_자유배너_6.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "좌측 아날로그 시계 아이콘 + 중앙 숫자 카드형 디지털 시간 표시 + 상단 당일발송 헤드라인 + 배경 파랑",
+  "absorbValue": 4,
+  "keyFeature": "검정 라운드 카드에 흰 숫자로 구성된 디지털 시계 + 아날로그 시계 벡터 조합으로 시간 긴박감 연출"
+ },
+ {
+  "file": "029_모바일_자유배너_7.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "배경 파랑 + 대형 흰 원 오버랩 + 중앙 숫자 카드형 디지털 시간 + 당일발송 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "배경을 뚫고 나오는 대형 반투명 원 장치로 깊이감 연출, 028과 동일 시간 카드 UI 변형"
+ },
+ {
+  "file": "030_pc_전환11.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "light",
+  "structure": "우측 대형 제품 이미지 + 좌하단 소형 보조 이미지 레이어드 + 좌측 서브카피·헤드라인·본문 텍스트 스택",
+  "absorbValue": 3,
+  "keyFeature": "우측 전면 대형 이미지와 좌하 소형 이미지 오버랩 레이어드 구조로 공간감 연출"
+ },
+ {
+  "file": "031_pc_전환12.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌측 대형 원형 이미지 + 배경 중앙 녹색 대원 + 우측 원형 이미지 + 하단 3개 이중 원 뱃지 아이콘 행 + 좌측 타이틀 스택",
+  "absorbValue": 4,
+  "keyFeature": "이중 원(외곽 라인+내부 흰 원) 뱃지 3개가 하단 행을 구성, 배경 대형 녹색 원이 시각 앵커 역할"
+ },
+ {
+  "file": "032_pc_전환13.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "어두운 단색 배경 + 좌측 서브카피·헤드라인·본문 텍스트 스택만으로 구성, 이미지 없음",
+  "absorbValue": 2,
+  "keyFeature": "짙은 갈색 배경에 금색+흰색 타이포그래피만으로 구성된 텍스트 전용 전환 배너"
+ },
+ {
+  "file": "033_pc_전환14.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌우 절반씩 제품 이미지 2장 + 중앙 라운드 흰 패널에 형광펜 밑줄+헤드라인+본문 텍스트",
+  "absorbValue": 4,
+  "keyFeature": "좌우 전면 이미지를 가르고 중앙에 라운드 흰 패널이 부유하는 플로팅 카드 구조"
+ },
+ {
+  "file": "034_pc_전환15.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "좌측 원형 제품 이미지 + 좌하 오렌지 뱃지(당도 수치) + 우측 반투명 흰 패널에 라운드 태그+헤드라인+본문",
+  "absorbValue": 4,
+  "keyFeature": "원형 이미지에 오렌지 원형 뱃지(Brix 당도 수치)를 오버랩하고 반투명 패널에 라운드 텍스트 태그 조합"
+ },
+ {
+  "file": "035_인트로_02.json",
+  "archetype": "hero",
+  "device": "unknown",
+  "tone": "dark",
+  "structure": "상단 전면 제품 사진 + 하단 황금색 텍스트 박스 + 구분선 + 대형 흰색 헤드라인 + 설명 본문 텍스트 스택",
+  "absorbValue": 3,
+  "keyFeature": "상단 이미지 하단 텍스트 세로 분할 구조에 황금색 브랜드 이름 박스를 상단 앵커로 배치"
+ },
+ {
+  "file": "036_인트로_03.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 중앙정렬 텍스트 스택(브랜드 배지 + 슬로건 + 제품명) + 하단 전폭 제품 이미지",
+  "absorbValue": 2,
+  "keyFeature": "파란 배지 안 흰색 브랜드명 + 분리된 슬로건·제품명 2단 컬러 대비 타이포"
+ },
+ {
+  "file": "037_인트로_01.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 중앙 타이포 블록 + 중앙 대형 원형모서리 제품 이미지 + 하단 해시태그 pill 3종 행",
+  "absorbValue": 3,
+  "keyFeature": "r=200 크게 둥근 제품 이미지 + 하단 pill 형태 해시태그 3개 수평 배치"
+ },
+ {
+  "file": "038_인트로_04.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 중앙 타이포(브랜드명+제품명) + 원형 모서리 대형 제품 이미지 + 하단 번호 3열 포인트 배너",
+  "absorbValue": 4,
+  "keyFeature": "하단 흰색 카드 안 번호(01/02/03) 원형 배지 + 구분선 + 키워드 2단 텍스트 3열 구조"
+ },
+ {
+  "file": "039_인트로_05.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "전폭 배경 이미지 위 우측 세로 텍스트 + 좌측 원형 성분 뱃지 3종 수직 배열 + 하단 타이포 블록",
+  "absorbValue": 5,
+  "keyFeature": "이미지 오버레이에 세로쓰기 텍스트 + 좌측 원형 성분 아이콘 컬럼(흰·갈·어두운 원 3단)"
+ },
+ {
+  "file": "040_제품소개_01.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전폭 배경 이미지 + 제품명 오버레이 + 하단 2×2 반투명 라운드 카드 그리드(point 01~04)",
+  "absorbValue": 4,
+  "keyFeature": "30% 투명도 흰색 r=30 카드 4개 2×2 그리드, 각 카드에 원형 이미지+번호 레이블+설명 텍스트"
+ },
+ {
+  "file": "041_인트로_06.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 브랜드 배지 + 핸드라이팅 대형 헤드라인 + 해시태그 pill 행 + 중앙 제품 이미지(우측 장식 텍스트+화살표) + 하단 r=100 아이콘 배너 3종",
+  "absorbValue": 5,
+  "keyFeature": "이미지 우측에 손글씨체 장식 텍스트+화살표 벡터 + 하단 pill형 아이콘 카드(r=100) 3열"
+ },
+ {
+  "file": "042_인트로_08.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "그라디언트 배경 위 상단 브랜드 배지+제품명 + 반투명 원형 체크 배지 3종 수평 + 하단 전폭 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "60% 투명도 흰 원형(r=999) 안에 체크 아이콘+효능 텍스트 3개 수평 배치"
+ },
+ {
+  "file": "043_인트로_07.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전폭 제품 이미지 + 하단 컬러 배지 + 슬로건 + 구분선 + 대형 제품명 타이포 + 인라인 해시태그",
+  "absorbValue": 3,
+  "keyFeature": "이미지 아래 보라색 배지로 카테고리 표기 후 세로 타이포 스택, 최하단 인라인 해시태그 텍스트 행"
+ },
+ {
+  "file": "044_인트로_09.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "검정 배경에 그라디언트 대형 브랜드명 + 반사광 세로 선 오버레이 제품 이미지 + 하단 그라디언트 타이포 블록",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지 위 흰색 반짝 세로 선 2줄 + 모든 텍스트에 그라디언트 fill 적용"
+ },
+ {
+  "file": "045_인트로_10.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "브라운 배경에 가로선 분기 브랜드명 + 좌측 정렬 대형 헤드라인 + r=400 대형 둥근 제품 이미지 위에 장식 워터마크 텍스트 오버레이 + 하단 제품 설명",
+  "absorbValue": 5,
+  "keyFeature": "r=400 pill형 제품 이미지 위 fs=200 반투명 필기체 워터마크 + 좌우 반투명 영문 레이블 오버레이"
+ },
+ {
+  "file": "046_인트로_11.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "배경 이미지 위 가로선 장식 브랜드명 + 대형 헤드라인 + 수직 구분선 + 반투명 원형 효능 배지 3종 수평",
+  "absorbValue": 3,
+  "keyFeature": "배경 이미지 위 50% 투명 흰 원(r=999) 효능 배지 3개 + 가로선으로 감싼 브랜드 레이블"
+ },
+ {
+  "file": "047_인트로_12.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "검정 배경에 그라디언트 대형 타이포 2줄(굵기 대비) + 중앙 제품 이미지 + 세로선 구분 + 하단 그라디언트 타이포+그라디언트 배지",
+  "absorbValue": 4,
+  "keyFeature": "점(.)으로 자간 분리한 한글 타이포(가.성.비.좋.은) + 굵기 극대비 2줄(SemiBold vs ExtraLight) 연출"
+ },
+ {
+  "file": "048_인트로_13.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 그라디언트 타이틀 영역(브랜드 타원 뱃지+대형 제목+서브카피+컬러 해시태그 pill 3개) + 하단 전체 배경 이미지 + 3열 번호형 키포인트 배너",
+  "absorbValue": 3,
+  "keyFeature": "타원형 브랜드 로고 뱃지 + 컬러 pill 해시태그 3종 + 01/02/03 번호 강조 키포인트 배너가 이미지 위에 부착"
+ },
+ {
+  "file": "049_인트로_14.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 전체 너비 제품 이미지 + 하단 텍스트 영역(브랜드명+대형 제목+서브카피+직사각형 해시태그 pill 3개)",
+  "absorbValue": 2,
+  "keyFeature": "이미지 위-아래 분할 구조에 파란색 직사각형 해시태그 pill 행"
+ },
+ {
+  "file": "050_인트로_15.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전체 배경 이미지 위에 하단부 대형 둥근 사각형 컬러 패널 오버레이, 리본 텍스트 장치+대형 제목+3열 카드 배너 내장",
+  "absorbValue": 4,
+  "keyFeature": "배경 이미지 위로 r=250 대형 둥근 패널이 오버랩되고, 리본(좌우 벡터+채색 바) 서브타이틀 장치 삽입"
+ },
+ {
+  "file": "051_인트로_16.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 전체 너비 제품 이미지 + 중앙 텍스트 스택(ExtraLight 서브+Bold 대형 타이틀+Light 서브) + 하단 제품 이미지, 위아래 이미지로 텍스트 샌드위치",
+  "absorbValue": 3,
+  "keyFeature": "위아래 두 개의 전면 이미지가 텍스트 블록을 샌드위치로 감싸는 세로 분할 구조, 웨이트 대비(ExtraLight↔Bold) 타이포"
+ },
+ {
+  "file": "052_인트로_17.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "어두운 배경에 상단 텍스트 영역(브랜드+해시태그 텍스트 행+대형 타이틀+서브) + 하단 r=300 대형 둥근 제품 이미지, 하단에 갈색 컬러 띠",
+  "absorbValue": 3,
+  "keyFeature": "r=300 대형 라운드 제품 이미지 아래 악센트 컬러 띠가 노출되며 이미지가 프레임 밖으로 돌출되는 느낌"
+ },
+ {
+  "file": "053_인트로_18.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "브라운 배경에 중앙 가로선+브랜드 라인 상단 배치 + r=300 제품 이미지 + 다크 하단 띠에 체크 아이콘+3열 키포인트",
+  "absorbValue": 3,
+  "keyFeature": "브랜드 텍스트 양옆 가로선 장치 + 하단 별도 다크 패널에 체크 벡터 아이콘+키포인트 3열 배치"
+ },
+ {
+  "file": "054_인트로_19.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "전체 배경 이미지 위에 우측 세로 이미지 여백 플레이스홀더 + 좌하단 텍스트 스택(영문 서브+한글 타이틀 2단)",
+  "absorbValue": 2,
+  "keyFeature": "배경 이미지 위 텍스트가 좌정렬 비중앙 배치, 영문+한글 이중 타이틀 계층"
+ },
+ {
+  "file": "055_인트로_20.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전체 배경 이미지 위에 반투명 흰 텍스트 박스(브랜드영문) + 대형 한글 타이틀+서브카피 + 반투명 타원 3개 나열 키포인트 행",
+  "absorbValue": 3,
+  "keyFeature": "반투명(0.30) 흰색 타원 배지 3개가 수평으로 나열된 키포인트 배너 + 반투명 텍스트 박스 브랜드 표기"
+ },
+ {
+  "file": "056_인트로_21.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "크림 배경 상단에 컬러 브랜드 탭+한글 서브타이틀+대형 한글 제품명 → 정사각형에 가까운 제품 이미지 → 하단 이미지 위 텍스트 오버레이",
+  "absorbValue": 3,
+  "keyFeature": "상단 좌측 컬러 브랜드 직사각형 탭 장치 + 이미지 하단부 인-이미지 텍스트 오버레이"
+ },
+ {
+  "file": "057_인트로_22.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "밝은 파란 배경에 상단 흰 직사각형 강조 박스+타이틀+서브카피 → r=400 대형 타원형 제품 이미지 → 우측에 검정 원형 업그레이드 배지 오버랩 → 하단 브랜드+영문 대형 배경 타이포",
+  "absorbValue": 4,
+  "keyFeature": "r=400 거대 타원 제품 이미지 + 우측 검정 원형 배지 오버랩 + 하단 대형 영문 배경 타이포(Foam cleansing, fs=180)"
+ },
+ {
+  "file": "058_인트로_23.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "하늘색 배경에 상단 반투명 브랜드 띠 + 브랜드명+타이틀 2단 → 전체 너비 제품 이미지 → 하단 3열 원형 아이콘 배지+텍스트 키포인트 행",
+  "absorbValue": 3,
+  "keyFeature": "상단 반투명(0.80) 컬러 브랜드 띠 + 하단 3개 원형 컬러 아이콘 배지 키포인트 행"
+ },
+ {
+  "file": "059_인트로_24.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전체 배경 이미지 위에 우측 세로 이미지 플레이스홀더 + 하단 텍스트 영역(서브카피+타이틀 2단+브랜드 컬러 띠)",
+  "absorbValue": 2,
+  "keyFeature": "하단 브랜드 컬러 바(#763c1b) 위 그라디언트 영문 브랜드 표기 + 텍스트 좌정렬 비중앙 계층"
+ },
+ {
+  "file": "060_인트로_25.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전폭 제품 이미지 + 하단 라인텍스트·대형 타이틀 2단·컬러 배경 박스 제품명 순 수직 스택",
+  "absorbValue": 2,
+  "keyFeature": "제품명을 강조색(#1a356c) 채운 라운드 박스로 배지화하여 타이틀 하단에 고정"
+ },
+ {
+  "file": "061_인트로_26.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라벤더 배경 위 흰 라운드 카드 내부: 상단 이미지·중단 타이틀·하단 보라 배경 + 체크아이콘 3열 리스트",
+  "absorbValue": 4,
+  "keyFeature": "카드 내부에서 배경이 흰→보라로 전환되며 체크리스트가 이분된 공간을 형성하는 이중 배경 구조"
+ },
+ {
+  "file": "062_인트로_27.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 회색 배경 박스에 브랜드명(ExtraBold+Thin 대비 2행) + 제품 이미지, 하단 그라디언트 배경에 슬래시 분리 키워드·서브 카피",
+  "absorbValue": 4,
+  "keyFeature": "브랜드명을 ExtraBold/Thin 웨이트 대비로 2행 분리하고, 슬래시(/)로 키워드를 자간 분리하는 타이포그래피 장치"
+ },
+ {
+  "file": "063_인트로_28.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "어두운 갈색 배경 전체, 최상단 라인텍스트 → 전폭 제품 이미지 → 해시태그 뱃지 3개 행 → 대형 타이틀+서브카피",
+  "absorbValue": 3,
+  "keyFeature": "해시태그를 황금색 pill 뱃지 3종으로 정렬해 제품 이미지와 타이틀 사이 키워드 레이어로 삽입"
+ },
+ {
+  "file": "064_인트로_29.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "핑크 배경, 워터마크 대형 브랜드명 + 핑크 배지 + 대형 타이틀, 중앙 타원 클리핑 마스크 제품 사진 + 별 장식, 하단 플레이버 해시태그 풀위드 배너",
+  "absorbValue": 5,
+  "keyFeature": "제품 사진을 3겹 타원 BOOLEAN 클리핑 마스크로 마카롱 모양 실루엣화하고 별 장식으로 큐트 분위기 연출"
+ },
+ {
+  "file": "065_제품소개_02.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "검정 배경 + 보라 액센트 타이틀, 흰 라운드 카드 내부: 제품 이미지·5색 원형 스와치 행·색상명 라운드 배지+설명",
+  "absorbValue": 3,
+  "keyFeature": "5개 원형 컬러 스와치를 카드 내부 이미지 하단에 배치해 색상 선택지를 시각화하는 팔레트 장치"
+ },
+ {
+  "file": "066_제품특징_01.json",
+  "archetype": "checkpoint",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "전폭 제품 이미지 상단, 하단 'check point' 대형 헤더 + 번호(대형 라이트 웨이트 숫자) + 제목+설명 3개 수직 리스트",
+  "absorbValue": 3,
+  "keyFeature": "대형 라이트 웨이트 번호를 좌측에 장식 타이포로 배치해 항목 구분자를 시각적 포인트로 전환"
+ },
+ {
+  "file": "067_제품특징_02.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "하늘 배경 + 'check point' 대형 헤더 + 라인텍스트 배지, 하단 2×2 흰 라운드 카드 그리드(아이콘+원 장식+제목+설명)",
+  "absorbValue": 3,
+  "keyFeature": "각 카드 내 아이콘 뒤에 연한 원(배경 원)을 겹쳐 아이콘에 깊이감을 부여하는 레이어드 아이콘 구조"
+ },
+ {
+  "file": "068_추천_01.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "하늘 배경 대형 질문 타이틀, 타원 클리핑 마스크 인물 사진 + 원형 보조 배너, 하단 흰 배경 패널에 아이콘+5개 추천 대상 리스트",
+  "absorbValue": 4,
+  "keyFeature": "타원 외곽선 2중 보더와 별 장식으로 인물 사진을 꾸미고, '72시간 보습' 원형 배너를 사진 위에 오버랩하는 구성"
+ },
+ {
+  "file": "069_제품소개_03.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "민트 배경 + 아이콘+대형 타이틀 헤더, 타원 클리핑 마스크 이미지 + 원형 인증 배너, 하단 2×2 흰 라운드 카드 그리드(아이콘+설명)",
+  "absorbValue": 3,
+  "keyFeature": "제품 이미지를 다중 타원 BOOLEAN 마스크로 클리핑하고 민트 원형 인증 배지를 이미지 우하단에 오버랩"
+ },
+ {
+  "file": "070_제품소개_04.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전체 배경 IMG(분위기 사진), 최상단 얇은 브랜드 텍스트+가로선, 중앙 두 개 오프셋 컬러 배지(황금+오렌지) 제품명, 하단 브랜드 배경 바",
+  "absorbValue": 4,
+  "keyFeature": "제품명을 황금·오렌지 두 배지로 수평 오프셋 배치해 레이어드 스태거 효과를 만드는 배지 장치"
+ },
+ {
+  "file": "071_인트로_30.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "연파랑 배경, 최상단 풀위드 반투명 배너+상품명, 브랜드+2행 대형 타이틀, 와이드 제품 이미지(프레임 초과), 하단 3개 원형 아이콘 배너 행",
+  "absorbValue": 3,
+  "keyFeature": "제품 이미지를 프레임 폭(860) 초과 1828px 와이드로 배치해 좌우 블리드 효과를 연출하는 와이드 오버플로우 구도"
+ },
+ {
+  "file": "072_인트로_31.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "전면 IMG 배경 위 상단 중앙 타이틀(브랜드 라운드뱃지+대제목+소제목) + 우측 세로 3개 원형 아이콘 뱃지 열",
+  "absorbValue": 3,
+  "keyFeature": "좌측 세로로 쌓인 흰 원형 카드에 아이콘+키워드 레이블을 띄워 제품 효능을 시각화한 버티컬 아이콘 배너"
+ },
+ {
+  "file": "073_인트로_32.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "전면 IMG 배경 위 중앙 텍스트 스택(컬러 뱃지박스+대제목+도트 페이지네이터+슬로건+구분선) + 하단 IMG 플레이스홀더",
+  "absorbValue": 3,
+  "keyFeature": "제품명 상단에 도트 3개 페이지네이터와 하단 가로선 구분자를 삽입해 카탈로그 슬라이드 느낌을 구현"
+ },
+ {
+  "file": "074_인트로_33.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 라운드 제품 이미지(r=150) + 하단 영문 캡션·대제목·설명문 텍스트 스택 + 최하단 해시태그 3개 행",
+  "absorbValue": 3,
+  "keyFeature": "대형 라운드 제품 이미지 아래 해시태그 뱃지 행으로 키워드를 나열해 SNS 감성 강조"
+ },
+ {
+  "file": "075_인트로_34.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전면 IMG 위 상단 라운드뱃지 브랜드 태그+2색 대제목(브랜드명 초록/제품명 흰색) + 하단 짙은 초록 배너에 4열 아이콘+키워드 그리드",
+  "absorbValue": 4,
+  "keyFeature": "2색 분리 대제목(브랜드컬러+흰색) 아래 다크 컬러 배너 내 4열 세로선 구분 아이콘 그리드를 이어붙인 복합 레이아웃"
+ },
+ {
+  "file": "076_인트로_35.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 텍스트 영역(뱃지+대제목+설명) + 하단 전폭 라운드 제품 이미지",
+  "absorbValue": 2,
+  "keyFeature": "텍스트 블록과 하단 대형 제품 이미지를 단순 상하 분리한 기본 hero 구성"
+ },
+ {
+  "file": "077_인트로_36.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 라운드 제품 이미지(텍스트 오버레이+원형 회전 텍스트 배지) + 중단 제목 블록 + 하단 2행×3열 아이콘 그리드",
+  "absorbValue": 5,
+  "keyFeature": "제품 이미지 위 별형 도형에 원호(TEXT_PATH) 회전 텍스트 배지가 올라간 공식판매처 스탬프 장치"
+ },
+ {
+  "file": "078_문제제기_01.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 질문형 대제목 + 4개 너비 가변 라운드 리스트 아이템(좌정렬 계단식) + 도트 구분자 + 하단 원인 설명 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "너비가 다른 라운드 알약 형태의 리스트 항목들이 계단식으로 오프셋 배치되어 시각적 리듬 형성"
+ },
+ {
+  "file": "079_문제제기_02.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 질문 대제목 + 4개 너비 가변 라운드 리스트(우정렬 계단식) + 중앙 라운드 이미지 + 하단 원인 설명 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "리스트 항목의 x좌표가 우측으로 번갈아 오프셋되어 시각적 리듬을 만드는 지그재그 계단 레이아웃"
+ },
+ {
+  "file": "080_문제제기_03.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 질문 대제목 + 라운드 제품 이미지 + 아이콘+텍스트 4행 리스트",
+  "absorbValue": 2,
+  "keyFeature": "좌측 아이콘 벡터와 우측 텍스트가 행 단위로 나열된 심플 불릿 리스트"
+ },
+ {
+  "file": "081_문제제기_04.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 말풍선 뱃지+2단 질문 대제목 + 전폭 이미지 + 4개 흰 카드 리스트(형광펜 하이라이트+세모 꼬리) + 하단 강조 박스",
+  "absorbValue": 5,
+  "keyFeature": "말풍선+세모 꼬리 달린 카드 리스트 아이템에 형광펜 highlight 레이어가 겹쳐진 독창적 문제제기 장치"
+ },
+ {
+  "file": "082_문제공감_01.json",
+  "archetype": "reason",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 말풍선 뱃지+2단 제목 + 전폭 이미지 + 번호+제목+설명 3개 흰 카드 리스트(어두운 배경)",
+  "absorbValue": 3,
+  "keyFeature": "다크 배경에 흰 카드를 띄우고 카드 내부에 원형 번호 배지+볼드 제목+회색 설명 본문을 조합한 문제 원인 분석 레이아웃"
+ },
+ {
+  "file": "083_문제제기_05.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 질문 대제목 + 4개 너비 가변 라운드 리스트(2색 교차) + 도트 구분자 + 설명 텍스트+구분선+본문 + 하단 전폭 이미지",
+  "absorbValue": 3,
+  "keyFeature": "연두/베이지 2가지 색을 교차한 가변 너비 라운드 알약 리스트로 문제 항목을 시각적으로 분류"
+ },
+ {
+  "file": "084_문제제기_06.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 중앙 제목 + 3개 좌이미지-우텍스트 pill형 카드 리스트 + 화살표 전환 + 중앙 결론 텍스트 블록 + 하단 전폭 이미지",
+  "absorbValue": 3,
+  "keyFeature": "r:999 pill 카드에 좌측 300px 이미지가 내장되고, 화살표 벡터가 문제→해결로 흐름을 시각화"
+ },
+ {
+  "file": "085_추천_02.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 컬러 배너 소제목 + 중앙 타원 프레임 장식(이중 라인+별) 원형 이미지 + 우하단 원형 뱃지 + 하단 흰 박스 내 아이콘+텍스트 5개 체크리스트",
+  "absorbValue": 4,
+  "keyFeature": "이중 타원 라인과 분산된 별 장식으로 감싸인 원형 제품 이미지, 우하단 원형 키워드 뱃지 오버랩"
+ },
+ {
+  "file": "086_문제해결_02.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 녹색 배경 + 인용부호 + 2줄 대형 헤드라인 + 큰 라운드 제품 이미지(r:80) + 하단 연녹 배경 텍스트 영역(굵기 변형 2줄 하이라이트 블록)",
+  "absorbValue": 3,
+  "keyFeature": "하단 텍스트 블록에서 두 줄의 너비가 다른 녹색 채워진 텍스트 pill로 핵심 키워드를 강조하는 타이포 장치"
+ },
+ {
+  "file": "087_문제해결_03.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 회색 배경 대형 제목 + 좌우 분할 색상 블록 키워드(합리적인/강력한) + 설명 텍스트 + 하단 전폭 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "단어별로 채워진 박스 색상이 다른 2단 분할 키워드 타이포(좌 짙은 남색 채움 / 우 윤곽만) 강조 구조"
+ },
+ {
+  "file": "088_문제해결_04.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "진청 배경 + 소제목+대제목 영역 + 라운드 제품 이미지(r:150) + 3개 흰 카드 리스트(좌 연파 사진+우 제목·설명, 카드 사이 화살표 구분선)",
+  "absorbValue": 4,
+  "keyFeature": "카드 사이에 화살표 구분 벡터를 삽입한 3단 기능 리스트, r:150 대곡률 이미지 컨테이너"
+ },
+ {
+  "file": "089_문제해결_07.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "베이지 배경 + 3단 텍스트 헤드라인 + 중앙 제품 이미지 + 3개 pill형 카드(좌 원형 이미지 + 우 번호뱃지·제목·설명, 가로선 구분)",
+  "absorbValue": 3,
+  "keyFeature": "pill(r:999) 카드 내 번호 태그 뱃지(r:30, 브라운)와 가로선으로 제목-설명을 분리하는 아이템 구조"
+ },
+ {
+  "file": "090_문제해결_08.json",
+  "archetype": "lineup",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "베이지 배경 + 3단 헤드라인 + 전폭 제품 이미지 + 3개 흰 카드(좌 원형 이미지+우 제목·설명·정상가/할인가 이중 뱃지 가격 표시) + 좌상단 원형 특별함 뱃지",
+  "absorbValue": 4,
+  "keyFeature": "카드마다 브랜드 박스+취소가/할인가 이중 레이어 가격 뱃지 + 원형 '특별함' 인장이 좌상단에 오버랩"
+ },
+ {
+  "file": "091_문제해결_09.json",
+  "archetype": "lineup",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "베이지 배경 + 3단 헤드라인 + 3개 라운드 카드(좌 원형 이미지+우 번호뱃지·제목·설명) + 하단 전폭 제품 이미지",
+  "absorbValue": 2,
+  "keyFeature": "089와 동일 pill 카드 구조이나 카드에 r:30 라운드 테두리 적용, 하단에 와이드 이미지 추가 배치"
+ },
+ {
+  "file": "092_후기_01.json",
+  "archetype": "review",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "녹색 배경 + 별점 아이콘 행 + 제목 2줄 + 4개 흰 카드 리스트(좌 200px 이미지+우 별점·닉네임+리뷰 텍스트)",
+  "absorbValue": 2,
+  "keyFeature": "타이틀 영역에 실제 노란 별 아이콘 5개를 배치하고, 각 리뷰 카드에 녹색 ★ 텍스트 별점 표기"
+ },
+ {
+  "file": "093_후기_03.json",
+  "archetype": "stats",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "흰 배경 + 볼드 제목+부제 + 가로선 구분 + 3개 항목별 대형 퍼센트 숫자+설명+진행 바(회색 트랙+파란 fill) 그래프 목록",
+  "absorbValue": 3,
+  "keyFeature": "체험단 만족도를 대형 숫자(65px)+라운드 프로그레스 바로 시각화한 통계 레이아웃"
+ },
+ {
+  "file": "094_후기_04.json",
+  "archetype": "review",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "연파 배경 + 인용부호+제목+대형 평점 숫자(4.9/5)+그라데이션 별점+기준 주석 + 4개 말풍선 카드(꼬리 벡터 포함) + 하단 전폭 이미지",
+  "absorbValue": 4,
+  "keyFeature": "리뷰를 꼬리 달린 말풍선(VECTOR 꼬리) 카드로 표현하고, 상단에 대형 숫자 평점+그라데이션 별을 배치"
+ },
+ {
+  "file": "095_후기_05.json",
+  "archetype": "review",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "짙은 남색 배경 + 빨간 별점+대형 제목 + 3개 리뷰 카드(내용흰블록: 키워드 뱃지+리뷰텍스트+우측 이미지+하단 파란 한줄 요약 바)",
+  "absorbValue": 4,
+  "keyFeature": "각 리뷰 카드 하단에 파란 배경 한줄 요약 바가 붙고, 카드 내 키워드 태그 뱃지+우측 제품 이미지가 공존"
+ },
+ {
+  "file": "096_후기_07.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "상단 IMG 타이틀 배경 + 좌우 2열 말풍선 카드(키워드 뱃지+사진+텍스트+별점) 4개 배치",
+  "absorbValue": 3,
+  "keyFeature": "말풍선 꼬리(Subtract 벡터)가 달린 흰색 라운드 카드가 좌우 2열로 교차 배치되어 실제 채팅 UI를 연상시키는 후기 레이아웃"
+ },
+ {
+  "file": "097_후기_08.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "상단 중앙 통계 3행(라벨+라인+강조 숫자) + 전면 IMG 오버레이 + 하단 좌이미지+우텍스트 리스트 3행",
+  "absorbValue": 4,
+  "keyFeature": "누적 리뷰·판매량·평점을 가로선으로 연결한 통계 행 위에 전면 사진을 오버레이하고, 아래에 썸네일+키워드 뱃지+별점 리스트를 이어붙인 복합 구성"
+ },
+ {
+  "file": "098_후기_06.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀+그라디언트 만족도 배지 + 원형 도넛 그래프 3개 행 + 전면 IMG",
+  "absorbValue": 4,
+  "keyFeature": "체험단 만족도 수치를 원형 도넛 그래프 3개로 시각화하고 그라디언트 필로우 배지로 강조한 데이터 시각화 후기 섹션"
+ },
+ {
+  "file": "099_문제해결_01.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "전면 IMG 배경 + 상단 대형 Bold 타이틀 2단 + 하단 반투명 타원 원배너 3개 가로 행",
+  "absorbValue": 3,
+  "keyFeature": "배경 이미지 위에 반투명 흰색 타원 뱃지(30% opacity)를 3개 나열해 개선율 퍼센트를 오버레이로 표시하는 장치"
+ },
+ {
+  "file": "100_포인트_01.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "세로 3파트(point 01~03) 순차 스택: 각 파트는 포인트 레이블+타이틀+이미지+비포애프터 비교 또는 체크리스트+원형 인증 뱃지 조합",
+  "absorbValue": 4,
+  "keyFeature": "동일 색상(#558bff) 포인트 레이블 바로 사용 전/후 비교 패널과 체크리스트, 텍스트 원형(TEXT_PATH 곡선 텍스트) 인증 뱃지를 point별로 반복하는 모듈식 구조"
+ },
+ {
+  "file": "101_후기_02.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 수평 바 그래프 4행(퍼센트 채움형) + 하단 그린 배경 영역에 비포애프터 카드 2열",
+  "absorbValue": 3,
+  "keyFeature": "체험단 만족 문장을 수평 필 바 그래프로 시각화한 뒤 비포/애프터 이미지+설명 카드를 이어 배치해 데이터→감성 전환 구조를 구현"
+ },
+ {
+  "file": "102_상품구성_01.json",
+  "archetype": "package",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀(할인 강조) + 3개 수직 스택 카드(좌 텍스트+가격, 우 상품 이미지, 우상단 화살표형 할인 뱃지)",
+  "absorbValue": 3,
+  "keyFeature": "각 옵션 카드 우상단에 화살표 벡터 형태의 할인율 뱃지(10%/20%/50%)를 배치해 시선을 자연스럽게 할인폭으로 유도하는 장치"
+ },
+ {
+  "file": "103_포인트_02.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "light",
+  "structure": "세로 3파트: point1(IMG 배경+말풍선 성분 뱃지 3개 플로팅) + point2(아이콘 원 5개 격자+이미지) + point3(타원 스택 3층+성분별 바 그래프 카드 3개)",
+  "absorbValue": 5,
+  "keyFeature": "타원(Ellipse) 3개를 수직으로 겹쳐 성분 레이어를 시각화하고, 별도 영양성분 카드에 가로 바 그래프(비타민13종·미네랄10종·루테인)를 섹션별로 전개하는 복합 성분 설명 구조"
+ },
+ {
+  "file": "104_성분소개_01.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀+라운드 뱃지 + 중앙 대형 원형 이미지에 성분 도트 4개 포인팅 레이아웃",
+  "absorbValue": 4,
+  "keyFeature": "원형 제품 이미지 주변에 흰색 도트(Ellipse)를 앵커로 4가지 핵심 성분명+설명 라벨을 방사형으로 배치한 인포그래픽 성분 맵"
+ },
+ {
+  "file": "105_비교_02.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 3열 비교 테이블(좌 구분열 회색, 중앙 자사 강조 컬러, 우 타사 회색) 4행 속성 비교",
+  "absorbValue": 3,
+  "keyFeature": "중앙 자사 컬럼을 풀 컬러(#558bff) 라운드 패널로 돌출시켜 비교 우위를 한눈에 강조하는 3열 스펙 비교 테이블"
+ },
+ {
+  "file": "106_상품구성_02.json",
+  "archetype": "package",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 2개 수직 스택 카드(좌 상품이미지, 우 상품명+정상가+할인가) + 원형 할인율 뱃지 좌상단 오버랩",
+  "absorbValue": 2,
+  "keyFeature": "원형(r:1000) 파란색 할인율 뱃지가 카드 모서리를 오버랩하며 즉각적인 가격 강조를 제공하는 2옵션 상품 카드"
+ },
+ {
+  "file": "107_상품구성_03.json",
+  "archetype": "package",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 2열 카드(상단 정사각 이미지, 하단 번호 뱃지+상품명+가격+구분선) + 좌상단 별 모양 오늘특가 뱃지",
+  "absorbValue": 3,
+  "keyFeature": "STAR 노드 형태의 별 모양 라벨(오늘 특가 텍스트)을 카드 모서리에 겹쳐 이벤트 긴급성을 시각화한 2열 상품 옵션 카드"
+ },
+ {
+  "file": "108_사용방법_01.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전폭 이미지 + 중앙정렬 영문 대형 타이틀(100px) + 한글 부제 + 3줄 본문 텍스트 스택",
+  "absorbValue": 2,
+  "keyFeature": "영문 대형 타이틀과 한글 소제목을 수직 병치해 타이포그래피 계층 대비 연출"
+ },
+ {
+  "file": "109_Q_A_01.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 전폭 이미지 + 중앙 타이틀 + 청색 라운드 Q바 / 흰 배경 A카드 3세트 수직 반복",
+  "absorbValue": 3,
+  "keyFeature": "Q 박스는 accent 컬러 채움 r20, A 박스는 흰 배경으로 명확한 색 대비 분리"
+ },
+ {
+  "file": "110_Q_A_07.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 전폭 이미지 + 타이틀 + r50 흰 카드 안에 Q바(컬러 채움 r50)와 A 텍스트 3세트",
+  "absorbValue": 3,
+  "keyFeature": "Q&A 쌍 전체를 r50 흰 카드로 감싸 버블 느낌의 컨테이너 형태"
+ },
+ {
+  "file": "111_Q_A_08.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "타이틀 + 말풍선 꼬리 달린 Q버블 + 아이콘+텍스트 A블록 3세트 + 하단 전폭 이미지",
+  "absorbValue": 4,
+  "keyFeature": "Q를 채팅 말풍선(꼬리 벡터 포함) 형태로 시각화해 대화형 UX 연출"
+ },
+ {
+  "file": "112_상품정보안내_01.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "배경 이미지 오버레이 + 중앙 '상품 정보 고시' 타이틀 + 항목(회색)/내용(흰색) 2열 표 7행",
+  "absorbValue": 2,
+  "keyFeature": "상품정보 고시 데이터를 항목/내용 2열 컴팩트 표로 구조화"
+ },
+ {
+  "file": "113_배송교환반품_01.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "배송안내·교환반품 2섹션 수직 스택, 각 섹션: 원형 아이콘 + 컬러 섹션명 + 흰 r30 박스 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "원형 badge 아이콘으로 배송/교환반품 섹션을 시각 구분하는 2-블록 구조"
+ },
+ {
+  "file": "114_제품특징_03.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "중앙 타이틀 텍스트 + 정사각 제품 이미지 + 2×2 그린 채움 타일(아이콘+제목+설명) 그리드",
+  "absorbValue": 3,
+  "keyFeature": "2×2 컬러 타일 그리드에 아이콘+텍스트를 수직 배치해 특징 4개를 균등 강조"
+ },
+ {
+  "file": "115_비교_03.json",
+  "archetype": "compare",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "배지+타이틀 영역 + 3열 비교표(자사 컬러 채움 좌열/중앙 구분 항목/경쟁사 회색 우열)",
+  "absorbValue": 4,
+  "keyFeature": "좌(자사 강조 컬러)·중(항목명)·우(경쟁사 회색) 3열 비교표로 자사 우위 시각화"
+ },
+ {
+  "file": "116_인증서_01.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀 + 블랙 배경 라벨박스 + 인증서 이미지(그림자+확대 클로즈업 오버랩) + 하단 설명 텍스트",
+  "absorbValue": 4,
+  "keyFeature": "실제 인증서 서류 이미지 위에 확대 클로즈업 레이어를 오버랩해 신뢰감 강화"
+ },
+ {
+  "file": "117_인증서_02.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "그라디언트 배경 + 로고 원형 이미지 포함 흰 pill 텍스트박스 + 2×2 라운드 이미지 그리드 + 상단 타이틀",
+  "absorbValue": 3,
+  "keyFeature": "원형 로고가 삽입된 pill형 텍스트박스로 GMP 인증 신뢰 메시지 전달"
+ },
+ {
+  "file": "118_추천_03.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀 + 2×2 카드 그리드(상단 회색 라운드 이미지 + 하단 컬러 채움 텍스트 레이블)",
+  "absorbValue": 3,
+  "keyFeature": "추천 대상 이미지 아래에 컬러 채움 레이블을 붙인 2×2 카드 그리드"
+ },
+ {
+  "file": "119_Q_A_02.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 전폭 이미지 + 타이틀 + Q아이콘+제목/회색 본문 인라인 흰 r30 카드 3세트",
+  "absorbValue": 2,
+  "keyFeature": "Q질문과 A답변을 하나의 흰 r30 카드 안에 인라인 배치해 단순 리스트형 구성"
+ },
+ {
+  "file": "120_사용방법_02.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전체폭 이미지 + 하단 라운드 카드 3개 수직 리스트(좌 아이콘·세로선·우 텍스트 스택)",
+  "absorbValue": 3,
+  "keyFeature": "세로 구분선으로 아이콘 영역과 텍스트 영역을 분리한 카드형 스텝 리스트"
+ },
+ {
+  "file": "121_상품정보안내_02.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 정렬 타이틀 + 2열(좌 제목·우 본문) 행 반복 테이블",
+  "absorbValue": 2,
+  "keyFeature": "좌 170px 고정 제목열과 우 560px 본문열로 나뉜 식품 법정 표시 테이블 구조"
+ },
+ {
+  "file": "122_배송교환반품_02.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "배송안내(타이틀+3단계 순서 카드+텍스트 박스) + 교환반품 안내(타이틀+텍스트 박스) 수직 2블록",
+  "absorbValue": 3,
+  "keyFeature": "3단계 흐름(시계→발송→완료)을 화살표로 연결한 수평 스텝 플로우 카드"
+ },
+ {
+  "file": "123_제품특징_04.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 중앙 타이틀 + 2×3 원형 뱃지 그리드(아이콘+텍스트)",
+  "absorbValue": 4,
+  "keyFeature": "네이비 배경 위 흰색 원형 아이콘 뱃지 6개를 2열 3행으로 배열한 체크포인트 허니콤 레이아웃"
+ },
+ {
+  "file": "124_이벤트_01.json",
+  "archetype": "event",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전체폭 이미지+반투명 타이틀 오버레이 상단 + 할인 내역 리스트+검정 최종가 바 하단",
+  "absorbValue": 4,
+  "keyFeature": "이미지 위 반투명 블록 타이틀 + 가격 항목별 색상 분기(정상가·행사가·쿠폰) + 강조 최종가 블랙바"
+ },
+ {
+  "file": "125_제품소개_05.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀(컬러 강조 헤드라인+서브) + 전체폭 이미지에 좌측 원형 뱃지 3개 수직 오버레이",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지 좌측에 원형 컬러 뱃지를 수직 나열하고 라인으로 이미지와 연결하는 콜아웃 장치"
+ },
+ {
+  "file": "126_포인트_03.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "번호형 포인트 3섹션 수직 적층(각 섹션: 대형 번호 타이틀+설명+이미지 2장+특징 배너)",
+  "absorbValue": 5,
+  "keyFeature": "01/02/03 대형 넘버링+BA 비교 내장+하단 컬러 3열 스탯 배너가 한 프레임에 결합된 멀티섹션 롱폼"
+ },
+ {
+  "file": "127_비교_04.json",
+  "archetype": "compare",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀+설명 + 흰 배경 박스 내 수직 막대 그래프(3열: 1년·5년·10년) + 하단 설명 텍스트",
+  "absorbValue": 4,
+  "keyFeature": "제품 강조 열에 대각선 화살표 장식을 얹은 수직 바 그래프로 배터리 수명 비교"
+ },
+ {
+  "file": "128_인증서_03.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "배경 이미지 위 인증서 카드 중앙 배치(확대 효과 레이어) + 하단 흰 배너(아이콘+텍스트)",
+  "absorbValue": 4,
+  "keyFeature": "인증서 하단에 그라디언트 그림자+확대 텍스트 레이어를 겹쳐 돋보기 줌인 효과를 연출"
+ },
+ {
+  "file": "129_제품특징_05.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전체폭 제품 이미지 상단 + 컬러 타이틀 바 + 흰 배경 원형 아이콘+제목+설명 5행 리스트",
+  "absorbValue": 3,
+  "keyFeature": "토스트 브라운 배경 이미지 위에 블루 타이틀 바를 오버랩하고 흰 카드 리스트로 전환하는 2톤 레이아웃"
+ },
+ {
+  "file": "130_비교_05.json",
+  "archetype": "compare",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀+설명 + 자사·A사·B사 3열 카드 비교(상단 제품 이미지 내장, 항목별 행 반복) + 하단 브랜드 문구",
+  "absorbValue": 4,
+  "keyFeature": "3열 카드 각각 상단에 제품 이미지를 배치하고 항목 레이블+값을 셀로 쌓는 세로 스펙 비교 카드"
+ },
+ {
+  "file": "131_사용방법_03.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀(대형 영문+강조 박스 한글) + 01~04 번호 스텝 좌우 교차(이미지 절반+텍스트 절반)",
+  "absorbValue": 4,
+  "keyFeature": "홀수 스텝은 좌이미지·우텍스트, 짝수 스텝은 좌텍스트·우이미지로 교차 배치하는 지그재그 사용법 레이아웃"
+ },
+ {
+  "file": "132_제품정보_01.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 제품 이미지에 번호 핀 오버레이(10개) + 하단 2열 번호-명칭 범례 리스트",
+  "absorbValue": 4,
+  "keyFeature": "제품 사진 위에 번호 핀을 직접 배치하고 하단 범례표와 연결하는 인포그래픽 구성품 안내"
+ },
+ {
+  "file": "133_제품정보_02.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 3열×2행 원형 이미지 카드 그리드(아이템명 하단)",
+  "absorbValue": 2,
+  "keyFeature": "원형 이미지 6개 균등 그리드로 추가 구성품 나열"
+ },
+ {
+  "file": "134_배송교환반품_06.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 아이콘+서브타이틀+포인트컬러 메인타이틀 + 수평 구분선으로 구분된 3행 좌항목-우내용 테이블",
+  "absorbValue": 3,
+  "keyFeature": "컬러 강조 아이콘·타이틀과 블루 계열 카테고리 레이블로 배송/교환/반품 3구획 구분"
+ },
+ {
+  "file": "135_제품정보_03.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "상단 타이틀 + 제품 측면 사진에 치수 라인·수치 텍스트 오버레이",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지에 mm 단위 치수선을 직접 그려넣은 도면 스타일 사이즈 안내"
+ },
+ {
+  "file": "136_상품정보안내_03.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 다크 항목열/화이트 내용열 8행 2열 테이블",
+  "absorbValue": 2,
+  "keyFeature": "#4f4f4f 다크 셀과 흰 내용 셀 교차 배색의 정형 스펙 표"
+ },
+ {
+  "file": "137_비교_06.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 타이틀 + 좌(회색 라운드 카드 타사)·우(블루 라운드 카드 자사) 나란히 배치, 중앙 VS 뱃지 오버랩",
+  "absorbValue": 4,
+  "keyFeature": "중앙 원형 VS 뱃지가 두 카드 경계에 오버랩되는 좌우 대비 비포애프터 구성"
+ },
+ {
+  "file": "138_이벤트_03.json",
+  "archetype": "event",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "다크 네이비 배경 + 좌측 텍스트 블록(강조색 헤드라인·본문·주석) + 우하단 원형 이미지에 그라데이션 원 배너 오버랩",
+  "absorbValue": 4,
+  "keyFeature": "제품 원형 사진 위에 그라데이션 뱃지 원이 겹치는 AS보증 이벤트 레이아웃"
+ },
+ {
+  "file": "139_이벤트_05.json",
+  "archetype": "discount",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "하늘색 배경 + 이벤트 레이블·초대형 헤드라인·할인 문구 텍스트 블록 + 상품명 박스·제품 이미지·가격 행 + 우측 원형 한정 뱃지 오버랩",
+  "absorbValue": 3,
+  "keyFeature": "fs:150 초대형 '깜짝 세일' 타이포그래피와 선착순 원형 뱃지 오버랩으로 긴급감 연출"
+ },
+ {
+  "file": "140_이벤트_06.json",
+  "archetype": "event",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "웜브라운 배경 + 아이콘·라운드 레이블·대형 타이틀 + 제품 이미지 + 흰 박스(제품 이미지·혜택 태그 3종) + 가격 다크 바 구조의 복합 이벤트 섹션",
+  "absorbValue": 5,
+  "keyFeature": "1+1 런칭 이벤트 전체를 단일 프레임에 담은 다단 복합 레이아웃(이미지→혜택태그→가격→환불보장 뱃지)"
+ },
+ {
+  "file": "141_제품특징_06.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "블랙 배경 + 상단 타이틀·부제 + 좌측 3개 그라데이션 원 아이콘+반투명 필 캡슐 카드 수직 스택",
+  "absorbValue": 4,
+  "keyFeature": "그라데이션 원 아이콘과 반투명(80%) 흰 배경 pill 카드가 어두운 배경 위에 부유하는 특징 리스트"
+ },
+ {
+  "file": "142_제품특징_07.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "상단 제품 이미지 풀블리드 배경에 타이틀+체크리스트 오버레이 + 하단 블루 배너에 3열 아이콘·수치 스탯 행",
+  "absorbValue": 4,
+  "keyFeature": "이미지 위 반투명 체크리스트와 하단 컬러 배너 스탯 3종 분리 구성으로 배터리 특징 이중 전달"
+ },
+ {
+  "file": "143_성분소개_03.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 라운드 레이블+타이틀+부제 + 중단 그린 라인 원형 뱃지 5개 배열(무첨가 인증) + 하단 라운드 코너 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "그린 아웃라인 원형 5개 무첨가 인증 뱃지를 중앙 집중 배열하고 하단 제품 사진과 연결"
+ },
+ {
+  "file": "144_성분소개_02.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 형광 뱃지 + 중앙 대형 헤드라인, 하단 말풍선 꼬리 달린 라운드 알약형 성분 태그 3개가 불규칙 좌우 배치",
+  "absorbValue": 4,
+  "keyFeature": "말풍선 꼬리(세모 벡터)가 달린 흰색 pill 태그가 서로 다른 x위치에 떠 있는 플로팅 성분 버블 레이아웃"
+ },
+ {
+  "file": "145_성분소개_04.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 포인트 텍스트 라인 + 타이틀 블록 + 풀폭 이미지 + 하단 원형 동심원 뱃지 3열 행",
+  "absorbValue": 3,
+  "keyFeature": "3중 동심원 안에 곡선 텍스트 패스(TEXT_PATH)가 회전 배치된 원형 인증 아이콘 뱃지"
+ },
+ {
+  "file": "146_비교_01.json",
+  "archetype": "ba",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 중앙 헤드라인 + 좌우 50:50 분할 사용전/후 카드(상단 컬러 헤더 + 이미지 + 하단 설명 텍스트)",
+  "absorbValue": 2,
+  "keyFeature": "사용 전 헤더는 회색·사용 후 헤더는 브랜드 블루로 색상 대비를 통한 비포애프터 명확화"
+ },
+ {
+  "file": "147_성분소개_06.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 뱃지+헤드라인 + 라운드 카드 3개 수직 스택(각 카드: 타이틀+아이콘 원 + 수평 바 차트 행)",
+  "absorbValue": 4,
+  "keyFeature": "라운드 카드 내부에 성분명·비율이 채워진 수평 그린 바 차트와 '+' 기호 조합으로 영양소 함량 시각화"
+ },
+ {
+  "file": "148_성분소개_05.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 뱃지+헤드라인 + 3개 타원(ELLIPSE)이 겹쳐 쌓인 레이어드 버블 스택",
+  "absorbValue": 4,
+  "keyFeature": "반투명 타원 3개가 세로로 겹쳐지며 각 성분 카테고리를 레이어로 표현하는 온이언(양파) 구조"
+ },
+ {
+  "file": "149_제품특징_08.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "풀폭 히어로 이미지 상단 + 타이틀 블록 + 2×2 다크 카드 그리드(원형 아이콘+제목+구분선+설명)",
+  "absorbValue": 3,
+  "keyFeature": "다크 네이비 배경 위 각 카드에 블루 원형 아이콘과 'point 0N.' 레이블이 달린 2×2 체크포인트 그리드"
+ },
+ {
+  "file": "150_포인트_04.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "3개 포인트 섹션 수직 적층 — 각 섹션: 포인트 번호 라인 + 풀폭 이미지 + 좌이미지·우텍스트 리스트 행들",
+  "absorbValue": 3,
+  "keyFeature": "번호(#point 01~03) + 구분선 + 풀폭 이미지 후 좌측 썸네일·우측 설명+키워드 블루 뱃지 행 반복 패턴"
+ },
+ {
+  "file": "151_인증서_04.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 타이틀+부제 + 인증서 이미지 카드 중앙 배치 + 하단 확대 효과 그라디언트 오버레이 영역",
+  "absorbValue": 3,
+  "keyFeature": "인증서 하단에 그라디언트 그림자+흰 배경 확대영역이 겹쳐 인증서를 확대·조명하는 줌인 연출 장치"
+ },
+ {
+  "file": "152_인증서_05.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀+부제 + 2열 인증서 카드(이미지+라벨) 병렬 배치",
+  "absorbValue": 2,
+  "keyFeature": "2개 인증서 이미지를 동등 너비로 나란히 놓고 각 하단에 인증 명칭 텍스트 레이블을 붙인 단순 2열 구성"
+ },
+ {
+  "file": "153_추천_04.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 아이콘+대형 헤드라인 + 2×2 카드 그리드(라운드 이미지+브랜드 컬러 텍스트 박스)",
+  "absorbValue": 2,
+  "keyFeature": "각 카드 하단에 브랜드 블루 배경 텍스트 박스가 반투명 오버레이 없이 분리 부착된 상황별 추천 그리드"
+ },
+ {
+  "file": "154_추천_05.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 헤드라인 + 3개 수평 행(좌원형이미지+우텍스트 또는 우이미지+좌텍스트 교차 배치)",
+  "absorbValue": 3,
+  "keyFeature": "정원(r:100) 썸네일과 오렌지 option 뱃지+제목+다섯 줄 설명이 한 행을 이루며 좌우 교차하는 지그재그 리스트"
+ },
+ {
+  "file": "155_사용방법_04.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "말풍선 뱃지+대형 헤드라인 + 4단계 좌텍스트·우이미지 행 + 하단 반투명 주의사항 박스",
+  "absorbValue": 3,
+  "keyFeature": "말풍선 꼬리 달린 다크 pill 뱃지 레이블과 단계별 다크 사각 숫자 뱃지(1~4)가 결합된 스텝 가이드 레이아웃"
+ },
+ {
+  "file": "156_비교_07.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 vs 타이틀 + 중앙 원형 배지, 하단 다크 헤더 5행 3열 비교표(자사/경쟁사/항목), 각주 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "vs 원형 배지 + 3열 비교표에서 자사 컬럼을 블루 강조, 경쟁사는 회색 처리"
+ },
+ {
+  "file": "157_제품정보_04.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 서브타이틀+메인 타이틀 텍스트, 대형 라운드 이미지, 하단 2열 3행 카드 그리드(제품 스펙 6항목)",
+  "absorbValue": 2,
+  "keyFeature": "라운드 카드 그리드에 항목명(라이트)+값(볼드) 2단 구성으로 스펙 6종 나열"
+ },
+ {
+  "file": "158_제품정보_05.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 타이틀, 측정법 이미지+말풍선 주석 오버레이 박스, 측정 안내 텍스트, 다크 헤더 4행 3열 사이즈 표",
+  "absorbValue": 4,
+  "keyFeature": "이미지 위에 캡슐형 말풍선(10cm·둘레) + 벡터 화살표 오버레이로 측정 방법 시각화"
+ },
+ {
+  "file": "159_Q_A_03.json",
+  "archetype": "faq",
+  "device": "pc",
+  "tone": "light",
+  "structure": "대형 Q&A 타이포 헤더, 흰 라운드 카드 내 Q./A. 접두어 + 질문·답변 3세트 세로 스택",
+  "absorbValue": 2,
+  "keyFeature": "130px 볼드 Q&A 글자를 배경 타이포로 활용하고 카드 내 Q./A. 이니셜 접두어로 구조화"
+ },
+ {
+  "file": "160_상품정보안내_04.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 대형 타이틀, 제목(회색 배경 셀)+본문(흰 셀) 2열 8행 표 구조",
+  "absorbValue": 1,
+  "keyFeature": "법정 상품정보 고지용 좌측 고정폭 제목 셀 + 우측 가변 본문 셀의 행 반복 테이블"
+ },
+ {
+  "file": "161_배송교환반품_03.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 타이틀, 흰 배경 카드 3열(아이콘 원형+제목+설명) 세로 스택",
+  "absorbValue": 2,
+  "keyFeature": "회색 원형 아이콘 박스 + 배송·교환반품·주의사항 3블록 세로 배치, 라이트 회색 배경"
+ },
+ {
+  "file": "162_이벤트_02.json",
+  "archetype": "event",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "전체 배경 이미지, 중앙 대형 2+1 숫자 타이포, 브랜드 문구 + 녹색 캡슐 배지",
+  "absorbValue": 3,
+  "keyFeature": "150px 초대형 프로모션 숫자 + 녹색 배경 캡슐 태그로 혜택 강조, 풀블리드 이미지 배경"
+ },
+ {
+  "file": "163_제품소개_07.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "풀블리드 이미지 배경, 상단 대형 질문형 헤드라인 + 그라디언트 캡슐 섹션 헤더, 하단 원형 아이콘+색상 텍스트+설명 3행 리스트",
+  "absorbValue": 4,
+  "keyFeature": "그라디언트 pill 태그로 섹션을 구분하고 녹색 원형 아이콘에 성분 아이콘을 내장한 3단 리스트"
+ },
+ {
+  "file": "164_인증서_06.json",
+  "archetype": "cert",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 타이틀+서브, 인증서 이미지 카드(확대 효과 레이어 내장), 하단 전폭 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "인증서 이미지 하단에 그라디언트 그림자 + 강조 텍스트 확대영역 오버레이 레이어 장치"
+ },
+ {
+  "file": "165_제품특징_09.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 대형 타이틀+서브, 2열 3행 녹색 원형 배지 그리드(체크마크+특징 텍스트 6종)",
+  "absorbValue": 3,
+  "keyFeature": "녹색 solid 원+내부 링 이중 원형 배지 6개 그리드로 핵심 특징을 아이콘 없이 텍스트만으로 표현"
+ },
+ {
+  "file": "166_비교_08.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 라운드 배지+2행 헤드라인+서브, 하단 3열 비교 패널(자사 녹색/항목 회색/경쟁사 회색) 좌우 비대칭 폭",
+  "absorbValue": 4,
+  "keyFeature": "자사 컬럼을 경쟁사보다 넓게(320px vs 240px) 설계하고 텍스트 색을 형광(#cdff71)으로 차별화한 비대칭 비교표"
+ },
+ {
+  "file": "167_포인트_05.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "point 01~03 3개 섹션 세로 연속 배치, 각 섹션에 대형 이미지·타이틀·체크리스트·2열 카드 그리드·성분 리스트(좌우 교차 이미지+텍스트) 혼합",
+  "absorbValue": 5,
+  "keyFeature": "동일 구조 point 섹션 3개를 연속 스크롤로 이어 붙이고, 인증서·원형 아이콘 뱃지·그라디언트 pill·텍스트패스 원형 스탬프 등 5가지 시각 장치를 복합 사용"
+ },
+ {
+  "file": "168_인증서_07.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 라인텍스트 + 볼드 타이틀 2줄 + 인증서 이미지(원형 마크 오버랩) + 숨김 확대효과 배너",
+  "absorbValue": 3,
+  "keyFeature": "인증서 이미지 위에 원형 마크(뱃지)가 오버랩되고 하단에 그라데이션 그림자 슬라이드업 확대효과 레이어 내장"
+ },
+ {
+  "file": "169_인증서_08.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 타이틀 + 3개 리스트 행(좌 사진 + 우 텍스트 + 좌측 원형 동심원 뱃지 오버랩)",
+  "absorbValue": 4,
+  "keyFeature": "각 인증 항목마다 동심원 3겹 원형 뱃지(텍스트패스 곡선 텍스트 + 중앙 아이콘)가 사진 위 좌측에 오버랩되는 독자적 뱃지 장치"
+ },
+ {
+  "file": "170_제품소개_10.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "포인트 라벨 + 타이틀 + 풀폭 사진 + 3행 지그재그(홀수=좌이미지우텍스트, 짝수=좌텍스트우이미지) 리스트 + 하단 풀폭 사진",
+  "absorbValue": 3,
+  "keyFeature": "각 성분명에 컬러 필 라운드 키워드 칩이 제목 위에 붙어있고 성분명 텍스트가 브랜드 컬러로 강조되는 이중 레이블 구조"
+ },
+ {
+  "file": "171_제품소개_08.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "포인트 라벨 + 타이틀 + 풀폭 이미지 + 좌측 세로 컬러 바 강조 제목 + 체크리스트 2항목",
+  "absorbValue": 2,
+  "keyFeature": "제목 좌측에 10px 폭 색상 바(세로줄)를 붙인 섹션 헤더 + 그린 체크 아이콘 리스트"
+ },
+ {
+  "file": "172_제품소개_09.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "포인트 라벨 + 풀폭 이미지 + 그라데이션 필 라운드 텍스트박스 + 구분선 + 설명 텍스트 + 2×2 라운드 카드 그리드(원형 아이콘+텍스트)",
+  "absorbValue": 4,
+  "keyFeature": "그라데이션 pill 형 소제목 박스 + 원형 흰 배경 아이콘 카드 4개를 r:60 라운드 사각 카드로 2×2 배치한 특성 그리드"
+ },
+ {
+  "file": "173_제품소개_11.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "포인트 라벨(좌정렬 텍스트만) + 볼드 타이틀 2줄 + 풀폭 이미지",
+  "absorbValue": 1,
+  "keyFeature": "최소 구성 — 라벨·타이틀·이미지만으로 이루어진 단순 제품 소개 슬라이드"
+ },
+ {
+  "file": "174_제품소개_12.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "포인트 라벨 + 타이틀 + 풀폭 이미지 + 컬러 소제목 + 체크아이콘 3항목 리스트 + 하단 추가 풀폭 이미지",
+  "absorbValue": 2,
+  "keyFeature": "동일 섹션 내 상·하단 두 장의 풀폭 이미지 사이에 체크리스트를 샌드위치 배치"
+ },
+ {
+  "file": "175_제품소개_13.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "해시태그형 섹션 라벨(# 제품소개 + 우측 수평선) + 타이틀 + 풀폭 이미지 + 3행 지그재그 리스트(이미지+번호 강조 텍스트+키워드 칩)",
+  "absorbValue": 3,
+  "keyFeature": "# 해시태그 스타일 섹션 헤더와 각 특징 하단에 컬러 필 라운드 키워드 칩이 달린 번호형(01/02/03) 지그재그 리스트"
+ },
+ {
+  "file": "176_제품소개_14.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "해시태그형 섹션 라벨(우측 정렬) + 타이틀 + 풀폭 이미지 + 2개 세로 스택(풀폭 이미지 위에 컬러 필 텍스트박스 + 중앙 본문 텍스트)",
+  "absorbValue": 3,
+  "keyFeature": "각 특징 이미지 상단에 체크 아이콘+텍스트가 담긴 컬러 필 pill 배너가 오버레이되고 이미지 아래 본문이 중앙정렬로 따라오는 카드 구조"
+ },
+ {
+  "file": "177_제품특징_10.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라운드 pill 배너 + 중앙정렬 타이틀 + 3개 세로 스택(풀폭 이미지 + 다크그린 하단 바 with 원형 아이콘+텍스트)",
+  "absorbValue": 4,
+  "keyFeature": "각 항목 이미지 바로 아래 다크그린 배경 바에 좌측 원형 아이콘 배너와 우측 제목+설명이 붙는 이미지-캡션 일체형 카드 3연속 배치"
+ },
+ {
+  "file": "178_성분소개_07.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "중앙정렬 타이틀 + 3열 수치 배너(세로선 구분) + 풀폭 배경 이미지 위에 원형 그라데이션 pH 게이지 오버랩",
+  "absorbValue": 5,
+  "keyFeature": "풀폭 이미지 위에 그라데이션 원형 pH 게이지(화살표 포인터 포함)와 산성/알칼리성 라벨이 오버랩되는 인포그래픽 장치"
+ },
+ {
+  "file": "179_성분소개_08.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "라운드 pill 배너 + 중앙정렬 타이틀 + 2열(좌 9단계 번호 리스트 + 우 세로 이미지) 배치",
+  "absorbValue": 4,
+  "keyFeature": "원형 번호 뱃지(step 1~9)와 단계명이 세로로 나열되는 9단계 정수 프로세스 리스트가 우측 세로 이미지와 2열로 병렬 배치"
+ },
+ {
+  "file": "180_Q_A_04.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 대형 타이틀(Q&A Bold + 부제) + 4개 흰색 라운드 카드 수직 스택, 각 카드는 검정 원형 번호 배지 + 질문(Bold) + 답변(회색) 2단 텍스트",
+  "absorbValue": 2,
+  "keyFeature": "검정 원형 번호 배지로 Q 식별, 카드별 라운드 박스 분리"
+ },
+ {
+  "file": "181_상품정보안내_05.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 대형 타이틀(product info Bold + 부제) + 전체 이미지 + 흰색 박스 내 8행 2열 표(제목 고정폭 170 | 본문 570) 수직 나열",
+  "absorbValue": 2,
+  "keyFeature": "제목-본문 고정 2열 행 반복 표 구조로 제품 규격 정보 표현"
+ },
+ {
+  "file": "182_배송교환반품_04.json",
+  "archetype": "cs",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "고객센터 타이틀 + 전화번호/운영시간 흰색 박스 → 배송안내 섹션(3열 라운드 카드 배너 + 텍스트 박스) → 교환반품 섹션(텍스트 박스) 3파트 수직 구성",
+  "absorbValue": 3,
+  "keyFeature": "배송사·마감·기간 3열 카드에 아이콘+시각 정보 배치, 녹색 필 배지 제목"
+ },
+ {
+  "file": "183_제품정보_06.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라운드 배지 서브타이틀 + 대형 헤드라인 + 구분선 → 전체폭 이미지 위 6개 검정 레이블 태그를 라인으로 연결한 콜아웃 오버레이",
+  "absorbValue": 5,
+  "keyFeature": "제품 이미지 위 벡터 라인 + 검정 필 레이블 태그로 부위별 특징 직접 표기(인포그래픽형)"
+ },
+ {
+  "file": "184_포인트_06.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "3개 포인트 섹션(#point 01~03) 수직 나열, 각 섹션: 포인트 넘버 + 헤드라인 텍스트박스 배지 → 전체폭 이미지 → 특징 서브섹션(이미지+체크배지 텍스트박스+설명 반복), 포인트02는 베이지 배경·좌우 교대 카드 리스트",
+  "absorbValue": 4,
+  "keyFeature": "#point 번호 태그 + 색상배지 체크 텍스트박스 + 섹션별 배경색 교체로 스토리 흐름 구성"
+ },
+ {
+  "file": "185_제품소개_06.json",
+  "archetype": "reason",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "말풍선 서브타이틀(검정 필+삼각 꼬리) + 대형 헤드라인 → 라운드 이미지 → 4개 흰색 행 카드(다크 원형 번호 배지 + 제목 + 부제) 수직 스택",
+  "absorbValue": 3,
+  "keyFeature": "말풍선 모양 서브타이틀 배지(삼각 꼬리 벡터 포함)로 신뢰 약속 포인트 강조"
+ },
+ {
+  "file": "186_제품소개_15.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "# 제품소개 넘버 태그 + 헤드라인 텍스트 → 전체폭 이미지 → 2개 특징 서브블록(이미지+색상 배지 체크박스+회색 설명 박스) 수직 반복",
+  "absorbValue": 3,
+  "keyFeature": "이미지 하단에 색상 필 체크배지 텍스트박스 오버레이 후 회색 설명박스 연결하는 2단 반복 패턴"
+ },
+ {
+  "file": "187_제품소개_16.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "# 제품소개 태그 + 헤드라인 → 전체폭 이미지 → 색상 배지 서브타이틀 + 3개 교대형 카드(좌이미지+우텍스트 / 우이미지+좌텍스트 라운드 박스) 수직 스택",
+  "absorbValue": 4,
+  "keyFeature": "이미지-텍스트 좌우 교대 배치 라운드 카드(r=50) + detail_0N 색상 레이블로 세부 특징 나열"
+ },
+ {
+  "file": "188_제품소개_17.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "# 제품소개 태그 + 헤드라인 → 전체폭 이미지 → 색상 배지 서브타이틀 → 2×2 그리드 카드(이미지+색상 필 텍스트 박스) 4개",
+  "absorbValue": 3,
+  "keyFeature": "2×2 이미지+색상 텍스트캡션 그리드로 내부 세부 특징 4종 동시 노출"
+ },
+ {
+  "file": "189_인증서_09.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌우 월계수 벡터 + 그라데이션 헤드라인 + 3개 인증서 이미지 수평 나열 → 3행 흰색 체크리스트 카드(금색 체크 아이콘 + 별 모양 합격 배지)",
+  "absorbValue": 4,
+  "keyFeature": "좌우 월계수 장식 + 골드 별 모양 합격 배지(STAR 노드)로 신뢰도 시각화"
+ },
+ {
+  "file": "190_제품특징_11.json",
+  "archetype": "checklist",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "흰색 서브타이틀 + 대형 헤드라인 + 부제 → 6개 특징 행(좌 정사각 이미지 260px + 우 번호박스·제목·설명 텍스트 블록, 진한 갈색 배경) → 하단 전체폭 이미지 위 흰색 텍스트 영역",
+  "absorbValue": 4,
+  "keyFeature": "6행 아이템 모두 동일 갈색 필 + 흰색 정사각 번호 박스 + 이미지 병치로 체크리스트를 시각적 리스트로 표현"
+ },
+ {
+  "file": "191_제품소개_18.json",
+  "archetype": "gallery",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "전체폭 이미지 배경 위 서브카피+대형 브랜드명+구분선+해시태그 행 2줄 오버레이 → 하단 2×3 라운드 이미지 그리드(6장)",
+  "absorbValue": 4,
+  "keyFeature": "히어로 이미지 위 해시태그 배지 2행 오버레이 + 2열 3행 갤러리 그리드 조합"
+ },
+ {
+  "file": "192_비교_09.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 중앙 타이틀 + 좌(브랜드·갈색 카드)·우(일반제품·회색 카드) 2열 비교 패널, 각 패널 내 제품 이미지 + 5개 속성 행, 하단 주석 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "좌우 카드 색상 대비(브랜드=워밍 브라운 vs 일반=회색)로 승패를 시각화하고 각 속성에 라운드 뱃지 레이블 부착"
+ },
+ {
+  "file": "193_인트로_37.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙 정렬 라운드박스 서브타이틀 + 대형 헤드라인 + 본문, 하단 3열 반투명 흰 카드 스탯 배너",
+  "absorbValue": 2,
+  "keyFeature": "반투명 흰 카드(opacity 0.5) 3분할 스탯 배너로 핵심 수치(4박5일·4.9kg·28인치)를 히어로 하단에 고정"
+ },
+ {
+  "file": "194_제품정보_07.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 대형 타이틀 + 2×2 컬러 카드 그리드(이미지+컬러 도트+텍스트) + 하단 3열 사이즈×추천 상황 표",
+  "absorbValue": 3,
+  "keyFeature": "컬러 스와치 도트(Ellipse)를 카드 내부에 인라인 배치하고 하단에 사이즈별 추천 상황 블랙헤더 표를 결합"
+ },
+ {
+  "file": "195_제품정보_08.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "light",
+  "structure": "대형 영문 타이틀 + 제품 사진에 치수 선(벡터 라인+텍스트 레이블) 오버레이 + 하단 4열 사이즈 스펙 표",
+  "absorbValue": 4,
+  "keyFeature": "사진 위에 치수 측정선(Vector 선분)과 방향 레이블을 직접 오버레이하여 다이어그램 효과 연출"
+ },
+ {
+  "file": "196_Q_A_05.json",
+  "archetype": "faq",
+  "device": "pc",
+  "tone": "light",
+  "structure": "대형 영문 f&q 타이틀 + 흰 배경 Q&A 카드 4개 세로 스택, 각 카드에 q번호 블랙 뱃지+질문·답변 텍스트 블록",
+  "absorbValue": 2,
+  "keyFeature": "q번호를 블랙 정사각 뱃지로 강조하고 답변 영역은 회색 텍스트로 시각적 위계를 명확히 분리"
+ },
+ {
+  "file": "197_상품정보안내_06.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문 타이틀 + 상단 대형 라운드 이미지 + 하단 2열(제목170px·내용570px) 8행 얼터네이트 행 표",
+  "absorbValue": 2,
+  "keyFeature": "얼터네이트 배경(#fbfbfb/흰색) 행과 좌측 고정 제목 열로 상품정보 고시 형식을 깔끔하게 구현"
+ },
+ {
+  "file": "198_상품정보안내_08.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "굵은 한글 타이틀 + 대형 라운드 이미지 + 상품정보 제공고시 레이블 + 2열(항목200px·내용540px) 8행 표",
+  "absorbValue": 2,
+  "keyFeature": "Gmarket Sans 폰트로 법정 제공고시 표 전용 스타일을 별도 적용하여 행정 문서 느낌 연출"
+ },
+ {
+  "file": "199_배송교환반품_05.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문 대형 타이틀 + 3단계 원형 아이콘+스텝 텍스트 세로 순서도 + 배송안내·교환반품 텍스트 블록 + 하단 블랙 고객센터 CTA 바",
+  "absorbValue": 3,
+  "keyFeature": "원형 블랙 아이콘 뱃지에 step 번호 라운드박스를 오버레이한 3단계 배송 플로우 + 하단 전화번호 블랙 CTA 결합"
+ },
+ {
+  "file": "200_인트로_38.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "짙은 올리브 그린 배경 + 중앙 영문 서브 + 한글 대형 제품명 헤드라인 + 전체 폭 제품 사진 + 하단 3열 세로선 구분 기능 배너",
+  "absorbValue": 3,
+  "keyFeature": "올리브 그린 배경색과 흰 텍스트로 자연/두피 케어 브랜드 톤을 히어로에 직접 부여하고 세로선 구분 3분할 기능 배너로 마무리"
+ },
+ {
+  "file": "201_문제제기_07.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "크림 베이지 배경 + 상단 서브타이틀·대형 문제 헤드라인 + 말풍선 꼬리 달린 4개 리스트 카드(좌우 교차 정렬) + 대형 라운드 이미지 + 하단 따옴표 강조 텍스트 블록",
+  "absorbValue": 4,
+  "keyFeature": "말풍선 꼬리(삼각형 벡터)를 좌우 교차 배치한 채팅형 리스트 카드로 고객 고민을 대화 형식으로 시각화"
+ },
+ {
+  "file": "202_문제공감_02.json",
+  "archetype": "story",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "짙은 올리브 배경 + 타이틀 + 이미지+하이라이트 텍스트박스 2단 스택 + 화살표 연결 3단계 플로우 카드 + 2열 증상 이미지 카드 + 인용 텍스트 + 전체 폭 하단 이미지",
+  "absorbValue": 5,
+  "keyFeature": "원인 이미지 위에 올리브/크림 색상 텍스트박스를 겹쳐 '피지→불균형' 인과 레이어를 만들고 화살표 플로우→증상 카드→인용 구조로 스토리를 순서대로 전개"
+ },
+ {
+  "file": "203_문제해결_05.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 볼드 타이틀 + 3열 번호 스텝 텍스트 컬럼(세로 구분선) + 따옴표 멀티라인 강조 텍스트 + 전체 폭 이미지",
+  "absorbValue": 3,
+  "keyFeature": "올리브 그린 번호 뱃지+세로선으로 3단계 케어 스텝을 수평 분할하고, 하단에 3색 계층 인용 텍스트(회색·녹색·진녹)로 솔루션 메시지를 드라마틱하게 전달"
+ },
+ {
+  "file": "204_인트로_39.json",
+  "archetype": "hero",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "상단 중앙정렬 타이틀(영문 배지+제품명+부제)+대형 원형 제품 이미지, 하단 교대색 체크리스트 4행",
+  "absorbValue": 3,
+  "keyFeature": "올리브 그린 배경 위 r200 대형 이미지 + 2색 교대 체크리스트 행(#bfc17b/#d9dab1)"
+ },
+ {
+  "file": "205_후기_09.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "light",
+  "structure": "타이틀+월계수 장식 누적판매량 수치, 좌우 교대 꼬리 방향이 다른 말풍선 후기 4개 세로 스택, 하단 전체 폭 리뷰 사진",
+  "absorbValue": 4,
+  "keyFeature": "좌·우 꼬리 방향 교번 말풍선 + 그라데이션 숫자 + 월계수 벡터 장식"
+ },
+ {
+  "file": "206_포인트_07.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "point 01~03 세 섹션 수직 나열, 각 섹션은 포인트 레이블+대형 이미지+텍스트+좌우 교대 성분 카드 리스트 또는 비포애프터 2열 구성",
+  "absorbValue": 5,
+  "keyFeature": "오버랩 원형 성분 버블(3개 그린 계열 반투명 원)+좌우 지그재그 이미지·텍스트 페어링+비포애프터 색 블록 타이틀 행"
+ },
+ {
+  "file": "207_인증서_10.json",
+  "archetype": "cert",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "올리브 배경, 중앙 타이틀+인증서 이미지 카드, 하단 확대 효과(그라데이션 그림자+강조 텍스트 줄)",
+  "absorbValue": 4,
+  "keyFeature": "인증서 카드 위 그라데이션 마스크 + 확대창 효과로 핵심 효능 문구 강조"
+ },
+ {
+  "file": "208_인증서_11.json",
+  "archetype": "cert",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "올리브 배경, 상단 타이틀+원형 더마테스트 마크, 하단 3장 오버랩 인증서 카드 행",
+  "absorbValue": 3,
+  "keyFeature": "원형 인증 마크 단독 배치 + 3열 겹침 인증서 카드"
+ },
+ {
+  "file": "209_후기_10.json",
+  "archetype": "stats",
+  "device": "pc",
+  "tone": "light",
+  "structure": "전체 폭 리뷰 사진, 그라데이션 배지 만족도% 타이틀, 원형 도넛 그래프+3개 수평 바 그래프 항목",
+  "absorbValue": 4,
+  "keyFeature": "원형 도넛 퍼센트 그래프 + 그라데이션 수평 바 3행 병렬로 만족도 수치 시각화"
+ },
+ {
+  "file": "210_성분소개_09.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 중앙 타이틀, pH 스케일 원형 그래프(산성~알칼리성 그라데이션 원+약산성 레이블), 하단 전체 폭 제품 사진",
+  "absorbValue": 4,
+  "keyFeature": "pH 5.5 약산성 위치를 그라데이션 원형 스케일로 시각화한 성분 설명 장치"
+ },
+ {
+  "file": "211_사용방법_05.json",
+  "archetype": "usage",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문 그라데이션 대형 타이틀+r150 제품 이미지, 3단계 좌 텍스트·우 이미지 교대 리스트(번호 배지+설명)",
+  "absorbValue": 3,
+  "keyFeature": "그라데이션 'How to use' 대형 헤드 + 초록 번호 배지 + 좌우 텍스트·이미지 페어"
+ },
+ {
+  "file": "212_이벤트_04.json",
+  "archetype": "event",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "전체 폭 배경 이미지 위 '오늘까지만/특별혜택' 강조 텍스트, 하단 다크 배경 타이틀+3개 키워드 배지, 제품 2개 흰 카드(정가/할인가 블랙 가격 바 포함)",
+  "absorbValue": 4,
+  "keyFeature": "반투명 블랙 박스 '특.별.혜.택' 타이포 + 블랙 가격 바에 노란 할인가 대비 + 증정품 카드"
+ },
+ {
+  "file": "213_Q_A_06.json",
+  "archetype": "faq",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "전체 폭 배경 이미지, 하단 브라운 배경에 검정 배지 타이틀+'Q&A' 대형 텍스트, r20 흰 카드 3개 Q&A 리스트(Q벡터+질문+구분선+답변)",
+  "absorbValue": 3,
+  "keyFeature": "배경 이미지 위 브라운 톤 + Q 벡터 아이콘 + 라운드 흰 카드 아코디언형 레이아웃"
+ },
+ {
+  "file": "214_상품정보안내_07.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "브라운 배지 타이틀+'product info' 대형 텍스트+r150 제품 이미지, 하단 흰/회 교대 8행 2열(제목170+본문570) 표",
+  "absorbValue": 2,
+  "keyFeature": "제목/본문 고정폭 2열 교대색 8행 표 + 라운드 이미지 상단 배치"
+ },
+ {
+  "file": "215_배송교환반품_07.json",
+  "archetype": "shipping",
+  "device": "pc",
+  "tone": "light",
+  "structure": "브라운 배지 타이틀+'delivery service' 대형 텍스트, 베이지 전화/운영시간 박스, 배송·교환·반품 3항목 좌 레이블+우 본문 리스트",
+  "absorbValue": 2,
+  "keyFeature": "전화번호+운영시간 강조 베이지 박스 + 색상 레이블 좌측 고정 3항목 안내 구조"
+ },
+ {
+  "file": "216_제품소개_19.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 대형 번호 장식 + 중앙정렬 타이틀 스택 + 2장 풀폭 이미지 수직 배치",
+  "absorbValue": 2,
+  "keyFeature": "125px 대형 섹션 번호가 장식 요소로 독립 배치된 타이틀 진입부"
+ },
+ {
+  "file": "217_제품소개_20.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "포인트 레이블 + 풀폭 이미지 + 따옴표 인용 텍스트 + 3개 원형 오버랩 성분 배지 + 번호-이미지 교차 리스트 3행",
+  "absorbValue": 4,
+  "keyFeature": "투명도 차등 적용된 3개 원형 성분 배지가 서로 오버랩되는 비주얼 장치"
+ },
+ {
+  "file": "218_제품소개_21.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "포인트 레이블 + 풀폭 이미지 + 그라디언트 하이라이트 키워드 텍스트 + 원형 인증 마크 아이콘 3개 카드 리스트 + 하단 풀블리드 이미지",
+  "absorbValue": 3,
+  "keyFeature": "링 3겹 텍스트패스 원형 인증 배지(더마테스트·저자극·무해성분)가 카드 좌측 앵커로 사용"
+ },
+ {
+  "file": "219_비교_10.json",
+  "archetype": "ba",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "그라디언트 키워드 타이틀 + 3개 Before/After 카드 수직 스택(컬러 헤더 라벨 + 좌우 분할 이미지 + before 흑/after 녹색 레이블)",
+  "absorbValue": 3,
+  "keyFeature": "각 BA 카드 상단에 번호+카테고리 라벨이 컬러 헤더 바로 처리되어 구분 명확"
+ },
+ {
+  "file": "220_문제제기_08.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 + 형광 그린 하이라이트 박스 키워드 + 여백 자리표시 이미지 + 3개 통계 수치 다크 카드 행 + 공감 텍스트 스택",
+  "absorbValue": 4,
+  "keyFeature": "#17e497 형광 그린 인라인 텍스트박스로 핵심 단어만 반전 강조하는 타이틀 레이아웃"
+ },
+ {
+  "file": "221_문제제기_09.json",
+  "archetype": "checklist",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀 + 4개 체크리스트 카드(컬러 헤더 바 + 체크 원 + 부연 텍스트) + 진단 결과 텍스트 + 원형 이미지",
+  "absorbValue": 3,
+  "keyFeature": "각 항목 상단에 색상 채워진 헤더 바 + 흰 원형 체크 아이콘으로 셀프진단 UX 구현"
+ },
+ {
+  "file": "222_문제공감_03.json",
+  "archetype": "story",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 + 타이틀 + 좌우 분할 정상/문제성 두피 비교 이미지 + 4단계 Step 다크 카드 수직 스택 + 결론 강조 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "정상vs문제성 두피 좌우 컬러 패널 비교 이미지가 스텝 플로우 진입 직전에 배치"
+ },
+ {
+  "file": "223_문제공감_04.json",
+  "archetype": "story",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "딥그린 배경 + 타이틀 + 4개 Step 흰 카드(좌 이미지 + 우 순서뱃지·텍스트) + 화살표 연결 + 결론 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "각 스텝 카드가 흰 배경 라운드 카드로 딥그린 배경 위에 떠 있고 화살표로 순서 연결"
+ },
+ {
+  "file": "224_문제해결_06.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "민트그린 배경 + 타이틀 + 그라디언트 대형 솔루션 텍스트 + 3단계 아코디언형 카드(컬러 헤더+내용+아이콘 박스텍스트) + 하단 풀블리드 이미지",
+  "absorbValue": 4,
+  "keyFeature": "각 스텝 카드 내부에 우측 고정 아이콘 패널 + 요약 박스텍스트가 중첩된 2레이어 내용 구조"
+ },
+ {
+  "file": "225_제품특징_12.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "그라디언트 배경 + 인라인 컬러박스 키워드 타이틀 + 제품 사진 풀블리드에 좌측 3단계 Step 리스트 오버레이",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지 위에 Step 텍스트 리스트가 직접 오버레이되어 사진과 설명이 한 레이어로 통합"
+ },
+ {
+  "file": "226_제품특징_13.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "그라디언트 박스 키워드 타이틀 + 원형 링 배경에 제품 사진 센터 배치 + 5개 인증 체크 레이블 방사형 분산",
+  "absorbValue": 4,
+  "keyFeature": "제품 사진 주위 원형 라인 위에 5개 인증 뱃지가 방사형으로 배치된 오비트 구성"
+ },
+ {
+  "file": "227_인트로_40.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "크림 배경 타이틀 영역(라인 레이블 바 + 대형 타이틀 + 소선) + 풀블리드 제품 사진 + 딥그린 배경 6개 아이콘 배지 2×3 그리드",
+  "absorbValue": 3,
+  "keyFeature": "상단 타이틀 블록과 하단 배지 그리드가 배경색 반전(크림↔딥그린)으로 구역 분리"
+ },
+ {
+  "file": "228_성분소개_10.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 타이틀(텍스트박스 강조) + 중앙 3개 타원이 수직 오버랩 적층(투명도 단계별) + 하단 전체폭 이미지",
+  "absorbValue": 4,
+  "keyFeature": "동심 타원 3개를 opacity 0.4→0.6→0.8로 겹쳐 성분 레이어를 시각적으로 쌓아 표현하는 반투명 스택 장치"
+ },
+ {
+  "file": "229_제품특징_14.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 뱃지+대형 헤드라인 타이틀 영역 + 가로선 구분 + 3열 번호 아이콘(원형)+키워드+설명 리스트 + 하단 전체폭 이미지",
+  "absorbValue": 2,
+  "keyFeature": "원형 번호 뱃지(#6b940f)와 형광 노랑(#e4ff00) 텍스트 조합으로 포인트 컬러를 통일한 3열 피처 아이콘 행"
+ },
+ {
+  "file": "230_인트로_41.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "전체 배경 이미지 위 상단 영문 브랜드명 + 2줄 타이틀(텍스트박스 강조) + 부제 + 하단 반투명 녹색 배너에 4열 아이콘+레이블",
+  "absorbValue": 3,
+  "keyFeature": "하단 고정 반투명 배너(opacity 0.9) 안에 4개 기능을 세로선 구분 아이콘 행으로 요약하는 인트로 요약 배너"
+ },
+ {
+  "file": "231_인트로_42.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "전체 배경 이미지 위 상단 2줄 타이틀(텍스트박스 강조) + 부제 + 우측 정렬 3개 원형 카드(투명도 단계별) 세로 스택",
+  "absorbValue": 4,
+  "keyFeature": "opacity 0.6→0.8→0.8 원형 카드 3개를 우측에 세로로 쌓아 수치(89%, 99%, EWG 등급)를 시각적 버블로 표현"
+ },
+ {
+  "file": "232_제품특징_15.json",
+  "archetype": "stats",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 파스텔 배경 타이틀 3줄 + 그라디언트 사진영역 위 좌측 수치 리스트(87%/93%/72h) 오버레이 + 하단 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "그라디언트 배경 이미지 위에 좌측 정렬 수치 스택을 오버레이하여 사진과 데이터를 공간 분리 없이 합성"
+ },
+ {
+  "file": "233_상품정보안내_09.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전체폭 이미지 + 중앙 타이틀 + 9행 2열 표(항목 회색/내용 흰색 교차) 구조",
+  "absorbValue": 1,
+  "keyFeature": "항목 열(#f4f4f4 회색)과 내용 열(흰색)을 교차 배색한 표준 상품정보 고지 테이블"
+ },
+ {
+  "file": "234_인트로_43.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전체폭 제품 이미지 + 물결 벡터 전환 + 파스텔 배경에 타이틀+설명 + 3열 원형 아이콘 배너 + 하단 포인트 색상 텍스트 바",
+  "absorbValue": 3,
+  "keyFeature": "이미지 하단에 커스텀 물결 벡터 도형으로 배경색 전환을 처리하고, 3열 원형 아이콘 배너와 하단 강조 바를 이어 붙이는 구성"
+ },
+ {
+  "file": "235_인트로_44.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 흰색 벡터 배경 위 라인텍스트 뱃지+2줄 타이틀 + 원형 제품 이미지 오버랩 + 하단 다크 그라디언트 영역에 대형 카피",
+  "absorbValue": 4,
+  "keyFeature": "흰 상단과 다크 하단을 원형 제품 이미지가 경계에서 오버랩하며 이분할 색상 전환을 자연스럽게 연결하는 분할 레이아웃"
+ },
+ {
+  "file": "236_문제공감_05.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 낱글자 원형 뱃지 4개(진짜원인) + 대형 카피 + 이미지1 → 삼중 화살표 → 이미지2 + 하단 3개 다크 라운드 리스트 카드",
+  "absorbValue": 4,
+  "keyFeature": "낱글자를 각각 원형 뱃지에 담아 가로 배열해 단어를 분해·강조하는 타이포 장치와 삼중 화살표 전환 시퀀스"
+ },
+ {
+  "file": "237_문제제기_10.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 배경이미지+대형 카피+3분할 라운드 사진 행 + 4개 라운드 리스트 알약(불규칙 좌우 들여쓰기) + 라운드 이미지 + 하단 해결 카피",
+  "absorbValue": 3,
+  "keyFeature": "4개 문제 리스트를 폭이 다른 알약형 흰색 박스로 불규칙 들여쓰기하여 시각적 리듬을 만드는 스태거드 레이아웃"
+ },
+ {
+  "file": "238_문제제기_11.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 밑줄 강조 헤드라인+대형 제품 이미지 + 3개 계단식 알약 리스트 + 붓글씨체 감성 카피 + 설명 텍스트 + 3열 리뷰형 카드(썸네일+키워드칩+별점)",
+  "absorbValue": 5,
+  "keyFeature": "알약 리스트 → 붓글씨체 감성 문구('속상해요!!') → 별점 포함 리뷰 카드로 감정 흐름을 3단 계층으로 구성하는 내러티브 레이아웃"
+ },
+ {
+  "file": "239_인트로_46.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 브랜드명+구분선+상품명 2줄+부제 타이틀 영역 + 중앙 전체폭 제품 이미지 + 하단 3×3 그리드 아이콘 배너(9개 피처)",
+  "absorbValue": 3,
+  "keyFeature": "9개 기능을 3열×3행 균등 그리드로 배치한 아이콘 배너로 한 화면에 스펙 전체를 정리하는 피처 매트릭스"
+ },
+ {
+  "file": "240_인트로_45.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 배경박스+중앙 타이틀 텍스트 스택, 중단 640px 이미지, 하단 영문 세리프 대제목+설명 텍스트+760px 이미지 2단 구성",
+  "absorbValue": 3,
+  "keyFeature": "라운드 pill 뱃지+영문 세리프(Abhaya Libre) 대비 한글 산세리프 혼용 타이포 계층, 베이지 배경박스 장치"
+ },
+ {
+  "file": "241_인트로_47.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "브랜드명 소형 태그 상단, 2줄 대제목 중앙 정렬, 설명 문구, 하단 이미지 플레이스홀더",
+  "absorbValue": 1,
+  "keyFeature": "하늘색(#b7dbf1) 배경 단색 플랫 히어로, 텍스트 전용 상단부+이미지 하단부 분리"
+ },
+ {
+  "file": "242_인트로_48.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "풀블리드 이미지 상단, 하단 라운드 pill 브랜드 뱃지+구분선+2줄 대제목+설명 텍스트",
+  "absorbValue": 2,
+  "keyFeature": "이미지 위에 텍스트 오버레이 없이 이미지-텍스트 분리, 파란색 포인트 텍스트 계층"
+ },
+ {
+  "file": "243_제품소개_22.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "point 번호 헤더+제목 텍스트 블록, 2열 이미지 사이드바이사이드, 하단 번호형 리스트(좌 정사각 이미지+우 제목·설명 텍스트) 3행 반복",
+  "absorbValue": 4,
+  "keyFeature": "'point 01' 영문 세리프 넘버링+가로선 장치, 정사각 썸네일+번호 접두사 리스트 구조"
+ },
+ {
+  "file": "244_제품소개_23.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "point 번호 헤더, 풀블리드 이미지, 오버랩 2장 이미지(뒤+앞 레이어), 중앙 텍스트 영역, 풀블리드 이미지, 사이드 정렬 사진+캡션",
+  "absorbValue": 4,
+  "keyFeature": "두 사진의 오버랩 레이어 배치(뒤 480px+앞 360px), 하단 베이지 배경색 전환 장치"
+ },
+ {
+  "file": "245_제품소개_24.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "point 번호 헤더+제목, 2열 이미지(좌 600h·우 700h 높이 엇갈림), 중앙 텍스트 영역",
+  "absorbValue": 3,
+  "keyFeature": "좌우 이미지 높이를 의도적으로 100px 엇갈려 배치한 비대칭 갤러리 구조"
+ },
+ {
+  "file": "246_제품소개_25.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "POINT 라벨+2줄 대제목(키워드 색상 강조 박스), 보조 설명, 풀블리드 제품 사진, 설명 텍스트+하단 이미지+파란 캡션 바",
+  "absorbValue": 4,
+  "keyFeature": "키워드 텍스트를 파란 배경박스로 인라인 강조하는 하이라이트 타이포 기법+하단 컬러드 캡션 바"
+ },
+ {
+  "file": "247_제품소개_26.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "하늘색 배경, POINT 라벨+키워드 강조 박스 대제목, 풀블리드 제품 사진",
+  "absorbValue": 3,
+  "keyFeature": "배경색(#e3f2f9) 변경으로 포인트 섹션 구분, 파란 인라인 키워드 강조 박스"
+ },
+ {
+  "file": "248_문제제기_12.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "인용문 텍스트박스+설명, 원형 이미지, 세로선, 고민 키워드 텍스트, 2×2 그리드(이미지+어두운 텍스트박스 카드), 화살표, 결론 형광펜 강조+아이콘+텍스트+풀블리드 이미지",
+  "absorbValue": 5,
+  "keyFeature": "원형 이미지+세로선 전환 연출, 2×2 어두운 카드 그리드, 형광펜(#e8d4b0) 밑줄 강조 결론 장치"
+ },
+ {
+  "file": "249_문제제기_13.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "어두운 배경(#34495e), 대제목+설명, 2×2 이미지+어두운 텍스트 카드 그리드, 체크리스트 4항목, 세로선 전환, 결론 텍스트+색상 강조 박스",
+  "absorbValue": 4,
+  "keyFeature": "원형 체크 아이콘 리스트+어두운 네이비 배경, 색상 강조 박스('모두 해결했습니다!') 반전 클로징"
+ },
+ {
+  "file": "250_제품특징_16.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "풀블리드 이미지 상단, 영문 세리프 'detail point' 레이블, 번호형 좌우 교차 리스트(홀수: 좌 이미지+우 텍스트, 짝수: 좌 텍스트+우 이미지) 3행",
+  "absorbValue": 4,
+  "keyFeature": "홀짝 행마다 이미지·텍스트 좌우 교차 배치, NanumMyeongjo+Pretendard 혼용 타이포, 세리프 레이블 장치"
+ },
+ {
+  "file": "251_제품특징_21.json",
+  "archetype": "stats",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 타이틀+설명, 원형 아이콘 배지 2개(보온·보냉), 그라디언트 진행 바 2열, 회색 박스 면책 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "빨강/파랑 원형 배지 시각화+그라디언트 게이지 바로 온도 유지 성능 수치 표현"
+ },
+ {
+  "file": "252_제품특징_20.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "상단 중앙 아이콘+헤드라인, 하단 2×2 그리드 카드(원형 이미지+컬러 뱃지 제목+설명)",
+  "absorbValue": 3,
+  "keyFeature": "파란 배경 위 흰색 카드 2×2 그리드, 각 카드에 원형 이미지+컬러 pill 제목 뱃지 조합"
+ },
+ {
+  "file": "253_제품특징_22.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 헤드라인+서브, 중앙 컬러 헤더 바 + 전폭 이미지, 하단 흰색 카드에 체크리스트 + 강조 콜아웃 박스",
+  "absorbValue": 3,
+  "keyFeature": "이미지 상단에 컬러 레이블 바를 오버레이하고 하단에 체크 아이콘 리스트+환경 팩트 콜아웃 박스로 마감"
+ },
+ {
+  "file": "254_제품특징_23.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 헤드라인+서브, 하단 3행 지그재그(좌우 교차) 원형 이미지+제목+설명 리스트",
+  "absorbValue": 3,
+  "keyFeature": "원형 이미지가 홀짝 행마다 좌우 교차 배치되는 지그재그 피처 리스트"
+ },
+ {
+  "file": "255_제품특징_17.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "dark",
+  "structure": "전폭 제품 이미지 배경(상단 절반)+내부 중앙 브랜드+제품명 텍스트 레이어, 하단 3행 좌우 교차 이미지+텍스트 블록",
+  "absorbValue": 4,
+  "keyFeature": "검정 배경 전폭 제품 사진 위에 브랜드명·제목을 겹친 뒤, 하단 교차형 디테일 컷+컬러 pill 번호 뱃지로 연결"
+ },
+ {
+  "file": "256_제품특징_18.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 대형 헤드라인+설명, 중앙 제품 이미지에 콜아웃 라인+원형 디테일 컷 플로팅, 하단 4행 아이콘+제목+설명 리스트",
+  "absorbValue": 5,
+  "keyFeature": "제품 중앙 이미지에서 각 부위로 선이 뻗어 원형 디테일 컷과 텍스트 레이블이 플로팅하는 해부도식 콜아웃 구성"
+ },
+ {
+  "file": "257_제품특징_19_gif.json",
+  "archetype": "feature",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 대형 키워드+2줄 설명, 전폭 GIF/이미지 영역, 하단 2줄 보조 텍스트",
+  "absorbValue": 2,
+  "keyFeature": "단일 전폭 이미지(GIF 슬롯)로 기능을 시각화하는 단순 집중형 레이아웃"
+ },
+ {
+  "file": "258_후기_11.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "상단 헤드라인+설명, 중단 2열 말풍선 카드(사진+컬러 제목 바+리뷰 텍스트+별점+ID), 하단 전폭 라이프스타일 이미지",
+  "absorbValue": 4,
+  "keyFeature": "하단 꼬리가 있는 말풍선 형태 리뷰 카드 2열 배치 + 하단 전폭 이미지로 분위기 마감"
+ },
+ {
+  "file": "259_후기_12.json",
+  "archetype": "review",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "상단 전폭 라이프스타일 이미지+내부 숫자 강조 텍스트, 하단 4행 흰색 카드(좌우 사진+별점+리뷰어+본문) 리스트",
+  "absorbValue": 3,
+  "keyFeature": "상단 이미지 영역에 '1,000건 이상' 숫자를 대형으로 배치해 신뢰 지표를 시각화하고, 하단 카드에 리뷰 사진을 인라인 삽입"
+ },
+ {
+  "file": "260_추천_06.json",
+  "archetype": "recommend",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 전폭 라이프스타일 이미지(내부 영문 오버레이 텍스트), 하단 소제목+강조 태그 바+아이콘 불릿 5행 리스트",
+  "absorbValue": 3,
+  "keyFeature": "이미지 오버레이 영문 대형 타이포 + 하단 컬러 서브타이틀 박스 + 아이콘 불릿 추천 리스트"
+ },
+ {
+  "file": "261_성분소개_11.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 영문 세리프 악센트+한글 헤드라인+설명, 중앙 전폭 소재 이미지, 하단 성분명+퍼센트 좌우 정렬 3행 리스트",
+  "absorbValue": 3,
+  "keyFeature": "성분명은 좌측 한글, 비율은 우측 대형 세리프 숫자로 대비시키는 소재 구성표"
+ },
+ {
+  "file": "262_성분소개_12.json",
+  "archetype": "ingredient",
+  "device": "pc",
+  "tone": "mixed",
+  "structure": "전폭 배경 이미지 위에 흰색 반투명 카드, 카드 내부 상단 영문 타이틀+4행 원형 아이콘+제목+설명 수직 리스트(구분선 포함)",
+  "absorbValue": 3,
+  "keyFeature": "배경 이미지 위 흰색 카드 오버레이 + 원형 아이콘 뱃지와 구분선으로 성분 속성을 정리한 레이아웃"
+ },
+ {
+  "file": "263_비교_11.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 헤드라인(2색 강조)+서브, 하단 3열 비교 표(항목열·경쟁사열·자사열), 자사 열만 흰색 카드+컬러 헤더로 강조",
+  "absorbValue": 3,
+  "keyFeature": "3열 비교 테이블에서 자사 열만 둥근 흰색 카드+파란 헤더로 시각적으로 돋보이게 처리한 전형적 비교 구조"
+ },
+ {
+  "file": "264_비교_12.json",
+  "archetype": "compare",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 중앙정렬 대제목 + 부제 스택, 하단 좌우 2분할 카드(전/후 이미지+라벨 배지)",
+  "absorbValue": 3,
+  "keyFeature": "전/후 카드에 각각 다른 배경색(회색 vs 브랜드 블루)으로 대비를 주고 하단 라벨에 색상 반전 적용"
+ },
+ {
+  "file": "265_포인트_08.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "point 01~03 세 섹션 수직 스택, 각 섹션은 구분선+번호 헤더 → 타이틀 → 이미지 그리드 → 텍스트 블록 구성, 섹션2에서 대·소 이미지 오버랩 배치",
+  "absorbValue": 4,
+  "keyFeature": "섹션별 가로선+point 번호 레이블로 챕터를 구분하고 섹션2에서 큰 이미지 위에 작은 이미지를 오프셋 오버랩해 입체감 연출"
+ },
+ {
+  "file": "266_포인트_09.json",
+  "archetype": "point",
+  "device": "pc",
+  "tone": "light",
+  "structure": "POINT 1~3 세 섹션 수직 스택, 각 섹션은 라인 POINT 번호 → 대제목+색채 배경 텍스트박스 강조 → 전폭 제품 이미지 → 하단 상세 설명 블록(체크리스트 또는 원형 이미지+텍스트 행)",
+  "absorbValue": 4,
+  "keyFeature": "핵심 키워드를 브랜드 컬러 배경 직사각형 텍스트박스에 흰 글씨로 끊어 강조하는 인라인 하이라이트 장치"
+ },
+ {
+  "file": "267_사용방법_06.json",
+  "archetype": "usage",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 영문+국문 타이틀 → 전폭 원형 마스크 제품사진 → 아이콘+제목+설명 3행 리스트(흰 배경 카드, 가로선 구분)",
+  "absorbValue": 3,
+  "keyFeature": "세탁법 각 항목을 아이콘 원형 배지+가로 구분선 행으로 정렬하고 제품사진을 pill(r:999) 마스크로 처리"
+ },
+ {
+  "file": "268_Q_A_09.json",
+  "archetype": "faq",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 전폭 이미지 → 영문+국문 타이틀 → Q1~Q4 흰 카드 리스트(원형 q번호 배지 + 질문 제목 + 본문 답변)",
+  "absorbValue": 2,
+  "keyFeature": "원형 배지에 q번호를 브랜드 컬러로 표시하고 상단 대형 이미지를 배경 블리드로 활용"
+ },
+ {
+  "file": "269_Q_A_10.json",
+  "archetype": "faq",
+  "device": "pc",
+  "tone": "light",
+  "structure": "상단 전폭 이미지 → 중앙정렬 타이틀 → 말풍선 대화 형식 Q&A 3쌍(파란 질문 말풍선 + 흰 답변 말풍선, 꼬리 포함)",
+  "absorbValue": 4,
+  "keyFeature": "질문과 답변을 실제 채팅 말풍선(꼬리 벡터 포함)으로 구현해 대화 UI를 상세페이지에 이식"
+ },
+ {
+  "file": "270_제품정보_09.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 영문+국문 타이틀 + 설명문 → 가로 5색상 스와치 행 → 하단 전폭 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "컬러 스와치를 정사각형 칩+컬러명+'color' 서브라벨 세트로 구성한 컬러 셀렉터 UI"
+ },
+ {
+  "file": "271_제품정보_10.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문+국문 타이틀 → 의류 실루엣 벡터+치수선 도해 → size tip 텍스트 → 5열 사이즈 표(S/M/L/XL 행) → detail info 속성 표(신축성·두께감·핏·착용계절 슬라이더형 행)",
+  "absorbValue": 4,
+  "keyFeature": "의류 실루엣 위에 치수선을 벡터로 직접 표기한 도해 + 하단 속성값을 라운드 칩 선택지 행으로 시각화"
+ },
+ {
+  "file": "272_제품정보_11.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "중앙정렬 영문+국문 타이틀 → 전폭 배너 이미지 → 2×2 그리드(컬러별 이미지+컬러명 배경 텍스트 캡션)",
+  "absorbValue": 3,
+  "keyFeature": "각 컬러 셀 하단에 해당 컬러를 배경으로 한 캡션 바(컬러명+무드 설명)를 붙여 색상 감성 전달"
+ },
+ {
+  "file": "273_제품정보_12.json",
+  "archetype": "spec",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문+국문 타이틀 + 용량·핏 설명 텍스트 → 제품 실루엣 벡터+치수선 도해(원형 배지에 용량 표기 오버레이)",
+  "absorbValue": 4,
+  "keyFeature": "제품 측면 벡터 실루엣에 치수선 3개를 그려 치수를 표기하고 오른쪽 상단에 브랜드 컬러 원형 배지로 용량(900ml)을 강조 오버랩"
+ },
+ {
+  "file": "274_상품정보안내_10.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문+국문 타이틀 → 좌우 2분할 이미지 → 제목/본문 2열 행 반복 테이블(8행)",
+  "absorbValue": 2,
+  "keyFeature": "상품정보고시 항목을 제목열(갈색)+본문열(회색) 2컬럼 테이블로 정리, 상단 2분할 이미지와 조합"
+ },
+ {
+  "file": "275_상품정보안내_11.json",
+  "archetype": "detail",
+  "device": "pc",
+  "tone": "light",
+  "structure": "영문+국문 타이틀 → 2×2 이미지 그리드(정사각형 4장) → 제목/본문 2열 행 반복 테이블(8행)",
+  "absorbValue": 2,
+  "keyFeature": "상품정보고시 테이블 상단에 2×2 정사각형 이미지 그리드를 배치해 상품 다각도 시각화와 정보 전달을 결합"
+ },
+ {
+  "file": "276_배송교환반품_08.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 영문+한글 타이틀 중앙정렬, 배송안내·교환반품 각각 필 배지 제목+라인+본문 구성, 하단 브라운 배경 고객센터 바(아이콘+전화번호+운영시간 뱃지)",
+  "absorbValue": 3,
+  "keyFeature": "하단 고객센터 영역을 브랜드 브라운(#836f57)으로 풀블리드 처리하고, 운영시간 항목마다 흰 배지+컬러 레이블 쌍으로 표시한 인라인 정보 바"
+ },
+ {
+  "file": "277_배송교환반품_09.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 영문 타이틀+한글 서브타이틀, 다크네이비(#34495e) 전화번호 블록, 배송안내·교환반품 각각 풀-폭 다크 헤더 + 흰 본문 카드 2분할",
+  "absorbValue": 2,
+  "keyFeature": "섹션 제목을 풀-폭 다크네이비 배너로 처리해 배송·교환반품을 시각적으로 구획하는 헤더 바 방식"
+ },
+ {
+  "file": "278_인트로_49.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 브랜드명+가로선, 대형 영문 타이틀(블루)+한글 슬로건 좌정렬 스택, 이미지 없는 순수 텍스트 히어로",
+  "absorbValue": 2,
+  "keyFeature": "이미지 없이 블루 영문 대제목과 블랙 한글 슬로건만으로 구성한 텍스트 전용 히어로"
+ },
+ {
+  "file": "279_인트로_50.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "풀블리드 배경 이미지 위 하단 텍스트 오버레이: 브랜드명+가로선, 영문 대제목+한글 슬로건 좌정렬",
+  "absorbValue": 2,
+  "keyFeature": "배경 이미지 위에 하단 고정 텍스트 오버레이를 얹는 이미지 히어로 변형"
+ },
+ {
+  "file": "280_제품소개_27.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "배경 이미지 풀블리드, 상단 브랜드+제목 중앙정렬, 이미지 중앙에 반투명 흰 배지 3개를 선(line)으로 제품 각 부위와 연결하는 콜아웃 레이아웃",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지 위에 선을 연결해 특징 배지를 부유시키는 핫스팟 콜아웃 장치"
+ },
+ {
+  "file": "281_제품소개_28.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "하늘색(#87cbf5) 배경, 상단 타이틀 영역+대형 제품 이미지(오버랩), 하단 원형 아이콘 3열 배지 행",
+  "absorbValue": 3,
+  "keyFeature": "제품 이미지가 타이틀 영역을 침범해 오버랩되고 하단에 원형 아이콘+텍스트 배지 3열로 핵심 스펙을 나열하는 구조"
+ },
+ {
+  "file": "282_제품소개_29.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "배경 이미지 풀블리드, 상단 브랜드명+영문 대제목+한글 슬로건 좌정렬 미니 히어로 (h530 단축형)",
+  "absorbValue": 1,
+  "keyFeature": "530px 초단형 이미지 배경 히어로 — 텍스트만 상단 좌정렬로 최소 구성"
+ },
+ {
+  "file": "283_제품소개_30.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 'point 01' 레이블+대형 제품명 우측 배치, 영문 회색 서브타이틀+대형 한글 슬로건+설명 텍스트 스택, 하단 풀블리드 이미지",
+  "absorbValue": 3,
+  "keyFeature": "포인트 번호 레이블과 제품명을 좌우 분할 배치하고 영문 워터마크 텍스트를 배경처럼 깔아 계층 깊이를 만드는 타이포그래피 구성"
+ },
+ {
+  "file": "284_제품소개_32.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 블루 배지+대형 볼드 제목+설명, 중간 둥근 직사각형 이미지, 하단 흰 카드에 세로선 구분된 아이콘+텍스트 3열 스펙 바",
+  "absorbValue": 3,
+  "keyFeature": "하단 스펙 정보를 세로선으로 구획된 3열 아이콘 바로 처리하고 전체를 흰 카드에 담는 detail 배지+이미지+스펙바 3단 구성"
+ },
+ {
+  "file": "285_제품소개_31.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 블루 배지+대형 볼드 제목+설명+이미지, 하단 배터리 잔량 이미지 오버레이, 그 아래 2개 스펙 항목별 레이블+대형 숫자+설명+진행률 바",
+  "absorbValue": 4,
+  "keyFeature": "사용 시간 스펙을 블루 프로그레스 바+대형 숫자 쌍으로 시각화하는 배터리 지속시간 비교 섹션"
+ },
+ {
+  "file": "286_제품소개_33.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 블루 배지+대형 제목+이미지(풍량·각도·배터리 레이블 오버레이), 하단 좌우 교차 이미지+텍스트 3행 리스트",
+  "absorbValue": 4,
+  "keyFeature": "이미지에 벡터 선+레이블로 기능을 표시한 디스플레이 핫스팟과 번호+제목+설명 교차 배치 리스트를 결합한 복합 구조"
+ },
+ {
+  "file": "287_문제제기_14.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크(#262626) 배경, 상단 따옴표 벡터+회색 대형 질문 텍스트 중앙정렬, 하단 풀블리드 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "여닫는 따옴표 벡터를 장식으로 배치하고 회색 대형 질문 텍스트로 공감을 유도하는 다크 배경 문제 제기 섹션"
+ },
+ {
+  "file": "288_문제제기_15.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 중앙 타이틀 텍스트 스택 + 하단 4개 카드 리스트(좌우 교차 썸네일+텍스트 행)",
+  "absorbValue": 3,
+  "keyFeature": "좌우 교차 배치(홀수=이미지 좌, 짝수=이미지 우) 카드 리스트로 페인포인트를 시각적으로 나열"
+ },
+ {
+  "file": "289_제품특징_24.json",
+  "archetype": "checkpoint",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전체폭 이미지 + 제품명 타이틀 + 'check point' 강조 레이블 + 6행 아이콘(원형 배경)+텍스트 리스트",
+  "absorbValue": 2,
+  "keyFeature": "원형 회색 배경 아이콘 + SemiBold 키워드 + Regular 설명 2단 텍스트 수직 리스트"
+ },
+ {
+  "file": "290_제품특징_25.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 아이콘+타이틀 + 4개 장소 시나리오 카드(홀수=이미지 우·텍스트 좌, 짝수=이미지 좌·텍스트 우, 원형 클립 이미지)",
+  "absorbValue": 4,
+  "keyFeature": "번호 해시태그(#01~#04) + 색상 배경 텍스트 박스 + 원형 클립 이미지가 좌우 교번 배치된 장소별 사용 씬"
+ },
+ {
+  "file": "291_제품특징_26.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 아이콘+타이틀 + 대형 이미지 1장(상단) + 하단 2단 그리드 이미지 2장",
+  "absorbValue": 2,
+  "keyFeature": "1+2 분할 이미지 갤러리로 폴딩 구조를 시각 설명하는 단순 포토 레이아웃"
+ },
+ {
+  "file": "292_제품특징_27.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "그라데이션 배경 + 상단 pill 레이블 + 중앙 대형 타이틀 + 제품 전신 이미지(우측 세로 원형 썸네일 3개+화살표 오버레이)",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지 위 좌측에 원형 썸네일 3개를 화살표로 연결한 단계 설명 오버레이 장치"
+ },
+ {
+  "file": "293_제품특징_28.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "검정 배경 + 상단 대형 타이틀+설명 + 전체폭 제품 이미지 + 하단 2×2 라운드 카드 그리드(원형 흰 아이콘+텍스트)",
+  "absorbValue": 3,
+  "keyFeature": "80px 곡률 회색 카드 내 흰 원형 아이콘 배지 + 다크 배경 대비 강조 레이아웃"
+ },
+ {
+  "file": "294_제품특징_29.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "배경 이미지 위 pill 레이블+타이틀+설명 오버레이 + 하단 반투명 검정 3열 인증 배지 행",
+  "absorbValue": 3,
+  "keyFeature": "배경 사진 위 80% 불투명 검정 라운드 박스 3개에 아이콘+인증명을 나열한 인증 배지 레이어"
+ },
+ {
+  "file": "295_제품특징_30.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "그라데이션 배경 + 번호 pill + 타이틀+설명 + 높낮이 연출 제품 이미지 + 4칸 수치 비교 표(검정 바)",
+  "absorbValue": 4,
+  "keyFeature": "제품 이미지 하단에 30/50/70/90cm 4단계 수치를 검정 배경 표로 직접 명시하는 스펙 시각화"
+ },
+ {
+  "file": "296_제품특징_31.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "베이지 배경 + 번호 pill + 타이틀+설명 + 전체폭 제품 이미지(블루 화살표 벡터 오버레이)",
+  "absorbValue": 3,
+  "keyFeature": "제품 이미지 위 파란색 반투명 부채꼴 화살표 2개로 좌우회전 각도를 시각화"
+ },
+ {
+  "file": "297_제품특징_32.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "그라데이션 배경 + 번호 pill + 타이틀+설명 + 전체폭 제품 이미지",
+  "absorbValue": 2,
+  "keyFeature": "연번 pill 레이블 시리즈 중 상하각도 조절 주제를 단일 전신 이미지로 표현한 심플 피처 슬라이드"
+ },
+ {
+  "file": "298_제품특징_33.json",
+  "archetype": "stats",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "배경 이미지(다크) + check point pill + 대형 타이틀 + 제품 이미지 공간 + 반투명 검정 데시벨 비교 바(5개 도트+수치+라벨)",
+  "absorbValue": 5,
+  "keyFeature": "수평 타임라인형 5단계 데시벨 비교 바를 반투명 오버레이로 배경 이미지 위에 얹은 소음 시각화 장치"
+ },
+ {
+  "file": "299_제품특징_34.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "배경 이미지 영역 + check point pill + 대형 타이틀 + 하단 흰 카드 내 3행 아이콘(정사각)+키워드+설명 리스트",
+  "absorbValue": 3,
+  "keyFeature": "이미지 배경 오버레이 타이틀 위에 흰 카드를 얹고 3가지 바람 모드를 정사각 회색 아이콘 박스로 구분하는 모드 선택 UI"
+ },
+ {
+  "file": "300_후기_13.json",
+  "archetype": "review",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 라벨+제목 영역, 중앙 3×2 정방형 사진 그리드, 하단 4개 리뷰 카드(원형 썸네일 좌우 교차+별점+닉네임)",
+  "absorbValue": 3,
+  "keyFeature": "리뷰 카드 내 원형 사진이 좌우 교번 배치되어 시각 리듬을 만드는 구성"
+ },
+ {
+  "file": "301_추천_07.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "다크 배경 중앙 타이틀+구분선, 전폭 라운드 제품 사진, 흰 패널에 아이콘+체크리스트 5행, 하단 화이트 텍스트 클로징 블록",
+  "absorbValue": 3,
+  "keyFeature": "다크 배경 위 전폭 이미지 + 분리된 흰색 추천 대상 체크리스트 패널 이중 구조"
+ },
+ {
+  "file": "302_비교_13.json",
+  "archetype": "compare",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙 고정 항목 열(vs 뱃지+5개 비교 항목)을 좌우 컬럼(경쟁사 vs 자사)이 대칭으로 감싸는 3열 비교표",
+  "absorbValue": 4,
+  "keyFeature": "중앙 원형 vs 뱃지가 좌우 컬럼을 분리하는 축 역할을 하며 자사 컬럼만 강조색 적용"
+ },
+ {
+  "file": "303_Q_A_11.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 좌우 분리 섹션 레이블, 검정 라운드 질문 바 + 흰 답변 패널 3세트 수직 반복",
+  "absorbValue": 2,
+  "keyFeature": "검정 필 라운드 질문 행과 흰 답변 행이 명확한 대비 쌍을 이루는 Q/A 블록"
+ },
+ {
+  "file": "304_제품정보_13.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "섹션 레이블 + 제품 정사이즈 이미지에 치수 라인(280mm/900mm/150mm) 오버레이, 소형 부속 이미지 우측 배치",
+  "absorbValue": 4,
+  "keyFeature": "제품 실물 이미지 위에 벡터 치수선과 mm 수치를 직접 오버레이한 사이즈 인포그래픽"
+ },
+ {
+  "file": "305_제품정보_14.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "섹션 레이블 + 구성품 5종 이미지(①~⑤ 번호 태그) 오버레이, 하단 검정 바 5열 명칭표",
+  "absorbValue": 3,
+  "keyFeature": "구성품 이미지 위 원문자 번호 태그와 하단 검정 바 대응 명칭표 연동 구성"
+ },
+ {
+  "file": "306_상품정보안내_12.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 2분할 회색 사진 플레이스홀더, 하단 9행 제목(170px)+본문(570px) 2열 규격표",
+  "absorbValue": 2,
+  "keyFeature": "제목 열과 본문 열 고정폭으로 정렬된 9행 상품정보 규격표 레이아웃"
+ },
+ {
+  "file": "307_배송교환반품_10.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "섹션 레이블 + 아이콘+타이틀 좌측 고정(160px) / 상세 텍스트 우측(580px) 3블록 수직 스택",
+  "absorbValue": 2,
+  "keyFeature": "고객센터·배송·교환반품 3항목을 아이콘 박스와 텍스트 영역 2열로 분리한 안내 블록"
+ },
+ {
+  "file": "308_01_평점.json",
+  "archetype": "stats",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "블루 배경 + 라운드 제품명 태그, 흰 카드 3개 수직 스택(누적판매량·리뷰수·평점 대형 수치)",
+  "absorbValue": 3,
+  "keyFeature": "강조 배경색 위 흰 카드에 80px 초대형 수치를 단독 배치한 숫자 증명 섹션"
+ },
+ {
+  "file": "309_인트로_51.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "브랜드 가로선 장식 타이틀, 전폭 원형 크롭 제품 사진+캡션 바, 장식 스크립트 폰트 워터마크, 제2 사진+텍스트 오버레이, 하단 베이지 배경 블록",
+  "absorbValue": 5,
+  "keyFeature": "원형 크롭 사진·스크립트 워터마크 텍스트·야자수 데코 이미지가 레이어드된 샌들 브랜드 인트로"
+ },
+ {
+  "file": "310_인트로_52.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "전폭 배경 이미지 위 명조 대형 타이틀+별 장식 라인, 흰 라운드 패널에 3열 아이콘+설명 피처 배너",
+  "absorbValue": 4,
+  "keyFeature": "배경 이미지 위 명조체 감성 카피 + 하단 원형 아이콘 3열 기능 요약 배너 중첩 구조"
+ },
+ {
+  "file": "311_인트로_54.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "우측 정렬 브랜드 가로선+제품명, 우측 정렬 대형 타이틀 2행, 하단 전폭 제품 이미지",
+  "absorbValue": 3,
+  "keyFeature": "전체 텍스트 우측 정렬과 브랜드 가로선 장식으로 비대칭 편집 감성을 구현한 인트로"
+ },
+ {
+  "file": "312_인트로_53.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "상단 중앙정렬 명조 타이틀 블록 + 하단 3개 타원형 반투명 원 아이콘 카드 수평 배열, 전체 배경 이미지",
+  "absorbValue": 3,
+  "keyFeature": "배경 이미지 위에 반투명 타원(Ellipse) 3개를 나란히 배치해 아이콘+설명을 담는 오버레이 원형 배지 구조"
+ },
+ {
+  "file": "313_인트로_55.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "흰 사각 카드 안에 상단 라운드 이미지 + 하단 한/영 혼합 타이틀 스택, 배경 이미지 위에 카드가 부유",
+  "absorbValue": 3,
+  "keyFeature": "큰 손글씨체(Quentin) 영문이 이미지 위에 대각선 인상으로 오버랩되고, 흰 카드 하단에 세리프+산세리프 혼용 타이틀 페어링"
+ },
+ {
+  "file": "314_인트로_56.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "배경 이미지 전체 + 상단 반투명 흰 박스에 한/영 혼합 타이틀, 하단 이탤릭 브랜드명 텍스트 단독 배치",
+  "absorbValue": 2,
+  "keyFeature": "상단 반투명 흰 오버레이 박스 안에 가로선으로 구분된 한국어+영문 세리프 타이틀 레이어링"
+ },
+ {
+  "file": "315_제품소개_34.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "대형 번호(point 01) 좌+제목 우 타이틀 행 → 풀폭 이미지 → 3열 정사각 썸네일 → 풀폭 이미지 → 설명 텍스트 → 제품 단면 분해 콜아웃(선+레이블)",
+  "absorbValue": 4,
+  "keyFeature": "제품 단면 이미지 위에 방사형 선(VECTOR)+레이블로 소재 레이어를 직접 가리키는 인포그래픽 분해도 장치"
+ },
+ {
+  "file": "316_제품소개_35.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "대형 번호(point 02) 좌+제목 우 → 풀폭 이미지 → 3열 썸네일 → 풀폭 이미지 → 설명 텍스트 → 제품 이미지+선+레이블 콜아웃",
+  "absorbValue": 3,
+  "keyFeature": "315와 동일 분해도 패턴, 구조적 특징(오픈 크로스·가벼운 무게)을 선+레이블로 제품 사진 위에 직접 표기"
+ },
+ {
+  "file": "317_제품소개_36.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "대형 번호(point 03) 좌+제목 우 → 3장 이미지 좌우 오버랩 팬아웃 배치 → 설명 텍스트 → 2×2 라운드 썸네일 그리드 → 풀폭 이미지",
+  "absorbValue": 4,
+  "keyFeature": "3장 이미지가 프레임 경계를 넘어 좌우로 삐져나오며 팬처럼 펼쳐지는 오버플로우 팬아웃 구성"
+ },
+ {
+  "file": "318_제품소개_37.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙정렬 타이틀 + 2×2 카드 그리드(상단 컬러 레이블 바 + 하단 사진)로 상황별 착용 장면 분류",
+  "absorbValue": 3,
+  "keyFeature": "각 카드 상단에 갈색 배경 레이블 바(출근·모임·일상 외출·여행)를 붙여 상황 태그와 이미지를 하나의 유닛으로 묶는 씬 카드 구조"
+ },
+ {
+  "file": "319_문제제기_16.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "베이지 갈색 전체 배경 + 상단 중앙 타이틀 → 4개 말풍선(좌우 교차 꼬리) 스택 → 하단 해결 질문 타이틀",
+  "absorbValue": 4,
+  "keyFeature": "실제 고객 불만을 좌우 교차 꼬리 말풍선 4개로 시각화해 공감 유도하는 SNS 채팅 스타일 문제제기 레이아웃"
+ },
+ {
+  "file": "320_문제해결_10.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 필 배지+세로선+타이틀 텍스트 블록 → 베이지 배경 3행 좌우 교차(이미지 좌+텍스트 우 / 텍스트 좌+이미지 우) 리스트 → 하단 풀폭 이미지",
+  "absorbValue": 3,
+  "keyFeature": "좌우 교차 이미지-텍스트 지그재그 리스트 위에 둥근 필 배지+세로선 타이틀 장치를 조합한 솔루션 제시 구조"
+ },
+ {
+  "file": "321_제품특징_35.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "배경 이미지 전체 + 상단 별-선 데코 라인 + 중앙정렬 대형 명조 타이틀 2행 + 본문 텍스트, 하단 이미지 여백 플레이스홀더",
+  "absorbValue": 2,
+  "keyFeature": "별(STAR)+좌우 라인 데코레이터로 타이틀 상단을 장식하는 명조 풀스크린 이미지 오버레이 타이틀 카드"
+ },
+ {
+  "file": "322_제품특징_36.json",
+  "archetype": "checklist",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 필 배지+대형 영문 세리프 타이틀 → 원형 번호 배지+체크 텍스트 4행 리스트 → 이미지 위 대형 영문 오버레이 텍스트",
+  "absorbValue": 3,
+  "keyFeature": "원형 채운 번호 배지(갈색 원+흰 숫자) + 이미지 하단에 대형 반투명 영문 타이포를 오버레이해 감성 포인트를 주는 체크포인트 구성"
+ },
+ {
+  "file": "323_제품특징_37.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "좌정렬 영문 세리프 대제목+한글 부제 → 대형 풀폭 라운드 이미지 → 3행 좌우 교차 (이미지 좌+텍스트 우 / 텍스트 좌+이미지 우) detail 번호 리스트",
+  "absorbValue": 4,
+  "keyFeature": "999px 곡률 완전 원형 라운드 풀폭 대표 이미지 아래, 세로선+영문 detail 번호로 구분된 지그재그 소재·디테일 클로즈업 교차 리스트"
+ },
+ {
+  "file": "324_제품특징_38.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "상단 메인 이미지 + 타이포 오버레이, 하단 3개 좌이미지-우텍스트 카드 수직 스택",
+  "absorbValue": 3,
+  "keyFeature": "이미지 위에 영문 세리프 대형 타이포 오버레이 + 번호형 detail 01/02/03 좌우 분할 카드"
+ },
+ {
+  "file": "325_후기_14.json",
+  "archetype": "review",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "전폭 이미지 + 말풍선 삼각형 장식 → 타이틀 → 3개 리뷰 카드(별점+아이디+텍스트+썸네일)",
+  "absorbValue": 3,
+  "keyFeature": "이미지 하단에 SVG 삼각형 말풍선 꼬리 장식으로 타이틀 영역과 자연스럽게 연결"
+ },
+ {
+  "file": "326_추천_08.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀 + 아이콘 불릿 4개 추천 리스트 + 하단 전폭 이미지",
+  "absorbValue": 2,
+  "keyFeature": "벡터 아이콘 불릿이 달린 흰 카드 행 리스트와 하단 대형 이미지의 단순 수직 조합"
+ },
+ {
+  "file": "327_포인트_11.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "3개 포인트 섹션 수직 반복: 대형 번호 타이틀 → 전폭 이미지 → 3열 썸네일 + 큰 이미지 → 레이어드 제품 도해",
+  "absorbValue": 4,
+  "keyFeature": "130pt 세리프 대형 번호(01/02/03)와 제품 소재 레이어 callout 도해(선+텍스트 레이블)"
+ },
+ {
+  "file": "328_포인트_10.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "3개 포인트 섹션 수직 반복: 영문 소제목 + 80pt 볼드 한글 헤드 + 전폭 이미지",
+  "absorbValue": 2,
+  "keyFeature": "회색 영문 키워드(cordless/folding/bldc)를 60pt로 배치해 섹션 구분자로 활용"
+ },
+ {
+  "file": "329_Q_A_12.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "가로선 브랜드 태그 타이틀 + 600h 이미지 + Q. 접두 4개 Q&A 행 수직 스택",
+  "absorbValue": 2,
+  "keyFeature": "Playfair Display 'Q.' 접두어를 브랜드 컬러로 강조한 질문-답변 행 반복 구조"
+ },
+ {
+  "file": "330_제품정보_15.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "가로선 타이틀 + 발 측정 가이드 일러스트 박스 + 사이즈 그리드 표(3행×6열) + 팁 배너",
+  "absorbValue": 4,
+  "keyFeature": "발 측정 방법 벡터 도해(가로선·세로선·발 이미지)와 좌측 레이블드 사이즈 표를 한 화면에 결합"
+ },
+ {
+  "file": "331_제품정보_16.json",
+  "archetype": "lineup",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "가로선 타이틀 + 4개 컬러 카드(좌우 교차 이미지-텍스트): 각 카드는 컬러 배경 전체에 이미지+컬러명+설명",
+  "absorbValue": 3,
+  "keyFeature": "카드 배경색 자체가 해당 컬러 스와치가 되는 컬러별 좌우 교차 배치"
+ },
+ {
+  "file": "332_상품정보안내_13.json",
+  "archetype": "detail",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "가로선 타이틀 + 2×2 정사각 이미지 그리드 + 8행 좌측 컬러 헤더-우측 내용 표",
+  "absorbValue": 2,
+  "keyFeature": "제품 사진 2×2 그리드 위에 브랜드 컬러 항목셀 + 연한 배경 내용셀로 구성된 정보 표"
+ },
+ {
+  "file": "333_배송교환반품_11.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "가로선 타이틀 + 600h 이미지 + 3개 좌측 컬러 박스(아이콘+라벨)-우측 내용 행",
+  "absorbValue": 3,
+  "keyFeature": "고객센터·배송·교환반품을 브랜드 컬러 정사각 아이콘 박스로 시각 분리한 좌우 분할 행"
+ },
+ {
+  "file": "334_인트로_57.json",
+  "archetype": "hero",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "전폭 제품 이미지 위 타이틀+뱃지 오버레이 + 하단 2×3 아이콘 카드 그리드 배너",
+  "absorbValue": 4,
+  "keyFeature": "말풍선 타원 장식(7세 이상 시니어 배지) + 오렌지 라운드 서브타이틀 칩 + 황색 배경 2×3 특징 카드"
+ },
+ {
+  "file": "335_제품소개_38.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀(포인트 타원 배지) + 대형 라운드 이미지 + 6가지 영양 2×3 교차색 타일 그리드",
+  "absorbValue": 4,
+  "keyFeature": "번호를 원형 뱃지로 처리한 6개 영양소 타일이 황색/흰색 교차 배경으로 구성된 2열 그리드"
+ },
+ {
+  "file": "336_제품소개_39.json",
+  "archetype": "ingredient",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀(타원 포인트 뱃지) + 전체 폭 이미지 + 좌 이미지/우 텍스트 카드 4행 수직 리스트",
+  "absorbValue": 3,
+  "keyFeature": "번호 태그+산지명+원료명 2단 제목 계층을 좌우 분할 카드(r50)에 반복 적용한 원료 쇼케이스"
+ },
+ {
+  "file": "337_제품소개_40.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀(타원 뱃지) + 대형 이미지(상단 와이드+하단 2분할) + 원형 로고 삽입 텍스트박스",
+  "absorbValue": 3,
+  "keyFeature": "HACCP 원형 로고를 텍스트박스 좌측에 앵커로 배치해 인증 신뢰를 시각화한 장치"
+ },
+ {
+  "file": "338_제품소개_41.json",
+  "archetype": "point",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀(타원 뱃지) + 전체 폭 이미지 + 3개 원형 아이콘 뱃지 수평 행",
+  "absorbValue": 2,
+  "keyFeature": "원형 프레임 안 아이콘+2줄 키워드로 '3 무첨가'를 동일 크기 뱃지 3열로 병렬 강조"
+ },
+ {
+  "file": "339_제품소개_42.json",
+  "archetype": "story",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라운드 라벨 + 세리프 대형 헤드라인 + 가로선 구분 본문 2단 + 좌 이미지/우 텍스트 카드",
+  "absorbValue": 4,
+  "keyFeature": "가로선으로 구획된 브랜드 철학 인용구 블록 + 하단 제품 소개 카드를 단일 프레임에 통합한 브랜드 스토리 구성"
+ },
+ {
+  "file": "340_문제제기_17.json",
+  "archetype": "callout",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "흑배경 + 따옴표 인용 헤드 + 이미지 + 말풍선 채팅 리스트 + 3열 카드 + 전환 텍스트",
+  "absorbValue": 5,
+  "keyFeature": "실제 채팅 말풍선(좌/우 교대)으로 보호자 공감 대화를 연출하는 독창적 문제 제기 장치"
+ },
+ {
+  "file": "341_제품특징_39.json",
+  "archetype": "reason",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라운드 라벨 + 대형 타이틀 + 제품 이미지 + 2×2 아이콘 카드 그리드",
+  "absorbValue": 3,
+  "keyFeature": "원형 아이콘 프레임 위에 번호 뱃지를 오버랩하고 카드 하단에 대형 숫자 KPI를 배치한 4가지 이유 그리드"
+ },
+ {
+  "file": "342_후기_15.json",
+  "archetype": "review",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "타이틀 + 다크 평점 박스(좌우 KPI 분할) + 말풍선 리뷰 카드 3행(확대 인용구 오버레이) + 하단 이미지",
+  "absorbValue": 4,
+  "keyFeature": "각 리뷰 카드 상단에 핵심 문장만 추출한 '확대 인용 오버레이 프레임'을 말풍선 위에 중첩 배치"
+ },
+ {
+  "file": "343_포인트_12.json",
+  "archetype": "feature",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "4개 포인트 섹션 수직 적층(point01~04): 각 섹션은 타원 뱃지+타이틀+이미지+리스트/그리드",
+  "absorbValue": 3,
+  "keyFeature": "point 번호 타원 뱃지를 섹션 헤더에 고정 반복해 멀티 포인트를 하나의 긴 스크롤 프레임으로 통합"
+ },
+ {
+  "file": "344_비교_14.json",
+  "archetype": "compare",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 타이틀+설명 + 좌우 2열 비교 패널(이미지+항목 리스트) + 중앙 VS 원형 뱃지",
+  "absorbValue": 3,
+  "keyFeature": "VS 원형 뱃지를 두 패널 경계에 중앙 오버랩해 대비 구조를 직관적으로 시각화"
+ },
+ {
+  "file": "345_비교_15.json",
+  "archetype": "ba",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "VS 원형 뱃지+타이틀 + 좌(급여 전 좁은 패널)+우(급여 후 넓은 패널) 비대칭 비교 + 우측 그림자 오버레이",
+  "absorbValue": 4,
+  "keyFeature": "전/후 패널을 340:380 비대칭 폭으로 분할하고 우측 패널에 그라디언트 그림자를 겹쳐 시선 유도"
+ },
+ {
+  "file": "346_사용방법_07.json",
+  "archetype": "usage",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라운드 라벨+타이틀 + 제품 이미지 + DAY별 4단계 타임라인 카드(좌 번호/우 내용) + 하단 안내",
+  "absorbValue": 3,
+  "keyFeature": "카드 좌측에 대형 노란 번호를 세로선으로 분리해 DAY 단계를 타임라인처럼 읽히게 한 전환 가이드"
+ },
+ {
+  "file": "347_사용방법_08.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "아이콘+타이틀 + 2열 체중/급여량 테이블(헤더 다크브라운+교대 행 음영) + 하단 전체 폭 이미지",
+  "absorbValue": 2,
+  "keyFeature": "헤더 다크브라운 배경과 교대 반투명 행 음영으로 체중별 급여량을 테이블 형식으로 명료화"
+ },
+ {
+  "file": "348_Q_A_13.json",
+  "archetype": "faq",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "상단 전면 이미지 + 중앙 타이틀(아이콘+텍스트) + 말풍선 꼬리 달린 노란 라운드박스 질문 3개 + 아이콘 답변 쌍 세로 리스트",
+  "absorbValue": 3,
+  "keyFeature": "말풍선(꼬리 달린 라운드박스 #ffd153)으로 질문을 시각화하고 아이콘으로 Q/A를 구분하는 채팅 말풍선 FAQ 구조"
+ },
+ {
+  "file": "349_상품정보안내_14.json",
+  "archetype": "spec",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "중앙정렬 타이틀+아이콘 → 2×2 정방형 이미지 그리드 → 제목열(크림배경)+본문열 2단 테이블 6행",
+  "absorbValue": 3,
+  "keyFeature": "2×2 사진 그리드와 좌측 크림색 제목 셀+우측 본문 셀 분리 테이블을 결합한 상품정보 이중 레이아웃"
+ },
+ {
+  "file": "350_배송교환반품_12.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "라운드 배지 + 대형 타이틀 + 큰 라운드 제품사진 → step 번호 원형 배지+텍스트 4단계 세로 리스트 → 크림색 경고 텍스트박스",
+  "absorbValue": 4,
+  "keyFeature": "원형 STEP 번호 배지(#ffd153)와 세로선으로 연결되는 콜드체인 4단계 프로세스 + 하단 보증 문구 강조박스"
+ },
+ {
+  "file": "351_배송교환반품_13.json",
+  "archetype": "shipping",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "대형 타이틀 → 2×2 라운드 카드(아이콘+배지+설명) 그리드 → 배송/교환반품 텍스트 블록 → 다크 고객센터 풀위드 배너",
+  "absorbValue": 4,
+  "keyFeature": "배송방법·출고일정·도착예정·신선도보장 4항목을 라운드 카드 그리드로 시각화 + 다크 브라운 고객센터 풀폭 배너 결합"
+ },
+ {
+  "file": "352_인증서_12.json",
+  "archetype": "cert",
+  "device": "mobile",
+  "tone": "mixed",
+  "structure": "오렌지 배지 + 대형 타이틀+설명 → 3장 인증서 카드 엇쌓기(오버랩) + 하단 다크 라운드 라벨 3개 행",
+  "absorbValue": 4,
+  "keyFeature": "3장 인증서 이미지를 Z축으로 엇쌓아(오버랩) 입체감을 주는 팬 스택 배치 + 노란 배경 대비"
+ },
+ {
+  "file": "353_이벤트_07.json",
+  "archetype": "event",
+  "device": "mobile",
+  "tone": "dark",
+  "structure": "노란 라운드 배지 + 강조 대형 타이틀 + 설명문 → 원형 이미지와 직사각 이미지 오버랩 + 그라디언트 원형 환불 배지 우상단 배치 → 하단 소셜 증거 문구",
+  "absorbValue": 4,
+  "keyFeature": "원형 이미지와 직사각 이미지를 겹쳐 깊이감을 주고 그라디언트 원형 배지를 우상단에 플로팅시킨 100% 환불 이벤트 구조"
+ },
+ {
+  "file": "354_추천_09.json",
+  "archetype": "recommend",
+  "device": "mobile",
+  "tone": "light",
+  "structure": "크림 배경 반원 상단 + 아이콘+대형 타이틀(2색)+설명 텍스트 → 전면 일러스트 이미지 → 해시태그 라운드 배지 행 → 흰색 체크리스트 카드 5행",
+  "absorbValue": 4,
+  "keyFeature": "크림 반배경 위에 대형 일러스트를 오버랩시키고 해시태그 배지와 체크리스트 카드를 결합한 추천 대상 섹션"
+ }
+]

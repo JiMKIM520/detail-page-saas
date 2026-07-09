@@ -1,0 +1,107 @@
+[
+ {
+  "id": "spec-size-diagram",
+  "prefix": "ssdg",
+  "archetype": "spec",
+  "frame": "195_제품정보_08.json",
+  "note": "제품 사진 위 치수선(벡터 라인+레이블) 오버레이 + 하단 4열 사이즈 표. 치수선은 CSS border/의사요소로 재구성"
+ },
+ {
+  "id": "spec-measure-table",
+  "prefix": "smtb",
+  "archetype": "spec",
+  "frame": "158_제품정보_05.json",
+  "note": "측정법 이미지+말풍선 주석 + 다크 헤더 사이즈 표. 말풍선은 CSS"
+ },
+ {
+  "id": "spec-silhouette-table",
+  "prefix": "sstb",
+  "archetype": "spec",
+  "frame": "271_제품정보_10.json",
+  "note": "실루엣 도해(이미지 슬롯)+치수 라벨 + 5열 사이즈 표 + size tip"
+ },
+ {
+  "id": "cert-spotlight-zoom",
+  "prefix": "cszm",
+  "archetype": "cert",
+  "frame": "207_인증서_10.json",
+  "note": "딥 톤 배경 + 인증서 이미지 카드 + 하단 확대 강조(그라데이션 그림자+강조 문구). 다크 섹션 — em-dark 필수"
+ },
+ {
+  "id": "cert-list-badges",
+  "prefix": "clbd",
+  "archetype": "cert",
+  "frame": "169_인증서_08.json",
+  "note": "인증 3행 리스트(좌 사진+우 텍스트) + 좌측 동심원 뱃지 오버랩"
+ },
+ {
+  "id": "callout-coupon-channel",
+  "prefix": "ccch",
+  "archetype": "callout",
+  "frame": "008_pc_자유배너8.json",
+  "note": "채널 친구추가 유도: 좌 폰 목업(CSS로 재구성) + 우 쿠폰 티켓(점선 절취+바코드 CSS). 카카오 상표 노출 금지 — 중립 '채널 추가' 표현"
+ },
+ {
+  "id": "callout-painpoint-cards",
+  "prefix": "cpcd",
+  "archetype": "callout",
+  "frame": "081_문제제기_04.json",
+  "note": "말풍선 질문 헤드 + 전폭 이미지 + 형광펜 하이라이트 카드 리스트(세모 꼬리) + 강조 박스"
+ },
+ {
+  "id": "recommend-oval-checklist",
+  "prefix": "rvoc",
+  "archetype": "recommend",
+  "frame": "085_추천_02.json",
+  "note": "타원 이중 라인 프레임 원형 이미지+별 + 하단 아이콘 체크 카드 5행 — 기존 '이런 분께 추천' 클리셰 대체"
+ },
+ {
+  "id": "recommend-hashtag-card",
+  "prefix": "rhtc",
+  "archetype": "recommend",
+  "frame": "354_추천_09.json",
+  "note": "반원 상단 장식 + 2색 타이틀 + 해시태그 라운드 배지 행 + 체크리스트 카드"
+ },
+ {
+  "id": "compare-asym-panels",
+  "prefix": "caps",
+  "archetype": "compare",
+  "frame": "166_비교_08.json",
+  "note": "3열 비대칭 폭 비교 패널(자사 강조열 넓게) — VS 뱃지 클리셰 대체"
+ },
+ {
+  "id": "compare-bar-years",
+  "prefix": "cbys",
+  "archetype": "compare",
+  "frame": "127_비교_04.json",
+  "note": "수직 막대 그래프 비교(기간·수치 라벨) — CSS 바 차트"
+ },
+ {
+  "id": "shipping-deadline-clock",
+  "prefix": "sdcl",
+  "archetype": "shipping",
+  "frame": "006_pc_자유배너6.json",
+  "note": "딥 블루 배경 + 디지털 시계 숫자 카드(검정 라운드 박스) + 당일발송 카피. 다크 — em-dark"
+ },
+ {
+  "id": "stats-gauge-bars",
+  "prefix": "sgbr",
+  "archetype": "stats",
+  "frame": "209_후기_10.json",
+  "note": "만족도 도넛(conic-gradient CSS) + 수평 바 3항목 — 근거 있는 수치 전용임을 describe에 명시"
+ },
+ {
+  "id": "closing-quote-photo",
+  "prefix": "cqph",
+  "archetype": "closing",
+  "frame": "004_pc_전환7.json",
+  "note": "풀블리드 사진 배경 + 인용부호·구분선·대형 헤드라인 스택 + 좌우 원형 사진 2장. 다크 스크림 — em-dark 필수, noimg-safe 강등 구현"
+ },
+ {
+  "id": "point-metric-badge",
+  "prefix": "pbxb",
+  "archetype": "point",
+  "frame": "021_모바일_전환_15.json",
+  "note": "흰 라운드 카드(타이틀+서브) + 원형 이미지 + 수치 원형 뱃지(이중 라인) 오버랩. 수치는 근거 필드로"
+ }
+]
