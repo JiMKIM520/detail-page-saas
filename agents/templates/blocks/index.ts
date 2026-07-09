@@ -353,6 +353,131 @@ import { specMeasureTable } from './variants/spec-measure-table'
 import { specSilhouetteTable } from './variants/spec-silhouette-table'
 import { specSizeDiagram } from './variants/spec-size-diagram'
 import { statsGaugeBars } from './variants/stats-gauge-bars'
+// Sprint 8 wave-2 — 1420종 2차 흡수
+import { bannerKineticDuoscale } from './variants/banner-kinetic-duoscale'
+import { calloutChatDarkProblem } from './variants/callout-chat-dark-problem'
+import { calloutChatZigzag } from './variants/callout-chat-zigzag'
+import { calloutDarkStatGrid } from './variants/callout-dark-stat-grid'
+import { calloutKakaofriendRadial } from './variants/callout-kakaofriend-radial'
+import { certDocZoom } from './variants/cert-doc-zoom'
+import { certFanStack } from './variants/cert-fan-stack'
+import { certLaurelTriple } from './variants/cert-laurel-triple'
+import { certMagnifyBanner } from './variants/cert-magnify-banner'
+import { certOrbitRing } from './variants/cert-orbit-ring'
+import { checklistBrownPhotoRow } from './variants/checklist-brown-photo-row'
+import { compareAsympanelBefaft } from './variants/compare-asympanel-befaft'
+import { compareSpecTrio } from './variants/compare-spec-trio'
+import { compareTriAxis } from './variants/compare-tri-axis'
+import { compareTripleBadge } from './variants/compare-triple-badge'
+import { compareVsCardSplit } from './variants/compare-vs-card-split'
+import { detailAnatomyCallout } from './variants/detail-anatomy-callout'
+import { detailBadgeCallout } from './variants/detail-badge-callout'
+import { detailInfotagOverlay } from './variants/detail-infotag-overlay'
+import { detailOverlapBookend } from './variants/detail-overlap-bookend'
+import { detailPinLegend } from './variants/detail-pin-legend'
+import { detailSectionExplode } from './variants/detail-section-explode'
+import { detailSerifAltrow } from './variants/detail-serif-altrow'
+import { detailSerifHeroZigzag } from './variants/detail-serif-hero-zigzag'
+import { eventCircleWarranty } from './variants/event-circle-warranty'
+import { eventDarkbgPricedrop } from './variants/event-darkbg-pricedrop'
+import { eventKakaoCouponSplit } from './variants/event-kakao-coupon-split'
+import { eventOneplusStack } from './variants/event-oneplus-stack'
+import { eventOverlapRefund } from './variants/event-overlap-refund'
+import { eventOverlayPricebar } from './variants/event-overlay-pricebar'
+import { faqBubbleTail } from './variants/faq-bubble-tail'
+import { faqChatBubble } from './variants/faq-chat-bubble'
+import { featureAltCardStack } from './variants/feature-alt-card-stack'
+import { featureArrowTrio } from './variants/feature-arrow-trio'
+import { featureChecklistStatBanner } from './variants/feature-checklist-stat-banner'
+import { featureCheckpointRail } from './variants/feature-checkpoint-rail'
+import { featureDarkPillStack } from './variants/feature-dark-pill-stack'
+import { featureHeroPillZigzag } from './variants/feature-hero-pill-zigzag'
+import { featureHighlightCaption } from './variants/feature-highlight-caption'
+import { featureHoneycombBadge } from './variants/feature-honeycomb-badge'
+import { featureHotspotCallout } from './variants/feature-hotspot-callout'
+import { featureHotspotSplit } from './variants/feature-hotspot-split'
+import { featurePillGrid } from './variants/feature-pill-grid'
+import { featureStackImgcap } from './variants/feature-stack-imgcap'
+import { featureStepIconbox } from './variants/feature-step-iconbox'
+import { featureStepOverlayPanel } from './variants/feature-step-overlay-panel'
+import { galleryHeroHashtagGrid } from './variants/gallery-hero-hashtag-grid'
+import { heroBadgeGrid } from './variants/hero-badge-grid'
+import { heroBadgeStagger } from './variants/hero-badge-stagger'
+import { heroBubbleGrid } from './variants/hero-bubble-grid'
+import { heroBubbleStack } from './variants/hero-bubble-stack'
+import { heroCropmarkOverlay } from './variants/hero-cropmark-overlay'
+import { heroDotDuoweight } from './variants/hero-dot-duoweight'
+import { heroFloatSplit } from './variants/hero-float-split'
+import { heroGlintBrand } from './variants/hero-glint-brand'
+import { heroHandscriptIconTrio } from './variants/hero-handscript-icon-trio'
+import { heroNumberedTrio } from './variants/hero-numbered-trio'
+import { heroOvalBadge } from './variants/hero-oval-badge'
+import { heroOvalMascot } from './variants/hero-oval-mascot'
+import { heroPillWatermark } from './variants/hero-pill-watermark'
+import { heroRibbonPanel } from './variants/hero-ribbon-panel'
+import { heroSerifIconPanel } from './variants/hero-serif-icon-panel'
+import { heroSplitOrbit } from './variants/hero-split-orbit'
+import { heroStampGrid } from './variants/hero-stamp-grid'
+import { heroTintOvalDrop } from './variants/hero-tint-oval-drop'
+import { heroVerticalBadge } from './variants/hero-vertical-badge'
+import { heroWeightSlash } from './variants/hero-weight-slash'
+import { ingredientBubbleFloat } from './variants/ingredient-bubble-float'
+import { ingredientCardBarStack } from './variants/ingredient-card-bar-stack'
+import { ingredientEllipseBarStack } from './variants/ingredient-ellipse-bar-stack'
+import { ingredientOnionStack } from './variants/ingredient-onion-stack'
+import { ingredientPhGaugeBanner } from './variants/ingredient-ph-gauge-banner'
+import { ingredientPhScale } from './variants/ingredient-ph-scale'
+import { ingredientPillIconList } from './variants/ingredient-pill-icon-list'
+import { ingredientRadialDotMap } from './variants/ingredient-radial-dot-map'
+import { ingredientStepPanelSplit } from './variants/ingredient-step-panel-split'
+import { lineupDualPriceSeal } from './variants/lineup-dual-price-seal'
+import { lineupWordmarkSplit } from './variants/lineup-wordmark-split'
+import { pointBadgeSectionTrio } from './variants/point-badge-section-trio'
+import { pointBadgeWordSplit } from './variants/point-badge-word-split'
+import { pointBubbleChat } from './variants/point-bubble-chat'
+import { pointBubbleZigzag } from './variants/point-bubble-zigzag'
+import { pointCardSplitCheck } from './variants/point-card-split-check'
+import { pointCircleBadgePanel } from './variants/point-circle-badge-panel'
+import { pointCircleGridReveal } from './variants/point-circle-grid-reveal'
+import { pointDarkGridResolve } from './variants/point-dark-grid-resolve'
+import { pointDualCircleBadge } from './variants/point-dual-circle-badge'
+import { pointGlassGrid } from './variants/point-glass-grid'
+import { pointHighlightStack } from './variants/point-highlight-stack'
+import { pointNumeralStack } from './variants/point-numeral-stack'
+import { pointPillCascadeReview } from './variants/point-pill-cascade-review'
+import { pointRuledChapterOverlap } from './variants/point-ruled-chapter-overlap'
+import { pointSerifLayerCallout } from './variants/point-serif-layer-callout'
+import { pointTripleBadge } from './variants/point-triple-badge'
+import { pointTripleScroll } from './variants/point-triple-scroll'
+import { promoLetterBadgeOval } from './variants/promo-letter-badge-oval'
+import { recommendSkyOval } from './variants/recommend-sky-oval'
+import { reviewBubbleGrid } from './variants/review-bubble-grid'
+import { reviewBubbleScore } from './variants/review-bubble-score'
+import { reviewCardSummarybar } from './variants/review-card-summarybar'
+import { reviewDonutPillow } from './variants/review-donut-pillow'
+import { reviewKpiBubbleTrio } from './variants/review-kpi-bubble-trio'
+import { reviewLaurelBubble } from './variants/review-laurel-bubble'
+import { reviewStatOverlay } from './variants/review-stat-overlay'
+import { shippingClockUrgency } from './variants/shipping-clock-urgency'
+import { shippingColdchainSteps } from './variants/shipping-coldchain-steps'
+import { shippingPolyDeadlineSplit } from './variants/shipping-poly-deadline-split'
+import { shippingRoundcardCs } from './variants/shipping-roundcard-cs'
+import { specBatteryProgress } from './variants/spec-battery-progress'
+import { specDimOverlay } from './variants/spec-dim-overlay'
+import { specFootMeasureGrid } from './variants/spec-foot-measure-grid'
+import { specHeightGauge } from './variants/spec-height-gauge'
+import { specSilhouetteBadge } from './variants/spec-silhouette-badge'
+import { statsDecibelOverlay } from './variants/stats-decibel-overlay'
+import { storyCauseFlow } from './variants/story-cause-flow'
+import { storySerifRuled } from './variants/story-serif-ruled'
+import { usageFanoutGrid } from './variants/usage-fanout-grid'
+import { usageNumberedSplit } from './variants/usage-numbered-split'
+import { usageSceneAltcard } from './variants/usage-scene-altcard'
+import { ingredientBadgeTileGrid } from './variants/ingredient-badge-tile-grid'
+import { ingredientCircleBadgeZigzag } from './variants/ingredient-circle-badge-zigzag'
+import { ingredientOvalStack } from './variants/ingredient-oval-stack'
+import { ingredientPointSerifList } from './variants/ingredient-point-serif-list'
+import { specDimBlueprint } from './variants/spec-dim-blueprint'
 
 registerBlocks([
   heroCentered,
@@ -737,6 +862,131 @@ registerBlocks([
   specSilhouetteTable,
   specSizeDiagram,
   statsGaugeBars,
+  // Sprint 8 wave-2
+  bannerKineticDuoscale,
+  calloutChatDarkProblem,
+  calloutChatZigzag,
+  calloutDarkStatGrid,
+  calloutKakaofriendRadial,
+  certDocZoom,
+  certFanStack,
+  certLaurelTriple,
+  certMagnifyBanner,
+  certOrbitRing,
+  checklistBrownPhotoRow,
+  compareAsympanelBefaft,
+  compareSpecTrio,
+  compareTriAxis,
+  compareTripleBadge,
+  compareVsCardSplit,
+  detailAnatomyCallout,
+  detailBadgeCallout,
+  detailInfotagOverlay,
+  detailOverlapBookend,
+  detailPinLegend,
+  detailSectionExplode,
+  detailSerifAltrow,
+  detailSerifHeroZigzag,
+  eventCircleWarranty,
+  eventDarkbgPricedrop,
+  eventKakaoCouponSplit,
+  eventOneplusStack,
+  eventOverlapRefund,
+  eventOverlayPricebar,
+  faqBubbleTail,
+  faqChatBubble,
+  featureAltCardStack,
+  featureArrowTrio,
+  featureChecklistStatBanner,
+  featureCheckpointRail,
+  featureDarkPillStack,
+  featureHeroPillZigzag,
+  featureHighlightCaption,
+  featureHoneycombBadge,
+  featureHotspotCallout,
+  featureHotspotSplit,
+  featurePillGrid,
+  featureStackImgcap,
+  featureStepIconbox,
+  featureStepOverlayPanel,
+  galleryHeroHashtagGrid,
+  heroBadgeGrid,
+  heroBadgeStagger,
+  heroBubbleGrid,
+  heroBubbleStack,
+  heroCropmarkOverlay,
+  heroDotDuoweight,
+  heroFloatSplit,
+  heroGlintBrand,
+  heroHandscriptIconTrio,
+  heroNumberedTrio,
+  heroOvalBadge,
+  heroOvalMascot,
+  heroPillWatermark,
+  heroRibbonPanel,
+  heroSerifIconPanel,
+  heroSplitOrbit,
+  heroStampGrid,
+  heroTintOvalDrop,
+  heroVerticalBadge,
+  heroWeightSlash,
+  ingredientBubbleFloat,
+  ingredientCardBarStack,
+  ingredientEllipseBarStack,
+  ingredientOnionStack,
+  ingredientPhGaugeBanner,
+  ingredientPhScale,
+  ingredientPillIconList,
+  ingredientRadialDotMap,
+  ingredientStepPanelSplit,
+  lineupDualPriceSeal,
+  lineupWordmarkSplit,
+  pointBadgeSectionTrio,
+  pointBadgeWordSplit,
+  pointBubbleChat,
+  pointBubbleZigzag,
+  pointCardSplitCheck,
+  pointCircleBadgePanel,
+  pointCircleGridReveal,
+  pointDarkGridResolve,
+  pointDualCircleBadge,
+  pointGlassGrid,
+  pointHighlightStack,
+  pointNumeralStack,
+  pointPillCascadeReview,
+  pointRuledChapterOverlap,
+  pointSerifLayerCallout,
+  pointTripleBadge,
+  pointTripleScroll,
+  promoLetterBadgeOval,
+  recommendSkyOval,
+  reviewBubbleGrid,
+  reviewBubbleScore,
+  reviewCardSummarybar,
+  reviewDonutPillow,
+  reviewKpiBubbleTrio,
+  reviewLaurelBubble,
+  reviewStatOverlay,
+  shippingClockUrgency,
+  shippingColdchainSteps,
+  shippingPolyDeadlineSplit,
+  shippingRoundcardCs,
+  specBatteryProgress,
+  specDimOverlay,
+  specFootMeasureGrid,
+  specHeightGauge,
+  specSilhouetteBadge,
+  statsDecibelOverlay,
+  storyCauseFlow,
+  storySerifRuled,
+  usageFanoutGrid,
+  usageNumberedSplit,
+  usageSceneAltcard,
+  ingredientBadgeTileGrid,
+  ingredientCircleBadgeZigzag,
+  ingredientOvalStack,
+  ingredientPointSerifList,
+  specDimBlueprint,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

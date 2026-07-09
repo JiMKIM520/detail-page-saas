@@ -66,3 +66,9 @@ export const myVariant = defineBlock<Data>({
 ```
 - contractLine 형식은 기존 DATA_CONTRACTS와 동일: `<id> { 필드(주석) }   // 설명`
 - sampleData는 스키마를 통과하는 현실적 한국어 표본(렌더 스모크에 사용, 이미지 필드는 "https://picsum.photos/800/600" 사용)
+
+## 강조 마크업 형식 (CRITICAL — wave2 결함 12건 원인)
+- 강조는 반드시 `<span class="em">텍스트</span>` — `<em>` 태그 금지(richSafe가 이스케이프해 리터럴 노출됨)
+- (em) 주석 필드는 렌더에서 반드시 richSafe() 사용 (esc() 금지)
+- sampleData 문자열에 & 는 그대로 쓴다(&amp; 금지)
+- 이미지 위 텍스트 오버레이에는 반드시 스크림(그라데이션/반투명 패널) 또는 text-shadow
