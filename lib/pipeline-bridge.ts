@@ -479,7 +479,9 @@ export async function runPipelineForProject(projectId: string): Promise<{
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
         cutoutUrls: cutoutUrls.filter((u) => !usedOriginalUrls.has(u)),
-        sectionImageUrls: [...okSection, ...logoUrls],
+        // 직배치 원본은 누끼 가드 대상에서 빼되, 새니타이즈 허용 집합(섹션 풀)에는 반드시 포함
+        // — cutoutUrls에서만 빼면 "지어낸 URL"로 오인 제거되는 실사례(럽앤 직배치 0장) 봉쇄
+        sectionImageUrls: [...okSection, ...logoUrls, ...usedOriginalUrls],
         imageNotes,
         preferredPreset: presetForCategory(input.category),
         script: approvedScript,

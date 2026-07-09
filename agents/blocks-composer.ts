@@ -996,7 +996,7 @@ export function applyPlacementGuards(
   cutoutSet: ReadonlySet<string>,
   logoSet: ReadonlySet<string> = new Set(),
 ): void {
-  const stats = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0 }
+  const stats: Record<string, number> = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0, emSpace: 0 }
   for (const b of spec.blocks) {
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     const data = (b.data ?? {}) as Record<string, unknown>
@@ -1037,6 +1037,12 @@ export function applyPlacementGuards(
         stats.logoMoved++
         return
       }
+      // 강조 스팬 경계 공백 누락 수술 — "…텍스처를</span>발행하다"처럼 조사로 끝나는 강조 뒤에
+      // 한글이 바로 붙으면 항상 띄어쓰기 오류(단어 중간 강조는 조사로 끝나지 않아 오탐 없음)
+      if (!isUrl && /[가-힣][를을이가은는와과도의로에서]<\/span>[가-힣]/.test(value)) {
+        parent[key] = value.replace(/([가-힣][를을이가은는와과도의로에서]<\/span>)(?=[가-힣])/g, '$1 ')
+        stats.emSpace = (stats.emSpace ?? 0) + 1
+      }
       if (!isUrl && EMOJI_RE.test(value)) {
         const cleaned = value.replace(EMOJI_RE, '').replace(/\s{2,}/g, ' ').trim()
         stats.emoji++
@@ -1047,7 +1053,7 @@ export function applyPlacementGuards(
   }
   if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace}`,
     )
 }
 
