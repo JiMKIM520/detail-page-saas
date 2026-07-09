@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { pickShotReferences } from '@/lib/photography/pick-refs'
 import { createServiceClient } from '@/lib/supabase/service'
 import { generateDesignImage } from '@/lib/ai/gemini-image'
 import { buildShotPrompt } from '@/agents/styling-shots'
@@ -42,12 +43,13 @@ export async function POST(request: Request) {
   }
 
   // 2) 제품 누끼컷(레퍼런스) 로드
-  const { data: files } = await svc.from('intake_files').select('storage_path').eq('project_id', project_id).eq('file_type', 'product_photo').order('created_at')
+  const { data: files } = await svc.from('intake_files').select('storage_path, file_name').eq('project_id', project_id).eq('file_type', 'product_photo').order('created_at')
   const nukki: string[] = []
+  const photoNames: string[] = []
   for (const f of files ?? []) {
     try {
       const { data } = await svc.storage.from('intake-files').download(f.storage_path)
-      if (data) nukki.push(Buffer.from(await data.arrayBuffer()).toString('base64'))
+      if (data) { nukki.push(Buffer.from(await data.arrayBuffer()).toString('base64')); photoNames.push(String((f as { file_name?: string }).file_name ?? '')) }
     } catch { /* skip */ }
   }
 
@@ -62,7 +64,9 @@ export async function POST(request: Request) {
         ? shot.finalPrompt
         : buildShotPrompt(shot, rules, meta as any)
       // withProduct=false(원료·소재컷)는 레퍼런스 없이 순수 생성 (Sprint 5)
-      const refs = (shot as any).withProduct === false ? [] : nukki.slice(0, 3)
+      // 니즈 매칭 레퍼런스 (Sprint 9-C) — 샷 텍스트·파일명 토큰 겹침 우선, 동점 최신순
+      const refIdx = pickShotReferences(String((shot as any).name ?? '') + ' ' + String((shot as any).filename ?? ''), photoNames)
+      const refs = (shot as any).withProduct === false ? [] : refIdx.map((i) => nukki[i]).filter(Boolean)
       const buf = await generateDesignImage({ prompt: fp, referenceImages: refs, aspectRatio: '3:4', model: 'pro' })
       const path = `projects/${project_id}/styling_real/${shot.filename || (shot.name + '.png')}`
       const { error } = await svc.storage.from('designs').upload(path, buf, { contentType: 'image/png', upsert: true })

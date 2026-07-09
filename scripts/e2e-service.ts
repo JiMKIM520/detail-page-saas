@@ -8,6 +8,7 @@
  *         성분/사용 이미지는 스타일링샷 8컷 커버리지 규칙(INGREDIENT·USAGE 필수)이 담당.
  */
 import fs from 'node:fs'
+import { pickShotReferences } from '@/lib/photography/pick-refs'
 import path from 'node:path'
 import { createServiceClient } from '@/lib/supabase/service'
 import { runPlanningForProject, runPipelineForProject } from '@/lib/pipeline-bridge'
@@ -31,11 +32,12 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
   if (!json) { console.warn('[e2e] styling-final-prompts.json 없음'); return 0 }
   const shots: any[] = json.shots ?? []
   const rules: string[] = json.productPreservationRules ?? []
-  const { data: files } = await svc.from('intake_files').select('storage_path').eq('project_id', pid).eq('file_type', 'product_photo').order('created_at')
+  const { data: files } = await svc.from('intake_files').select('storage_path, file_name').eq('project_id', pid).eq('file_type', 'product_photo').order('created_at')
   const nukki: string[] = []
+  const photoNames: string[] = []
   for (const f of files ?? []) {
     const { data: blob } = await svc.storage.from('intake-files').download(f.storage_path)
-    if (blob) nukki.push(Buffer.from(await blob.arrayBuffer()).toString('base64'))
+    if (blob) { nukki.push(Buffer.from(await blob.arrayBuffer()).toString('base64')); photoNames.push(String((f as { file_name?: string }).file_name ?? '')) }
   }
   const { data: project } = await svc.from('projects').select('category, platforms(slug)').eq('id', pid).single()
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', aspectRatio: '3:4' }
@@ -45,7 +47,9 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt) ? shot.finalPrompt : buildShotPrompt(shot, rules, meta as any)
       console.log(`[e2e] 스타일링샷 생성: ${shot.name ?? shot.filename}…`)
       // withProduct=false(원료·소재컷)는 레퍼런스 없이 순수 생성 — 라벨 재현 위험 0 (Sprint 5)
-      const refs = (shot as any).withProduct === false ? [] : nukki.slice(0, 3)
+      // 니즈 매칭 레퍼런스 (Sprint 9-C) — 샷 텍스트·파일명 토큰 겹침 우선, 동점 최신순
+      const refIdx = pickShotReferences(String((shot as any).name ?? '') + ' ' + String((shot as any).filename ?? ''), photoNames)
+      const refs = (shot as any).withProduct === false ? [] : refIdx.map((i) => nukki[i]).filter(Boolean)
       const buf = await generateDesignImage({ prompt: fp, referenceImages: refs, aspectRatio: '3:4', model: 'pro' })
       const p = `projects/${pid}/styling_real/${shot.filename || shot.name + '.png'}`
       const { error } = await svc.storage.from('designs').upload(p, buf, { contentType: 'image/png', upsert: true })

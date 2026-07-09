@@ -23,7 +23,7 @@ import * as path from 'path'
 async function deriveBrandColors(supabase: SupabaseClient, projectId: string): Promise<string[]> {
   const { data: logos } = await supabase
     .from('intake_files')
-    .select('storage_path, file_type')
+    .select('storage_path, file_type, file_name')
     .eq('project_id', projectId)
     .in('file_type', ['brand_logo', 'product_photo'])
     .order('created_at', { ascending: true })
@@ -155,12 +155,16 @@ export async function runPipelineForProject(projectId: string): Promise<{
     if (useBlocks) {
       // 누끼컷 → 서명URL (cutout 슬롯 + 브랜드색 추출 소스)
       const cutoutUrls: string[] = []
+      const intakePhotoName = new Map<string, string>() // url → 파일명 (원본 직배치 매칭용, Sprint 9-C)
       if (files) {
         for (const file of files) {
           const { data: signed } = await supabase.storage
             .from('intake-files')
             .createSignedUrl(file.storage_path, 60 * 60 * 24 * 7)
-          if (signed?.signedUrl) cutoutUrls.push(signed.signedUrl)
+          if (signed?.signedUrl) {
+            cutoutUrls.push(signed.signedUrl)
+            intakePhotoName.set(signed.signedUrl, String((file as { file_name?: string }).file_name ?? ''))
+          }
         }
       }
 
@@ -333,14 +337,42 @@ export async function runPipelineForProject(projectId: string): Promise<{
       // 생성된 "브랜드 로고" 계열 컷 — 업로드 로고와 동일하게 배치 화이트리스트(hero/closing/cs)
       // 적용 대상으로 승격. 스토리 배경 등에 로고컷이 깔려 헤드라인과 겹친 실사례(아로마티카 stf) 봉쇄.
       const needLogoUrls: string[] = []
+      const usedOriginalUrls = new Set<string>()
       if (storedBlueprint?.sections?.length) {
         const byBase = new Map<string, string>()
         for (const u of okStyling) byBase.set((u.split('/').pop() ?? '').split('?')[0], u)
+        // 원본 직배치 매칭 (Sprint 9-C) — 니즈 subject/id 토큰 ↔ 업로드 파일명 토큰
+        const tokensOf = (t: string): string[] =>
+          (t ?? '').toLowerCase().split(/[^a-z0-9가-힣]+/).filter((w) => w.length >= 2)
+        const pickOriginal = (n: { id: string; subject?: string }): string | undefined => {
+          let best: string | undefined
+          let bestScore = 0
+          const needTok = new Set(tokensOf(`${n.id} ${n.subject ?? ''}`))
+          for (const [url, name] of intakePhotoName) {
+            if (usedOriginalUrls.has(url)) continue
+            const score = tokensOf(name).filter((w) => needTok.has(w)).length
+            if (score > bestScore) { bestScore = score; best = url }
+          }
+          // 토큰 매칭 실패 시 미사용 원본 중 첫 번째(그래도 생성 실패보다 실물이 낫다)
+          return best ?? [...intakePhotoName.keys()].find((u) => !usedOriginalUrls.has(u))
+        }
         let mapped = 0
         let missing = 0
+        let originals = 0
         for (const s of storedBlueprint.sections) {
           const urls: string[] = []
           for (const n of s.imageNeeds ?? []) {
+            if (n.useOriginal) {
+              const ou = pickOriginal(n)
+              if (ou) {
+                urls.push(ou)
+                usedOriginalUrls.add(ou)
+                imageNotes[ou] = `업로드 원본 실사(${intakePhotoName.get(ou) || '제품 사진'}) — 실물·라벨 정확, 지정 섹션 전용`
+                mapped++
+                originals++
+                continue
+              }
+            }
             const u = byBase.get(`${n.id}.png`) ?? byBase.get(`regen_${n.id}.png`)
             if (u) {
               urls.push(u)
@@ -350,6 +382,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
           }
           if (urls.length) s.imageUrls = urls.slice(0, 2)
         }
+        if (originals) console.log(`[pipeline-bridge] 원본 직배치 ${originals}건 (생성 대체)`)
         console.log(
           `[pipeline-bridge] 저장 청사진 사용 — ${storedBlueprint.sections.length}블록 · 니즈 매핑 ${mapped}건 · 미충족 ${missing}건${needLogoUrls.length ? ` · 로고컷 ${needLogoUrls.length}건(배치 화이트리스트)` : ''}`,
         )
@@ -445,7 +478,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
       result = await runBlocksPipeline(blocksInput, {
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
-        cutoutUrls,
+        cutoutUrls: cutoutUrls.filter((u) => !usedOriginalUrls.has(u)),
         sectionImageUrls: [...okSection, ...logoUrls],
         imageNotes,
         preferredPreset: presetForCategory(input.category),
@@ -662,9 +695,24 @@ export async function runPlanningForProject(projectId: string): Promise<{
             moodKeywords = sgm.brand?.moodKeywords
           }
         } catch { /* 무드 없이 진행 */ }
-        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {}, moodKeywords })
+        // 업로드 원본 사진 파일명 — useOriginal 판단 근거 (Sprint 9-C)
+        let uploadedPhotos: string[] | undefined
+        try {
+          const { data: photoRows } = await supabase
+            .from('intake_files')
+            .select('file_name')
+            .eq('project_id', projectId)
+            .eq('file_type', 'product_photo')
+            .order('created_at', { ascending: true })
+          uploadedPhotos = (photoRows ?? []).map((r) => String(r.file_name ?? '')).filter(Boolean)
+        } catch { /* 파일명 없이 진행 */ }
+        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {}, moodKeywords, uploadedPhotos })
         if (planned.success && planned.data) {
-          const needs = planned.data.sections.flatMap((s) => s.imageNeeds ?? [])
+          const allNeeds = planned.data.sections.flatMap((s) => s.imageNeeds ?? [])
+          const originalNeeds = allNeeds.filter((n) => n.useOriginal)
+          const needs = allNeeds.filter((n) => !n.useOriginal)
+          if (originalNeeds.length)
+            console.log(`[pipeline-bridge/planning] 원본 직배치 니즈 ${originalNeeds.length}건 — 생성 제외: ${originalNeeds.map((n) => n.id).join(', ')}`)
           let sg: unknown
           try {
             if (result.artifacts.styleGuide) sg = JSON.parse(fs.readFileSync(result.artifacts.styleGuide, 'utf8'))
@@ -675,7 +723,7 @@ export async function runPlanningForProject(projectId: string): Promise<{
             productName: input.productName,
             category: input.category,
           })
-          if (prompted.success && prompted.data && prompted.data.length >= 4) {
+          if (prompted.success && prompted.data && prompted.data.length >= Math.min(4, needs.length)) {
             let existing: Record<string, unknown> = {}
             try {
               if (result.artifacts.stylingPrompts)

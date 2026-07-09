@@ -21,6 +21,8 @@ export interface ImageNeed {
   style: 'styled' | 'raw-material' | 'texture' | 'usage' | 'mood'
   /** 제품(패키지)이 프레임에 필요한가 — false면 레퍼런스 없이 순수 생성(원료·소재컷) */
   withProduct: boolean
+  /** 생성 대신 업로드 원본 사진을 직접 배치 — 패키지 구성·라벨 등 실물 정확성이 중요한 니즈 (Sprint 9-C) */
+  useOriginal?: boolean
 }
 
 export interface BlueprintSection {
@@ -50,6 +52,8 @@ export interface PagePlannerInput {
   avoidVariants?: string[]
   /** 아트디렉터 무드 키워드 — 히어로 아형 내 변형 선택의 보조 신호 */
   moodKeywords?: string[]
+  /** 업로드 원본 사진 파일명 목록 — useOriginal 판단 근거 (Sprint 9-C) */
+  uploadedPhotos?: string[]
 }
 
 // 상한 초과는 기계적으로 수리 가능한 위반 — 실패 대신 절단(컴포저 수리 패스와 같은 철학)
@@ -76,6 +80,7 @@ const blueprintSchema = z.object({
                   subject: z.string().min(1),
                   style: z.enum(['styled', 'raw-material', 'texture', 'usage', 'mood']),
                   withProduct: z.boolean(),
+                  useOriginal: z.boolean().optional(),
                 }),
               )
               .max(2)
@@ -120,6 +125,9 @@ system prompt). Your job:
      (없는 원료·소품·행위를 지어내지 말 것)
    - style: styled(제품 연출)/raw-material(원료·소재 실물)/texture(질감)/usage(사용 장면)/mood(무드)
    - withProduct: 제품 패키지가 프레임에 필요한가 — 원료·소재·질감컷은 false 권장(라벨 재현 위험 0)
+   - useOriginal: 업로드 원본 사진 목록에 그 니즈를 정확히 충족하는 실물 사진이 있으면 true —
+     생성하지 않고 원본을 그대로 배치한다(패키지 구성·묶음·라벨·실물 디테일은 원본이 항상 정확).
+     true면 subject에 어떤 원본인지 알 수 있는 특징(파일명 키워드)을 포함하라.
    - 페이지 전체 니즈 총합 8~12개. imageSlots>=2 블록은 니즈 필수. hero는 withProduct=true 1개 필수.
 4. copyBrief: ONE terse Korean sentence (max 80 chars) stating WHAT the filler must say there,
    quoting key facts from the script (numbers, claims). The filler may not invent beyond this.
@@ -170,6 +178,10 @@ function buildUserPrompt(input: PagePlannerInput, repairNote?: string): string {
   const heroSection = input.script.sections.find((s) => String(s.type ?? s.sectionType ?? '') === 'hero')
   const heroStyle = String((heroSection as { heroStyle?: string } | undefined)?.heroStyle ?? '').toLowerCase()
   const heroCandidates = HERO_STYLE_TO_VARIANTS[heroStyle]
+  // 업로드 원본 사진 목록 (Sprint 9-C) — useOriginal 판단 근거
+  const photosBlock = input.uploadedPhotos?.length
+    ? `\n\n업로드 원본 사진 (useOriginal 후보 — 실물 정확성이 중요한 니즈는 생성 대신 이 원본을 지정):\n${input.uploadedPhotos.map((n) => `- ${n}`).join('\n')}`
+    : ''
   const heroBlock = heroCandidates
     ? `\n\nHERO 후보 (스크립트 heroStyle="${heroStyle}" — 이 목록에서만 선택, 무드에 맞게):\n${heroCandidates.join(', ')}\n무드 키워드: ${(input.moodKeywords ?? []).join(', ') || '(없음)'}`
     : input.moodKeywords?.length
@@ -185,7 +197,7 @@ function buildUserPrompt(input: PagePlannerInput, repairNote?: string): string {
 ${summarizeScriptSections(input.script.sections)}
 
 이미지 인벤토리(실물 검수 완료 — 노트 기준으로만 배정):
-${imgLines || '(이미지 없음)'}${heroBlock}${avoid}${repair}
+${imgLines || '(이미지 없음)'}${photosBlock}${heroBlock}${avoid}${repair}
 
 위 스크립트 서사에 맞는 페이지 청사진 JSON만 출력하세요.`
 }
