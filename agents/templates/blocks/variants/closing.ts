@@ -25,6 +25,7 @@ export const closingMood = defineBlock<MoodData>({
 .clm-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,9,.55),rgba(20,14,9,.78));z-index:1}
 .clm-inner{position:relative;z-index:2}
 .clm-h{font-size:56px;text-shadow:0 4px 18px rgba(0,0,0,.5)}
+.clm-h .em{color:var(--em-dark,#FFF7EA)}
 .clm-sub{margin-top:16px;font-family:var(--font-serif);font-weight:700;font-size:22px;letter-spacing:.06em;color:#F1E4D2}
 .clm-sp{position:absolute;z-index:2;color:#fff;opacity:.9}
 .clm-sp svg{width:100%;height:100%;fill:#fff}

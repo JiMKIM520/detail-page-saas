@@ -330,6 +330,9 @@ export async function runPipelineForProject(projectId: string): Promise<{
       } catch {
         /* 청사진 없음 — 조립 단계 플래너(레거시 경로) */
       }
+      // 생성된 "브랜드 로고" 계열 컷 — 업로드 로고와 동일하게 배치 화이트리스트(hero/closing/cs)
+      // 적용 대상으로 승격. 스토리 배경 등에 로고컷이 깔려 헤드라인과 겹친 실사례(아로마티카 stf) 봉쇄.
+      const needLogoUrls: string[] = []
       if (storedBlueprint?.sections?.length) {
         const byBase = new Map<string, string>()
         for (const u of okStyling) byBase.set((u.split('/').pop() ?? '').split('?')[0], u)
@@ -342,12 +345,13 @@ export async function runPipelineForProject(projectId: string): Promise<{
             if (u) {
               urls.push(u)
               mapped++
+              if (/logo|로고/i.test(`${n.id} ${n.subject ?? ''}`)) needLogoUrls.push(u)
             } else missing++
           }
           if (urls.length) s.imageUrls = urls.slice(0, 2)
         }
         console.log(
-          `[pipeline-bridge] 저장 청사진 사용 — ${storedBlueprint.sections.length}블록 · 니즈 매핑 ${mapped}건 · 미충족 ${missing}건`,
+          `[pipeline-bridge] 저장 청사진 사용 — ${storedBlueprint.sections.length}블록 · 니즈 매핑 ${mapped}건 · 미충족 ${missing}건${needLogoUrls.length ? ` · 로고컷 ${needLogoUrls.length}건(배치 화이트리스트)` : ''}`,
         )
       }
 
@@ -395,6 +399,11 @@ export async function runPipelineForProject(projectId: string): Promise<{
           logoUrls = [signedLogo.signedUrl]
           imageNotes[signedLogo.signedUrl] = '브랜드 로고 원본 — 히어로/클로징 브랜드 라벨 소형 슬롯 전용'
         }
+      }
+      // 니즈 기반 생성 로고컷도 로고 취급 — 배치 가드가 hero/closing/cs 밖 배치를 수술한다
+      for (const u of needLogoUrls) {
+        if (!logoUrls.includes(u)) logoUrls.push(u)
+        imageNotes[u] ??= '브랜드 로고 연출컷 — 히어로/클로징 브랜드 슬롯 전용 (본문 배경 금지)'
       }
 
       // 아트디렉터 스타일가이드 — 팔레트·폰트를 블록 토큰에 반영 (Sprint 4-D. 없으면 프리셋 유지)
