@@ -337,6 +337,22 @@ import { awardRankingPodiumSale } from './variants/award-ranking-podium-sale'
 import { awardLaurelEmblemGrid } from './variants/award-laurel-emblem-grid'
 import { awardTrophyBadgeGrid } from './variants/award-trophy-badge-grid'
 import { awardNo1EmblemRosette } from './variants/award-no1-emblem-rosette'
+// Sprint 8 — 1420종 .fig 흡수 변형 (docs/plans/image-pipeline-redesign.md)
+import { calloutCouponChannel } from './variants/callout-coupon-channel'
+import { calloutPainpointCards } from './variants/callout-painpoint-cards'
+import { certListBadges } from './variants/cert-list-badges'
+import { certSpotlightZoom } from './variants/cert-spotlight-zoom'
+import { closingQuotePhoto } from './variants/closing-quote-photo'
+import { compareAsymPanels } from './variants/compare-asym-panels'
+import { compareBarYears } from './variants/compare-bar-years'
+import { pointMetricBadge } from './variants/point-metric-badge'
+import { recommendHashtagCard } from './variants/recommend-hashtag-card'
+import { recommendOvalChecklist } from './variants/recommend-oval-checklist'
+import { shippingDeadlineClock } from './variants/shipping-deadline-clock'
+import { specMeasureTable } from './variants/spec-measure-table'
+import { specSilhouetteTable } from './variants/spec-silhouette-table'
+import { specSizeDiagram } from './variants/spec-size-diagram'
+import { statsGaugeBars } from './variants/stats-gauge-bars'
 
 registerBlocks([
   heroCentered,
@@ -705,6 +721,22 @@ registerBlocks([
   awardLaurelEmblemGrid,
   awardTrophyBadgeGrid,
   awardNo1EmblemRosette,
+  // Sprint 8 흡수 변형
+  calloutCouponChannel,
+  calloutPainpointCards,
+  certListBadges,
+  certSpotlightZoom,
+  closingQuotePhoto,
+  compareAsymPanels,
+  compareBarYears,
+  pointMetricBadge,
+  recommendHashtagCard,
+  recommendOvalChecklist,
+  shippingDeadlineClock,
+  specMeasureTable,
+  specSilhouetteTable,
+  specSizeDiagram,
+  statsGaugeBars,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

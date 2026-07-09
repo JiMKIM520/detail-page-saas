@@ -426,6 +426,21 @@ banner-seasonal-arch { bgImage?(url), eyebrow?, month?, title(em,br), period?, d
 banner-seasonal-illustration { dateBadge?, titleKr(em,br), titleEn(em,br), illustrationImage?(url), bgColor?, badgeColor? }   // 전면 계절 일러스트 배경 + 상단 날짜 바 + KR+EN 대형 타이틀 시즌 배너
 banner-seasonal-dark-coupon { subtitle?, titleLine1(em,br), titleLine2?(em,br), couponValue, couponUnit?, couponNote?, period? }   // 짙은 배경+원형 후광+CSS 눈송이+대형 2줄 타이틀+하단 단일 쿠폰 티켓(절취선) 겨울 시즌 배너
 banner-dark-promo { patternText?, subhead?(em,br), titleLine1(em,br), titleLine2?(em,br), propLeft?(url), propRight?(url), propAccent?(url) }   // 다크 BG + 반복 텍스트 패턴 텍스처 + 영문 대형 2줄 타이틀 + 3D 소품 3개 산재 블랙프라이데이 배너
+callout-coupon-channel { channelHandle, headline(em,br), couponValue, couponSub?, benefitLine?, couponTabLabel?, statNumber?, statLabel? }   // 채널 친구추가 유도 배너: 좌 CSS 폰 목업 + 채널 검색 UI, 우 절취선·CSS 바코드 티켓형 쿠폰
+callout-painpoint-cards { bubble, titleSub(em), titleMain(em), image?(url), items(2~4)[text(em,br), highlightWidth?]   // 브리프에 근거 있을 때만, desc?(em,br), accent?(em,br)   // 브리프에 근거 있을 때만 }   // 말풍선 질문 헤드 + 전폭 사진 + 형광펜 카드 리스트 + 강조 박스
+cert-list-badges { eyebrow?, title(em,br), items(2~4)[heading(em), body(em), certNumber?, image?(url), badgeArcTop?, badgeArcBottom?, badgeValue?] }   // 인증 3행 리스트(좌 사진+우 텍스트) + 각 행 좌하단 동심원 뱃지 오버랩. 수치·후기성 슬롯(certNumber, badgeValue)은 브리프에 근거 있을 때만.
+cert-spotlight-zoom { title(em,br), subtitle?, image?(url), zoomText?(em,br), zoomLabel? }   // 딥 톤 배경 + 인증서 카드 + 하단 확대 강조 패널 (zoomText·zoomLabel은 브리프에 근거 있을 때만)
+closing-quote-photo { bgImage?(url), subHead(em), title(em), desc?(em,br), photoLeft?(url), photoRight?(url), badge? }   // 풀블리드 배경사진+다크스크림 위 인용부호·구분선·대형헤드라인 스택, 좌우 원형사진 2장, 수치·후기성 badge는 브리프 근거 시만
+compare-asym-panels { badge?, title(em,br), desc?, ourLabel, theirLabel, rows(2~6)[criterion, ours(em), theirs], footNote? }   // 3열 비대칭 비교 패널 — 자사 강조열(넓음·accent 배경)·기준열(중앙)·경쟁사열(좁음), VS 뱃지 없이 폭 대비로 우위 표현, 수치·후기 슬롯은 브리프에 근거 있을 때만
+compare-bar-years { title(em,br), subtitle?, bars(2~5)[period, label, value(1~100), highlight?, note?], caption?, sourceNote? }   // 수직 막대 CSS 차트로 기간·수명·수치를 비교. note·sourceNote는 브리프에 근거 있을 때만.
+point-metric-badge { chip?, title(em,br), desc?, image?(url), badgeValue?(근거수치), badgeUnit? }   // 흰 라운드 카드+원형 사진 오버랩, 이중링 수치뱃지 카드-사진 경계 오버랩
+recommend-hashtag-card { titleLine1(em,br), titleLine2(em,br), subtitle?, tags(1~6)[string], image?(url), items(2~8)[string], badge? }   // 앰버 반원 아치 + 2색 타이틀 + 해시태그 pill 배지 행 + 체크리스트 카드
+recommend-oval-checklist { tagline?(text), title(em,br), image?(url), badgeText?(text — 브리프에 근거 있을 때만), items(2~5)[icon(ICON_NAMES 35종, default:check), text] }   // 타원 이중 라인 원형 이미지+별+배지 + 하단 아이콘 체크 카드 2~5행 추천 블록
+shipping-deadline-clock { tagline(em), d0, d1, d2, d3, cutoffDesc, subNote?, carrierNote? }   // 딥 블루 전폭 배너: 아날로그 시계 SVG + 디지털 숫자 카드 4개(HH:MM) + 당일발송 마감 카피
+spec-measure-table { sectionEn?(em), title(em,br), panelTitle, image?(url), callouts(1~4)[label, posX, posY, dir?('left'|'right'|'up'|'down')], tips(1~4)[], col1?, col2?, col3?, rows(2~8)[size, measure, desc?] }   // 측정법 이미지+CSS 말풍선 주석+다크 헤더 사이즈 표. 수치·체형 슬롯은 브리프에 근거 있을 때만.
+spec-silhouette-table { decoTitle?(em), subtitle?, image?(url), dims(1~5)[key, label], rows(1~6)[size, values{key:cm}], tipTitle?(em), tipBody?, toleranceNote? }   // 실루엣 도해(이미지 or SVG)+치수라벨 좌측 / 5열 사이즈표 우측 2단 + size tip 하단
+spec-size-diagram { titleLat?(라틴대제목, 기본 'size info'), titleKo(em,br), image?(url), dims?[label, value](2~3, 치수선 — 브리프에 근거 있을 때만), colHeaders(2~4, 사이즈옵션명), rows(2~5)[metric, values(1~4)], notice?(오차안내 — 브리프에 근거 있을 때만) }   // 제품 사진 위 CSS 치수선 오버레이 + 하단 4열 사이즈 비교표
+stats-gauge-bars { productName(em), badgeText?, surveyNote?, gaugeLabel, gaugePct(int 1~100), bars(2~3)[label, pct(int 1~100)], disclaimer? }   // 체험단·임상 실측 수치 전용: CSS conic-gradient 도넛 게이지 + 수평 진행 바 2~3항목. 브리프에 근거 없으면 사용 금지.
 `.trim()
 
 /** DATA_CONTRACTS에 슬롯 계약이 정의된 variantId 집합 (각 줄 맨 앞 `<id> {` 파싱).
