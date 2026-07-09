@@ -61,6 +61,8 @@ export async function runPageEvaluator(input: {
   brief: ProjectBrief
   blueprint?: PageBlueprint
   spec: PageSpec
+  /** 결정적 카피 린터 감지 사항(수치 반복·상투어·스펙 나열형 히어로) — 사실 여부는 평가자가 판단 */
+  lintHints?: string[]
 }): Promise<AgentResult<EvaluatorVerdict>> {
   const elapsed = timer()
   console.log('[Page Evaluator] 시작')
@@ -68,10 +70,13 @@ export async function runPageEvaluator(input: {
     const bpBlock = input.blueprint
       ? `\n청사진(구속 계약이었음):\n${input.blueprint.sections.map((s, i) => `${i}. ${s.variantId}: ${s.copyBrief}`).join('\n')}\n`
       : ''
+    const lintBlock = input.lintHints?.length
+      ? `\n결정적 린터 감지(기계 검출 — 실제 품질 문제로 판단되면 반려 사유에 포함하라):\n${input.lintHints.map((h) => `- ${h}`).join('\n')}\n`
+      : ''
     const userPrompt = `브리프 사실 관계(근거의 전부 — 여기 없는 사실·수치는 무근거):
 제품: ${input.brief.productName} / 카테고리: ${input.brief.category}
 핵심 강조점: ${(input.brief.keyHighlights ?? []).join(' | ').slice(0, 8000)}
-${bpBlock}
+${bpBlock}${lintBlock}
 조립된 페이지:
 ${summarizeSpec(input.spec)}
 

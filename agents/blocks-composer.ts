@@ -14,6 +14,7 @@ import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractTex
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
 import { getVariant } from './templates/blocks/registry'
+import { ICON_NAMES } from './templates/blocks/shared'
 
 // ── AI 출력 계약 ────────────────────────────────────────────────
 const composerOutputSchema = z.object({
@@ -479,7 +480,7 @@ RULES
 - NEVER output an empty emphasis tag as a fill-in-blank placeholder (e.g. 우리 아이에게 <span class="em"></span>가 있어요 is WRONG). Put the real word inside the span, or use plain text with no span.
 - Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). **HARD CAP: use the SAME image URL in at most 2 blocks.** When images run out, choose image-light/text-first variants instead of repeating a third time — repeated identical photos read as low-effort.
 - IMAGE-SECTION SEMANTICS (CRITICAL): match each image's 컷 내용 note to the section's meaning. Lifestyle/연출 shots belong in hero, feature/point, story, usage, closing — NEVER inside spec tables, 성분/영양 정보, FAQ, shipping/CS blocks (those are text-led; leave their image fields empty instead). Texture/누끼 close-ups fit ingredient/detail sections. When in doubt, prioritize giving images to feature/point sections over tables. If a block truly has no fitting image, omit the field.
-- FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인 — replace with concrete facts.
+- FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인, 특별한 경험, 특별한 이유, 자연의 선택, 깊고 진한 — AI-cliché adjectives; replace with concrete facts (온도·질감·시간·수치의 맥락 등 물리적 구체어).
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
 - IDENTITY DATA (CRITICAL): phone numbers, business/item registration numbers, addresses, courier/partner brand names, account numbers — use ONLY strings that appear verbatim in the brief. If the brief has none, OMIT the row/line entirely (e.g., write "고객센터로 문의해 주세요" without a number). A fabricated phone number sends real customers to a stranger.
 - IMAGE REALITY (CRITICAL): each image's 컷 내용 note starting with "실물 확인" describes what is ACTUALLY in the image — trust it over the filename or your assumption. A note marked "차선 — 소형 슬롯에만" may only fill small thumbnail slots, never hero/full-bleed.
@@ -487,6 +488,9 @@ RULES
 - IMAGE-ASSET GROUNDING: blocks whose visual story requires specific subjects (raw ingredients for 원료 공식/원료 비주얼, real usage scene for usage photos) may only be selected if a note confirms such an image EXISTS. Never caption an image with content it does not show (e.g., a package close-up captioned as "베르가못 오일"). If no fitting image exists, choose a text/graphic variant instead.
 - CUTOUT USE: 누끼(제품 단독컷) images fit product-focused slots (hero, detail, feature, ingredient). Do NOT use them as story/gallery/mood backgrounds or full-bleed scenery.
 - NO EMOJI anywhere in output text — this is a professional detail page; use block-provided icons only.
+- ICON VOCABULARY (CRITICAL): every "icon" slot accepts ONLY these names — ${ICON_NAMES.join(' | ')}. NEVER invent icon names (no "protein", "coffee" etc.). If no icon fits the meaning, use the closest generic one (check/star/target).
+- REPETITION CAP: state each numeric claim (e.g. "단백질 20g") at most TWICE per page. From the 3rd mention, replace it with NEW information: a comparison basis, a daily-intake %, or a usage scenario. Repeating identical claims collapses scroll value.
+- HERO HOOK: the hero headline must NOT be a spec list ("20g / 105kcal" style). Write ONE sentence about the customer's change, sensation, or desire; move numbers into sub-copy or point rows.
 - GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
 
@@ -673,6 +677,8 @@ type RepairIssue = {
   minimum?: number | bigint
   origin?: string
   keys?: string[]
+  /** invalid_value(enum/literal 위반) 시 zod가 허용값 목록을 담는 필드 */
+  values?: unknown[]
 }
 
 function resolveParent(root: unknown, path: (string | number)[]): { parent: Record<string, unknown> | null; key: string | number } {
@@ -725,6 +731,31 @@ function applyMechanicalFixes(data: unknown, issues: RepairIssue[]): boolean {
       // 빈/짧은 문자열은 지어낼 수 없다 — 필드 제거(옵션 필드면 통과), 필수면 다음 라운드 invalid_type에서 아이템 제거
       delete parent[key as never]
       fixed = true
+    } else if (issue.code === 'invalid_value' && parent) {
+      // enum 위반 — 아이콘 필드에 한해 어휘 내 최근접 이름으로 치환(히어로가 아이콘 하나로 전체
+      // 재생성되던 실사례 8건 봉쇄). 아이콘 외 enum(달력 status·bgTone 등)은 오치환이 의미를
+      // 왜곡하므로(리뷰 지적) 치환하지 않고 해당 배열 항목 드롭 → 필드 제거 순으로 위임한다.
+      const allowed = issue.values?.filter((v): v is string => typeof v === 'string') ?? []
+      const cur = parent[key as never] as unknown
+      const isIconField =
+        String(key) === 'icon' || (allowed.length > 0 && allowed.every((a) => (ICON_NAMES as readonly string[]).includes(a)))
+      if (isIconField && allowed.length > 0 && typeof cur === 'string') {
+        const lc = cur.toLowerCase()
+        // 최장 일치 우선 — "shield-check"는 check가 아니라 shield로 (부분 일치 다수 시 의미 보존)
+        const near = allowed
+          .filter((a) => lc.includes(a.toLowerCase()) || a.toLowerCase().includes(lc))
+          .sort((a, b) => b.length - a.length)[0]
+        const pick = near ?? (allowed.includes('check') ? 'check' : allowed[0])
+        ;(parent as Record<string, unknown>)[key as never] = pick as never
+        console.warn(`[Blocks Composer] 아이콘 enum 치환 — "${cur}" → "${pick}"`)
+        fixed = true
+      } else if (dropNearestArrayItem(data, path)) {
+        fixed = true
+      } else {
+        // 배열 밖 단독 필드 — 필드 제거(옵션이면 통과, 필수면 다음 라운드가 블록 단위로 처리)
+        delete parent[key as never]
+        fixed = true
+      }
     } else if (issue.code === 'invalid_type' && path.length > 0) {
       const { parent: p2, key: k2 } = resolveParent(data, path)
       const cur = p2?.[k2 as never]
@@ -955,6 +986,54 @@ function dropEmptyPhotoBlocks(spec: PageSpec): void {
     console.warn(`[Blocks Composer] 이미지 없는 사진형/오버레이형 블록 ${beforeLen - spec.blocks.length}개 제거`)
 }
 
+/** ── 결정적 카피 린터 (Sprint 7) ──────────────────────────────────────────
+ *  품질 다각도 리뷰(4산출×13관점)에서 반복 확인된 카피 결함 3종을 기계 검출한다:
+ *  ① 동일 수치 클레임 3회+ 반복(스크롤 정보 밀도 붕괴) ② AI 상투어 ③ 스펙 나열형 히어로 헤드라인.
+ *  하드 차단이 아니라 페이지 평가자에게 힌트로 전달 — 오탐이 품질을 깎지 않게 판단은 평가자가. */
+const BANNED_COPY_RE = /특별한 (?:경험|이유|선택)|완벽한|최고의|혁신적인|압도적인|자연의 선택|깊고 진한/g
+// 경성 단위(측정치) — 3회째부터 힌트. 배/만/억 같은 배수·통화 표현은 일상 문구("3배 더", "1만원")
+// 오탐이 잦아(리뷰 지적) 별도 임계(5회째부터)로 분리한다.
+const NUMERIC_CLAIM_RE = /\d[\d,.]*\s?(?:mg|ml|g|kcal|%|℃|°c)(?![a-z가-힣])/gi
+const MULTIPLIER_CLAIM_RE = /\d[\d,.~]*\s?(?:배|만|억)(?![a-z가-힣])/g
+
+export function lintCopyQuality(spec: PageSpec): string[] {
+  const claims = new Map<string, number>()
+  const multipliers = new Map<string, number>()
+  const banned = new Map<string, number>()
+  for (const b of spec.blocks) {
+    walkStringFields((b.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
+      if (/^https?:\/\//.test(v)) return
+      const plain = v.replace(/<[^>]+>/g, '')
+      for (const m of plain.matchAll(NUMERIC_CLAIM_RE)) {
+        const key = m[0].replace(/\s+/g, '').toLowerCase()
+        claims.set(key, (claims.get(key) ?? 0) + 1)
+      }
+      for (const m of plain.matchAll(MULTIPLIER_CLAIM_RE)) {
+        const key = m[0].replace(/\s+/g, '')
+        multipliers.set(key, (multipliers.get(key) ?? 0) + 1)
+      }
+      for (const m of plain.matchAll(BANNED_COPY_RE)) banned.set(m[0], (banned.get(m[0]) ?? 0) + 1)
+    })
+  }
+  const hints: string[] = []
+  const repeated = [
+    ...[...claims.entries()].filter(([, n]) => n > 2),
+    ...[...multipliers.entries()].filter(([, n]) => n > 4),
+  ]
+  if (repeated.length)
+    hints.push(
+      `동일 수치 클레임 3회 이상 반복: ${repeated.map(([k, n]) => `"${k}"×${n}`).join(', ')} — 반복분은 비교 기준·권장량 환산·사용 시나리오 등 새 정보로 대체돼야 함`,
+    )
+  if (banned.size)
+    hints.push(`상투어 감지: ${[...banned.entries()].map(([k, n]) => `"${k}"×${n}`).join(', ')} — 물리적 구체어로 대체돼야 함`)
+  const hero = (spec.blocks[0]?.data ?? {}) as Record<string, unknown>
+  const heroTitle = String(hero.title ?? hero.headline ?? hero.productName ?? '').replace(/<[^>]+>/g, '')
+  const unitCount = (heroTitle.match(NUMERIC_CLAIM_RE) ?? []).length
+  if (unitCount >= 2)
+    hints.push(`히어로 헤드라인이 스펙 나열형(수치 ${unitCount}개): "${heroTitle.slice(0, 60)}" — 소비자 변화·감각 중심 한 문장으로, 수치는 서브카피/포인트로 이동돼야 함`)
+  return hints
+}
+
 /** ── 조립 후 페어링 QA ─────────────────────────────────────────────────────
  *  컴포저는 텍스트 노트만 보고 배치하므로 "카피 ↔ 이미지 어울림"의 최종 판단이 확률적이다
  *  (효능 카피 옆 패키지 라벨 확대 실사례). 조립이 끝난 spec의 (섹션 카피, 이미지) 쌍을
@@ -1132,7 +1211,9 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
     // 재작업 실패 시 원안 유지(무중단) — 평가는 품질 게이트지 가용성 게이트가 아니다.
     try {
       const { runPageEvaluator } = await import('./page-evaluator')
-      const verdict = await runPageEvaluator({ brief: input.brief, blueprint: input.blueprint, spec: result.spec })
+      const lintHints = lintCopyQuality(result.spec)
+      if (lintHints.length) console.warn(`[Blocks Composer] 카피 린터 감지 ${lintHints.length}건 — 평가자 전달:\n  - ${lintHints.join('\n  - ')}`)
+      const verdict = await runPageEvaluator({ brief: input.brief, blueprint: input.blueprint, spec: result.spec, lintHints })
       if (verdict.success && verdict.data && !verdict.data.pass && verdict.data.issues.length) {
         const note = `페이지 평가자 반려 — 아래 결함을 모두 고쳐 유효한 전체 JSON을 다시 출력:\n${verdict.data.issues.join('\n')}`
         try {
