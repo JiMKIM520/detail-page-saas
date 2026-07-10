@@ -42,7 +42,7 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
   const { data: project } = await svc.from('projects').select('category, platforms(slug)').eq('id', pid).single()
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', aspectRatio: '3:4' }
   let ok = 0
-  for (const shot of shots.slice(0, 12)) {
+  for (const shot of shots.slice(0, 18)) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt) ? shot.finalPrompt : buildShotPrompt(shot, rules, meta as any)
       console.log(`[e2e] 스타일링샷 생성: ${shot.name ?? shot.filename}…`)
@@ -50,7 +50,7 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
       // 니즈 매칭 레퍼런스 (Sprint 9-C) — 샷 텍스트·파일명 토큰 겹침 우선, 동점 최신순
       const refIdx = pickShotReferences(String((shot as any).name ?? '') + ' ' + String((shot as any).filename ?? ''), photoNames)
       const refs = (shot as any).withProduct === false ? [] : refIdx.map((i) => nukki[i]).filter(Boolean)
-      const buf = await generateDesignImage({ prompt: fp, referenceImages: refs, aspectRatio: '3:4', model: 'pro' })
+      const buf = await generateDesignImage({ prompt: fp, referenceImages: refs, aspectRatio: '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
       const p = `projects/${pid}/styling_real/${shot.filename || shot.name + '.png'}`
       const { error } = await svc.storage.from('designs').upload(p, buf, { contentType: 'image/png', upsert: true })
       if (error) throw new Error(error.message)
@@ -59,7 +59,7 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
   }
   // 재생성 성공 시 이전 기획의 컷 정리 (서비스 generate-shots 라우트와 동일 동작)
   if (ok > 0) {
-    const valid = new Set(shots.slice(0, 12).map((s: any) => s.filename || (s.name + '.png')))
+    const valid = new Set(shots.slice(0, 18).map((s: any) => s.filename || (s.name + '.png')))
     const { data: existing } = await svc.storage.from('designs').list(`projects/${pid}/styling_real`)
     const stale = (existing ?? []).filter((f) => f.name && !valid.has(f.name)).map((f) => `projects/${pid}/styling_real/${f.name}`)
     if (stale.length) {

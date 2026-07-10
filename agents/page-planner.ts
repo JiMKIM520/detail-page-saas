@@ -23,6 +23,8 @@ export interface ImageNeed {
   withProduct: boolean
   /** 생성 대신 업로드 원본 사진을 직접 배치 — 패키지 구성·라벨 등 실물 정확성이 중요한 니즈 (Sprint 9-C) */
   useOriginal?: boolean
+  /** 노출 크기 — main(대형 프레임: pro 모델) / support(소형 썸네일·서브컷: 경량 모델) (Sprint 9-D) */
+  prominence?: 'main' | 'support'
 }
 
 export interface BlueprintSection {
@@ -81,6 +83,7 @@ const blueprintSchema = z.object({
                   style: z.enum(['styled', 'raw-material', 'texture', 'usage', 'mood']),
                   withProduct: z.boolean(),
                   useOriginal: z.boolean().optional(),
+                  prominence: z.enum(['main', 'support']).optional(),
                 }),
               )
               .max(2)
@@ -128,7 +131,11 @@ system prompt). Your job:
    - useOriginal: 업로드 원본 사진 목록에 그 니즈를 정확히 충족하는 실물 사진이 있으면 true —
      생성하지 않고 원본을 그대로 배치한다(패키지 구성·묶음·라벨·실물 디테일은 원본이 항상 정확).
      true면 subject에 어떤 원본인지 알 수 있는 특징(파일명 키워드)을 포함하라.
-   - 페이지 전체 니즈 총합 8~12개. imageSlots>=2 블록은 니즈 필수. hero는 withProduct=true 1개 필수.
+   - 니즈 수는 그 블록의 이미지 슬롯 수와 일치시켜라(CRITICAL — 3슬롯 지그재그면 니즈 3개,
+     4행 리스트면 4개. 일부만 계획하면 빈 프레임이 노출된다). 페이지 전체 총합 상한 20.
+     hero는 withProduct=true 1개 필수.
+   - prominence: 대형 프레임(히어로·풀블리드·본문 큰 사진)=main / 소형 썸네일·서브컷(원형 아이콘,
+     리스트 썸네일, 보조컷)=support — 생성 모델 티어 결정에 쓰인다. 반드시 지정하라.
 4. copyBrief: ONE terse Korean sentence (max 80 chars) stating WHAT the filler must say there,
    quoting key facts from the script (numbers, claims). The filler may not invent beyond this.
 
@@ -245,7 +252,7 @@ function validateBlueprint(
   if (closingIdx >= 0 && closingIdx !== bp.sections.length - 1)
     bp.sections.push(...bp.sections.splice(closingIdx, 1))
 
-  // 니즈 모드(인벤토리 없음) 검증·수리 — id 중복 제거, 총량 12 상한 절단, 최소량 미달은 재시도
+  // 니즈 모드(인벤토리 없음) 검증·수리 — id 중복 제거, 총량 20 상한 절단, 최소량 미달은 재시도
   if (allowedUrls.size === 0) {
     const seenIds = new Set<string>()
     let total = 0
@@ -253,7 +260,7 @@ function validateBlueprint(
       s.imageUrls = []
       if (!s.imageNeeds?.length) continue
       s.imageNeeds = s.imageNeeds.filter((n) => {
-        if (seenIds.has(n.id) || total >= 12) return false
+        if (seenIds.has(n.id) || total >= 20) return false
         seenIds.add(n.id)
         total++
         return true

@@ -6,6 +6,7 @@
  * 결과물을 Supabase Storage에 업로드.
  */
 import { createServiceClient } from '@/lib/supabase/service'
+import { getVariant } from '@/agents/templates/blocks/registry'
 import { uploadPipelineOutput, updateDesignUrls, uploadToStorage } from '@/lib/storage'
 import { transitionStatus } from '@/lib/status-machine'
 import type { ProjectInput } from '@/agents/types'
@@ -380,7 +381,11 @@ export async function runPipelineForProject(projectId: string): Promise<{
               if (/logo|로고/i.test(`${n.id} ${n.subject ?? ''}`)) needLogoUrls.push(u)
             } else missing++
           }
-          if (urls.length) s.imageUrls = urls.slice(0, 2)
+          if (urls.length) {
+            // 캡은 변형의 실제 슬롯 수 기준 (Sprint 9-D — 고정 2가 다슬롯 섹션 결손 유발했던 2차 방벽)
+            const slots = getVariant(s.variantId)?.imageSlots ?? 2
+            s.imageUrls = urls.slice(0, Math.max(1, slots))
+          }
         }
         if (originals) console.log(`[pipeline-bridge] 원본 직배치 ${originals}건 (생성 대체)`)
         console.log(

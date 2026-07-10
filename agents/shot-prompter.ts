@@ -14,6 +14,8 @@ export interface PromptedShot {
   filename: string
   finalPrompt: string
   withProduct: boolean
+  /** 생성 모델 티어 결정용 — main(pro) / support(경량 nb2) (Sprint 9-D) */
+  prominence?: 'main' | 'support'
 }
 
 const SYSTEM_PROMPT = `You are a commercial photography prompt director for Korean e-commerce detail pages.
@@ -86,7 +88,8 @@ ${needLines}
         name: String(r.name ?? need.subject).slice(0, 80),
         filename: `${id}.png`,
         finalPrompt: String(r.finalPrompt),
-        withProduct: need.withProduct, // 프롬프터 출력이 아니라 니즈가 결정 (결정적)
+        withProduct: need.withProduct,
+      prominence: need.prominence, // 프롬프터 출력이 아니라 니즈가 결정 (결정적)
       })
     }
     // 누락 니즈 관측 — 프롬프터가 빠뜨린 니즈는 로그로 (생성 단계에서 그 컷만 없음)
