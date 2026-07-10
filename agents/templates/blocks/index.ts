@@ -478,6 +478,116 @@ import { ingredientCircleBadgeZigzag } from './variants/ingredient-circle-badge-
 import { ingredientOvalStack } from './variants/ingredient-oval-stack'
 import { ingredientPointSerifList } from './variants/ingredient-point-serif-list'
 import { specDimBlueprint } from './variants/spec-dim-blueprint'
+// Sprint 10 — 184종 novel 57 + 1420 3점 novel 51 (라이브러리 실대조 기반)
+import { awardSalesFloatBadges } from './variants/award-sales-float-badges'
+import { awardSerifGoldDecl } from './variants/award-serif-gold-decl'
+import { awardStageBurst } from './variants/award-stage-burst'
+import { awardStarRank } from './variants/award-star-rank'
+import { awardTrophyFlankedStat } from './variants/award-trophy-flanked-stat'
+import { awardTrophyOrbFlanked } from './variants/award-trophy-orb-flanked'
+import { bannerCategoryCounter } from './variants/banner-category-counter'
+import { bannerGrandMosaic } from './variants/banner-grand-mosaic'
+import { certBadgeSplit } from './variants/cert-badge-split'
+import { certPointBadgeStack } from './variants/cert-point-badge-stack'
+import { checklistRadialLedger } from './variants/checklist-radial-ledger'
+import { comparePackageGrid } from './variants/compare-package-grid'
+import { csGreenLabelTable } from './variants/cs-green-label-table'
+import { csNoticeTypoSplit } from './variants/cs-notice-typo-split'
+import { csScheduleDivider } from './variants/cs-schedule-divider'
+import { csSloganInfoTable } from './variants/cs-slogan-info-table'
+import { discountBoltSplit } from './variants/discount-bolt-split'
+import { eventPolyPriceList } from './variants/event-poly-price-list'
+import { eventSaleAsymcollage } from './variants/event-sale-asymcollage'
+import { eventSpotlightType } from './variants/event-spotlight-type'
+import { eventStagePillar } from './variants/event-stage-pillar'
+import { faqExpertCard } from './variants/faq-expert-card'
+import { faqSidePortraitOval } from './variants/faq-side-portrait-oval'
+import { featureBookmarkCompare } from './variants/feature-bookmark-compare'
+import { featureDarkAsymgrid } from './variants/feature-dark-asymgrid'
+import { featureDualMosaic } from './variants/feature-dual-mosaic'
+import { heroKanjiBead } from './variants/hero-kanji-bead'
+import { heroTypoFrame } from './variants/hero-typo-frame'
+import { ingredientBadgeTable } from './variants/ingredient-badge-table'
+import { ingredientDotNavMint } from './variants/ingredient-dot-nav-mint'
+import { ingredientFloatOverlay } from './variants/ingredient-float-overlay'
+import { lineupBentoCompare } from './variants/lineup-bento-compare'
+import { lineupBentoGradient } from './variants/lineup-bento-gradient'
+import { lineupDarkGauge } from './variants/lineup-dark-gauge'
+import { lineupGradientGallery } from './variants/lineup-gradient-gallery'
+import { lineupHashtagDuo } from './variants/lineup-hashtag-duo'
+import { lineupHeroTierBar } from './variants/lineup-hero-tier-bar'
+import { lineupPersonaOverlap } from './variants/lineup-persona-overlap'
+import { lineupSpikeCol } from './variants/lineup-spike-col'
+import { lineupTieredFloat } from './variants/lineup-tiered-float'
+import { pointDualBottleBloom } from './variants/point-dual-bottle-bloom'
+import { pointSpecSandwich } from './variants/point-spec-sandwich'
+import { promoBokehCard } from './variants/promo-bokeh-card'
+import { reasonAltRows } from './variants/reason-alt-rows'
+import { reasonBubbleBadgeStack } from './variants/reason-bubble-badge-stack'
+import { reasonDotConnector } from './variants/reason-dot-connector'
+import { reasonNumberedThumbStack } from './variants/reason-numbered-thumb-stack'
+import { reasonStaircardOverlap } from './variants/reason-staircard-overlap'
+import { recommendCrossTypo } from './variants/recommend-cross-typo'
+import { reviewDarkHighlightStack } from './variants/review-dark-highlight-stack'
+import { reviewStarOverlap } from './variants/review-star-overlap'
+import { shippingHeroRibbonTrio } from './variants/shipping-hero-ribbon-trio'
+import { shippingNoticeTwinTruck } from './variants/shipping-notice-twin-truck'
+import { statsBottleStatRail } from './variants/stats-bottle-stat-rail'
+import { statsSatisfactionDash } from './variants/stats-satisfaction-dash'
+import { storyDoubtStack } from './variants/story-doubt-stack'
+import { calloutDualCircle } from './variants/callout-dual-circle'
+import { calloutPillCascade } from './variants/callout-pill-cascade'
+import { certBadgeTriptych } from './variants/cert-badge-triptych'
+import { certDermaTrio } from './variants/cert-derma-trio'
+import { certPhotoBadgeStrip } from './variants/cert-photo-badge-strip'
+import { certPillGrid } from './variants/cert-pill-grid'
+import { checklistColorbarDiag } from './variants/checklist-colorbar-diag'
+import { checkpointFullbleedNumlist } from './variants/checkpoint-fullbleed-numlist'
+import { csSupportTricard } from './variants/cs-support-tricard'
+import { detailPaletteCard } from './variants/detail-palette-card'
+import { detailSpecIconBar } from './variants/detail-spec-icon-bar'
+import { discountShockBadge } from './variants/discount-shock-badge'
+import { featureHashtagChipZigzag } from './variants/feature-hashtag-chip-zigzag'
+import { featureMintOvalGrid } from './variants/feature-mint-oval-grid'
+import { featureOffsetGallery } from './variants/feature-offset-gallery'
+import { featurePivotArcShot } from './variants/feature-pivot-arc-shot'
+import { featurePointWatermark } from './variants/feature-point-watermark'
+import { featureQuadImgcapGrid } from './variants/feature-quad-imgcap-grid'
+import { featureQuotePillStack } from './variants/feature-quote-pill-stack'
+import { featureSkyBadgeOverlap } from './variants/feature-sky-badge-overlap'
+import { featureSkyIconQuad } from './variants/feature-sky-icon-quad'
+import { featureSplitboxKeyword } from './variants/feature-splitbox-keyword'
+import { featureStepQuoteReveal } from './variants/feature-step-quote-reveal'
+import { heroBadgeKeypoint } from './variants/hero-badge-keypoint'
+import { heroBleedRibbon } from './variants/hero-bleed-ribbon'
+import { heroCatalogSlide } from './variants/hero-catalog-slide'
+import { heroFloatcardHand } from './variants/hero-floatcard-hand'
+import { heroMarkerPanel } from './variants/hero-marker-panel'
+import { heroOliveChecklist } from './variants/hero-olive-checklist'
+import { heroPillSerifZones } from './variants/hero-pill-serif-zones'
+import { heroRailRight } from './variants/hero-rail-right'
+import { heroSandwichStack } from './variants/hero-sandwich-stack'
+import { heroWaveIcons } from './variants/hero-wave-icons'
+import { ingredientBadgeArc } from './variants/ingredient-badge-arc'
+import { ingredientOrbitBadgeTrio } from './variants/ingredient-orbit-badge-trio'
+import { ingredientSerifRatio } from './variants/ingredient-serif-ratio'
+import { lineupArrowStack } from './variants/lineup-arrow-stack'
+import { lineupSwatchZigzag } from './variants/lineup-swatch-zigzag'
+import { pointFullbgOvalStats } from './variants/point-fullbg-oval-stats'
+import { pointPillFlow } from './variants/point-pill-flow'
+import { pointStaggerPill } from './variants/point-stagger-pill'
+import { reasonBubbleStack } from './variants/reason-bubble-stack'
+import { reasonQuadCircleGallery } from './variants/reason-quad-circle-gallery'
+import { recommendCircleZigzag } from './variants/recommend-circle-zigzag'
+import { recommendGridLabel } from './variants/recommend-grid-label'
+import { reviewAltcircleGrid } from './variants/review-altcircle-grid'
+import { reviewFillbarBeforeAfter } from './variants/review-fillbar-before-after'
+import { reviewSpeechPairGrid } from './variants/review-speech-pair-grid'
+import { shippingBadgeDualStack } from './variants/shipping-badge-dual-stack'
+import { specGridCreamTable } from './variants/spec-grid-cream-table'
+import { statsScoreCascade } from './variants/stats-score-cascade'
+import { usageDayTimeline } from './variants/usage-day-timeline'
+import { shippingNumeralSchedule } from './variants/shipping-numeral-schedule'
 
 registerBlocks([
   heroCentered,
@@ -987,6 +1097,116 @@ registerBlocks([
   ingredientOvalStack,
   ingredientPointSerifList,
   specDimBlueprint,
+  // Sprint 10
+  awardSalesFloatBadges,
+  awardSerifGoldDecl,
+  awardStageBurst,
+  awardStarRank,
+  awardTrophyFlankedStat,
+  awardTrophyOrbFlanked,
+  bannerCategoryCounter,
+  bannerGrandMosaic,
+  certBadgeSplit,
+  certPointBadgeStack,
+  checklistRadialLedger,
+  comparePackageGrid,
+  csGreenLabelTable,
+  csNoticeTypoSplit,
+  csScheduleDivider,
+  csSloganInfoTable,
+  discountBoltSplit,
+  eventPolyPriceList,
+  eventSaleAsymcollage,
+  eventSpotlightType,
+  eventStagePillar,
+  faqExpertCard,
+  faqSidePortraitOval,
+  featureBookmarkCompare,
+  featureDarkAsymgrid,
+  featureDualMosaic,
+  heroKanjiBead,
+  heroTypoFrame,
+  ingredientBadgeTable,
+  ingredientDotNavMint,
+  ingredientFloatOverlay,
+  lineupBentoCompare,
+  lineupBentoGradient,
+  lineupDarkGauge,
+  lineupGradientGallery,
+  lineupHashtagDuo,
+  lineupHeroTierBar,
+  lineupPersonaOverlap,
+  lineupSpikeCol,
+  lineupTieredFloat,
+  pointDualBottleBloom,
+  pointSpecSandwich,
+  promoBokehCard,
+  reasonAltRows,
+  reasonBubbleBadgeStack,
+  reasonDotConnector,
+  reasonNumberedThumbStack,
+  reasonStaircardOverlap,
+  recommendCrossTypo,
+  reviewDarkHighlightStack,
+  reviewStarOverlap,
+  shippingHeroRibbonTrio,
+  shippingNoticeTwinTruck,
+  statsBottleStatRail,
+  statsSatisfactionDash,
+  storyDoubtStack,
+  calloutDualCircle,
+  calloutPillCascade,
+  certBadgeTriptych,
+  certDermaTrio,
+  certPhotoBadgeStrip,
+  certPillGrid,
+  checklistColorbarDiag,
+  checkpointFullbleedNumlist,
+  csSupportTricard,
+  detailPaletteCard,
+  detailSpecIconBar,
+  discountShockBadge,
+  featureHashtagChipZigzag,
+  featureMintOvalGrid,
+  featureOffsetGallery,
+  featurePivotArcShot,
+  featurePointWatermark,
+  featureQuadImgcapGrid,
+  featureQuotePillStack,
+  featureSkyBadgeOverlap,
+  featureSkyIconQuad,
+  featureSplitboxKeyword,
+  featureStepQuoteReveal,
+  heroBadgeKeypoint,
+  heroBleedRibbon,
+  heroCatalogSlide,
+  heroFloatcardHand,
+  heroMarkerPanel,
+  heroOliveChecklist,
+  heroPillSerifZones,
+  heroRailRight,
+  heroSandwichStack,
+  heroWaveIcons,
+  ingredientBadgeArc,
+  ingredientOrbitBadgeTrio,
+  ingredientSerifRatio,
+  lineupArrowStack,
+  lineupSwatchZigzag,
+  pointFullbgOvalStats,
+  pointPillFlow,
+  pointStaggerPill,
+  reasonBubbleStack,
+  reasonQuadCircleGallery,
+  recommendCircleZigzag,
+  recommendGridLabel,
+  reviewAltcircleGrid,
+  reviewFillbarBeforeAfter,
+  reviewSpeechPairGrid,
+  shippingBadgeDualStack,
+  specGridCreamTable,
+  statsScoreCascade,
+  usageDayTimeline,
+  shippingNumeralSchedule,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

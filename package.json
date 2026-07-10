@@ -37,6 +37,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "kiwi-schema": "^0.5.0",
     "supabase": "^2.84.4",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
