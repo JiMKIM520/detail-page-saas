@@ -22,8 +22,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const { project_id } = await request.json()
+  const { project_id, from: fromIdx, count } = await request.json()
   if (!project_id) return NextResponse.json({ error: 'project_id 누락' }, { status: 400 })
+  // 배치 실행(관리자 콘솔) — Vercel 타임아웃 안에서 2~3컷씩 나눠 호출할 수 있게 (Sprint 11)
+  const batchFrom = Number.isInteger(fromIdx) && fromIdx >= 0 ? fromIdx : 0
+  const batchCount = Number.isInteger(count) && count > 0 ? count : undefined
 
   const svc = createServiceClient()
 
@@ -58,7 +61,8 @@ export async function POST(request: Request) {
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', brandColorHex: '#A8682E', aspectRatio: '3:4' }
   const out: { name: string; url: string }[] = []
   const errors: string[] = []
-  for (const shot of shots.slice(0, 18)) {
+  const targetShots = shots.slice(0, 18).slice(batchFrom, batchCount ? batchFrom + batchCount : undefined)
+  for (const shot of targetShots) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt)
         ? shot.finalPrompt
@@ -100,5 +104,30 @@ export async function POST(request: Request) {
     catch (e) { console.warn('[generate-shots] photo_uploaded 전이 경고:', (e as Error).message) }
   }
 
-  return NextResponse.json({ success: true, shots: out, errors, advanced: cur?.status === 'prompt_ready' })
+  return NextResponse.json({ success: true, shots: out, errors, total: Math.min(shots.length, 18), from: batchFrom, advanced: cur?.status === 'prompt_ready' })
+}
+
+/** 샷 목록 조회 (관리자 콘솔 배치 오케스트레이션용) — 기획 산출 프롬프트의 이름·수량만 반환 */
+export async function GET(request: Request) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = user.user_metadata?.role as string | undefined
+  if (!role || !['admin', 'designer'].includes(role)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  const project_id = new URL(request.url).searchParams.get('project_id')
+  if (!project_id) return NextResponse.json({ error: 'project_id 누락' }, { status: 400 })
+  const svc = createServiceClient()
+  try {
+    const { data } = await svc.storage.from('designs').download(`projects/${project_id}/planning/styling-final-prompts.json`)
+    if (!data) throw new Error('없음')
+    const json = JSON.parse(await data.text())
+    const shots = (json.shots ?? []).slice(0, 18)
+    return NextResponse.json({
+      success: true,
+      total: shots.length,
+      names: shots.map((s: { name?: string; prominence?: string; useOriginal?: boolean }) => ({ name: s.name ?? '', prominence: s.prominence ?? 'main' })),
+    })
+  } catch {
+    return NextResponse.json({ success: true, total: 0, names: [] })
+  }
 }

@@ -2,7 +2,7 @@ import { generateScriptForProject } from '@/lib/ai/generate-script'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-export const maxDuration = 300
+export const maxDuration = 800 // Vercel Fluid compute 기준 상한 — 컴포저 실측 273~358초(재시도 포함) 대비 여유
 
 export async function POST(request: Request) {
   const userSupabase = await createClient()

@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { runPlanningForProject } from '@/lib/pipeline-bridge'
 import { NextResponse } from 'next/server'
 
-export const maxDuration = 300
+export const maxDuration = 800 // Vercel Fluid compute 기준 상한 — 컴포저 실측 273~358초(재시도 포함) 대비 여유
 
 export async function POST(request: Request) {
   // 인증 + 관리자 권한 검증 (generate route 패턴 동일)

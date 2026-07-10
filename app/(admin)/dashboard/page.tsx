@@ -300,12 +300,20 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                   const days = daysSince(p.created_at)
                   const isAging = days >= 7
                   return (
+                    <div key={p.id} className="relative">
+                    {/* 파이프라인 콘솔 진입 (Sprint 11) — 카드 링크와 중첩 불가라 형제 배치 */}
                     <Link
-                      key={p.id}
+                      href={`/pipeline/${p.id}`}
+                      title="파이프라인 콘솔"
+                      className="absolute top-2 right-2 z-10 text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 hover:bg-slate-700 hover:text-white transition-colors"
+                    >
+                      ▶
+                    </Link>
+                    <Link
                       href={group.href(p.id)}
                       className="block bg-white rounded-lg border border-border p-3 hover:border-primary-300 hover:shadow-sm transition-all"
                     >
-                      <p className="text-sm font-semibold text-text-primary truncate">{p.company_name}</p>
+                      <p className="text-sm font-semibold text-text-primary truncate pr-7">{p.company_name}</p>
                       <p className="text-xs text-text-tertiary mt-0.5 truncate">
                         {p.platforms?.name ?? '-'} · {p.category ?? '-'}
                       </p>
@@ -332,6 +340,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                         )}
                       </div>
                     </Link>
+                    </div>
                   )
                 })}
                 {items.length === 0 && (
