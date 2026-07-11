@@ -49,7 +49,7 @@ export const comparePhoneMockup = defineBlock<Data>({
 .cpm-card-before .cpm-icon-wrap svg{color:#9A9AA8}
 .cpm-card-after .cpm-icon-wrap svg{color:var(--accent)}
 .cpm-inner{border-radius:calc(var(--r-scale,1)*28px);overflow:hidden;box-shadow:0 16px 40px -12px rgba(0,0,0,.28)}
-.cpm-head{text-align:center;font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.1em;padding:18px 20px}
+.cpm-head{text-align:center;font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.1em;padding:48px 20px 16px}
 .cpm-head-b{background:#DADADF;color:#8A8A96}
 .cpm-head-a{background:var(--accent);color:#fff}
 .cpm-body{background:var(--paper);padding:20px 24px 24px}
