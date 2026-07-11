@@ -354,8 +354,10 @@ export async function runPipelineForProject(projectId: string): Promise<{
             const score = tokensOf(name).filter((w) => needTok.has(w)).length
             if (score > bestScore) { bestScore = score; best = url }
           }
-          // 토큰 매칭 실패 시 미사용 원본 중 첫 번째(그래도 생성 실패보다 실물이 낫다)
-          return best ?? [...intakePhotoName.keys()].find((u) => !usedOriginalUrls.has(u))
+          // 무매칭 폴백 금지 (Sprint 12) — "아무거나 첫 원본"이 무관 패키지 누끼를 대표컷으로
+          // 만든 실사례(동원). 기획 단계 가드가 무근거 useOriginal을 생성으로 전환하므로,
+          // 여기서 매칭이 없으면 생성컷 경로(byBase)로 자연 폴백된다.
+          return best
         }
         let mapped = 0
         let missing = 0
@@ -713,8 +715,31 @@ export async function runPlanningForProject(projectId: string): Promise<{
             .order('created_at', { ascending: true })
           uploadedPhotos = (photoRows ?? []).map((r) => String(r.file_name ?? '')).filter(Boolean)
         } catch { /* 파일명 없이 진행 */ }
-        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {}, moodKeywords, uploadedPhotos })
+        const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {}, moodKeywords, uploadedPhotos, seed: projectId })
         if (planned.success && planned.data) {
+          // useOriginal 가드 (Sprint 12) — ① hero 대표컷은 원본 직배치 금지(연출 생성컷이 항상 우선),
+          // ② 니즈 토큰이 업로드 파일명과 하나도 겹치지 않으면 조립 단계에서 무관 원본이 폴백 배치되던
+          //    실사례(동원: 무의미 파일명 H11A9742 → 무관 패키지 누끼가 대표컷) — 근거 없으면 생성 전환.
+          {
+            const tokensOf = (t: string): string[] =>
+              (t ?? '').toLowerCase().split(/[^a-z0-9가-힣]+/).filter((w) => w.length >= 2)
+            const photoTokens = (uploadedPhotos ?? []).map((n) => tokensOf(n))
+            const flippedIds: string[] = []
+            for (const s of planned.data.sections) {
+              const isHero = getVariant(s.variantId)?.archetype === 'hero'
+              for (const n of s.imageNeeds ?? []) {
+                if (!n.useOriginal) continue
+                const needTok = new Set(tokensOf(`${n.id} ${n.subject ?? ''}`))
+                const matched = photoTokens.some((toks) => toks.some((w) => needTok.has(w)))
+                if (isHero || !matched) {
+                  n.useOriginal = false
+                  flippedIds.push(`${n.id}${isHero ? '(hero)' : '(무근거)'}`)
+                }
+              }
+            }
+            if (flippedIds.length)
+              console.log(`[pipeline-bridge/planning] useOriginal 가드 — 생성 전환 ${flippedIds.length}건: ${flippedIds.join(', ')}`)
+          }
           const allNeeds = planned.data.sections.flatMap((s) => s.imageNeeds ?? [])
           const originalNeeds = allNeeds.filter((n) => n.useOriginal)
           const needs = allNeeds.filter((n) => !n.useOriginal)

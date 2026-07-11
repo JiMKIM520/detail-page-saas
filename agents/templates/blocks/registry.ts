@@ -37,3 +37,33 @@ export function catalog(): Array<{ id: string; archetype: BlockArchetype; styleT
     describe: v.describe,
   }))
 }
+
+/** 변형의 '누끼 전용' 이미지 필드 키 — CSS의 object-fit:contain 클래스와 render 소스의
+ *  media(필드, '클래스') 호출을 대조해 자동 산출한다(Sprint 12). 장식 프레임(원형·좌대·플롯)에
+ *  배경 있는 실사가 들어가면 사각 사진이 프레임 안에 그대로 노출되는 결함(동원 ingredient-spotlight
+ *  실사례)의 근거 데이터 — 수동 태깅 없이 신규 변형에도 자동 적용된다.
+ *  플래너 카탈로그 마커(⛔누끼전용)와 컴포저 배치 가드가 같은 출처를 쓴다. */
+const containKeysCache = new Map<string, ReadonlySet<string>>()
+export function containSlotKeys(id: string): ReadonlySet<string> {
+  const hit = containKeysCache.get(id)
+  if (hit) return hit
+  const v = REGISTRY.get(id)
+  const keys = new Set<string>()
+  if (v) {
+    const containCls = new Set(
+      [...String(v.css).matchAll(/\.([a-z0-9-]+)[^{}]*\{[^}]*object-fit:\s*contain/g)].map((m) => m[1]),
+    )
+    if (containCls.size) {
+      // 렌더 함수 소스는 빌드 도구가 변형한다 — tsx는 `(0,import_shared.media)(d.image,"cls")`,
+      // 원본은 `media(d.image, 'cls')`. 프로퍼티명(media)·마지막 필드 식별자·클래스 문자열은
+      // 트랜스파일·minify에도 보존되므로 그 셋만으로 매칭한다.
+      for (const m of String(v.render).matchAll(/(?:\bmedia|\.media\))\s*\(\s*([^,()]+?)\s*,\s*['"]([a-z0-9-]+)['"]/g)) {
+        if (!containCls.has(m[2])) continue
+        const field = m[1].trim().split('.').pop() ?? ''
+        if (/^[a-zA-Z_$][\w$]*$/.test(field)) keys.add(field)
+      }
+    }
+  }
+  containKeysCache.set(id, keys)
+  return keys
+}

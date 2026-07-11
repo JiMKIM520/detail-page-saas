@@ -8,6 +8,7 @@
 import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, timer, MODELS, extractText } from './utils'
 import { catalog } from './templates/blocks'
+import { containSlotKeys } from './templates/blocks/registry'
 import { SCRIPT_TYPE_TO_ARCHETYPES, HERO_STYLE_TO_VARIANTS } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
 import type { AgentResult, ProjectBrief } from './types'
@@ -56,6 +57,9 @@ export interface PagePlannerInput {
   moodKeywords?: string[]
   /** 업로드 원본 사진 파일명 목록 — useOriginal 판단 근거 (Sprint 9-C) */
   uploadedPhotos?: string[]
+  /** 결정적 셔플 시드(보통 projectId) — 카탈로그 표본·히어로 후보 순서가 프로젝트마다 달라진다 (Sprint 12).
+   *  같은 프로젝트의 재시도는 같은 순서 → 프롬프트 캐시 히트 유지 */
+  seed?: string
 }
 
 // 상한 초과는 기계적으로 수리 가능한 위반 — 실패 대신 절단(컴포저 수리 패스와 같은 철학)
@@ -130,7 +134,10 @@ system prompt). Your job:
    - withProduct: 제품 패키지가 프레임에 필요한가 — 원료·소재·질감컷은 false 권장(라벨 재현 위험 0)
    - useOriginal: 업로드 원본 사진 목록에 그 니즈를 정확히 충족하는 실물 사진이 있으면 true —
      생성하지 않고 원본을 그대로 배치한다(패키지 구성·묶음·라벨·실물 디테일은 원본이 항상 정확).
-     true면 subject에 어떤 원본인지 알 수 있는 특징(파일명 키워드)을 포함하라.
+     true면 subject에 반드시 그 원본의 파일명 키워드를 그대로 포함하라(시스템이 파일명 토큰으로
+     매칭한다 — 근거 토큰이 없으면 생성으로 강제 전환된다).
+     ⛔ hero 블록의 니즈에는 useOriginal 금지 — 대표컷은 항상 연출 생성컷이다(원본 실사는
+     히어로 품질 기준 미달, 시스템이 강제 전환한다).
    - 니즈 수는 그 블록의 이미지 슬롯 수와 일치시켜라(CRITICAL — 3슬롯 지그재그면 니즈 3개,
      4행 리스트면 4개. 일부만 계획하면 빈 프레임이 노출된다). 페이지 전체 총합 상한 20.
      hero는 withProduct=true 1개 필수.
@@ -152,15 +159,61 @@ system prompt). Your job:
 Output raw compact JSON only (no prose, no markdown, minimal whitespace):
 {"sections":[{"order":0,"variantId":"hero-arch","scriptType":"hero","copyBrief":"...","imageUrls":["https://..."]}]}`
 
-/** 카탈로그(계약 있는 변형만) — 정적이므로 프롬프트 캐싱 대상 */
-let catalogBlock: string | null = null
-function getCatalogBlock(): string {
-  if (catalogBlock) return catalogBlock
-  catalogBlock = `블록 카탈로그(variantId · archetype · imageSlots · 설명):\n${catalog()
-    .filter((c) => CONTRACTED_IDS.has(c.id))
-    .map((c) => `- ${c.id} · ${c.archetype} · img${c.imageSlots} · ${c.describe}`)
-    .join('\n')}`
-  return catalogBlock
+/** 결정적 시드 난수(mulberry32 계열) — Math.random 금지 환경에서도 프로젝트별로 재현 가능 */
+function seededRandom(seed: string): () => number {
+  let h = 1779033703 ^ seed.length
+  for (let i = 0; i < seed.length; i++) {
+    h = Math.imul(h ^ seed.charCodeAt(i), 3432918353)
+    h = (h << 13) | (h >>> 19)
+  }
+  return () => {
+    h = Math.imul(h ^ (h >>> 16), 2246822507)
+    h = Math.imul(h ^ (h >>> 13), 3266489909)
+    return ((h ^= h >>> 16) >>> 0) / 4294967296
+  }
+}
+
+function seededShuffle<T>(arr: readonly T[], rand: () => number): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+/** 카탈로그 표본 — 아키타입별 시드 셔플 후 상한 컷 (Sprint 12).
+ *  전체 591종을 등록순으로 나열하면 LLM 위치 편향으로 앞쪽(구형) 변형만 선택되고 뒤쪽 60%의
+ *  신규 233종은 사실상 죽은 재고가 된 실사례(동원: 사용 11종 전부 앞 30%). 프로젝트 시드로
+ *  아키타입 안에서 셔플·표본화하면 매 프로젝트 다른 부분집합이 앞에 오고, 같은 프로젝트의
+ *  재시도는 같은 표본 → 프롬프트 캐시도 유지된다. hero는 사용자 프롬프트의 후보 목록과
+ *  어긋나면 안 되므로 상한 없이 전부 싣는다. */
+const PER_ARCHETYPE_CAP = 12
+const catalogBlockCache = new Map<string, string>()
+export function getCatalogBlock(seed: string): string {
+  const hit = catalogBlockCache.get(seed)
+  if (hit) return hit
+  const rand = seededRandom(`catalog:${seed}`)
+  const byArch = new Map<string, ReturnType<typeof catalog>>()
+  for (const c of catalog()) {
+    if (!CONTRACTED_IDS.has(c.id)) continue
+    const list = byArch.get(c.archetype) ?? []
+    list.push(c)
+    byArch.set(c.archetype, list)
+  }
+  const lines: string[] = []
+  for (const arch of [...byArch.keys()].sort()) {
+    const pool = seededShuffle(byArch.get(arch)!, rand)
+    const picked = arch === 'hero' ? pool : pool.slice(0, PER_ARCHETYPE_CAP)
+    for (const c of picked) {
+      const cutoutMark = c.imageSlots > 0 && containSlotKeys(c.id).size > 0 ? ' ⛔누끼전용슬롯' : ''
+      lines.push(`- ${c.id} · ${c.archetype} · img${c.imageSlots}${cutoutMark} · ${c.describe}`)
+    }
+  }
+  const block = `블록 카탈로그(variantId · archetype · imageSlots · 설명) — 아키타입별 대표 표본:\n${lines.join('\n')}\n\n⛔누끼전용슬롯 = 이미지 프레임이 장식형(원형·좌대·플롯)이라 배경 없는 단독컷(누끼)만 어울린다.\n이 변형을 고르면 그 블록의 imageNeeds는 반드시 배경 없는 제품/원료 단독컷으로 명세하라 — 배경 있는 실사·원본 사진은 시스템이 제거한다.`
+  if (catalogBlockCache.size > 32) catalogBlockCache.clear()
+  catalogBlockCache.set(seed, block)
+  return block
 }
 
 function summarizeScriptSections(sections: Array<Record<string, unknown>>): string {
@@ -184,7 +237,9 @@ function buildUserPrompt(input: PagePlannerInput, repairNote?: string): string {
   // 히어로 아형 후보 — 스크립트 hero 섹션의 heroStyle에 해당하는 목록만 제시(의미 기반 선택)
   const heroSection = input.script.sections.find((s) => String(s.type ?? s.sectionType ?? '') === 'hero')
   const heroStyle = String((heroSection as { heroStyle?: string } | undefined)?.heroStyle ?? '').toLowerCase()
-  const heroCandidates = HERO_STYLE_TO_VARIANTS[heroStyle]
+  // 후보 순서도 시드 셔플 (Sprint 12) — 고정 나열은 첫 항목 편향으로 같은 히어로만 반복(hero-icon-rows 3연속 실사례)
+  const heroPool = HERO_STYLE_TO_VARIANTS[heroStyle]
+  const heroCandidates = heroPool ? seededShuffle(heroPool, seededRandom(`hero:${input.seed ?? input.brief.productName}`)) : undefined
   // 업로드 원본 사진 목록 (Sprint 9-C) — useOriginal 판단 근거
   const photosBlock = input.uploadedPhotos?.length
     ? `\n\n업로드 원본 사진 (useOriginal 후보 — 실물 정확성이 중요한 니즈는 생성 대신 이 원본을 지정):\n${input.uploadedPhotos.map((n) => `- ${n}`).join('\n')}`
@@ -288,7 +343,8 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
       max_tokens: 16000, // 8192는 16블록 청사진에서 잘림(Unterminated JSON 실사례) — S5 토크나이저 여유 포함
       system: [
         { type: 'text', text: SYSTEM_PROMPT },
-        { type: 'text', text: getCatalogBlock(), cache_control: { type: 'ephemeral' } },
+        // 시드 표본 카탈로그 — 프로젝트별 상이하지만 같은 프로젝트 재시도는 동일 텍스트 → 캐시 유효
+        { type: 'text', text: getCatalogBlock(input.seed ?? input.brief.productName), cache_control: { type: 'ephemeral' } },
       ],
       messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
     })

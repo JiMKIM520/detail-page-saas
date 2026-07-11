@@ -13,7 +13,7 @@ import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
-import { getVariant } from './templates/blocks/registry'
+import { getVariant, containSlotKeys } from './templates/blocks/registry'
 import { ICON_NAMES } from './templates/blocks/shared'
 
 // ── AI 출력 계약 ────────────────────────────────────────────────
@@ -1105,9 +1105,11 @@ export function applyPlacementGuards(
   cutoutSet: ReadonlySet<string>,
   logoSet: ReadonlySet<string> = new Set(),
 ): void {
-  const stats: Record<string, number> = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0, emSpace: 0 }
+  const stats: Record<string, number> = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0, emSpace: 0, containSlot: 0 }
   for (const b of spec.blocks) {
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
+    // 누끼 전용 필드(contain 프레임) — 레지스트리가 CSS×render 대조로 자동 산출 (Sprint 12)
+    const containKeys = containSlotKeys(b.variantId)
     const data = (b.data ?? {}) as Record<string, unknown>
     // 다행 리스트 이미지 균일성 — 일부 행에만 이미지가 있으면 전부 제거(절름발이 레이아웃 방지).
     // usage 스텝에서 시작(황태 실사례) → ingredient 리스트로 확장(럽앤 성분 4행 중 2행만 썸네일 실사례)
@@ -1147,6 +1149,14 @@ export function applyPlacementGuards(
         stats.logoMoved++
         return
       }
+      // 누끼 전용 슬롯(contain 장식 프레임)에 배경 있는 실사·원본이 들어가면 사각 사진이
+      // 프레임 안에 그대로 노출된다(동원 ingredient-spotlight 원형 속 사각 실사례) —
+      // 누끼·로고 외 URL은 제거하고 noimg-safe 강등에 맡긴다.
+      if (isUrl && containKeys.has(key) && !cutoutSet.has(value) && !logoSet.has(value)) {
+        delete parent[key]
+        stats.containSlot++
+        return
+      }
       // 강조 스팬 경계 공백 누락 수술 — "…텍스처를</span>발행하다"처럼 조사로 끝나는 강조 뒤에
       // 한글이 바로 붙으면 항상 띄어쓰기 오류(단어 중간 강조는 조사로 끝나지 않아 오탐 없음)
       if (!isUrl && /[가-힣][를을이가은는와과도의로에서]<\/span>[가-힣]/.test(value)) {
@@ -1161,9 +1171,9 @@ export function applyPlacementGuards(
       }
     })
   }
-  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText)
+  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText || stats.containSlot)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot}`,
     )
 }
 
@@ -1317,7 +1327,8 @@ export function lintCopyQuality(spec: PageSpec): string[] {
 async function applyPairingQA(spec: PageSpec): Promise<number> {
   const pairs: Array<{ id: string; url: string; sectionCopy: string }> = []
   spec.blocks.forEach((b, i) => {
-    if (i === 0) return // 히어로 메인컷은 제품 대표 비주얼 — 카피 적합성 검사 대상 아님
+    // 히어로도 검사 대상 (Sprint 12) — 무관 원본이 대표컷이 됐는데 스킵 때문에 그물에 안 걸린
+    // 실사례(동원). 히어로 카피(헤드라인·제품명)와 이미지의 적합성은 오히려 가장 중요하다.
     const data = (b.data ?? {}) as Record<string, unknown>
     const urls = new Set<string>()
     const copyParts: string[] = []
