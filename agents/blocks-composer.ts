@@ -1015,6 +1015,9 @@ function applyMechanicalFixes(data: unknown, issues: RepairIssue[]): boolean {
       const { parent: p2, key: k2 } = resolveParent(data, path)
       const cur = p2?.[k2 as never]
       if (cur === undefined && dropNearestArrayItem(data, path)) fixed = true
+      // 타입 불일치(예: bullets 아이템이 객체여야 하는데 문자열 — hero-card-wrapper 3연속 실패
+      // 실사례): 해당 배열 아이템만 드롭해 블록을 살린다
+      else if (cur !== undefined && dropNearestArrayItem(data, path)) fixed = true
     }
   }
   return fixed
@@ -1115,16 +1118,21 @@ export function applyPlacementGuards(
     const containKeys = containSlotKeys(b.variantId)
     const data = (b.data ?? {}) as Record<string, unknown>
     // 다행 리스트 이미지 균일성 — 일부 행에만 이미지가 있으면 전부 제거(절름발이 레이아웃 방지).
-    // usage 스텝에서 시작(황태 실사례) → ingredient 리스트로 확장(럽앤 성분 4행 중 2행만 썸네일 실사례)
-    if (arch === 'usage' || arch === 'ingredient') {
+    // usage·ingredient 한정이던 것을 전 아키타입으로 확대(feature-checkpoint-rail 빈 링 실사례) +
+    // 검사 키를 'image' 하드코딩에서 변형 render의 배열 아이템 media 키 자동 식별로 일반화.
+    {
+      const vshape = ((getVariant(b.variantId)?.schema as { shape?: Record<string, unknown> } | undefined)?.shape) ?? {}
+      const itemImgKeys = new Set(['image', ...[...mediaSlotKeys(b.variantId)].filter((k) => !(k in vshape))])
       for (const v of Object.values(data)) {
         if (!Array.isArray(v) || v.length < 2) continue
         const items = v.filter((it): it is Record<string, unknown> => Boolean(it) && typeof it === 'object')
         if (items.length < 2) continue
-        const withImg = items.filter((it) => typeof it.image === 'string' && /^https?:\/\//.test(String(it.image)))
-        if (withImg.length > 0 && withImg.length < items.length) {
-          for (const it of items) delete it.image
-          stats.usageUniform += withImg.length
+        for (const key of itemImgKeys) {
+          const withImg = items.filter((it) => typeof it[key] === 'string' && /^https?:\/\//.test(String(it[key])))
+          if (withImg.length > 0 && withImg.length < items.length) {
+            for (const it of items) delete it[key]
+            stats.usageUniform += withImg.length
+          }
         }
       }
     }
@@ -1295,7 +1303,10 @@ function redistributeUnusedImages(
     walkStringFields((b.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
       if (/^https?:\/\//.test(v)) usedUrls.add(v)
     })
-  const pool = Object.entries(candidates).filter(([url]) => !usedUrls.has(url))
+  // 재배치 풀은 생성컷만 — 업로드 원본은 앵글·배경 통제가 안 돼 자동 주입 시 프레임과
+  // 부조화한다(매일 usage 풀블리드에 기울어진 원본 팩 실사례). 원본 배치는 니즈 매핑
+  // (useOriginal, 파일명 토큰 근거)만 허용.
+  const pool = Object.entries(candidates).filter(([url]) => !usedUrls.has(url) && !url.includes('/intake-files/'))
   if (!pool.length) return { reassigned: 0, unused: 0, used: usedUrls.size }
 
   // 니즈 id(파일명) → 청사진 소속 variantId 매핑 — 1순위 복귀 근거

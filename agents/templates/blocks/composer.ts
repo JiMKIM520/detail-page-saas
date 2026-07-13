@@ -43,7 +43,12 @@ export function renderPage(spec: PageSpec): RenderResult {
     sections.push(variant.render(parsed.data, ctx))
   })
 
-  const styles = [baseCss(spec.tokens, width), ...cssById.values()].join('\n')
+  // vw 단위를 페이지 고정폭 기준 px로 결정적 치환 — 데스크톱 브라우저는 viewport meta를
+  // 무시하므로 vw가 실제 창 폭을 따라 커져 872px 설계가 와이드 화면에서 붕괴한다
+  // (로모노소프 선물 타이틀-이미지 겹침 실사례). 모바일은 meta로 이미 872 가상폭 = 동일 결과.
+  const styles = [baseCss(spec.tokens, width), ...cssById.values()]
+    .join('\n')
+    .replace(/([\d.]+)vw/g, (_, n) => `${Math.round(parseFloat(n) * width) / 100}px`)
   const title = `${spec.meta.product}`.trim() || 'Detail'
 
   const html = `<!DOCTYPE html>

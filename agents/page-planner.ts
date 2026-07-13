@@ -140,8 +140,14 @@ system prompt). Your job:
      ⛔ hero 블록의 니즈에는 useOriginal 금지 — 대표컷은 항상 연출 생성컷이다(원본 실사는
      히어로 품질 기준 미달, 시스템이 강제 전환한다).
    - 니즈 수는 그 블록의 이미지 슬롯 수와 일치시켜라(CRITICAL — 3슬롯 지그재그면 니즈 3개,
-     4행 리스트면 4개. 일부만 계획하면 빈 프레임이 노출된다). 페이지 전체 총합 상한 20.
-     hero는 withProduct=true 1개 필수.
+     4행 리스트면 4개. 일부만 계획하면 빈 프레임이 노출된다).
+   - 표준 12컷 패키지(CRITICAL — 페이지 전체 니즈는 정확히 12개, 용도 분포를 따르라):
+     ① 히어로 연출 1 (withProduct=true, main) ② 제품 연출 2 (styled, main)
+     ③ 원료/소재 2 (raw-material, support) ④ 텍스처/디테일 2 (texture, support)
+     ⑤ 사용 장면 2 (usage — main 1, support 1) ⑥ 무드/배경 1 (mood, support)
+     ⑦ 스펙/비교 보조 1 (support) ⑧ 예비 1 (카테고리 특성 보완, support)
+     블록 구성은 이 12컷을 전부 소화해야 한다 — 이미지 슬롯 보유 블록이 전체의 절반 이상
+     (슬롯 합 10 이상)이 되도록 선택하고, 부족하면 이미지 블록을 추가하라.
    - prominence: 대형 프레임(히어로·풀블리드·본문 큰 사진)=main / 소형 썸네일·서브컷(원형 아이콘,
      리스트 썸네일, 보조컷)=support — 생성 모델 티어 결정에 쓰인다. 반드시 지정하라.
 4. copyBrief: ONE terse Korean sentence (max 80 chars) stating WHAT the filler must say there,
@@ -326,13 +332,20 @@ function validateBlueprint(
       s.imageUrls = []
       if (!s.imageNeeds?.length) continue
       s.imageNeeds = s.imageNeeds.filter((n) => {
-        if (seenIds.has(n.id) || total >= 20) return false
+        if (seenIds.has(n.id) || total >= 12) return false
         seenIds.add(n.id)
         total++
         return true
       })
     }
-    if (total < 4) issues.push(`이미지 니즈 ${total}개(<4) — 이미지가 필요한 블록마다 imageNeeds를 명세하라`)
+    // 표준 12컷 패키지 — 공급을 고정해 제품별 컷 수 편차·활용 저조를 구조적으로 제거 (±1 완충)
+    if (total < 11) issues.push(`이미지 니즈 ${total}개 — 표준 패키지는 12컷이다. 용도 분포에 맞춰 부족분을 명세하라`)
+    const slotSum = bp.sections.reduce(
+      (acc, sec) => acc + (catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0),
+      0,
+    )
+    if (slotSum < 10)
+      issues.push(`이미지 슬롯 합 ${slotSum}(<10) — 이미지 보유 블록이 부족하다. 텍스트 전용 블록 일부를 이미지 블록으로 교체하라`)
   }
 
   // 수리 불가 위반만 재시도 사유로

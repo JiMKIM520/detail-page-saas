@@ -253,6 +253,7 @@ body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);backg
 .acc,.em{color:var(--accent-d)}
 /* 빈 미디어 슬롯 — 어떤 변형의 .ph 오버라이드보다 우선(!important)해 '미완성 점선 박스'를 은은한 틴트 패널로 통일 */
 .ph{display:none!important}
+.dpg :has(> .ph:only-child){display:none!important}
 .wm{display:none}
 .wm.light{display:none}
 .lab{display:inline-block;background:var(--brand);color:#F5ECDF;font-weight:800;font-size:17px;padding:8px 26px;border-radius:999px;letter-spacing:.04em}
