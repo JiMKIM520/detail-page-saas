@@ -338,8 +338,27 @@ function validateBlueprint(
         return true
       })
     }
-    // 표준 12컷 패키지 — 공급을 고정해 제품별 컷 수 편차·활용 저조를 구조적으로 제거 (±1 완충)
-    if (total < 11) issues.push(`이미지 니즈 ${total}개 — 표준 패키지는 12컷이다. 용도 분포에 맞춰 부족분을 명세하라`)
+    // 표준 12컷 패키지 — 공급을 고정해 제품별 컷 수 편차·활용 저조를 구조적으로 제거.
+    // 미달은 실패가 아니라 수리 가능한 위반: 부족분을 제품 연출 예비 니즈로 자동 보충한다
+    // (재시도 강요는 "니즈=슬롯 수" 규칙과 충돌해 2연속 실패→무청사진 폴백 실사례).
+    if (total < 12) {
+      const deficit = 12 - total
+      const withSlots = bp.sections.filter((sec) => {
+        const slots = catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0
+        return slots > 0 && arch(sec.variantId) !== 'hero'
+      })
+      for (let i = 0; i < deficit && withSlots.length > 0; i++) {
+        const target = withSlots[i % withSlots.length]
+        ;(target.imageNeeds ??= []).push({
+          id: `need_reserve_${i + 1}`,
+          subject: '제품 연출 보조컷 — 브리프의 핵심 소구를 뒷받침하는 연출',
+          style: 'styled',
+          withProduct: true,
+          prominence: 'support',
+        })
+      }
+      console.warn(`[Page Planner] 12컷 미달(${total}) — 예비 니즈 ${deficit}개 자동 보충`)
+    }
     const slotSum = bp.sections.reduce(
       (acc, sec) => acc + (catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0),
       0,
