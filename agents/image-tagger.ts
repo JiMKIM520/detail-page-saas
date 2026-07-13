@@ -55,7 +55,8 @@ Judging rules:
 - quality — judge as a SHOPPER at page scale, not a forensic zoom (컷은 대부분 축소되어 배치된다):
   - "reject" ONLY for defects a shopper would notice: brand name misspelled/altered (e.g. MOMOS→NONOS),
     wrong quantity on packaging, large empty bands, gross distortion, garbled text that is LARGE and
-    prominent in frame.
+    prominent in frame, or the product rendered UPSIDE-DOWN / label text flipped or mirrored
+    (제품이 뒤집혀 라벨이 거꾸로 보이는 컷 — 배경·무드용으로도 쓰지 않는다).
   - "degraded" for label text that is merely soft/small/angled, minor artifacts — these images are
     still valuable as lifestyle/mood/background scenes. Do NOT reject them.
   - "ok" otherwise. Bias: when torn between reject and degraded, choose degraded.

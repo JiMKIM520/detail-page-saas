@@ -44,7 +44,7 @@ export const storyBrand = defineBlock<Data>({
 .sb-bg.ph{position:absolute;inset:0;width:100%;height:100%;border:none;border-radius:0}
 
 /* 상단 오버레이: 이미지 위 밝은 그라데이션으로 메타바 가독성 확보 */
-.sb-top-veil{position:absolute;top:0;left:0;right:0;height:220px;background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,0) 100%);pointer-events:none}
+.sb-top-veil{position:absolute;top:0;left:0;right:0;height:420px;background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(255,255,255,.82) 45%,rgba(255,255,255,0) 100%);pointer-events:none}
 
 /* 하단 오버레이: 본문 패널 위 영역 */
 .sb-bot-veil{position:absolute;bottom:0;left:0;right:0;height:55%;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.95) 22%,rgba(255,255,255,1) 45%);pointer-events:none}

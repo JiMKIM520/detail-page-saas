@@ -1255,6 +1255,20 @@ function dropEmptyPhotoBlocks(spec: PageSpec): void {
     console.warn(`[Blocks Composer] 이미지 없는 사진형/오버레이형 블록 ${beforeLen - spec.blocks.length}개 제거`)
 }
 
+/** 가격 없는 할인 블록 드롭 — 무근거 가격 차단이 값을 지우면 "정상가/타임딜가" 라벨만 남아
+ *  빈 프레임이 노출된다(루미트론 실사례). 할인 소구는 가격 표기가 성립 요건 — 원화·퍼센트
+ *  표현이 하나도 없으면 블록 자체를 제거한다(히어로/클로징은 discount 아키타입이 아니므로 무관). */
+const PRICE_TOKEN_RE = /\d[\d,.]*\s*(?:원|₩)|₩\s*\d|\d+\s*%/
+function dropPricelessDiscountBlocks(spec: PageSpec): void {
+  const beforeLen = spec.blocks.length
+  spec.blocks = spec.blocks.filter((b) => {
+    if (getVariant(b.variantId)?.archetype !== 'discount') return true
+    return PRICE_TOKEN_RE.test(JSON.stringify(b.data ?? {}))
+  })
+  if (spec.blocks.length < beforeLen)
+    console.warn(`[Blocks Composer] 가격 표기 없는 할인 블록 ${beforeLen - spec.blocks.length}개 제거`)
+}
+
 /** ── 결정적 카피 린터 (Sprint 7) ──────────────────────────────────────────
  *  품질 다각도 리뷰(4산출×13관점)에서 반복 확인된 카피 결함 3종을 기계 검출한다:
  *  ① 동일 수치 클레임 3회+ 반복(스크롤 정보 밀도 붕괴) ② AI 상투어 ③ 스펙 나열형 히어로 헤드라인.
@@ -1458,6 +1472,7 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   // 빈 사진 블록 드롭은 반드시 이미지를 제거하는 가드들(새니타이즈·배치 가드·수리) 이후에 —
   // 배치 가드(스텝 균일화)가 걷어낸 뒤 빈 원형 플레이스홀더가 그대로 렌더된 실사례(황태 uzz, 시각 감사 검출)
   dropEmptyPhotoBlocks(spec)
+  dropPricelessDiscountBlocks(spec)
 
   const rendered = renderPage(spec) // 변형 id/슬롯 데이터 검증 (실패 시 throw)
   return { spec, html: rendered.html, usedVariants: rendered.usedVariants }
@@ -1486,6 +1501,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       const removed = await applyPairingQA(result.spec)
       if (removed > 0) {
         dropEmptyPhotoBlocks(result.spec)
+        dropPricelessDiscountBlocks(result.spec)
         repairAndSalvageBlocks(result.spec)
         const re = renderPage(result.spec)
         result = { spec: result.spec, html: re.html, usedVariants: re.usedVariants }
@@ -1508,6 +1524,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
           const removed2 = await applyPairingQA(rework.spec).catch(() => 0)
           if (removed2 > 0) {
             dropEmptyPhotoBlocks(rework.spec)
+        dropPricelessDiscountBlocks(rework.spec)
             repairAndSalvageBlocks(rework.spec)
             const re2 = renderPage(rework.spec)
             rework = { spec: rework.spec, html: re2.html, usedVariants: re2.usedVariants }

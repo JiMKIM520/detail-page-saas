@@ -34,10 +34,10 @@ export const detailPaletteCard = defineBlock<Data>({
   css: `
 /* ── detail-palette-card (dmhu) ── */
 .dmhu{
-  background:var(--bg,#000);
+  background:var(--brand,#101826);
   padding:64px var(--pad-x,56px) 72px;
   text-align:center;
-  color:var(--ink,#fff);
+  color:#fff;
 }
 /* 다크 배경 위 em 스코프 오버라이드 */
 .dmhu .em{color:var(--em-dark,#FFF7EA)}

@@ -37,7 +37,7 @@ export const discountShockBadge = defineBlock<Data>({
 .djpn-label{font-size:18px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#fff;font-family:var(--font-lat,'Cormorant Garamond',serif)}
 
 /* 초대형 헤드라인 */
-.djpn-headline{font-family:var(--font-display);font-weight:900;font-size:clamp(80px,15vw,150px);line-height:1;letter-spacing:-.03em;color:#fff;white-space:nowrap}
+.djpn-headline{font-family:var(--font-display);font-weight:900;font-size:clamp(56px,11vw,110px);line-height:1.06;letter-spacing:-.03em;color:#fff;word-break:keep-all}
 .djpn-headline .em{color:rgba(255,255,255,.75)}
 
 /* 할인 슬로건 */

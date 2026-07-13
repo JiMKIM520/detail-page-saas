@@ -102,7 +102,7 @@ export const recommendHashtagCard = defineBlock<Data>({
 }
 .rhtc-tag{
   background:var(--accent);
-  color:var(--ink);
+  color:var(--on-accent,#fff);
   font-size:clamp(13px,1.6vw,17px);
   font-weight:700;
   padding:10px 22px;
