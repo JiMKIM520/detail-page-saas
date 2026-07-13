@@ -362,16 +362,20 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
   const allowedUrls = new Set(Object.keys(input.imageNotes))
 
   const callOnce = async (repairNote?: string): Promise<PageBlueprint> => {
-    const message = await anthropicClient.messages.create({
+    // 12컷 상세 명세로 출력이 16000을 초과(잘림 → JSON 손상 → 청사진 폴백 실사례) —
+    // 컴포저와 동일하게 32000+스트리밍(S5는 동일 JSON에 ~30k 토큰, 논스트리밍은 SDK가 거부)
+    const message = await anthropicClient.messages
+      .stream({
       model: MODELS.CLAUDE_SONNET,
-      max_tokens: 16000, // 8192는 16블록 청사진에서 잘림(Unterminated JSON 실사례) — S5 토크나이저 여유 포함
+      max_tokens: 32000,
       system: [
         { type: 'text', text: SYSTEM_PROMPT },
         // 시드 표본 카탈로그 — 프로젝트별 상이하지만 같은 프로젝트 재시도는 동일 텍스트 → 캐시 유효
         { type: 'text', text: getCatalogBlock(input.seed ?? input.brief.productName), cache_control: { type: 'ephemeral' } },
       ],
       messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
-    })
+      })
+      .finalMessage()
     if (message.stop_reason === 'max_tokens')
       console.warn('[Page Planner] ⚠ 출력이 max_tokens로 잘림 — JSON 불완전')
     const bp = blueprintSchema.parse(parseJsonResponse<unknown>(extractText(message.content))) as PageBlueprint
