@@ -1157,6 +1157,14 @@ export function applyPlacementGuards(
         stats.containSlot++
         return
       }
+      // 클로징 무드 배경에 업로드 원본 금지 — 원본은 앵글·라벨 방향이 통제되지 않아
+      // 풀블리드 배경에서 거꾸로 팩이 그대로 노출된다(매일 실사례). 태거는 고객 원본을
+      // reject하지 않는 설계(실물=정답 기준)라 이 가드가 유일한 방벽. 무드 배경은 연출 생성컷만.
+      if (isUrl && arch === 'closing' && value.includes('/intake-files/')) {
+        delete parent[key]
+        stats.closingOriginal = (stats.closingOriginal ?? 0) + 1
+        return
+      }
       // 강조 스팬 경계 공백 누락 수술 — "…텍스처를</span>발행하다"처럼 조사로 끝나는 강조 뒤에
       // 한글이 바로 붙으면 항상 띄어쓰기 오류(단어 중간 강조는 조사로 끝나지 않아 오탐 없음)
       if (!isUrl && /[가-힣][를을이가은는와과도의로에서]<\/span>[가-힣]/.test(value)) {
@@ -1171,9 +1179,9 @@ export function applyPlacementGuards(
       }
     })
   }
-  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText || stats.containSlot)
+  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText || stats.containSlot || stats.closingOriginal)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot} · 클로징 원본 제거 ${stats.closingOriginal ?? 0}`,
     )
 }
 
