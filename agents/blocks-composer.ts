@@ -1313,6 +1313,9 @@ function redistributeUnusedImages(
     if (!v) return []
     const arch = String(v.archetype ?? '')
     if (TEXT_LED_ARCHETYPES.has(arch)) return []
+    // 오버레이형(absolute 배치)은 주입 이미지가 배경 그래픽·텍스트를 가린다 — 재배치 금지
+    // (매일 BCAA 수치 그래픽이 주입 컷에 가려진 실사례. 원 설계 배치만 허용)
+    if (/position:\s*absolute/.test(String(v.css ?? ''))) return []
     const data = (b.data ?? {}) as Record<string, unknown>
     const contains = containSlotKeys(b.variantId)
     const shape = (v.schema as { shape?: Record<string, unknown> } | undefined)?.shape ?? {}
