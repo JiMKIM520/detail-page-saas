@@ -214,7 +214,35 @@ export function parseJsonResponse<T>(text: string): T {
     .replace(/```json\s*/g, '')
     .replace(/```\s*/g, '')
     .trim()
-  return JSON.parse(cleaned) as T
+  try {
+    return JSON.parse(cleaned) as T
+  } catch (firstErr) {
+    // 폴백 정규화 — 모델이 문자열 안에 리터럴 개행을 넣거나(Unterminated string 실사례,
+    // 동원 플래너 2연속) JSON 앞뒤에 산문을 붙이는 경우를 결정적으로 수리한다.
+    // 기존 성공 경로는 위 try가 그대로 처리하므로 회귀 없음.
+    const start = cleaned.indexOf('{')
+    const end = cleaned.lastIndexOf('}')
+    if (start < 0 || end <= start) throw firstErr
+    const sliced = cleaned.slice(start, end + 1)
+    let out = ''
+    let inStr = false
+    let esc = false
+    for (const ch of sliced) {
+      if (inStr) {
+        if (esc) { esc = false; out += ch; continue }
+        if (ch === '\\') { esc = true; out += ch; continue }
+        if (ch === '"') inStr = false
+        if (ch === '\n') { out += '\\n'; continue }
+        if (ch === '\r') continue
+        if (ch === '\t') { out += '\\t'; continue }
+        out += ch
+        continue
+      }
+      if (ch === '"') inStr = true
+      out += ch
+    }
+    return JSON.parse(out) as T
+  }
 }
 
 // ─── 타이머 ─────────────────────────────────────────────────
