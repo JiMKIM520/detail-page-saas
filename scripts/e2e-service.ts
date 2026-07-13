@@ -120,30 +120,17 @@ async function main() {
   console.log('\n=== STEP 5: 산출물 회수 ===')
   await fetchOutputs(svc, pid, slug)
 
-  // ── STEP 6: 시각 감사 — 렌더 결함(텍스트 겹침·섹션 붕괴)을 스크린샷 비전으로 검출.
-  // feature-fullbleed 캡션이 이웃 섹션 위로 떠오른 실사례처럼, 조립·가드가 못 보는 층의 마지막 그물.
-  const SHELL = '/Users/jinman/Library/Caches/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell'
+  // ── STEP 6: 시각 감사 — 파이프라인 내장 감사(render-audit)와 동일 모듈 재사용.
+  // 파이프라인이 이미 폐루프(반려 재조립 1회)를 돌므로 여기서는 최종 상태 리포트만.
   const htmlPath = path.join(OUT_BASE, 'results', `${slug}.html`)
-  if (design.success && fs.existsSync(SHELL) && fs.existsSync(htmlPath)) {
-    console.log('\n=== STEP 6: 시각 감사(렌더 결함 검출) ===')
+  if (design.success && fs.existsSync(htmlPath)) {
+    console.log('\n=== STEP 6: 시각 감사(최종 확인) ===')
     try {
-      const { chromium } = await import('playwright-core')
-      const { runVisualAudit } = await import('@/agents/image-tagger')
-      const browser = await chromium.launch({ executablePath: SHELL })
-      const page = await browser.newPage({ viewport: { width: 900, height: 1200 } })
-      await page.setContent(fs.readFileSync(htmlPath, 'utf8'), { waitUntil: 'networkidle', timeout: 90000 })
-      const H = await page.evaluate(() => document.body.scrollHeight)
-      const segments: string[] = []
-      for (let y = 0; y * 2400 < H && segments.length < 8; y++) {
-        const h = Math.min(2400, H - y * 2400)
-        const buf = await page.screenshot({ clip: { x: 0, y: y * 2400, width: 900, height: h }, fullPage: true })
-        segments.push(Buffer.from(buf).toString('base64'))
-      }
-      await browser.close()
-      const audit = await runVisualAudit(segments)
-      if (audit.success && audit.data && !audit.data.pass) {
-        console.error(`[e2e] ⚠⚠ 시각 감사 결함 — 납품 전 확인 필요:\n${audit.data.issues.map((x) => '  - ' + x).join('\n')}`)
-      }
+      const { auditRenderedHtml } = await import('@/lib/render-audit')
+      const audit = await auditRenderedHtml(fs.readFileSync(htmlPath, 'utf8'))
+      if (!audit.ran) console.warn(`[e2e] 시각 감사 미실행: ${audit.reason}`)
+      else if (!audit.pass)
+        console.error(`[e2e] ⚠⚠ 시각 감사 결함 — 납품 전 확인 필요:\n${audit.issues.map((x) => '  - ' + x).join('\n')}`)
     } catch (e) {
       console.warn('[e2e] 시각 감사 스킵:', (e as Error).message?.slice(0, 120))
     }

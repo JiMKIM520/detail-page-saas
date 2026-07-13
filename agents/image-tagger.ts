@@ -149,13 +149,23 @@ export async function runVisualAudit(
       content.push({ type: 'image', source: { type: 'base64', media_type: 'image/png', data } })
     })
     content.push({ type: 'text', text: '렌더 결함만 검출해 JSON만 출력하세요.' })
-    const message = await anthropicClient.messages.create({
-      model: MODELS.CLAUDE_SONNET,
-      max_tokens: 3000,
-      system: VISUAL_AUDIT_SYSTEM,
-      messages: [{ role: 'user', content: content as never }],
-    })
-    const raw = parseJsonResponse<{ pass?: boolean; issues?: unknown[] }>(extractText(message.content))
+    // 산문 응답으로 JSON 파싱이 깨져 감사가 통째로 생략된 실사례(로모노소프) — 1회 재시도
+    let raw: { pass?: boolean; issues?: unknown[] } | null = null
+    for (let attempt = 0; attempt < 2 && !raw; attempt++) {
+      const message = await anthropicClient.messages.create({
+        model: MODELS.CLAUDE_SONNET,
+        max_tokens: 3000,
+        system: VISUAL_AUDIT_SYSTEM,
+        messages: [{ role: 'user', content: content as never }],
+      })
+      try {
+        raw = parseJsonResponse<{ pass?: boolean; issues?: unknown[] }>(extractText(message.content))
+      } catch (parseErr) {
+        if (attempt === 1) throw parseErr
+        console.warn('[Visual Audit] 응답 파싱 실패 — 재시도 1회')
+      }
+    }
+    if (!raw) throw new Error('visual audit 응답 없음')
     const verdict = {
       pass: raw.pass !== false,
       issues: Array.isArray(raw.issues) ? raw.issues.map(String).slice(0, 8) : [],

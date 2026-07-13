@@ -9,6 +9,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { getVariant } from '@/agents/templates/blocks/registry'
 import { uploadPipelineOutput, updateDesignUrls, uploadToStorage } from '@/lib/storage'
 import { transitionStatus } from '@/lib/status-machine'
+import { reportStart, reportAdd, reportFinish } from '@/lib/run-report'
 import type { ProjectInput } from '@/agents/types'
 import { composeProductContext } from '@/lib/ai/project-brief'
 import { extractBrandColor } from '@/lib/ai/brand-color'
@@ -96,6 +97,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
   error?: string
 }> {
   const supabase = createServiceClient()
+  reportStart(projectId)
 
   try {
     // 1. 프로젝트 데이터 로드
@@ -482,7 +484,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
         `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${okStyling.length}(제외 ${stylingUrls.length - okStyling.length}) · 섹션이미지 ${okSection.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
       )
       const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
-      result = await runBlocksPipeline(blocksInput, {
+      const composerOpts = {
         heroImageUrl: heroPool[0],
         imageUrls: heroPool,
         cutoutUrls: cutoutUrls.filter((u) => !usedOriginalUrls.has(u)),
@@ -495,7 +497,52 @@ export async function runPipelineForProject(projectId: string): Promise<{
         logoUrls,
         styleGuide: styleGuideTokens,
         blueprint: storedBlueprint,
-      })
+      }
+      result = await runBlocksPipeline(blocksInput, composerOpts)
+
+      // 시각 감사 폐루프 — 렌더 결함을 검출만 하지 않고 반려 재조립 1회로 자동 해소 시도.
+      // chromium 없는 환경(Vercel)은 ran:false로 리포트에 명시 — 조용한 생략 금지(200사 무인 운영 원칙).
+      if (result.success) {
+        try {
+          const { auditRenderedHtml } = await import('@/lib/render-audit')
+          const htmlPath = path.join(result.outputDir, '4_final', 'index.html')
+          if (fs.existsSync(htmlPath)) {
+            let audit = await auditRenderedHtml(fs.readFileSync(htmlPath, 'utf8'))
+            reportAdd('visual-audit', audit as unknown as Record<string, unknown>)
+            if (audit.ran && !audit.pass) {
+              console.warn(`[pipeline-bridge] 시각 감사 결함 ${audit.issues.length}건 → 반려 재조립 1회`)
+              const rework = await runBlocksPipeline(blocksInput, {
+                ...composerOpts,
+                auditReworkNote: audit.issues.join('\n'),
+              })
+              if (rework.success) {
+                const html2 = path.join(rework.outputDir, '4_final', 'index.html')
+                if (fs.existsSync(html2)) {
+                  const audit2 = await auditRenderedHtml(fs.readFileSync(html2, 'utf8'))
+                  reportAdd('visual-audit-rework', audit2 as unknown as Record<string, unknown>)
+                  // 재조립본이 감사를 통과했거나 결함이 줄었을 때만 교체 — 악화 방지
+                  if (!audit2.ran || audit2.pass || audit2.issues.length < audit.issues.length) {
+                    result = rework
+                    audit = audit2
+                  }
+                }
+              }
+            }
+            if (audit.ran && !audit.pass) {
+              await supabase.from('project_logs').insert({
+                project_id: projectId,
+                from_status: 'design_generating',
+                to_status: 'design_generating',
+                changed_by: null,
+                note: `⚠ 시각 감사 결함 잔존(운영자 확인 필요): ${audit.issues.join(' / ').slice(0, 280)}`,
+              })
+            }
+          }
+        } catch (auditErr) {
+          console.warn('[pipeline-bridge] 시각 감사 스킵:', (auditErr as Error).message?.slice(0, 120))
+          reportAdd('visual-audit', { ran: false, reason: (auditErr as Error).message?.slice(0, 120) })
+        }
+      }
     } else if (isFood) {
       // 히어로용 첫 누끼컷 서명 URL (exporter가 즉시 PNG로 구워 영구 보존; 없으면 브랜드 그라데이션 폴백)
       let heroImageUrl: string | undefined
@@ -523,6 +570,21 @@ export async function runPipelineForProject(projectId: string): Promise<{
 
     // 6. designs 테이블 업데이트
     await updateDesignUrls(projectId, uploadResult.urls)
+
+    // 6b. 런 리포트 저장 — 운영자는 warnings 있는 건만 확인한다 (200사 운영 원칙)
+    try {
+      const report = reportFinish(projectId)
+      await uploadToStorage(
+        `projects/${projectId}/run-report.json`,
+        Buffer.from(JSON.stringify(report, null, 2)),
+        'application/json',
+      )
+      console.log(
+        `[pipeline-bridge] 런 리포트 저장 — 항목 ${report.entries.length} · 경고 ${report.warnings.length}${report.warnings.length ? `:\n  - ${report.warnings.join('\n  - ')}` : ''}`,
+      )
+    } catch (repErr) {
+      console.warn('[pipeline-bridge] 런 리포트 저장 실패:', (repErr as Error).message?.slice(0, 100))
+    }
 
     // 7. 상태 전이 (실패 시 design_failed — 과거 photo_uploaded는 무효 전이로 스턱 유발)
     const nextStatus = result.success ? 'design_review' : 'design_failed'

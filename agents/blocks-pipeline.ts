@@ -39,6 +39,8 @@ export interface BlocksPipelineOptions {
   styleGuide?: import('./templates/blocks/tokens').StyleGuideTokenInput
   /** 기획 단계에서 저장된 청사진(Sprint 5) — 있으면 조립 시 플래너 재실행 생략 */
   blueprint?: import('./page-planner').PageBlueprint
+  /** 시각 감사 폐루프 반려 노트 — 렌더 결함 사유를 컴포저 첫 호출부터 반영 */
+  auditReworkNote?: string
 }
 
 export async function runBlocksPipeline(
@@ -84,6 +86,7 @@ export async function runBlocksPipeline(
 
   // ── Step 2: 블록 컴포저 (카탈로그 조합 → PageSpec → HTML, 내부 슬롯 zod 검증) ──
   const composer = await runBlocksComposer({
+    auditNote: opts.auditReworkNote,
     brief,
     blueprint,
     logoUrls: opts.logoUrls,

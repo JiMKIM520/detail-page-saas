@@ -14,6 +14,7 @@ import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractTex
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
 import { getVariant, containSlotKeys, mediaSlotKeys } from './templates/blocks/registry'
+import { reportAdd } from '@/lib/run-report'
 import { ICON_NAMES } from './templates/blocks/shared'
 
 // ── AI 출력 계약 ────────────────────────────────────────────────
@@ -72,6 +73,8 @@ export interface BlocksComposerInput {
   /** 승인 스크립트 전문 — 근거 코퍼스(수치·전화 가드)의 완결 소스. copyBrief 요약만으로는
    *  스크립트가 담은 실데이터(고객센터 번호 등)가 누락되는 실사례가 있었다 */
   script?: { tone?: string; sections: Array<Record<string, unknown>> }
+  /** 시각 감사 폐루프의 반려 노트 — 렌더 결함 사유를 첫 호출부터 반영해 재조립한다 */
+  auditNote?: string
 }
 
 export interface BlocksComposerResult {
@@ -1179,6 +1182,7 @@ export function applyPlacementGuards(
       }
     })
   }
+  reportAdd('placement-guards', stats)
   if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText || stats.containSlot || stats.closingOriginal)
     console.warn(
       `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot} · 클로징 원본 제거 ${stats.closingOriginal ?? 0}`,
@@ -1522,6 +1526,7 @@ async function applyPairingQA(spec: PageSpec): Promise<number> {
     reasons.push(`${b.variantId}(${verdict.reason ?? '부적합'})`)
   }
   if (removed) console.warn(`[Blocks Composer] 페어링 QA — 부적합 이미지 ${removed}건 제거: ${reasons.join(' · ')}`)
+  reportAdd('pairing-qa', { removed, reasons: reasons.slice(0, 6) })
   return removed
 }
 
@@ -1628,7 +1633,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
   try {
     let result: BlocksComposerResult
     try {
-      result = await callOnce(input)
+      result = await callOnce(input, input.auditNote ? `⚠ 직전 렌더 시각 감사 결함 — 반드시 해소하라:\n${input.auditNote}` : undefined)
     } catch (firstErr: unknown) {
       const issues = firstErr instanceof Error ? firstErr.message.slice(0, 900) : String(firstErr)
       console.warn('[Blocks Composer] 1차 검증 실패 → 재시도 1/2:', issues.slice(0, 160))
@@ -1661,6 +1666,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       const lintHints = [...lintCopyQuality(result.spec), ...lintImageDeficit(result.spec)]
       if (lintHints.length) console.warn(`[Blocks Composer] 카피 린터 감지 ${lintHints.length}건 — 평가자 전달:\n  - ${lintHints.join('\n  - ')}`)
       const verdict = await runPageEvaluator({ brief: input.brief, blueprint: input.blueprint, spec: result.spec, lintHints })
+      if (verdict.success && verdict.data) reportAdd('evaluator', { pass: verdict.data.pass, issues: (verdict.data.issues ?? []).slice(0, 6) })
       if (verdict.success && verdict.data && !verdict.data.pass && verdict.data.issues.length) {
         const note = `페이지 평가자 반려 — 아래 결함을 모두 고쳐 유효한 전체 JSON을 다시 출력:\n${verdict.data.issues.join('\n')}`
         try {
@@ -1714,6 +1720,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       const minImages = Math.min(6, candidateCount)
       if (finalUsed < minImages)
         console.warn(`[Blocks Composer] ⚠ 이미지 밀도 미달 — 최종 ${finalUsed}장 < 최소 ${minImages}장 (후보 ${candidateCount})`)
+      reportAdd('image-usage', { candidates: candidateCount, used: finalUsed, reassigned: dist.reassigned, belowMinimum: finalUsed < minImages })
     } catch (e) {
       console.warn('[Blocks Composer] 재배치 패스 스킵:', (e as Error).message?.slice(0, 120))
     }
