@@ -13,7 +13,7 @@ import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
-import { getVariant, containSlotKeys } from './templates/blocks/registry'
+import { getVariant, containSlotKeys, mediaSlotKeys } from './templates/blocks/registry'
 import { ICON_NAMES } from './templates/blocks/shared'
 
 // ── AI 출력 계약 ────────────────────────────────────────────────
@@ -1263,6 +1263,97 @@ function dropEmptyPhotoBlocks(spec: PageSpec): void {
     console.warn(`[Blocks Composer] 이미지 없는 사진형/오버레이형 블록 ${beforeLen - spec.blocks.length}개 제거`)
 }
 
+/** ── 미사용 컷 재배치 패스 ──────────────────────────────────────────────
+ *  게이트(QA·가드·블록 드롭·재작업)가 이미지 배치를 제거하면 이미 생성한 컷이 고아가 되고
+ *  페이지 이미지 밀도가 깎인다(매일 16블록에 2장 실사례 — 생성 60컷 중 37만 사용).
+ *  원칙: 만든 컷은 전부 사용 가능해야 한다. 최종 스펙에서 빈 media 슬롯에 미사용 컷을
+ *  되돌린다 — ① 1순위: 컷의 원래 니즈(need_x.png)가 속한 청사진 블록 ② 2순위: 태거
+ *  노트-아키타입 키워드 매칭. 재배치 후 배치 가드·페어링 QA가 재검증하므로 규칙 위반
+ *  주입(누끼전용·클로징 원본·표계열)은 자동 회수된다. */
+const ARCH_NOTE_KEYWORDS: Record<string, RegExp> = {
+  ingredient: /원료|원물|성분|텍스처|질감|마크로|매크로/,
+  usage: /사용|급여|스텝|단계|장면|손/,
+  story: /라이프|무드|연출|배경|플랫레이|공간/,
+  gallery: /라이프|무드|연출|디테일|클로즈업|질감/,
+  detail: /제품|패키지|디테일|클로즈업|라벨/,
+  feature: /제품|패키지|연출|장면/,
+  point: /제품|패키지|연출|비교/,
+  hero: /대표|히어로|패키지|정면/,
+}
+
+function redistributeUnusedImages(
+  spec: PageSpec,
+  candidates: Record<string, string>,
+  blueprint?: import('./page-planner').PageBlueprint,
+): { reassigned: number; unused: number; used: number } {
+  const usedUrls = new Set<string>()
+  for (const b of spec.blocks)
+    walkStringFields((b.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
+      if (/^https?:\/\//.test(v)) usedUrls.add(v)
+    })
+  const pool = Object.entries(candidates).filter(([url]) => !usedUrls.has(url))
+  if (!pool.length) return { reassigned: 0, unused: 0, used: usedUrls.size }
+
+  // 니즈 id(파일명) → 청사진 소속 variantId 매핑 — 1순위 복귀 근거
+  const needHome = new Map<string, string>()
+  for (const s of blueprint?.sections ?? [])
+    for (const n of s.imageNeeds ?? []) needHome.set(n.id, s.variantId)
+
+  const blockOf = new Map<string, (typeof spec.blocks)[number]>()
+  for (const b of spec.blocks) blockOf.set(b.variantId, b)
+
+  /** 블록의 주입 가능 슬롯 — 최상위 media 키 중 스키마에 존재하고 현재 비어 있는 것.
+   *  누끼전용 키·표계열 아키타입은 가드가 도로 빼므로 애초에 제외(무의미 주입 방지). */
+  const openSlots = (b: (typeof spec.blocks)[number]): string[] => {
+    const v = getVariant(b.variantId)
+    if (!v) return []
+    const arch = String(v.archetype ?? '')
+    if (TEXT_LED_ARCHETYPES.has(arch)) return []
+    const data = (b.data ?? {}) as Record<string, unknown>
+    const contains = containSlotKeys(b.variantId)
+    const shape = (v.schema as { shape?: Record<string, unknown> } | undefined)?.shape ?? {}
+    return [...mediaSlotKeys(b.variantId)].filter(
+      (k) => k in shape && !contains.has(k) && (data[k] === undefined || data[k] === null || data[k] === ''),
+    )
+  }
+
+  let reassigned = 0
+  for (const [url, note] of pool) {
+    const needId = ((url.split('/').pop() ?? '').split('?')[0]).replace(/^regen_/, '').replace(/\.[a-z]+$/i, '')
+    // 원본(intake) 컷은 클로징 금지 가드와 동일 원칙 — 재배치 대상에서 원본은 본문 블록만
+    const isOriginal = url.includes('/intake-files/')
+    let placed = false
+    // 1순위: 원래 니즈의 소속 블록
+    const home = needHome.get(needId)
+    if (home) {
+      const b = blockOf.get(home)
+      const slot = b ? openSlots(b)[0] : undefined
+      if (b && slot) {
+        ;((b.data ??= {}) as Record<string, unknown>)[slot] = url
+        reassigned++
+        placed = true
+      }
+    }
+    // 2순위: 태거 노트 ↔ 아키타입 키워드 매칭 (히어로·클로징 제외 — 대표컷·무드 마감은 계획 유지)
+    if (!placed) {
+      for (const b of spec.blocks.slice(1, -1)) {
+        const arch = String(getVariant(b.variantId)?.archetype ?? '')
+        if (isOriginal && arch === 'closing') continue
+        const kw = ARCH_NOTE_KEYWORDS[arch]
+        if (!kw || !kw.test(note)) continue
+        const slot = openSlots(b)[0]
+        if (slot) {
+          ;((b.data ??= {}) as Record<string, unknown>)[slot] = url
+          reassigned++
+          placed = true
+          break
+        }
+      }
+    }
+  }
+  return { reassigned, unused: pool.length - reassigned, used: usedUrls.size }
+}
+
 /** 가격 없는 할인 블록 드롭 — 무근거 가격 차단이 값을 지우면 "정상가/타임딜가" 라벨만 남아
  *  빈 프레임이 노출된다(루미트론 실사례). 할인 소구는 가격 표기가 성립 요건 — 원화·퍼센트
  *  표현이 하나도 없으면 블록 자체를 제거한다(히어로/클로징은 discount 아키타입이 아니므로 무관). */
@@ -1545,6 +1636,41 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       }
     } catch (e) {
       console.warn('[Blocks Composer] 평가자 스킵:', (e as Error).message?.slice(0, 120))
+    }
+
+    // 미사용 컷 재배치 — 게이트가 뺀 자리를 남은 컷으로 채운다 (만든 컷은 전부 사용 원칙).
+    // 재배치분은 배치 가드→페어링 QA 재검증을 거치므로 규칙 위반 주입은 자동 회수된다.
+    try {
+      const dist = redistributeUnusedImages(result.spec, input.imageNotes ?? {}, input.blueprint)
+      if (dist.reassigned > 0) {
+        applyPlacementGuards(
+          result.spec,
+          new Set(input.cutoutUrls ?? (input.images?.cutout ? [input.images.cutout] : [])),
+          new Set(input.logoUrls ?? []),
+        )
+        await applyPairingQA(result.spec).catch(() => 0)
+        dropEmptyPhotoBlocks(result.spec)
+        repairAndSalvageBlocks(result.spec)
+        const re3 = renderPage(result.spec)
+        result = { spec: result.spec, html: re3.html, usedVariants: re3.usedVariants }
+      }
+      // 이미지 활용 계측 — 낭비를 상시 관측한다 (사후 실측이 아니라 매 런 로그)
+      const finalUrls = new Set<string>()
+      for (const b of result.spec.blocks)
+        walkStringFields((b.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
+          if (/^https?:\/\//.test(v)) finalUrls.add(v)
+        })
+      const candidateCount = Object.keys(input.imageNotes ?? {}).length
+      const finalUsed = [...finalUrls].filter((u) => (input.imageNotes ?? {})[u] !== undefined).length
+      console.log(
+        `[Blocks Composer] 이미지 활용 — 후보 ${candidateCount} · 최종 사용 ${finalUsed} · 재배치 ${dist.reassigned} · 미회수 ${candidateCount - finalUsed}`,
+      )
+      // 최소 밀도 룰 — 후보가 있는데 페이지가 빈약하면 명시적 경고 (16블록 2장 실사례)
+      const minImages = Math.min(6, candidateCount)
+      if (finalUsed < minImages)
+        console.warn(`[Blocks Composer] ⚠ 이미지 밀도 미달 — 최종 ${finalUsed}장 < 최소 ${minImages}장 (후보 ${candidateCount})`)
+    } catch (e) {
+      console.warn('[Blocks Composer] 재배치 패스 스킵:', (e as Error).message?.slice(0, 120))
     }
 
     saveJson(result.spec, `${input.outputDir}/page-spec.json`)

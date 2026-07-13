@@ -116,6 +116,7 @@ system prompt). Your job:
 2. BLOCK CHOICE: pick variantIds ONLY from the catalog below. Match each script section's intent
    to the block archetype (story→story/point, 성분→ingredient, 사용법→usage, FAQ→faq, 배송→cs/shipping).
    Do not use the same variant twice. Avoid three consecutive blocks of the same archetype.
+   discount 계열은 브리프/스크립트에 실제 가격·할인 정보가 있을 때만 선택하라(없으면 시스템이 제거한다).
 3. IMAGES — two modes:
    [INVENTORY MODE] (이미지 인벤토리가 주어짐): assign from inventory ONLY where the image's actual
    content supports the section (읽어라 — 노트가 실물이다). Rules:
@@ -269,6 +270,7 @@ ${imgLines || '(이미지 없음)'}${photosBlock}${heroBlock}${avoid}${repair}
 function validateBlueprint(
   bp: PageBlueprint,
   allowedUrls: ReadonlySet<string>,
+  briefCorpus?: string,
 ): { issues: string[]; gaps: string[] } {
   const issues: string[] = []
   const gaps: string[] = []
@@ -282,6 +284,15 @@ function validateBlueprint(
     s.imageUrls = s.imageUrls.filter((u) => allowedUrls.has(u))
     return true
   })
+
+  // 수리 1b: 브리프에 가격·할인 근거가 없으면 discount 계열 제거 — 조립 단계에서 무근거 가격
+  // 차단→가격 공백→블록 드롭으로 이어져 니즈 컷만 고아가 되는 낭비를 기획에서 차단(루미트론 실사례)
+  if (briefCorpus && !/\d[\d,.]*\s*(?:원|₩)|\d+\s*%\s*(?:할인|OFF|세일)|타임딜|특가/i.test(briefCorpus)) {
+    const before = bp.sections.length
+    bp.sections = bp.sections.filter((s) => arch(s.variantId) !== 'discount')
+    if (bp.sections.length < before)
+      console.warn(`[Page Planner] 가격 근거 없음 — discount 블록 ${before - bp.sections.length}개 제거(니즈 낭비 예방)`)
+  }
 
   // 검증: 스크립트 type → 아키타입 결정적 매핑 테이블 (Sprint 4-B)
   bp.sections.forEach((s, i) => {
@@ -352,7 +363,7 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
       console.warn('[Page Planner] ⚠ 출력이 max_tokens로 잘림 — JSON 불완전')
     const bp = blueprintSchema.parse(parseJsonResponse<unknown>(extractText(message.content))) as PageBlueprint
     bp.sections.sort((a, b) => a.order - b.order)
-    const { issues, gaps } = validateBlueprint(bp, allowedUrls)
+    const { issues, gaps } = validateBlueprint(bp, allowedUrls, JSON.stringify(input.brief))
     // 커버리지 갭(Sprint 4-C) — 실패가 아니라 "어떤 블록 계열을 만들어야 하는가"의 데이터
     if (gaps.length) console.warn(`[Coverage Gap] 매핑 테이블 미등재 스크립트 type: ${gaps.join(' · ')}`)
     if (issues.length) throw new Error(issues.join(' / '))

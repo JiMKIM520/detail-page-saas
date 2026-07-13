@@ -67,3 +67,21 @@ export function containSlotKeys(id: string): ReadonlySet<string> {
   containKeysCache.set(id, keys)
   return keys
 }
+
+/** 변형의 최상위 media 슬롯 키 전체 — render 소스의 media(d.X, …) 호출에서 자동 산출한다.
+ *  미사용 컷 재배치 패스가 "이 블록의 어느 필드에 이미지를 넣을 수 있는가"를 알기 위한 근거.
+ *  d.X 형태(최상위 필드)만 수집 — 배열 아이템 필드는 구조를 알 수 없어 재배치 대상에서 제외. */
+const mediaKeysCache = new Map<string, ReadonlySet<string>>()
+export function mediaSlotKeys(id: string): ReadonlySet<string> {
+  const hit = mediaKeysCache.get(id)
+  if (hit) return hit
+  const v = REGISTRY.get(id)
+  const keys = new Set<string>()
+  if (v) {
+    for (const m of String(v.render).matchAll(/(?:\bmedia|\.media\))\s*\(\s*([a-zA-Z_$][\w$]*)\.([a-zA-Z_$][\w$]*)\s*,/g)) {
+      keys.add(m[2])
+    }
+  }
+  mediaKeysCache.set(id, keys)
+  return keys
+}
