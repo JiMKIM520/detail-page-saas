@@ -1318,9 +1318,13 @@ function redistributeUnusedImages(
   }
 
   let reassigned = 0
-  for (const [url, note] of pool) {
+  const remaining = [...pool]
+  const take = (idx: number): string => remaining.splice(idx, 1)[0][0]
+
+  for (let i = 0; i < remaining.length; ) {
+    const [url, note] = remaining[i]
     const needId = ((url.split('/').pop() ?? '').split('?')[0]).replace(/^regen_/, '').replace(/\.[a-z]+$/i, '')
-    // 원본(intake) 컷은 클로징 금지 가드와 동일 원칙 — 재배치 대상에서 원본은 본문 블록만
+    // 원본(intake)은 클로징 금지 가드와 동일 원칙 — 무드 배경 재배치 불가, 본문만
     const isOriginal = url.includes('/intake-files/')
     let placed = false
     // 1순위: 원래 니즈의 소속 블록
@@ -1334,12 +1338,13 @@ function redistributeUnusedImages(
         placed = true
       }
     }
-    // 2순위: 태거 노트 ↔ 아키타입 키워드 매칭 (히어로·클로징 제외 — 대표컷·무드 마감은 계획 유지)
+    // 2순위: 태거 노트 ↔ 아키타입 키워드 매칭 (히어로 제외 — 대표컷은 계획 유지.
+    // 클로징 무드 배경은 생성컷에 한해 허용 — 원본만 금지가 가드와 정합)
     if (!placed) {
-      for (const b of spec.blocks.slice(1, -1)) {
+      for (const b of spec.blocks.slice(1)) {
         const arch = String(getVariant(b.variantId)?.archetype ?? '')
         if (isOriginal && arch === 'closing') continue
-        const kw = ARCH_NOTE_KEYWORDS[arch]
+        const kw = ARCH_NOTE_KEYWORDS[arch] ?? (arch === 'closing' ? /무드|연출|배경|라이프|공간/ : undefined)
         if (!kw || !kw.test(note)) continue
         const slot = openSlots(b)[0]
         if (slot) {
@@ -1350,8 +1355,48 @@ function redistributeUnusedImages(
         }
       }
     }
+    if (placed) remaining.splice(i, 1)
+    else i++
   }
-  return { reassigned, unused: pool.length - reassigned, used: usedUrls.size }
+
+  // 3순위: 배열 아이템 슬롯 일괄 주입 — usage 스텝·리스트류의 item.image는 균일화 가드
+  // (전부 있거나 전부 없거나) 대상이라, 모든 아이템을 채울 수 있을 때만 통째로 넣는다
+  // (스텝 균일화가 걷어낸 2컷이 통째 고아가 된 매일 실사례의 복구 경로).
+  for (const b of spec.blocks.slice(1, -1)) {
+    if (remaining.length === 0) break
+    const v = getVariant(b.variantId)
+    if (!v) continue
+    const arch = String(v.archetype ?? '')
+    if (TEXT_LED_ARCHETYPES.has(arch)) continue
+    const shape = (v.schema as { shape?: Record<string, unknown> } | undefined)?.shape ?? {}
+    // media 키인데 최상위 shape에 없는 키 = 배열 아이템 이미지 필드라는 결정적 신호
+    const itemKeys = [...mediaSlotKeys(b.variantId)].filter((k) => !(k in shape) && !containSlotKeys(b.variantId).has(k))
+    if (!itemKeys.length) continue
+    const data = (b.data ?? {}) as Record<string, unknown>
+    for (const val of Object.values(data)) {
+      if (!Array.isArray(val) || val.length < 2 || remaining.length < val.length) continue
+      const items = val.filter((it): it is Record<string, unknown> => Boolean(it) && typeof it === 'object')
+      if (items.length !== val.length) continue
+      const key = itemKeys[0]
+      if (items.some((it) => typeof it[key] === 'string' && /^https?:\/\//.test(String(it[key])))) continue
+      // 노트가 이 아키타입과 어울리는 컷 우선으로 아이템 수만큼 소진
+      const kw = ARCH_NOTE_KEYWORDS[arch]
+      const ranked = remaining
+        .map(([u, n], idx) => ({ idx, score: kw?.test(n) ? 1 : 0, u }))
+        .sort((a, b2) => b2.score - a.score)
+        .slice(0, items.length)
+      if (ranked.length < items.length) continue
+      ranked.sort((a, b2) => b2.idx - a.idx) // splice 안정성 — 뒤 인덱스부터 제거
+      const urls = ranked.map((r) => take(r.idx)).reverse()
+      items.forEach((it, j) => {
+        it[key] = urls[j]
+      })
+      reassigned += items.length
+      break
+    }
+  }
+
+  return { reassigned, unused: remaining.length, used: usedUrls.size }
 }
 
 /** 가격 없는 할인 블록 드롭 — 무근거 가격 차단이 값을 지우면 "정상가/타임딜가" 라벨만 남아
