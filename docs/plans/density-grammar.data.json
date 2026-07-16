@@ -1,0 +1,323 @@
+{
+ "grammar": [
+  {
+   "name": "화살표 시스템",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "4변형 통합: (A)손그림 곡선 2노드(body+arrowhead, 각 ~1200px), (B)직선 단방향 line+polygon, (C)두꺼운 블록 chevron polygon, (D)루프 12노드 폐경로. 기존 점선 화살표에 솔리드·곡선·블록·순환 변형 추가",
+   "placement": "섹션 전환 외부 여백·CTA 버튼 측면·인라인 리스트 접두사. 본문 바깥 데코 레이어로 분리, z-index 콘텐츠 아래",
+   "proportion": "손그림형 섹션폭 10-20%; 직선형 5-35%; 블록형 4-8%(거의 정사각); 루프형 20-28% 정사각",
+   "recipe": "/* A: 곡선 */ <path d='M10,80 Q35,5 90,38' stroke='var(--ink)' stroke-width='8' fill='none' stroke-linecap='round'/><path d='M80,24 L92,40 L72,44' stroke='var(--ink)' stroke-width='6' fill='none' stroke-linecap='round'/> /* B: 직선 */ <line x1='0' y1='8' x2='120' y2='8' stroke='var(--ink)' stroke-width='6'/><polygon points='112,-4 132,8 112,20' fill='var(--ink)'/> /* C: 블록 */ <polygon points='0,22 68,22 68,0 100,36 68,72 68,50 0,50' fill='var(--ink)' fill-opacity='.88'/> /* D: 루프 */ <path d='M50,5 A45,45 0 1,1 5,50' stroke='var(--ink)' stroke-width='8' fill='none'/><polygon points='-5,42 8,60 20,44' fill='var(--ink)'/>",
+   "tokenBinding": "stroke/fill=--ink; 강조 변형은 --accent로 교체; organic형(손그림)→stroke-width±2 불규칙, sharp-editorial형(블록)→fill 솔리드",
+   "frequency": 39
+  },
+  {
+   "name": "체크마크 시스템",
+   "kind": "신규",
+   "priority": 1,
+   "composition": "3변형: (A)V획 단순형 단일 polyline, (B)도트 궤적형 circle 10개 V배열, (C)원형 배지형 circle fill+polyline 조합. 다크/그린/브랜드 fill 8종 파생",
+   "placement": "리스트 불릿 선두(A), 완료 상태 중앙 배치(B), 상태 뱃지/체크박스(C). 텍스트 좌측 고정폭 영역 또는 카드 내 독립 아이콘",
+   "proportion": "A: 인라인 12-20px, 섹션 아이콘 64-120px; B: 바운딩박스 약 447×378; C: 1:1 정원형 렌더 24-96px",
+   "recipe": "/* A: V획 */ <polyline points='8,46 35,74 84,12' stroke='var(--accent)' stroke-width='9' fill='none' stroke-linecap='round' stroke-linejoin='round'/> /* B: 도트 */ [(8,46),(17,54),(27,62),(36,70),(46,70),(56,58),(67,46),(78,34),(86,22),(92,12)].forEach(([x,y])=>`<circle cx='${x}' cy='${y}' r='6' fill='var(--ink)'/>`).join('') /* C: 배지 */ <circle cx='50' cy='50' r='46' fill='var(--ink)'/><polyline points='22,52 40,70 78,28' stroke='#fff' stroke-width='9' fill='none' stroke-linecap='round'/>; .승인{fill:#3ab54a}",
+   "tokenBinding": "--accent(강조 체크), --ink(완료 배지 배경); form: neutral(A), organic(B), soft-round(C)",
+   "frequency": 25
+  },
+  {
+   "name": "말풍선 시스템",
+   "kind": "신규",
+   "priority": 1,
+   "composition": "5변형: (A)꼬리 하단-좌측형 rounded-rect+triangle path, (B)타이핑 도트형 bubble+3dots, (C)이중 중첩형 2 bubble 100-180px 오프셋, (D)Q&A 쌍 색반전 대화, (E)말풍선 칩 라벨 pill+꼬리",
+   "placement": "A: 리뷰·후기 카드 상단. B: 채팅 로딩. C: Q&A 섹션 독립 영역. D: Q(주조색)+A(흰색) 세로 스택. E: 이미지 오버레이 플로팅",
+   "proportion": "A body: 컬럼폭 55-80%; tail h=body h 18-22%. B 도트 3개 합산=body폭 28-32%. D Q 90px+A 167px. E pill w=프레임폭 30-38%",
+   "recipe": "/* A */ <path d='M12,0 H90 Q102,0 102,12 V50 Q102,62 90,62 H30 L18,80 L24,62 H12 Q0,62 0,50 V12 Q0,0 12,0Z' fill='var(--ink)'/> /* B */ .bubble{background:var(--ink);border-radius:12px;padding:20px 28px}.dots{display:flex;gap:14px}.dot{width:14px;height:10px;border-radius:50%;background:#fff;animation:bounce .66s infinite alternate} /* C */ 두 rect 100px 오프셋: fill조합 var(--ink)+var(--accent) /* D */ .qa-q{background:var(--brand);color:#fff}.qa-a{background:#fff;color:var(--ink)}.qa-q::after,.qa-a::after{border-top-color:inherit} /* E */ .img-chip{background:#fff;border-radius:9999px;color:var(--brand)}.img-chip::after{border-top-color:#fff}",
+   "tokenBinding": "--ink 기본 body, --brand Q버블·칩텍스트, --accent 타이핑 도트 강조; form: soft-round(A·E), neutral(B·D), arch-serif(C)",
+   "frequency": 49
+  },
+  {
+   "name": "원형 배지 시스템",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "4서브: (A)순위 메달(2중 원+순위텍스트 conic gradient), (B)동심원 씰 인장(3중 원+TEXT_PATH), (C)키포인트 배지 그리드(fill circle+내부 outline), (D)원형 원배너(이미지 코너 플로팅 배지). 기존 conic 강조 링에 rank/seal/grid 배치 규칙 추가",
+   "placement": "A: 상품 카드 좌상단 -24px 돌출. B: 행 우측 절대배치 상하 overflow. C: 섹션 내 2-3열 그리드 전폭. D: 이미지 하단-우측 10-15% 침범",
+   "proportion": "A: 84px(기본)~197px(씰); B: 외197·중179·내103px 동심; C: 콘텐츠폭/열수(3열→30.7%); D: 200-220px=프레임폭 23-26%",
+   "recipe": "/* A */ .rank-badge{width:84px;height:84px;border-radius:50%;background:conic-gradient(var(--accent) 0%,#b88532 40%,var(--accent));display:flex;align-items:center;justify-content:center} .rank-inner{width:80%;height:80%;border-radius:50%;background:var(--brand);color:var(--accent);font-weight:700} /* B SVG */ <circle cx='50' cy='50' r='49' stroke='var(--brand)' fill='white'/><circle cx='50' cy='50' r='44' stroke='var(--brand)' fill='none'/><circle cx='50' cy='50' r='26' fill='var(--brand)'/> /* C */ .circle-badge{aspect-ratio:1;border-radius:50%;background:var(--brand);outline:2px solid rgba(255,255,255,.45);outline-offset:-10px;color:#fff;font-weight:600} /* D */ .circle-badge-d{position:absolute;bottom:-10%;right:5%;width:clamp(160px,23%,220px);aspect-ratio:1;border-radius:50%;background:var(--brand);color:#fff}",
+   "tokenBinding": "--brand fill, --accent conic gradient stroke; form: soft-round(A·D), neutral(B TEXT_PATH), sharp-editorial(C 그리드)",
+   "frequency": 42
+  },
+  {
+   "name": "월계수·어워드 장식 시스템",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "3서브: (A)측면 기둥(leaf-pair 10-13개 스택, 3레이어 그림자→하이라이트→gradient), (B)원형 인장(잎 11-21개 rotate 배열+중앙 텍스트), (C)좌우 플랭킹 프레임(SVG 30+ ellipse rotate 반복+mirrored)",
+   "placement": "A: 콘텐츠 열 좌우 미러링, 프레임 사이드 접함. B: 어워드 카드 내부 상단 2/3 중앙. C: 인증서 섹션 좌우 가장자리 맞닿아",
+   "proportion": "A: 기둥 높이 36-38% 프레임, 폭 32-33%; B: 배지 전체 150px, 잎 높이 92%; C: 각 반쪽 폭 약 30% 프레임",
+   "recipe": "/* A */ <g class='laurel-col'> for(i=0;i<13;i++) `<g transform='translate(0,${i*42})'><path d='M0,0 C10,-15 40,-15 65,0 C65,0 65,28 0,28Z' fill='#755223' transform='translate(0,4)'/><path d='M0,0 C10,-15 40,-15 65,0Z' fill='#fff9c5'/><path d='M0,0 C-15,10 -15,40 0,65Z' fill='#755223' transform='translate(4,0)'/></g>` /* B SVG 150x131 */ for(i=0;i<11;i++) `<ellipse cx='0' cy='-52' rx='7' ry='19' fill='url(#leaf-g)' transform='rotate(${i*14-70} 75 65)'/>` /* C */ <ellipse cx='200' cy='100' rx='15' ry='40' fill='url(#laurel-g)' transform='rotate(-30 200 100)'/> 30+회 반복; <g transform='scale(-1,1) translate(-860,0)'>로 우측 미러",
+   "tokenBinding": "leaf gradient: --accent(#d8ac55 기준) 3단계; form: organic; --ink 그림자 레이어",
+   "frequency": 6
+  },
+  {
+   "name": "방사형 광채 코로나",
+   "kind": "보강",
+   "priority": 2,
+   "composition": "기존 radial 스포트라이트에 동심원 3-4개(150-450px)+부채꼴 방사선 polygon 6개(60° 간격) 추가. 글로우 오버레이 변형(프레임폭 140-160% 타원)과 스타 필드(200+개 흰 도트 1-4px) 서브타입 포함",
+   "placement": "모든 콘텐츠 레이어 아래(d:1-2). 코로나 중심점=배지 중심; 글로우 타원 중심=프레임 중앙 또는 상단 1/3; 스타필드=어두운 배경 전체",
+   "proportion": "코로나 외원 지름=프레임폭 40-55%(860px→344-473px); 글로우 원 지름=프레임폭 1.4-1.6x; 스타필드 도트=프레임폭 0.1-0.5%",
+   "recipe": "/* 코로나 */ <defs><radialGradient id='corona' cx='50%' cy='50%'><stop offset='0%' stop-color='var(--accent)' stop-opacity='.7'/><stop offset='60%' stop-color='var(--brand)' stop-opacity='.25'/><stop offset='100%' stop-color='transparent'/></radialGradient></defs><circle r='40' fill='url(#corona)'/><circle r='80' fill='url(#corona)'/><circle r='120' fill='url(#corona)'/> + 6 <polygon points='cx,cy ...' fill='url(#corona)' opacity='.35'/> /* 글로우 */ .radial-glow{width:145%;height:145%;border-radius:50%;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--accent) 45%,transparent) 0%,transparent 65%);z-index:0} /* 스타필드 CSS */ background:radial-gradient(1px 1px at x% y%,#fff 100%,transparent) 반복",
+   "tokenBinding": "--accent 코로나 중심 발광, --brand 중간 링; 어두운 배경 전제; form: organic",
+   "frequency": 6
+  },
+  {
+   "name": "파티클·컨페티 산란",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "3서브: (A)금속 파티클(극좌표 분포 원형 도트 100-200개, 3-12px, gradient 금색), (B)핑크 컨페티(다형 30-50개 5-30px + 광택 오버레이 radial-gradient), (C)장식 별 스캐터(32/41/64px 별 3개 이미지 주변 부유)",
+   "placement": "A: 코로나 링 겹침, 메인 배지보다 1 z레이어 위, 산란 반경=프레임폭 17%. B: 이미지 주변 d=6-7, 이미지폭 60-80% 반경. C: 이미지 프레임 좌하·우하·좌상 절대위치",
+   "proportion": "A: 개별 0.35-1.4% 프레임폭; B: 파티클 동일+광택 이미지폭 60%; C: 소/중/대 32/41/64px",
+   "recipe": "/* A */ Array.from({length:120}).map(()=>{const r=20+Math.random()*130,a=Math.random()*Math.PI*2;return `<circle cx='${cx+r*Math.cos(a)}' cy='${cy+r*Math.sin(a)}' r='${2+Math.random()*4}' fill='var(--accent)' opacity='${.4+Math.random()*.5}'/>`}).join('') /* B 광택 */ .photo-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 25%,rgba(255,255,255,.45) 0%,transparent 60%);mix-blend-mode:overlay;pointer-events:none} /* C */ .star-scatter .s-lg{width:64px;height:64px;background:var(--brand);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}",
+   "tokenBinding": "--accent 금속 파티클 gradient, --brand 별 스캐터 fill; form: organic",
+   "frequency": 8
+  },
+  {
+   "name": "구조 디바이더 시스템",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "기존 물결 디바이더에 3변형 추가: (A)라인-다이아몬드-라인(수평선+rotate 45° 사각형+수평선), (B)수평 세선(1px stroke), (C)말풍선 형태 디바이더(rect+하단 삼각 tail full-width). A는 타이틀 하단 강조선, B는 카드 내부 구분·Q&A 항목 분리, C는 섹션 전환 브리지",
+   "placement": "A: 타이틀 텍스트 아래 수평 중앙, 폭=프레임폭 53%. B: 좁은형(136px 중앙) vs 넓은형(700px 전폭). C: 섹션 경계 full-width",
+   "proportion": "A: 선:다이아:선=4:1:4(186:49:186px); B: stroke 1px; C: rect h=159px+tail h=84px",
+   "recipe": "/* A */ .divider{display:flex;align-items:center} .line{flex:1;height:3px;background:var(--accent)} .diamond{width:49px;height:49px;background:var(--accent);transform:rotate(45deg);margin:0 -17px;z-index:1} /* B */ .section-divider{width:81.4%;height:1px;background:rgba(0,0,0,.12);margin:16px auto} /* C */ .callout-divider{position:relative;width:100%;height:159px;background:var(--bg-tint)} .callout-divider::after{content:'';position:absolute;bottom:-84px;left:50%;transform:translateX(-50%);border-left:94.5px solid transparent;border-right:94.5px solid transparent;border-top:84px solid var(--bg-tint)}",
+   "tokenBinding": "--accent A 다이아몬드+라인, --ink B 세선; form: sharp-editorial(A), neutral(B·C)",
+   "frequency": 8
+  },
+  {
+   "name": "KPI 슈퍼스크립트 닷·언더라인",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "2변형: (A)슈퍼스크립트 닷(fs:160 숫자+Ellipse 20px 우상단 절대위치+fs:90 단위), (B)KPI 언더라인 벡터(fs:120 수치+h:25px rounded bar 하단 중앙정렬). 메가 히어로형(fs:180 Black+카테고리 라벨)도 포함",
+   "placement": "A: 누적판매 KPI 블록, 숫자 컨테이너 top:8px right:-12px. B: 이미지 프레임 내부 중앙 상단 오버레이. 메가: 섹션 최상단 전폭 중앙",
+   "proportion": "A: 닷 지름=숫자폭 19.8%; 숫자폭=프레임폭 11.7-12%. B: 언더라인 w=프레임폭 46%, h=25px. 메가: fs=프레임폭 21vw",
+   "recipe": "/* A */ .kpi{position:relative;display:inline-flex;align-items:baseline;gap:4px} .kpi-num{font-size:clamp(80px,18.6vw,160px);font-weight:700;line-height:.9;color:var(--accent)} .kpi-dot{position:absolute;top:8px;right:-12px;width:20px;height:20px;border-radius:50%;background:var(--accent)} .kpi-unit{font-size:clamp(45px,10.5vw,90px);font-weight:700;color:var(--accent)} /* B */ .kpi-line{display:block;width:46%;height:25px;background:var(--accent);margin:4px auto 0;border-radius:12px} /* 메가 */ .hero-kpi{font-size:clamp(4rem,21vw,11.25rem);font-weight:900;color:var(--accent);line-height:.95}",
+   "tokenBinding": "--accent 전체 fill; form: sharp-editorial",
+   "frequency": 4
+  },
+  {
+   "name": "인라인 이색 타이포그래피",
+   "kind": "보강",
+   "priority": 2,
+   "composition": "기존 아웃라인·고스트 타이포에 인라인 이색 변형 추가: 동일 줄 Regular+액센트색 span과 Semi-Bold+다크색 span 혼재. 대형 영문 장식 타이포(fs:80 Bold, 반투명 배경 오버레이)도 서브타입으로 통합",
+   "placement": "섹션 헤드라인 영역. 이미지 아래 또는 이미지에 겹쳐 오버레이. 영문 장식형은 한국어 제목 위 중앙 정렬 독립 레이어",
+   "proportion": "이색형 fs:45-75px; 영문 장식형 fs:80 h≈80px; Regular부분과 Semi-Bold 부분 동일 line-height",
+   "recipe": "/* 이색 */ .headline-mixed{font-size:clamp(45px,6vw,75px);font-weight:400;color:var(--ink);line-height:1.15} .headline-mixed .accent{font-weight:600;color:var(--accent)} /* 영문 장식 */ .deco-text{font-size:80px;font-weight:700;line-height:1;letter-spacing:-.02em;opacity:.85;pointer-events:none;user-select:none;color:var(--ink)}",
+   "tokenBinding": "--ink 기본 Regular 구간, --accent Semi-Bold 강조 구간; form: arch-serif(이색), sharp-editorial(영문 장식)",
+   "frequency": 4
+  },
+  {
+   "name": "섹션 라벨 칩 시스템",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "기존 킥커 라벨·형광 마커에 3변형 추가: (A)pill 칩(r=9999, h:32-58px, 투명 또는 브랜드색), (B)키워드 칩(r=8-10, full-width 카드 내부, h:52px), (C)텍스트 하이라이트 스트립(position:absolute h:32px, mix-blend-mode:multiply). 타원 배지형(234×80 ELLIPSE+텍스트)도 통합",
+   "placement": "A: 섹션 진입부 상단 중앙(프레임폭 13-40%). B: 리뷰 카드 상단 첫 요소 전폭. C: 리뷰 카드 내 본문 텍스트 하단 우측",
+   "proportion": "A: h:32-58px, w:텍스트 의존 111-344px; B: w:100% 카드 내부, h:52px; C: h:32px 고정, w:40-85% 카드폭",
+   "recipe": "/* A pill */ .section-chip{display:inline-flex;align-items:center;padding:6px 24px;border-radius:9999px;background:var(--accent);font-size:20px;color:#fff;white-space:nowrap} /* B keyword */ .review-chip{display:block;width:100%;padding:8px 16px;background:var(--brand);border-radius:10px;color:#fff;font-size:30px;text-align:center} /* C strip */ .highlight-strip{position:absolute;height:32px;background:color-mix(in srgb,var(--accent) 30%,transparent);border-radius:4px;mix-blend-mode:multiply;pointer-events:none} /* 타원 */ .ellipse-badge{display:inline-flex;align-items:center;justify-content:center;width:30.8%;aspect-ratio:2.93;background:var(--accent);border-radius:50%;font-size:1.875rem;font-weight:700;color:var(--ink)}",
+   "tokenBinding": "--accent A·타원 배경, --brand B 키워드 칩; form: soft-round(A·타원), neutral(B), sharp-editorial(C)",
+   "frequency": 7
+  },
+  {
+   "name": "기능 카드 그리드 시스템",
+   "kind": "신규",
+   "priority": 1,
+   "composition": "4서브: (A)퍼센트 수치 카드(2×3, r:20, 카테고리+설명+대형 KPI), (B)원형 아바타 카드(2×3, r:20, 원형 칩+설명), (C)교대 체크보드(2열, 홀짝 fill 반전), (D)피처 아이콘 카드(2×2, r:40-60, 아이콘원+제목+설명). 공통: 흰 둥근 카드+데이터 영역+텍스트 계층",
+   "placement": "섹션 전체폭 2열 그리드. A: 히어로 KPI 직하단. B: 다크 섹션 헤더 아래. C: 서브타이틀 직하단. D: 이미지 없는 독립 섹션",
+   "proportion": "A/B/C 카드폭=섹션폭 41-50%(gap포함); D 카드폭=섹션폭 48%; 카드 높이=섹션폭 30-50%",
+   "recipe": "/* 공통 그리드 */ .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px} .card{background:#fff;border-radius:20px;padding:24px} /* A KPI */ .stat-kpi{font-size:clamp(3rem,9vw,5.625rem);font-weight:900;color:var(--accent)} /* B 아바타 */ .avatar-chip{width:135px;height:135px;border-radius:50%;background:var(--bg-tint);margin:47px auto 20px} /* C 교대 */ .card:nth-child(4n+1),.card:nth-child(4n+4){background:var(--accent)} .card:nth-child(4n+2),.card:nth-child(4n+3){background:#fff} /* D 피처 */ .feature-card{border-radius:40px;background:color-mix(in srgb,var(--brand) 15%,white)} .icon-circle{width:90px;height:90px;border-radius:50%;background:#fff}",
+   "tokenBinding": "--accent A KPI 수치 + C 강조 셀, --brand D 카드 배경 틴트; form: soft-round(A·B), neutral(C), soft-round(D)",
+   "frequency": 20
+  },
+  {
+   "name": "데이터 시각화 요소 시스템",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "4서브: (A)수평 진행 바(h:30 rounded, 성분명+퍼센트 텍스트), (B)원형 페어 비교(대형 원 2개 300px+'+'커넥터), (C)계단식 그레이스케일 바 스트립(10단계 flex 막대), (D)캘린더 그리드(7열 셀+오버레이 바+원형 마커). 섹션마다 1종",
+   "placement": "A: 영양·성분 카드 데이터 행. B: 카드 수평 중앙 하단. C: 아이콘 그룹 하단 구분선. D: CS 섹션 대형 헤드라인 아래",
+   "proportion": "A: 바 h=30px, max-w=87% 컨테이너. B: 원 300px=카드폭 41%. C: 막대 1개 폭=스트립폭 6-10%. D: 셀 100×115px 7열",
+   "recipe": "/* A */ .bar-fill{height:30px;border-radius:100px;background:var(--brand);width:var(--pct)} /* B */ .pair-circles{display:flex;align-items:center;gap:12px} .data-circle{width:300px;height:300px;border-radius:50%;background:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center} /* C */ .bar-strip{display:flex} .bar:nth-child(1){background:#231f20} .bar:nth-child(5){background:#808285} .bar:nth-child(10){background:#e6e7e8} /* D */ .cal-grid{display:grid;grid-template-columns:repeat(7,100px);grid-template-rows:repeat(2,115px);position:relative} .today-circle{position:absolute;width:95px;height:95px;background:var(--ink);border-radius:50%;color:#fff} .holiday-bar{position:absolute;height:42px;border-radius:30px;background:var(--brand)}",
+   "tokenBinding": "--brand A·D 진행 바 fill, --accent B 원형 페어; C: --ink 그레이스케일(토큰 무관); form: neutral(A·C), soft-round(B·D)",
+   "frequency": 12
+  },
+  {
+   "name": "위치·공간 시스템",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "3서브: (A)핀 마커(눈물방울형 body+inner hole+그라운드 섀도), (B)건물 실루엣(#000 fill rect+창문 punch-out 반복 8-15개), (C)버스/교통 아이콘(차체 rect+창문+바퀴 원 2개). A는 지도 오버레이, B는 배경 레이어, C는 텍스트 아이콘",
+   "placement": "A: 지도 캔버스 절대좌표 다수. B: 지도 또는 위치 섹션 배경 전체. C: 교통 안내 텍스트 옆 인라인 아이콘",
+   "proportion": "A: 렌더 40-120px, 바운딩박스 가로:세로=0.64-0.74:1. B: 개별 폭=섹션폭 5-15%, 높이 20-50%. C: 가로:세로=1.24:1, 48-96px",
+   "recipe": "/* A */ .map-pin{position:absolute;display:flex;flex-direction:column;align-items:center} .map-pin__body{width:40px;height:40px;background:var(--accent);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:-2px 2px 0 color-mix(in srgb,var(--accent) 80%,black)} .map-pin__shadow{width:14px;height:5px;background:#9b9b9b;border-radius:50%;margin-top:2px;opacity:.7} /* B */ <svg viewBox='0 0 860 300' fill='var(--ink)'><rect x='40' y='80' width='120' height='220'/><rect x='60' y='100' width='25' height='30' fill='white'/></svg> /* C */ <rect x='5' y='18' width='90' height='52' rx='8' fill='var(--ink)'/><circle cx='22' cy='70' r='10' fill='rgba(255,255,255,.25)'/><circle cx='78' cy='70' r='10' fill='rgba(255,255,255,.25)'/>",
+   "tokenBinding": "--accent A 핀 마커(레드 기본→교체 가능), --ink B 실루엣+C 아이콘; form: organic(A), sharp-editorial(B), neutral(C)",
+   "frequency": 21
+  },
+  {
+   "name": "가격·CTA 밴드 시스템",
+   "kind": "신규",
+   "priority": 1,
+   "composition": "5서브: (A)중첩 박스 가격 배너(외 크림+내 컬러바+가격 텍스트), (B)다크 CTA 밴드(h:82px 단일행 또는 h:227px 멀티라인), (C)풀폭 컬러 레이블 바(h:78px 섹션 상단), (D)풀너비 컬러 배너(슬림 h:65 또는 톨 h:350+아이콘 그리드), (E)비포애프터 헤더 칩(2분할 색반전 쌍)",
+   "placement": "A: 이미지→가격→CTA 흐름 중간. B: 섹션 최하단. C: 섹션 시작 선언 레이블. D: 섹션 닫음 또는 분리자. E: 비교 패널 상단",
+   "proportion": "A: 외박스=프레임폭 89.5%, 내바=84%, 바 h=박스 h 37%. B: w=81-90% 프레임. C: w=100%, h=78px. D: w=100%. E: 각 50% 컬럼",
+   "recipe": "/* A */ .price-banner{background:#fefaf2;border-radius:20px;padding:24px} .color-bar{background:var(--brand);border-radius:16px;padding:20px 24px;display:flex;justify-content:space-between;color:#fff} /* B */ .dark-band{background:color-mix(in srgb,var(--ink) 85%,transparent);border-radius:16px;color:#fff;text-align:center} .dark-band.cta{height:82px;display:flex;align-items:center;justify-content:center} /* C */ .point-label-bar{width:100%;height:78px;background:var(--brand);display:flex;align-items:center;padding-left:20px;font-size:2.8125rem;font-weight:600;color:#fff} /* D */ .banner-slim{width:100%;background:var(--brand);color:#fff;text-align:center;padding:8px 20px} /* E */ .ba-header.before{background:#dbdbdb;color:#737373} .ba-header.after{background:var(--brand);color:#fff;font-weight:700}",
+   "tokenBinding": "--brand B·C·D·E-after fill, --ink A 내부 컬러바 어두운 variant; form: neutral(A·B), sharp-editorial(C·D), soft-round(E)",
+   "frequency": 12
+  },
+  {
+   "name": "어워드 카드·배너",
+   "kind": "보강",
+   "priority": 2,
+   "composition": "기존 킥커 라벨에 3서브 추가: (A)라운드 그라디언트 어워드 카드(r:20, 2열 그리드, 배지+텍스트), (B)수평 어워드 배너(GRADIENT 바+양단 원형 엔드캡), (C)전폭 컬러 배너 스트립(h:66, 좌우 텍스트 2분할)",
+   "placement": "A: 프레임 하단 40% 2열 그리드 gap:26px. B: 어워드 섹션 수평 중앙, 폭=프레임폭 60-70%. C: 프레임 최상단(y=0, z-index 최상위)",
+   "proportion": "A: 카드폭=프레임폭 41.6%; B: 배너폭 65%, 높이=폭 17-22%; C: 폭 100%, h:66px",
+   "recipe": "/* A */ .award-card{border-radius:20px;background:linear-gradient(160deg,color-mix(in srgb,var(--brand) 30%,black),color-mix(in srgb,var(--brand) 50%,black));padding:28px 16px;display:flex;flex-direction:column;align-items:center} /* B */ .award-banner{display:flex;align-items:center;width:65%;margin:0 auto} .award-banner__track{flex:1;height:56px;background:linear-gradient(90deg,var(--brand),var(--accent) 50%,var(--brand));color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center} .award-banner__cap{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--brand))} /* C */ .banner-strip{width:100%;height:66px;background:var(--accent);display:flex;justify-content:space-between;align-items:center;padding:0 20px;color:#fff}",
+   "tokenBinding": "--accent B·C 강조 배너, --brand A 카드 그라디언트 베이스; form: soft-round(A), sharp-editorial(C), neutral(B)",
+   "frequency": 4
+  },
+  {
+   "name": "어워드 트로피·별점 시스템",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "3서브: (A)SVG 트로피 아이콘(컵+손잡이 3레이어 그림자→하이라이트→gradient), (B)별점 5개 행(STAR×5, 크기 30-68px, 카드/섹션 2용도), (C)텍스트 간 스타 인터럽터(19×19px 별, 텍스트 상단 리듬 배치)",
+   "placement": "A: 프레임 최상단 중앙, 헤드라인 기준 130px 이격. B: 리뷰 카드 상단 또는 섹션 헤드라인 직상단 독립 행. C: 헤드라인 텍스트 청크 위, 60° 간격 배치",
+   "proportion": "A: 폭=프레임폭 14.4%, 높이=프레임높이 8.5%. B: 카드용 30px×5=162px, 섹션용 68px×5=340px. C: 별 크기=본문 fs 25%",
+   "recipe": "/* A */ <filter id='sh'><feDropShadow dx='2' dy='3' stdDeviation='0' flood-color='color-mix(in srgb,var(--accent) 60%,black)'/></filter><g filter='url(#sh)'><path fill='url(#gold)' d='M62,8 C62,8 88,10 88,38L88,54Q88,70 62,70Q36,70 36,54L36,38C36,10 62,8 62,8Z'/><path fill='url(#gold)' d='M36,24 Q18,24 18,40Q18,54 36,54'/><path fill='url(#gold)' d='M88,24 Q106,24 106,40Q106,54 88,54'/></g> /* B */ .star-row{display:flex;gap:2px} .star-row svg{fill:var(--accent)} /* SVG M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26Z */ /* C */ .star-text{display:flex;flex-direction:column;align-items:center} .star-text__icon{font-size:.25em;background:linear-gradient(var(--accent),var(--brand));-webkit-background-clip:text;-webkit-text-fill-color:transparent}",
+   "tokenBinding": "--accent 별 fill + 트로피 gradient, --brand 트로피 그림자; form: organic(A 3레이어), neutral(B), arch-serif(C)",
+   "frequency": 7
+  },
+  {
+   "name": "말풍선 Q&A + 타이핑 인디케이터",
+   "kind": "신규",
+   "priority": 1,
+   "composition": "2서브: (A)Q&A 쌍(Q h:90px 주조색+A h:167px 흰색, 각 좌우 삼각 꼬리), (B)타이핑 인디케이터(bubble body + 도트 3개 bounce 애니메이션). 말풍선 코너 점 장식(17px 정원 2-3개 코너 내측) 옵션 포함",
+   "placement": "A: Q&A 섹션 세로 스택, 각 쌍 사이 가로선 디바이더. B: 플로팅 레이어 또는 채팅 UI 본문 하단. 코너 점: bubble 바운딩 박스 내 50px 위치",
+   "proportion": "A: bubble 폭=프레임폭 81.4%, Q:90px, A:167px, 꼬리 22×22px. B: 도트 3개 총 스팬=body폭 28-32%",
+   "recipe": "/* A */ .qa-q{background:var(--brand);color:#fff;min-height:90px;border-radius:20px;padding:16px 16px 16px 74px;position:relative} .qa-q::after{content:'';position:absolute;bottom:-22px;left:0;width:22px;height:22px;background:var(--brand);clip-path:polygon(0 0,100% 0,0 100%)} .qa-a{background:#fff;color:var(--ink);min-height:167px} .qa-a::after{clip-path:polygon(0 0,100% 0,100% 100%);right:0} /* B */ .dots{display:flex;gap:14px;justify-content:center} .dot{width:14px;height:10px;border-radius:50%;background:#fff;animation:bounce .66s infinite alternate} @keyframes bounce{to{transform:translateY(-6px)}} /* 코너 점 */ .corner-dot{position:absolute;width:17px;height:17px;border-radius:50%;background:var(--ink)}",
+   "tokenBinding": "--brand Q버블 fill, --ink A 텍스트; B: --brand bubble, 흰 dot; form: soft-round",
+   "frequency": 18
+  },
+  {
+   "name": "동심원 인장 뱃지 (씰)",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "기존 conic 강조 링에 3중 동심원 씰 형태 추가: 외곽 링(stroke only 또는 fill white) + 중간 링(stroke+텍스트 레일) + 내원(fill 주조색+중앙 아이콘). TEXT_PATH 2개로 원호 텍스트. 로우 배치(3개 균등 가로 배열) / 이미지 코너 플로팅 두 배치 변형",
+   "placement": "로우: 섹션 주 이미지 직하단, 콘텐츠폭 3등분. 플로팅: 이미지 하단 좌측 모서리 -60px(좌) -27px(하) 돌출",
+   "proportion": "배지 지름 197px; 외197·중179·내103px; 로우 배치 슬롯=콘텐츠폭/3=253px; 플로팅 지름=이미지폭(300px)의 65.7%",
+   "recipe": "/* SVG 197×197 */ <circle cx='98.5' cy='98.5' r='97' stroke='var(--brand)' stroke-width='2.5' fill='white'/><circle cx='98.5' cy='98.5' r='88' stroke='var(--brand)' stroke-width='1.5' fill='none'/><circle cx='98.5' cy='98.5' r='51.5' fill='var(--brand)'/> <defs><path id='arc-outer' d='M 20 98.5 A 78.5 78.5 0 0 1 177 98.5'/><path id='arc-inner' d='M 30 98.5 A 68.5 68.5 0 0 1 167 98.5'/></defs><text><textPath href='#arc-outer' startOffset='50%' text-anchor='middle' fill='var(--brand)' font-size='13'>CERTIFIED</textPath></text> /* 플로팅 */ .floating-seal{position:absolute;width:197px;height:197px;left:-60px;bottom:-27px}",
+   "tokenBinding": "--brand 내원 fill + TEXT_PATH + 외중 stroke; form: neutral(로우), arch-serif(플로팅)",
+   "frequency": 12
+  },
+  {
+   "name": "리뷰 카드 구조",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "기존 오버랩 캡션 카드에 리뷰 특화 구조 추가: 흰 둥근 카드(r:12-20) + 상단 키워드 칩 + 별점 행 + 본문 텍스트 + 하단 말풍선 꼬리(흰 삼각). 대형 평점 숫자 앵커(fs:196 bold + fs:88 단위)를 섹션 상단에 배치",
+   "placement": "컬러 배경 섹션 내 세로 스택(gap:30px, 카드 폭=프레임폭 88%). 평점 앵커는 리뷰 섹션 상단 우측 정렬",
+   "proportion": "카드 폭=760px(88%), 높이 149-258px 가변; 별점 행 총폭 162px(카드폭 21%); 평점 앵커 fs:196=프레임 h 11%",
+   "recipe": ".review-card{width:88%;background:#fff;border-radius:16px;padding:20px} .review-card .stars{display:flex;gap:0;margin-bottom:12px} .review-card::after{content:'';position:absolute;bottom:-24px;left:20px;border-left:20px solid transparent;border-right:20px solid transparent;border-top:25px solid #fff} /* 평점 앵커 */ .giant-rating{display:flex;align-items:baseline;gap:4px} .giant-rating .num{font-size:196px;font-weight:700;color:var(--ink)} .giant-rating .unit{font-size:88px;font-weight:700;color:color-mix(in srgb,var(--ink) 60%,transparent)}",
+   "tokenBinding": "--ink 평점 숫자, --accent 별점 fill; form: soft-round(카드), neutral(평점 앵커)",
+   "frequency": 8
+  },
+  {
+   "name": "폴라로이드·오프셋 섀도 스택",
+   "kind": "보강",
+   "priority": 2,
+   "composition": "기존 플로팅 제품·오프셋 섀도 칩에 2서브 추가: (A)폴라로이드 스택(3레이어 카드 회전 적층, 뒤판 5° 회전+필름 탭+앞면), (B)레이어 오프셋 섀도(동일 형상 12개를 x+n, y+n 1px씩 누적, fill:#7e727d 단색)",
+   "placement": "A: 섹션 본문 중앙 또는 텍스트와 좌우 분할 이미지 역할. B: 카드 또는 아이콘 요소 뒤 z-index 낮음, 좌상단 12px 돌출",
+   "proportion": "A: 스택 전체=섹션폭 20%(174px); 뒤판 h=앞면 h 113%. B: 섀도 외곽=전경 103-106%, 최대 오프셋=단변의 7%",
+   "recipe": "/* A */ .polaroid-stack{position:relative;width:174px;height:200px} .card.back{position:absolute;width:174px;height:166px;transform:rotate(-5deg);transform-origin:bottom center;border-radius:10px;background:#eee} .card.front{position:absolute;width:164px;height:147px;top:30px;left:5px} /* B CSS multi-shadow */ .icon-with-shadow::before{content:'';position:absolute;inset:0;background:color-mix(in srgb,var(--brand) 60%,#7e727d);border-radius:inherit;box-shadow:1px 1px 0,2px 2px 0,3px 3px 0,4px 4px 0,5px 5px 0,6px 6px 0,7px 7px 0,8px 8px 0,9px 9px 0,10px 10px 0,11px 11px 0,12px 12px 0;box-shadow-color:inherit;transform:translate(-12px,-12px)}",
+   "tokenBinding": "--brand B 섀도 fill(모브 계열 대체 가능); form: organic(A 폴라로이드), sharp-editorial(B 오프셋)",
+   "frequency": 5
+  },
+  {
+   "name": "십자·팬·폴리곤 배경 장식",
+   "kind": "신규",
+   "priority": 3,
+   "composition": "3서브: (A)십자형 배경 장식(::before+::after 수직·수평 막대, 대114/중47/소29px 3사이즈, opacity 0.5 gradient), (B)식물형 팬 테두리(30-35개 팬 ellipse 좌우 미러, fill 거의 검정), (C)배경 폴리곤 스캐터(불규칙 다각형 15-16개, 단일 중간 회색, 자유 배치)",
+   "placement": "A: 배경 장식 전용 레이어(d:8-9), 배지·텍스트와 z레벨 분리. B: 콘텐츠 이미지 좌우 테두리 그림자. C: 섹션 배경 전체 z최하단",
+   "proportion": "A: 대=프레임폭 13.3%, 중5.5%, 소3.4%; B: 팬 높이=프레임 h 38%, 폭 35%; C: 개별=섹션폭 15-25%",
+   "recipe": "/* A */ .cross{position:absolute;--s:114px;width:var(--s);height:var(--s)} .cross::before,.cross::after{content:'';position:absolute;top:50%;left:50%;background:linear-gradient(135deg,var(--accent),var(--brand));opacity:.5} .cross::before{width:calc(var(--s)*.088);height:calc(var(--s)*.59);transform:translate(-50%,-50%)} .cross::after{width:calc(var(--s)*.59);height:calc(var(--s)*.07);transform:translate(-50%,-50%)} /* B */ for(i=0;i<30;i++) `<ellipse cx='54' cy='195' rx='${54-i*.8}' ry='195' fill='var(--ink)' opacity='${.85-i*.018}'/>` clipPath 좌절반 마스크 /* C */ <ellipse cx='120' cy='80' rx='90' ry='60' fill='color-mix(in srgb,var(--ink) 30%,transparent)' opacity='.45' transform='rotate(-20 120 80)'/> 반복",
+   "tokenBinding": "--accent·--brand A 크로스 gradient, --ink B 팬·C 폴리곤; form: organic(B), sharp-editorial(A), neutral(C)",
+   "frequency": 4
+  },
+  {
+   "name": "시계 아이콘 시스템",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "3서브: (A)표준 아날로그(원형 outline+분침 세로+시침 가로우세+중심점), (B)스톱워치(원형 body+상단 크라운 rect+사이드 돌출 버튼 2개+단침), (C)모래시계(상하 대칭 삼각+외곽 수직선+크라운 rect). 눈금 링(12개 rect 방사형+clip-path) 옵션",
+   "placement": "배송·운영시간 섹션 아이콘(A:40-80px), urgency 배너(B:60-100px), 한정판매 강조(C:60-100px), 눈금링은 시계 내부 테두리",
+   "proportion": "A: 외곽 stroke=지름 7%; B: 바운딩박스 가로:세로=0.86:1; C: 가로:세로=0.44-0.50:1",
+   "recipe": "/* A */ <circle cx='50' cy='50' r='44' stroke='var(--ink)' stroke-width='4' fill='none'/><line x1='50' y1='50' x2='50' y2='13' stroke='var(--ink)' stroke-width='3'/><line x1='50' y1='50' x2='72' y2='36' stroke='var(--ink)' stroke-width='5' stroke-linecap='round'/><circle cx='50' cy='50' r='3' fill='var(--ink)'/> /* B */ <rect x='36' y='18' width='28' height='10' rx='3' fill='var(--ink)'/><circle cx='30' cy='22' r='5' fill='var(--ink)'/><circle cx='70' cy='22' r='5' fill='var(--ink)'/><circle cx='50' cy='60' r='38' stroke='var(--ink)' stroke-width='4' fill='none'/><line x1='50' y1='60' x2='66' y2='38' stroke='var(--ink)' stroke-width='3.5' stroke-linecap='round'/> /* C */ <polygon points='10,2 90,2 50,50' fill='var(--ink)'/><polygon points='10,98 90,98 50,50' fill='var(--ink)'/><rect x='5' y='-5' width='90' height='10' rx='3' fill='var(--ink)'/>",
+   "tokenBinding": "--ink 모든 변형; 강조 버전은 stroke=--accent; form: neutral",
+   "frequency": 9
+  },
+  {
+   "name": "클릭 커서 시스템",
+   "kind": "신규",
+   "priority": 2,
+   "composition": "2서브: (A)포인터 커서(단일 path 28개 미세 변형, fill=#231f20, 가로:세로=0.68-0.75:1), (B)클릭 물결 효과(동심원 3개, 반지름 16/30/46, opacity 0.85/0.55/0.30 단계 감소). B는 CSS animation 버전 포함",
+   "placement": "A: CTA 버튼 위·아래·좌측 장식, 인터랙션 유도. B: 버튼 hover/active 장식, 터치 인터랙션 강조",
+   "proportion": "A: 인라인 16-24px, 장식형 80-160px. B: 바운딩박스 1:1 80-200px, 내:중:외 반지름=1:1.9:2.9",
+   "recipe": "/* A */ <path d='M22,4 L22,68 L34,53 L46,80 L54,77 L42,49 L60,49Z' fill='var(--ink)'/> 선단(22,4) x·엄지분기 y(53)·하단돌출 y(80)·우측돌출 x(60) 파라미터를 ±4px 변조해 28종 생성 /* B */ <circle cx='50' cy='50' r='16' stroke='var(--ink)' stroke-width='3.5' fill='none' opacity='.85'/><circle cx='50' cy='50' r='30' stroke='var(--ink)' stroke-width='2.5' fill='none' opacity='.55'/><circle cx='50' cy='50' r='46' stroke='var(--ink)' stroke-width='1.5' fill='none' opacity='.30'/> @keyframes ripple{from{r:5;opacity:.9}to{r:46;opacity:0}} 3개 animation-delay:0/.3/.6s",
+   "tokenBinding": "--ink A fill + B stroke; form: neutral(A), organic(B 물결)",
+   "frequency": 30
+  },
+  {
+   "name": "타임라인 날짜 캘리아웃",
+   "kind": "신규",
+   "priority": 3,
+   "composition": "fs:80 Bold 날짜 숫자+옆 설명 텍스트(fs:22)+하단 ROUNDED_RECTANGLE 수평 바(h:18px 가변 너비). 활성(빨강 #c7080a)/비활성(회색 #525252) 2색 상태 구분. 행 간격 90-100px으로 반복",
+   "placement": "배송·일정 섹션 내 타임라인; 숫자 컬럼 고정(좌), 바는 텍스트 레일 들여쓰기",
+   "proportion": "숫자 h≈행간격 0.9x; 바 h=숫자 h 22%; 바 w 가변 96-350px",
+   "recipe": ".date-callout{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:12px;margin-bottom:16px} .date-number{font-size:80px;font-weight:700;line-height:.9;color:var(--accent)} .date-bar{height:18px;border-radius:9px;background:var(--accent);width:var(--bar-w,200px)} .date-callout.inactive .date-number,.date-callout.inactive .date-bar{color:#525252;background:#525252}",
+   "tokenBinding": "--accent 활성 날짜+바, --ink 비활성 회색; form: sharp-editorial",
+   "frequency": 1
+  },
+  {
+   "name": "섹션 헤더 그라디언트 텍스트",
+   "kind": "보강",
+   "priority": 1,
+   "composition": "기존 다층 텍스트 섀도에 3단 계층 헤더 변형 추가: fs:60-75 Bold 헤드라인(gradient fill) + fs:32-38 부제목(흰색/gradient) + fs:28-32 설명 텍스트(흰색). 다크 섹션 이중 타이틀(훅+Bold 제목 2단) 서브타입 포함",
+   "placement": "각 섹션 최상단 수평 중앙; 헤더 블록 높이=섹션 h 20-25%. 다크 섹션형: 짙은 배경 상단 12% 지점",
+   "proportion": "헤드라인 fs=프레임폭 7-9%; 부제목=헤드라인 55-65%; 설명=헤드라인 45%",
+   "recipe": ".section-header{text-align:center;padding:0 5%} .section-heading{font-size:clamp(2.5rem,7vw,5rem);font-weight:700;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 80%,white),var(--accent) 40%,color-mix(in srgb,var(--accent) 60%,var(--brand)) 60%,color-mix(in srgb,var(--accent) 80%,white));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text} .section-subheading{font-size:clamp(1.2rem,3.5vw,2rem);font-weight:500;color:#fff;margin-top:.4em} /* 다크 이중 */ .dark-section{background:color-mix(in srgb,var(--brand) 20%,black);border-radius:20px;padding:40px 24px} .section-hook{font-size:2.5rem;font-weight:400;color:#fff;text-align:center} .section-title{font-size:3.25rem;font-weight:600;color:#fff;text-align:center;margin-top:10px}",
+   "tokenBinding": "--accent 헤드라인 gradient 중심, --brand 다크섹션 배경 베이스; form: arch-serif(gradient헤드), neutral(다크 이중)",
+   "frequency": 6
+  }
+ ],
+ "assetSeries": [
+  {
+   "name": "화살표 아이콘 시트",
+   "forms": "손그림 곡선형 18종 / 직선 단방향형 12종 / 두꺼운 블록 chevron형 8종 / 루프 순환형 1종 — 4계열 39변형. 각 계열별 4방향(0/90/180/270°) 파생 포함. stroke-width 3-18px 경량-볼드 스펙트럼",
+   "worth": "frequency 39 최상위 — 상세페이지 모든 섹션에서 방향 유도 장치로 필수 사용되므로 svg 스프라이트 시트 1개 제작 즉시 ROI"
+  },
+  {
+   "name": "체크마크 아이콘 시트",
+   "forms": "V획 단순형(경량~볼드 stroke-width 6종) / 도트 궤적형(10도트 SVG animation) / 원형 배지형(다크·그린·브랜드색·미완료 outline 8변형) — 3계열 25변형",
+   "worth": "frequency 25로 화살표 다음 고빈도 — 인증·리스트·완료상태 UI 전반에 재사용되어 컴포넌트화 가치 높음"
+  },
+  {
+   "name": "말풍선 아이콘 시트",
+   "forms": "꼬리 하단좌 / 하단우 / 상단좌 / 상단우 4방향 × 단색·outline 2종 / 타이핑 도트형(정적+애니메이션) / 이중 중첩형(2색 조합 4종) — 3계열 49변형",
+   "worth": "frequency 49 전체 최고 — Q&A·리뷰·채팅·안내 섹션 다용도, 꼬리 방향 변형만으로 레이아웃 역방향 대응 가능"
+  },
+  {
+   "name": "시계·타이머 아이콘 시트",
+   "forms": "표준 아날로그(시침·분침·눈금 링 옵션) / 스톱워치(크라운+사이드 버튼) / 모래시계(대칭 삼각 실루엣) — 3계열 9변형. 각 인라인(40-80px)·배너형(200-320px) 2사이즈",
+   "worth": "배송 urgency·운영시간·한정판매 섹션 전용 — 3종 세트 제작 시 상세페이지 CS 섹션 전체 커버"
+  },
+  {
+   "name": "클릭 커서 아이콘 시트",
+   "forms": "표준 포인터 단일 path 28미세변형(선단·엄지분기·하단돌출 파라미터 ±4px 조정) / 클릭 물결 동심원 3단계(정적+CSS animation) — 2계열 30변형",
+   "worth": "CTA 강조·인터랙션 유도 섹션에 집중 사용(frequency 30) — 포인터 SVG 1개 파라미터만 변조하면 28종 자동 생성 가능"
+  },
+  {
+   "name": "위치·교통 아이콘 시트",
+   "forms": "핀 마커(레드·네이비·틸·차콜 4색 × inner-hole 유무 2종) / 건물 실루엣 모듈(상점·아파트·역사·빌딩 8-15종) / 버스·교통 아이콘(다크그레이·네이비 2색) — 3계열 21변형",
+   "worth": "오프라인 매장·배달 섹션 특화(frequency 21) — 건물 실루엣은 배경 레이어로 반복 재사용되어 SVG 모듈 분리 제작 권장"
+  }
+ ],
+ "overview": "101개 후보 패턴을 25개 통합 문법 항목으로 압축한 결과, 화살표(39)·말풍선(49)·체크(25)·클릭 커서(30) 네 아이콘 계열이 전체 frequency의 60% 이상을 점유하며 최우선 에셋 시트 제작 대상임을 확인했다. 장식 구조는 '방사형 배경 코로나·글로우(d:1-2) → 월계수·파티클 중간 장식(d:3-5) → 배지·칩·텍스트 전면(d:6-8)'의 3단 z축이 모든 어워드·리뷰·포인트 프레임에서 공통으로 적용되며, 배경 장식 노드 수가 60-80%를 차지하면서도 중앙 집중형 원형 존(프레임폭 40-55%)에 한정되어 텍스트 가독성과 충돌하지 않는 밀도 제어 원칙이 일관된다. 기존 보유 유틸(킥커 라벨·오프셋 섀도·radial 스포트라이트·conic 링 등)은 대부분 배치 규칙·크기 변형·토큰 연동 방법 추가만으로 보강 가능하며, 순수 신규 도입 항목은 말풍선 시스템·체크마크 시스템·기능 카드 그리드·위치 시스템·가격·CTA 밴드 시스템의 5개 우선순위 1 항목에 집중된다. 전체 토큰 연동은 --accent(강조 fill·gradient 중심)→--brand(구조 배경·씰 내원)→--ink(아이콘 단색·실루엣) 3단 계층으로 표준화되며, 형태 언어는 소프트라운드(카드·배지), 샤프에디토리얼(배너·KPI), 오가닉(파티클·월계수·손그림), 아치세리프(인용·씰 TEXT_PATH), 뉴트럴(아이콘 시트 기본) 5종이 각 패턴에 명시적으로 바인딩된다."
+}
