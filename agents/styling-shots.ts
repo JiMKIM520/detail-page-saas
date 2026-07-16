@@ -78,12 +78,23 @@ export function buildShotPrompt(shot: StylingShot, rules: string[], meta?: ShotM
   // P2: 색온도
   const colorTempLine = 'Color temperature: 3200–4500K warm natural light.'
 
+  // 히어로 샷 감지 — name 또는 filename에 'hero' 포함 (대소문자 무관)
+  // 상세페이지 히어로는 object-fit:cover로 상하가 잘리므로 별도 프레이밍 규칙 적용
+  const isHeroShot = /hero/i.test(shot.name) || /hero/i.test(shot.filename)
+  const heroFramingBlock = isHeroShot
+    ? `HERO FRAMING RULES (MANDATORY):
+Entire product must be FULLY VISIBLE within the frame — full body, no cropping, no partial framing allowed.
+Safe margin: product edges must not touch or bleed beyond 10% from any frame boundary.
+Place the main subject within the CENTER 60% of the frame height — top and bottom 20% may be cropped by object-fit:cover in the detail page hero banner.`
+    : ''
+
   const positiveBody = `${buildPreservationPrefix(rules)}
 [ROLE] You are a ${role}.
 
 [OUTPUT SPECS]
 Output aspect ratio: ${aspectRatio} (portrait), do not crop subject.
 Leave 30% of top OR bottom edge as clean negative space for text overlay.
+${heroFramingBlock}
 ${brandColorLine}
 
 [Composition: ${shot.composition}]

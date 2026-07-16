@@ -392,6 +392,30 @@ const VARIANT_DATA: Record<string, any> = {
       { text: '영업일 기준 약 10~15일 소요됩니다.' },
     ],
   },
+
+  // ── point-glass-grid (PR 수정 변형 — 전폭 배경+2×2 글라스 카드) ──────────────
+  'point-glass-grid': {
+    title: '제품 핵심 포인트',
+    points: [
+      { label: 'point 01.', keyword: '신선함', text: '산지 직송으로 신선도가 다릅니다' },
+      { label: 'point 02.', keyword: '정성', text: '엄선된 원료만 사용합니다' },
+    ],
+  },
+
+  // ── point-dark-grid-resolve (PR 수정 변형 — 문제제기 다크 그리드) ────────────
+  'point-dark-grid-resolve': {
+    title: '왜 기존 제품은\n실패할까요?',
+    cards: [
+      { sub: '금방 식어버리는', keyword: '보온력 부족' },
+      { sub: '흘러넘치는', keyword: '밀봉 불량' },
+    ],
+    checks: [
+      '뜨거운 음료도 4시간 보온 유지',
+      '완벽 밀봉 — 가방 안에서 새지 않음',
+    ],
+    resolveLabel: '기존 제품이 가진 불편함',
+    resolveBox: '이제는 달라질 때입니다',
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

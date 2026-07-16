@@ -43,6 +43,8 @@ export const pointDarkGridResolve = defineBlock<Data>({
 
 /* 2×2 카드 그리드 */
 .pjyo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:40px}
+/* 홀수 3개: 1행 3칸 (빈 칸 없음) */
+.pjyo-grid[data-count="3"]{grid-template-columns:repeat(3,1fr)}
 .pjyo-card{border-radius:calc(var(--r-scale,1)*12px);overflow:hidden;background:#10202f}
 /* 이미지 프레임 */
 .pjyo-card-img{width:100%;aspect-ratio:1/0.74;object-fit:cover;display:block;border-radius:0}
@@ -113,7 +115,7 @@ export const pointDarkGridResolve = defineBlock<Data>({
     return `<section class="pjyo">
   <h2 class="pjyo-ttl">${richSafe(d.title)}</h2>
   ${d.desc ? `<p class="pjyo-sub">${esc(d.desc)}</p>` : ''}
-  <div class="pjyo-grid">
+  <div class="pjyo-grid" data-count="${d.cards.length}">
     ${cardHtml}
   </div>
   <div class="pjyo-checks">

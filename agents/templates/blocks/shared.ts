@@ -257,6 +257,7 @@ body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);backg
 .wm{display:none}
 .wm.light{display:none}
 .lab{display:inline-block;background:var(--brand);color:#F5ECDF;font-weight:800;font-size:17px;padding:8px 26px;border-radius:999px;letter-spacing:.04em}
+.scene{position:relative}
 `.trim()
 }
 

@@ -96,6 +96,8 @@ export interface BlockVariant<T = unknown> {
 export interface PageBlock {
   variantId: string
   data: unknown
+  /** 씬 번호(1~7) — 청사진 경로에서 blocks-composer가 결정적으로 부여. 데모·스모크 경로는 undefined(렌더 무변). */
+  sceneId?: number
 }
 
 /** 페이지 전체 사양. AI 컴포저의 출력이자 renderPage의 입력. */

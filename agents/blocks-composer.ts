@@ -729,7 +729,7 @@ RULES
 - Korean copy only. Emphasis via <span class="em">강조</span> sparingly; <br> for line breaks. NO other HTML/markdown in slot text.
 - <span class="em"> and <br> are allowed ONLY in fields annotated (em) / (br) in the contract. In a field WITHOUT that annotation, output PLAIN TEXT — inserting em/br there renders as literal visible tags.
 - NEVER output an empty emphasis tag as a fill-in-blank placeholder (e.g. 우리 아이에게 <span class="em"></span>가 있어요 is WRONG). Put the real word inside the span, or use plain text with no span.
-- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). **HARD CAP: use the SAME image URL in at most 2 blocks.** When images run out, choose image-light/text-first variants instead of repeating a third time — repeated identical photos read as low-effort.
+- Map provided image URLs into (url) slots, distributing them so each image-bearing block gets a DIFFERENT image (lifestyle/scene shots → hero/story/sensory/usage; detail·macro → ingredient/feature; mood → closing/fullbleed). **HARD CAP: use the SAME image URL in at most 1 block.** When images run out, choose image-light/text-first variants instead of repeating — repeated identical photos read as low-effort.
 - IMAGE-SECTION SEMANTICS (CRITICAL): match each image's 컷 내용 note to the section's meaning. Lifestyle/연출 shots belong in hero, feature/point, story, usage, closing — NEVER inside spec tables, 성분/영양 정보, FAQ, shipping/CS blocks (those are text-led; leave their image fields empty instead). Texture/누끼 close-ups fit ingredient/detail sections. When in doubt, prioritize giving images to feature/point sections over tables. If a block truly has no fitting image, omit the field.
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인, 특별한 경험, 특별한 이유, 자연의 선택, 깊고 진한 — AI-cliché adjectives; replace with concrete facts (온도·질감·시간·수치의 맥락 등 물리적 구체어).
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
@@ -781,7 +781,7 @@ function buildUserPrompt(input: BlocksComposerInput, repairNote?: string): strin
     distinctImgs === 0
       ? ''
       : distinctImgs < 5
-        ? `\n\nIMAGE BUDGET (엄수): 서로 다른 이미지가 ${distinctImgs}장뿐이다. 같은 이미지 URL은 **최대 2개 블록**에만 사용. 이미지 슬롯을 채우는 블록 수를 ${Math.min(distinctImgs * 2, 8)}개 이하로 유지하고, 나머지 자리는 이미지 없이도 완성돼 보이는 텍스트/그래픽/수치 변형을 선택하라. 점선 placeholder 박스가 보이면 실패다 — image? 필드를 비울 바에는 이미지 없는 변형을 고를 것.`
+        ? `\n\nIMAGE BUDGET (엄수): 서로 다른 이미지가 ${distinctImgs}장뿐이다. 같은 이미지 URL은 **최대 1개 블록**에만 사용. 이미지 슬롯을 채우는 블록 수를 ${Math.min(distinctImgs, 8)}개 이하로 유지하고, 나머지 자리는 이미지 없이도 완성돼 보이는 텍스트/그래픽/수치 변형을 선택하라. 점선 placeholder 박스가 보이면 실패다 — image? 필드를 비울 바에는 이미지 없는 변형을 고를 것.`
         : ''
 
   const required =
@@ -1111,7 +1111,25 @@ export function applyPlacementGuards(
   cutoutSet: ReadonlySet<string>,
   logoSet: ReadonlySet<string> = new Set(),
 ): void {
-  const stats: Record<string, number> = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0, emSpace: 0, containSlot: 0 }
+  const stats: Record<string, number> = { textLedImg: 0, emoji: 0, cutoutMoved: 0, usageUniform: 0, logoMoved: 0, urlInText: 0, emSpace: 0, containSlot: 0, urlDup: 0 }
+
+  // URL 1회 사용 가드 — 같은 이미지 URL의 2번째 이후 등장 슬롯을 결정적으로 제거.
+  // redistributeUnusedImages의 pool은 미사용 URL만 다루므로 이 가드와 충돌 없음.
+  {
+    const urlCount = new Map<string, number>()
+    for (const b of spec.blocks) {
+      walkStringFields((b.data ?? {}) as Record<string, unknown>, (parent, key, value) => {
+        if (!/^https?:\/\//.test(value)) return
+        const count = (urlCount.get(value) ?? 0) + 1
+        urlCount.set(value, count)
+        if (count >= 2) {
+          delete parent[key]
+          stats.urlDup++
+        }
+      })
+    }
+  }
+
   for (const b of spec.blocks) {
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     // 누끼 전용 필드(contain 프레임) — 레지스트리가 CSS×render 대조로 자동 산출 (Sprint 12)
@@ -1191,9 +1209,9 @@ export function applyPlacementGuards(
     })
   }
   reportAdd('placement-guards', stats)
-  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText || stats.containSlot || stats.closingOriginal)
+  if (stats.textLedImg || stats.emoji || stats.cutoutMoved || stats.usageUniform || stats.urlInText || stats.containSlot || stats.closingOriginal || stats.urlDup)
     console.warn(
-      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot} · 클로징 원본 제거 ${stats.closingOriginal ?? 0}`,
+      `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot} · 클로징 원본 제거 ${stats.closingOriginal ?? 0} · URL 중복 제거 ${stats.urlDup}`,
     )
 }
 
@@ -1737,6 +1755,29 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       reportAdd('image-usage', { candidates: candidateCount, used: finalUsed, reassigned: dist.reassigned, belowMinimum: finalUsed < minImages })
     } catch (e) {
       console.warn('[Blocks Composer] 재배치 패스 스킵:', (e as Error).message?.slice(0, 120))
+    }
+
+    // sceneId 결정적 매핑 — 청사진 경로에서만 부여(LLM에 맡기지 않음).
+    // 가드·재배치가 모두 완료된 후 최종 spec에 적용해 렌더가 씬 래퍼를 정확히 감싼다.
+    if (input.blueprint) {
+      const bp = input.blueprint
+      let bpIdx = 0
+      let lastSceneId = 1
+      for (const block of result.spec.blocks) {
+        let found = false
+        for (let si = bpIdx; si < bp.sections.length; si++) {
+          if (bp.sections[si].variantId === block.variantId) {
+            block.sceneId = bp.sections[si].scene ?? lastSceneId
+            lastSceneId = block.sceneId
+            bpIdx = si + 1
+            found = true
+            break
+          }
+        }
+        if (!found) block.sceneId = lastSceneId
+      }
+      const reScene = renderPage(result.spec)
+      result = { spec: result.spec, html: reScene.html, usedVariants: reScene.usedVariants }
     }
 
     saveJson(result.spec, `${input.outputDir}/page-spec.json`)

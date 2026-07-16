@@ -75,6 +75,10 @@ export const pointGlassGrid = defineBlock<Data>({
   grid-template-columns:1fr 1fr;
   gap:20px
 }
+/* 홀수 3개: 1행 3칸 (빈 칸 없음) */
+.pcgc-grid[data-count="3"]{grid-template-columns:repeat(3,1fr)}
+/* 3칸일 때 칸당 ~240px — 가로 패딩 소폭 축소로 내용 넘침 방지 */
+.pcgc-grid[data-count="3"] .pcgc-card{padding:28px 16px 32px}
 .pcgc-card{
   background:rgba(255,255,255,0.30);
   border-radius:calc(var(--r-scale,1)*30px);
@@ -154,7 +158,7 @@ export const pointGlassGrid = defineBlock<Data>({
     ${hasBg ? media(d.bgImage, 'pcgc-hero-bg', '제품 배경') : ''}
     <h2 class="pcgc-hero-overlay">${richSafe(d.title)}</h2>
   </div>
-  <div class="pcgc-grid">
+  <div class="pcgc-grid" data-count="${d.points.length}">
     ${cards}
   </div>
 </section>`

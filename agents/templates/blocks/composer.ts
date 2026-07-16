@@ -29,6 +29,11 @@ export function renderPage(spec: PageSpec): RenderResult {
   const sections: string[] = []
   const usedVariants: string[] = []
 
+  // 씬 경계 추적 — sceneId가 정의된 블록은 <div class="scene"> 래퍼로 묶는다.
+  // 전부 undefined이면 래퍼가 하나도 생성되지 않아 출력이 현행과 100% 동일하다.
+  let prevSceneId: number | undefined = undefined
+  let sceneOpen = false
+
   spec.blocks.forEach((block, i) => {
     const variant = getVariant(block.variantId)
     if (!variant) throw new Error(`[composer] unknown variant id at block ${i}: ${block.variantId}`)
@@ -40,8 +45,26 @@ export function renderPage(spec: PageSpec): RenderResult {
 
     if (!cssById.has(variant.id)) cssById.set(variant.id, variant.css)
     usedVariants.push(variant.id)
+
+    const sid = block.sceneId
+    if (sid !== undefined) {
+      if (sid !== prevSceneId) {
+        if (sceneOpen) sections.push('</div>')
+        sections.push(`<div class="scene" data-scene="${sid}">`)
+        sceneOpen = true
+        prevSceneId = sid
+      }
+    } else if (sceneOpen) {
+      // sceneId 없는 블록은 씬 래퍼 밖에 배치
+      sections.push('</div>')
+      sceneOpen = false
+      prevSceneId = undefined
+    }
+
     sections.push(variant.render(parsed.data, ctx))
   })
+
+  if (sceneOpen) sections.push('</div>')
 
   // vw 단위를 페이지 고정폭 기준 px로 결정적 치환 — 데스크톱 브라우저는 viewport meta를
   // 무시하므로 vw가 실제 창 폭을 따라 커져 872px 설계가 와이드 화면에서 붕괴한다

@@ -509,6 +509,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
           if (fs.existsSync(htmlPath)) {
             let audit = await auditRenderedHtml(fs.readFileSync(htmlPath, 'utf8'))
             reportAdd('visual-audit', audit as unknown as Record<string, unknown>)
+            reportAdd('rule-check', { violations: audit.ruleViolations ?? [], measurements: audit.measurements ?? null })
             if (audit.ran && !audit.pass) {
               console.warn(`[pipeline-bridge] 시각 감사 결함 ${audit.issues.length}건 → 반려 재조립 1회`)
               const rework = await runBlocksPipeline(blocksInput, {

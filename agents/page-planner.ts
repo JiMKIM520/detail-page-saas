@@ -33,6 +33,8 @@ export interface BlueprintSection {
   variantId: string
   /** 이 블록이 담당하는 승인 스크립트 섹션 type — 결정적 매핑 테이블(Sprint 4-B) 검증 기준 */
   scriptType?: string
+  /** 씬 번호(1~7) — 7씬 서사 구조에서 이 섹션이 속하는 씬 */
+  scene?: number
   /** 이 블록이 다룰 승인 스크립트 내용 요지 (필러의 카피 원천) */
   copyBrief: string
   /** 배정 이미지 (0~2, 제공 풀 URL만) — 인벤토리 모드 */
@@ -72,6 +74,7 @@ const blueprintSchema = z.object({
           order: z.number().int().min(0),
           variantId: z.string().min(1),
           scriptType: z.string().optional(),
+          scene: z.number().int().min(1).max(7).optional(),
           copyBrief: z.string().min(1),
           imageUrls: z.preprocess(
             (v) => (Array.isArray(v) ? v.slice(0, 3) : v),
@@ -113,6 +116,13 @@ system prompt). Your job:
    ingredients → spotlight + grid, usage → steps + tips) so the page reads full and generous.
    Every page starts with one hero-family block and ends with one closing-family block.
    14~20 blocks total — a Korean detail page should feel substantial.
+   Scene assignment (CRITICAL): assign a "scene" number (integer 1–7) to EVERY block. Consecutive
+   blocks sharing the same scene number form one poster unit — exactly 7 distinct scenes across the
+   page, 2–3 blocks each. Standard narrative arc: ①hook(hero) ②problem·promise
+   ③ingredient·material ④detail·texture ⑤usage·points ⑥trust(review·cert·spec)
+   ⑦purchase(faq·cs·closing) — adapt to the product category while keeping exactly 7 scenes.
+   Adjacent scenes must contrast in background tone (light / dark / tint): choose variants so dark
+   variants are grouped within a single scene and scene boundaries are visually distinct by colour.
 2. BLOCK CHOICE: pick variantIds ONLY from the catalog below. Match each script section's intent
    to the block archetype (story→story/point, 성분→ingredient, 사용법→usage, FAQ→faq, 배송→cs/shipping).
    Do not use the same variant twice. Avoid three consecutive blocks of the same archetype.
@@ -164,7 +174,7 @@ system prompt). Your job:
    difference must come from the product, never from novelty.
 
 Output raw compact JSON only (no prose, no markdown, minimal whitespace):
-{"sections":[{"order":0,"variantId":"hero-arch","scriptType":"hero","copyBrief":"...","imageUrls":["https://..."]}]}`
+{"sections":[{"order":0,"variantId":"hero-arch","scriptType":"hero","scene":1,"copyBrief":"...","imageUrls":["https://..."]}]}`
 
 /** 결정적 시드 난수(mulberry32 계열) — Math.random 금지 환경에서도 프로젝트별로 재현 가능 */
 function seededRandom(seed: string): () => number {
@@ -365,6 +375,32 @@ function validateBlueprint(
     )
     if (slotSum < 10)
       issues.push(`이미지 슬롯 합 ${slotSum}(<10) — 이미지 보유 블록이 부족하다. 텍스트 전용 블록 일부를 이미지 블록으로 교체하라`)
+  }
+
+  // 수리 3: 씬 결정적 재그룹핑 — 유효 조건 미충족 시 결정적 폴백(니즈 수리와 같은 철학)
+  // 유효 조건: 전 섹션 scene 존재 + 비내림차순 + 1~7 범위 + 연속(빠진 번호 없음)
+  {
+    const n = bp.sections.length
+    const allHaveScene = bp.sections.every((s) => typeof s.scene === 'number')
+    const isNonDecreasing = bp.sections.every((s, i) => i === 0 || (s.scene ?? 0) >= (bp.sections[i - 1].scene ?? 0))
+    const sceneVals = bp.sections.map((s) => s.scene ?? 0)
+    const uniqueScenes = [...new Set(sceneVals)].sort((a, b) => a - b)
+    const inRange = uniqueScenes.every((v) => v >= 1 && v <= 7)
+    const isContiguous =
+      uniqueScenes.length > 0 &&
+      uniqueScenes[0] === 1 &&
+      uniqueScenes.every((v, i) => i === 0 || v === uniqueScenes[i - 1] + 1)
+    const isValid = allHaveScene && isNonDecreasing && inRange && isContiguous
+
+    if (!isValid) {
+      // n 섹션을 7구간으로 균등 분할 — floor(i*7/n)+1 공식은 n=8..20 전체에서
+      // 정확히 7개의 씬 번호를 사용하며 비내림차순을 보장한다.
+      // (구 Math.ceil(n/7) 공식은 n=8..12에서 4~6개 씬만 생성하는 결함이 있었음)
+      bp.sections.forEach((s, i) => {
+        s.scene = Math.min(Math.floor((i * 7) / n) + 1, 7)
+      })
+      gaps.push('scene 재그룹핑(폴백)')
+    }
   }
 
   // 수리 불가 위반만 재시도 사유로

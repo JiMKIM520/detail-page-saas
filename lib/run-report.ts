@@ -32,6 +32,7 @@ function isWarning(e: ReportEntry): boolean {
     return e.data.ran === false || e.data.pass === false
   if (e.kind === 'image-usage') return Boolean(e.data.belowMinimum)
   if (e.kind === 'evaluator') return e.data.pass === false
+  if (e.kind === 'rule-check') return Boolean((e.data as any)?.violations?.length)
   return false
 }
 
