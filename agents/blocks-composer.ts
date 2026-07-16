@@ -14,6 +14,7 @@ import { anthropicClient, parseJsonResponse, saveJson, timer, MODELS, extractTex
 import type { AgentResult, ProjectBrief } from './types'
 import { catalog, deriveTokens, renderPage, type PageSpec } from './templates/blocks'
 import { getVariant, containSlotKeys, mediaSlotKeys } from './templates/blocks/registry'
+import { isOffPalette } from './templates/blocks/variant-meta'
 import { reportAdd } from '@/lib/run-report'
 import { ICON_NAMES } from './templates/blocks/shared'
 
@@ -1224,7 +1225,10 @@ export function applyPlacementGuards(
  *  조합이면 결정적 치환(원본 집합이 정확히 1개일 때) 또는 위반 수집 후 경고. 순수 함수(테스트 가능).
  *  패턴: /(\d+(?:\.\d+)?)g\s*\((\d+(?:\.\d+)?)g\s*[×xX]\s*(\d+)개입\)/ (내부 공백 유연). */
 function mkQtyRe(): RegExp {
-  return /(\d+(?:\.\d+)?)\s*g\s*\(\s*(\d+(?:\.\d+)?)\s*g\s*[×xX]\s*(\d+)\s*개입\s*\)/g
+  // 괄호형: 56g(14g×4개입) · 56g (14g × 4개입)
+  // 쉼표형: 56g, 14g×4개입 · 56g, 14g × 4개입  (괄호 없는 원문 형태)
+  // 공통: ×(U+00D7)·x·X, 내부 공백 유연, 닫는 ) 선택적
+  return /(\d+(?:\.\d+)?)\s*g\s*[,(]\s*(\d+(?:\.\d+)?)\s*g\s*[×xX]\s*(\d+)\s*개입\s*\)?/g
 }
 
 type QtyCombo = { total: string; perUnit: string; count: string; key: string }
@@ -1719,6 +1723,14 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
 export async function runBlocksComposer(input: BlocksComposerInput): Promise<AgentResult<BlocksComposerResult>> {
   const elapsed = timer()
   console.log('[Blocks Composer] 시작')
+  // S1 가드: 저장 청사진에 offPalette 변형 잔류(기획 후 gen-variant-meta 재실행 타이밍 회귀) 제거.
+  // 기획-생성 경계에서 청사진을 정규화해 LLM 계약 전달·이탈 검증·sceneId 매핑 세 경로 모두 보호.
+  if (input.blueprint?.sections?.length) {
+    const before = input.blueprint.sections.length
+    input.blueprint.sections = input.blueprint.sections.filter((s) => !isOffPalette(s.variantId))
+    if (input.blueprint.sections.length < before)
+      console.warn(`[Blocks Composer] 청사진 offPalette 변형 제거 — ${before - input.blueprint.sections.length}개`)
+  }
   try {
     let result: BlocksComposerResult
     try {
@@ -1846,6 +1858,11 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
         }
         if (!found) block.sceneId = lastSceneId
       }
+      // S3 씬 번호 재정규화: 가드가 블록을 드롭하면 씬 번호가 비연속(예: 1,2,3,5)이 된다.
+      // 최종 spec 블록의 등장 순서를 기준으로 1..N 연속 재라벨(상대 순서 보존).
+      const seenScenes = [...new Set(result.spec.blocks.map((b) => b.sceneId ?? 1))].sort((a, b) => a - b)
+      const sceneRemap = new Map(seenScenes.map((id, i) => [id, i + 1] as const))
+      for (const block of result.spec.blocks) block.sceneId = sceneRemap.get(block.sceneId ?? 1) ?? 1
       const reScene = renderPage(result.spec)
       result = { spec: result.spec, html: reScene.html, usedVariants: reScene.usedVariants }
     }
