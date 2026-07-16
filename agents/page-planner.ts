@@ -11,6 +11,7 @@ import { catalog } from './templates/blocks'
 import { containSlotKeys } from './templates/blocks/registry'
 import { SCRIPT_TYPE_TO_ARCHETYPES, HERO_STYLE_TO_VARIANTS } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
+import { variantTone, estimateHeight } from './templates/blocks/variant-meta'
 import type { AgentResult, ProjectBrief } from './types'
 
 export interface ImageNeed {
@@ -121,8 +122,14 @@ system prompt). Your job:
    page, 2–3 blocks each. Standard narrative arc: ①hook(hero) ②problem·promise
    ③ingredient·material ④detail·texture ⑤usage·points ⑥trust(review·cert·spec)
    ⑦purchase(faq·cs·closing) — adapt to the product category while keeping exactly 7 scenes.
-   Adjacent scenes must contrast in background tone (light / dark / tint): choose variants so dark
-   variants are grouped within a single scene and scene boundaries are visually distinct by colour.
+   Tone composition (CRITICAL): each scene has ONE tone ('light' or 'dark'). All blocks within a
+   scene must use same-tone variants — catalog lines show [dark]/[light] and (~NNNpx) per variant.
+   Tone sequence: (a) no 3 consecutive scenes share the same tone; (b) include 1–3 dark scenes
+   total (adapt to product mood); (c) first scene follows the category mood (bright/casual → light,
+   premium/night-care → dark). Scene tone boundaries create the visual rhythm — adjacent scenes
+   should contrast. Height budget: target ~2,000 px per scene (1,600–2,400 acceptable). Sum the
+   (~NNNpx) values from the catalog when planning each scene; >2,600 px fatigues, <1,400 px feels
+   abrupt. Adjust block count per scene to hit the target.
 2. BLOCK CHOICE: pick variantIds ONLY from the catalog below. Match each script section's intent
    to the block archetype (story→story/point, 성분→ingredient, 사용법→usage, FAQ→faq, 배송→cs/shipping).
    Do not use the same variant twice. Avoid three consecutive blocks of the same archetype.
@@ -224,10 +231,12 @@ export function getCatalogBlock(seed: string): string {
     const picked = arch === 'hero' ? pool : pool.slice(0, PER_ARCHETYPE_CAP)
     for (const c of picked) {
       const cutoutMark = c.imageSlots > 0 && containSlotKeys(c.id).size > 0 ? ' ⛔누끼전용슬롯' : ''
-      lines.push(`- ${c.id} · ${c.archetype} · img${c.imageSlots}${cutoutMark} · ${c.describe}`)
+      const tone = variantTone(c.id)
+      const height = estimateHeight(c.id, c.archetype)
+      lines.push(`- ${c.id} · ${c.archetype} · img${c.imageSlots} · [${tone}] · (~${height}px)${cutoutMark} · ${c.describe}`)
     }
   }
-  const block = `블록 카탈로그(variantId · archetype · imageSlots · 설명) — 아키타입별 대표 표본:\n${lines.join('\n')}\n\n⛔누끼전용슬롯 = 이미지 프레임이 장식형(원형·좌대·플롯)이라 배경 없는 단독컷(누끼)만 어울린다.\n이 변형을 고르면 그 블록의 imageNeeds는 반드시 배경 없는 제품/원료 단독컷으로 명세하라 — 배경 있는 실사·원본 사진은 시스템이 제거한다.`
+  const block = `블록 카탈로그(variantId · archetype · imageSlots · 톤 · 예상높이 · 설명) — 아키타입별 대표 표본:\n${lines.join('\n')}\n\n⛔누끼전용슬롯 = 이미지 프레임이 장식형(원형·좌대·플롯)이라 배경 없는 단독컷(누끼)만 어울린다.\n이 변형을 고르면 그 블록의 imageNeeds는 반드시 배경 없는 제품/원료 단독컷으로 명세하라 — 배경 있는 실사·원본 사진은 시스템이 제거한다.`
   if (catalogBlockCache.size > 32) catalogBlockCache.clear()
   catalogBlockCache.set(seed, block)
   return block
@@ -400,6 +409,99 @@ function validateBlueprint(
         s.scene = Math.min(Math.floor((i * 7) / n) + 1, 7)
       })
       gaps.push('scene 재그룹핑(폴백)')
+    }
+  }
+
+  // 수리 4 · 5 + 3연속 톤 갭 체크: 씬 컴포지션 수리 (기존 수리 후 실행)
+  {
+    // 씬별 블록 그룹핑 — repair 3 이후 scene 값은 1~7 보장됨
+    const sceneGroups = new Map<number, BlueprintSection[]>()
+    for (const s of bp.sections) {
+      const sc = s.scene!
+      const list = sceneGroups.get(sc) ?? []
+      list.push(s)
+      sceneGroups.set(sc, list)
+    }
+
+    // 수리 4: 씬 내 톤 혼재 수리 — 소수 톤 블록을 동일 아키타입·다수 톤 변형으로 교체 시도
+    for (const [sceneNum, blocks] of sceneGroups) {
+      const darkCount = blocks.filter((b) => variantTone(b.variantId) === 'dark').length
+      const lightCount = blocks.length - darkCount
+      if (darkCount === 0 || lightCount === 0) continue // 이미 단일 톤
+      const majorTone: 'dark' | 'light' = darkCount >= lightCount ? 'dark' : 'light'
+      for (const block of blocks) {
+        if (variantTone(block.variantId) === majorTone) continue
+        const catalogEntry = catalog().find((c) => c.id === block.variantId)
+        if (!catalogEntry) continue
+        const targetArch = catalogEntry.archetype
+        const replacement = catalog().find(
+          (c) =>
+            CONTRACTED_IDS.has(c.id) &&
+            c.archetype === targetArch &&
+            variantTone(c.id) === majorTone &&
+            !seen.has(c.id),
+        )
+        if (replacement) {
+          seen.delete(block.variantId)
+          block.variantId = replacement.id
+          seen.add(replacement.id)
+        } else {
+          gaps.push(
+            `씬${sceneNum} 톤 혼재: ${block.variantId}(${variantTone(block.variantId)}) → ${targetArch}/${majorTone} 대체 변형 없음`,
+          )
+        }
+      }
+    }
+
+    // 수리 5: 씬 높이 예산 수리 — 초과/미달 인접 씬 간 경계 블록 이동(최대 7회)
+    const getH = (id: string): number => {
+      const e = catalog().find((c) => c.id === id)
+      return e ? estimateHeight(id, e.archetype) : 1100
+    }
+    const sceneSum = (blocks: BlueprintSection[]): number =>
+      blocks.reduce((acc, b) => acc + getH(b.variantId), 0)
+    const sortedNums = [...sceneGroups.keys()].sort((a, b) => a - b)
+    let moves = 0
+    for (let i = 0; i < sortedNums.length - 1 && moves < 7; i++) {
+      const numA = sortedNums[i]
+      const numB = sortedNums[i + 1]
+      const blocksA = sceneGroups.get(numA)!
+      const blocksB = sceneGroups.get(numB)!
+      const sumA = sceneSum(blocksA)
+      const sumB = sceneSum(blocksB)
+      if (sumA > 2600 && sumB < 1400 && blocksA.length > 1) {
+        // 초과 씬의 마지막 블록 → 미달 씬 앞으로
+        const moved = blocksA.pop()!
+        moved.scene = numB
+        blocksB.unshift(moved)
+        moves++
+      } else if (sumB > 2600 && sumA < 1400 && blocksB.length > 1) {
+        // 미달 씬이 인접 초과 씬 첫 블록을 넘겨받음
+        const moved = blocksB.shift()!
+        moved.scene = numA
+        blocksA.push(moved)
+        moves++
+      }
+    }
+    // 수리 후에도 위반이면 gaps 기록
+    for (const num of sortedNums) {
+      const sum = sceneSum(sceneGroups.get(num)!)
+      if (sum > 2600) gaps.push(`씬${num} 높이 초과: ~${sum}px(>2,600 — 재기획 권고)`)
+      else if (sum < 1400) gaps.push(`씬${num} 높이 미달: ~${sum}px(<1,400 — 재기획 권고)`)
+    }
+
+    // 갭 체크: 3연속 동일 톤 씬 — 수리 없음, 재기획 판단 자료
+    const sceneTones = sortedNums.map((n) => {
+      const blocks = sceneGroups.get(n)!
+      const dc = blocks.filter((b) => variantTone(b.variantId) === 'dark').length
+      return dc > blocks.length / 2 ? 'dark' : 'light'
+    })
+    for (let i = 0; i <= sceneTones.length - 3; i++) {
+      if (sceneTones[i] === sceneTones[i + 1] && sceneTones[i + 1] === sceneTones[i + 2]) {
+        gaps.push(
+          `톤 시퀀스 경고: 씬${sortedNums[i]}~씬${sortedNums[i + 2]} 3연속 ${sceneTones[i]} — 재기획 권고`,
+        )
+      }
     }
   }
 

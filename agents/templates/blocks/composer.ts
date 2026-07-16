@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { baseCss, buildFontLinks, esc, makeCtx } from './shared'
 import { getVariant } from './registry'
 import { decorateSection, DECOR_CSS } from './scene-decor'
+import { variantTone } from './variant-meta'
 import type { PageSpec } from './types'
 
 const DEFAULT_WIDTH = 872
@@ -70,6 +71,7 @@ export function renderPage(spec: PageSpec): RenderResult {
       isLastScene: sid !== undefined && sid === lastSceneId,
       archetype: variant.archetype,
       globalIndex: i,
+      tone: variantTone(variant.id),
     })
     if (sid !== undefined) sceneCounters.set(sid, indexInScene + 1)
 

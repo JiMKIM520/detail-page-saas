@@ -1,0 +1,2960 @@
+{
+  "_generated": "2026-07-16T05:07:03.071Z",
+  "_measured": 52,
+  "_total": 591,
+  "hero-centered": {
+    "tone": "dark",
+    "height": 277,
+    "archetype": "hero"
+  },
+  "hero-editorial": {
+    "tone": "light",
+    "height": 202,
+    "archetype": "hero"
+  },
+  "hero-points": {
+    "tone": "light",
+    "height": 402,
+    "archetype": "hero"
+  },
+  "hero-arch": {
+    "tone": "light",
+    "height": 360,
+    "archetype": "hero"
+  },
+  "checkpoint-rows": {
+    "tone": "light",
+    "height": 565,
+    "archetype": "checkpoint"
+  },
+  "checkpoint-grid": {
+    "tone": "light",
+    "height": 471,
+    "archetype": "checkpoint"
+  },
+  "point-bubble": {
+    "tone": "light",
+    "height": 192,
+    "archetype": "point"
+  },
+  "feature-fullbleed": {
+    "tone": "dark",
+    "height": 216,
+    "archetype": "feature"
+  },
+  "callout-banner": {
+    "tone": "dark",
+    "height": 201,
+    "archetype": "callout"
+  },
+  "statement-serif": {
+    "tone": "light",
+    "height": 245,
+    "archetype": "callout"
+  },
+  "compare-cooking": {
+    "tone": "dark",
+    "height": 477,
+    "archetype": "compare"
+  },
+  "spec-table": {
+    "tone": "light",
+    "height": 386,
+    "archetype": "spec"
+  },
+  "closing-mood": {
+    "tone": "light",
+    "height": 560,
+    "archetype": "closing"
+  },
+  "closing-light": {
+    "tone": "light",
+    "height": 274,
+    "archetype": "closing"
+  },
+  "recommend-dark": {
+    "tone": "dark",
+    "height": 168,
+    "archetype": "recommend"
+  },
+  "checklist-checks": {
+    "tone": "light",
+    "height": 358,
+    "archetype": "checklist"
+  },
+  "strip-band": {
+    "tone": "dark",
+    "height": 51,
+    "archetype": "strip"
+  },
+  "reason-question": {
+    "tone": "light",
+    "height": 238,
+    "archetype": "reason"
+  },
+  "feature-seal": {
+    "tone": "light",
+    "height": 84,
+    "archetype": "feature"
+  },
+  "equation-visual": {
+    "tone": "light",
+    "height": 164,
+    "archetype": "equation"
+  },
+  "story-pair": {
+    "tone": "light",
+    "height": 191,
+    "archetype": "story"
+  },
+  "cert-rosette": {
+    "tone": "light",
+    "height": 359,
+    "archetype": "cert"
+  },
+  "review-bubbles": {
+    "tone": "light",
+    "height": 487,
+    "archetype": "review"
+  },
+  "review-cards": {
+    "tone": "light",
+    "height": 432,
+    "archetype": "review"
+  },
+  "faq-chat": {
+    "tone": "light",
+    "height": 561,
+    "archetype": "faq"
+  },
+  "shipping-info": {
+    "tone": "light",
+    "height": 234,
+    "archetype": "shipping"
+  },
+  "stats-highlight": {
+    "tone": "light",
+    "height": 376,
+    "archetype": "stats"
+  },
+  "gallery-options": {
+    "tone": "dark",
+    "height": 263,
+    "archetype": "gallery"
+  },
+  "banner-event": {
+    "tone": "light",
+    "height": 420,
+    "archetype": "banner"
+  },
+  "feature-editorial": {
+    "tone": "light",
+    "height": 662,
+    "archetype": "feature"
+  },
+  "feature-cards": {
+    "tone": "light",
+    "height": 1010,
+    "archetype": "feature"
+  },
+  "feature-dark": {
+    "tone": "dark",
+    "height": 485,
+    "archetype": "feature"
+  },
+  "ingredient-accent": {
+    "tone": "light",
+    "height": 471,
+    "archetype": "ingredient"
+  },
+  "ingredient-grid": {
+    "tone": "dark",
+    "height": 311,
+    "archetype": "ingredient"
+  },
+  "ingredient-spotlight": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "compare-beforeafter": {
+    "tone": "light",
+    "height": 397,
+    "archetype": "compare"
+  },
+  "review-list": {
+    "tone": "light",
+    "height": 515,
+    "archetype": "review"
+  },
+  "review-chat-bubbles": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "usage-steps": {
+    "tone": "light",
+    "height": 434,
+    "archetype": "usage"
+  },
+  "usage-flow": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-dark": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "usage"
+  },
+  "package-list": {
+    "tone": "light",
+    "height": 514,
+    "archetype": "lineup"
+  },
+  "package-cards": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-dark": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "cert-frame": {
+    "tone": "light",
+    "height": 334,
+    "archetype": "cert"
+  },
+  "gallery-grid": {
+    "tone": "light",
+    "height": 419,
+    "archetype": "gallery"
+  },
+  "event-promo": {
+    "tone": "dark",
+    "height": 573,
+    "archetype": "event"
+  },
+  "discount-deal": {
+    "tone": "dark",
+    "height": 753,
+    "archetype": "discount"
+  },
+  "detail-showcase": {
+    "tone": "light",
+    "height": 391,
+    "archetype": "detail"
+  },
+  "detail-points": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-spec-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "story-brand": {
+    "tone": "light",
+    "height": 604,
+    "archetype": "story"
+  },
+  "banner-seasonal": {
+    "tone": "light",
+    "height": 480,
+    "archetype": "banner"
+  },
+  "intro-cover": {
+    "tone": "light",
+    "height": 776,
+    "archetype": "hero"
+  },
+  "stats-figures": {
+    "tone": "dark",
+    "height": 342,
+    "archetype": "stats"
+  },
+  "stats-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "faq-list": {
+    "tone": "light",
+    "height": 659,
+    "archetype": "faq"
+  },
+  "hero-photo": {
+    "tone": "light",
+    "height": 731,
+    "archetype": "hero"
+  },
+  "shipping-notice": {
+    "tone": "dark",
+    "height": 447,
+    "archetype": "shipping"
+  },
+  "hero-split-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-icon-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-dark-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-overlay-bubble": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "stats-glass-cards": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-columns": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-emoji-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "stats"
+  },
+  "feature-arc-timeline": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-split-panels": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-zigzag-circle": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "ingredient-stagger": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-pill-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-hero-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-checklist-photo": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "usage-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-accent-hero": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-number-band": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-checklist-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "review-alternating-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-image-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-thumbnail-cards": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "compare-asymmetric-cta": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-stacked-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-grid-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "package-hero-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-band-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "story-photo-header": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-dark-editorial": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-vertical-repeat": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-rotating-highlight": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "story"
+  },
+  "detail-image-caption-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "story-gallery-narrative": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-labeled-image-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-stacked-image-narrative": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "story"
+  },
+  "detail-point-scroll-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "feature-numbered-callout-scroll": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-spec-illustration-callout": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-numbered-point-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "cs-hours-contact": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "cs-contact-banner": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cs"
+  },
+  "cs-closure-calendar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "reason-zebra-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "cs-monthly-calendar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "cs-vacation-calendar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "cs-holiday-calendar": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "cs-delivery-calendar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "cs-delivery-guarantee-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cs"
+  },
+  "shipping-hero-notice-strip": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "shipping-speed-banner": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cs"
+  },
+  "shipping-subscription-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cs"
+  },
+  "shipping-speed-hero": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "shipping-vehicle-composite-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "cs-authorized-seller-hero": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "cs-authorized-retailer-badge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cs"
+  },
+  "shipping-illust-hero": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "shipping-date-timeline": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "ba-painpoint-bubbles": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "reason"
+  },
+  "ba-photo-split-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "recommend-persona-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "compare-product-cards": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "event-comment-prize-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "compare-price-bar-chart": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-overlap-cards": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "ba-multi-effect-stacked": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-competitor-photo": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "recommend-painpoint-bubbles": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "compare-tab-panels-image-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-price-card-pair": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "credentials-stat-bento": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "painpoint-brand-research-trio": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "compare-product-spec-matrix": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-upgrade-product-cards": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "feature-dark-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-bento-photo-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-bento-photo-tiles": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-bento-mosaic": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "compare-product-card-vs": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "spec-nutrition-macro-table": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "ba-clinical-bar-chart": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "point-discount-price-reveal": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "promo"
+  },
+  "point-promo-asymcard": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "feature-dark-product-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-fullbleed-caption": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-award-credential": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "feature-dark-float-cutout": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-editorial-marquee": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-heritage-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-ingredient-hero": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-brand-collab-editorial": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "promo-event-spotlight": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "promo"
+  },
+  "promo-story-price-reveal": {
+    "tone": "light",
+    "height": null,
+    "archetype": "promo"
+  },
+  "point-fullbleed-bookend": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-timing-banner": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "promo-scatter-banner": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "promo"
+  },
+  "point-numbered-hero-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-numbered-image-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-step-timeline-bleed": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-radar-web": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "feature-event-poster": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-ingredient-overlay": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "feature-dark-tab-mosaic": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "stats-satisfaction-bars": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "point-product-annotation": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "feature-image-row-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-urgency-tape-cross": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-list-image-bleed": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "stats-hero-anchor-card-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "feature-product-float-icon-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-product-stats-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "story-text-first": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "faq-numbered": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-plain": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-box": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "hero-photo-bottom": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-fullbg": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-inset": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "gallery-numbered-badge": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-caption-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-numbered-strip": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-ribbon-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "event-review-prize-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-coupon-device-steps": {
+    "tone": "light",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-launch-checklist": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "cert-badge-hero": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "discount-photo-price": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "discount"
+  },
+  "discount-coupon-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "discount"
+  },
+  "shipping-icon-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "detail-policy-table": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-compare-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "banner-seasonal-coupon-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-seasonal-wreath": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-event-twozone": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-image-dominant": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "hero-circle-check": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-pedestal": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-thumb-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-card-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-card-wrapper": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-stripe-points": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-connector-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-circle-bg": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-check-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-bubble-points": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-numbered-cols": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "stats-bento-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-header-card-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-circle-stagger": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-icon-blocks": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-text-only": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "stats"
+  },
+  "feature-captionbar": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-ribbon-cards": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-why-iconlist": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-spoke-diagram": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-wave-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-dark-inset-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "ingredient-radar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-rule-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-ellipse-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-photo-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-editorial-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "usage-card-number": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-pill-steps": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-text-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-dark-bands": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-photo-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-photo-thumb-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "review-collage": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-text-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-stacked-pairs": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-divider-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "compare-hero-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-phone-mockup": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-hero-panels": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-staggered-banners": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "package-zigzag-circle": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-hero-fade-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-offset-image-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-ticket-podium": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "story-curve-panel": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-wave-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-arch-image": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-highlight-box": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-centered-secondary-image": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "faq-badge-row": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-glyph-box": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-pill-bar": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "faq"
+  },
+  "hero-photo-quote": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-dual-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-dual-offset": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-circle": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-pinned": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-blob-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-photo-glass-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "gallery-stagger-rounded": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-color-panel": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-arch-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-barframe-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "gallery-halfwidth-stagger": {
+    "tone": "light",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "event-coming-soon-teaser": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-reopen-price-strip": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-hero-price-cta": {
+    "tone": "light",
+    "height": null,
+    "archetype": "event"
+  },
+  "cert-pedestal": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-clipboard": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "discount-coupon-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "discount"
+  },
+  "discount-event-billboard": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "discount"
+  },
+  "discount-price-bullets": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "discount"
+  },
+  "shipping-chapter-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "detail-steps-support": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-dimension-faq": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-package-faq": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-hero-info-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-editorial-venn": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "banner-seasonal-arch": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-seasonal-illustration": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-seasonal-dark-coupon": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-dark-promo": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "banner"
+  },
+  "package-event-price-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-image-rows-strike-price": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-split-image-price-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-option-rows-panel": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-numbered-split-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "product-tab-filter-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-discount-badge-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-option-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "promo"
+  },
+  "package-lineup-badge-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "product-price-breakdown-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "product-discount-badge-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "promo"
+  },
+  "package-numbered-option-selector": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "package-numbered-band-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-split-icon-cards": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "package-gradient-bundle-discount": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "promo"
+  },
+  "package-bundle-gift-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "product-lineup-dark-cards": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-event-product-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "product-hero-discount-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "promo"
+  },
+  "event-countdown-product-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "promo"
+  },
+  "package-discount-image-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "product-hero-gift-price": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-hero-price-table": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "package-dark-component-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "review-photo-bubble-staggered": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-divider-image-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "recommend-persona-list-annotated": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "review-efficacy-bar-chart": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-aggregate-score-cards": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-image-story-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-satisfaction-stats": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-divider-image-right": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-image-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-satisfaction-pill-bars": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-thumbnail-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-photo-bg-dashed-cards": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-hero-avatar-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-stat-header-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-instagram-dm-mockup": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-icon-alternating-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-aggregate-score-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-numbered-thumbnail-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "faq-circle-badge": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-stagger-offset": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-label-spec-table": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "faq-editorial-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-pill-card-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-satisfaction-bar": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "stats"
+  },
+  "faq-dual-circle": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "faq"
+  },
+  "spec-table-label-value": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "award-warranty-pledge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-rank1-listing-card": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-laurel-stat-rows": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-no1-emblem-banner": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-trophy-declare": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-milestone-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-no1-emblem": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-no1-emblem-streak": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-no1-emblem-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-no1-emblem-badges": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-trophy-stat": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-trophy-poster": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-gov-seal-hero": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-ranking-podium-sale": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-laurel-emblem-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-trophy-badge-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-no1-emblem-rosette": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "callout-coupon-channel": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "callout"
+  },
+  "callout-painpoint-cards": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "callout"
+  },
+  "cert-list-badges": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-spotlight-zoom": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "closing-quote-photo": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "closing"
+  },
+  "compare-asym-panels": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-bar-years": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "point-metric-badge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "recommend-hashtag-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "recommend-oval-checklist": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "shipping-deadline-clock": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "spec-measure-table": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "spec"
+  },
+  "spec-silhouette-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "spec"
+  },
+  "spec-size-diagram": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "spec"
+  },
+  "stats-gauge-bars": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "banner-kinetic-duoscale": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "callout-chat-dark-problem": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "callout"
+  },
+  "callout-chat-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "callout"
+  },
+  "callout-dark-stat-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "callout"
+  },
+  "callout-kakaofriend-radial": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "callout"
+  },
+  "cert-doc-zoom": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-fan-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-laurel-triple": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-magnify-banner": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-orbit-ring": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "checklist-brown-photo-row": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "checklist"
+  },
+  "compare-asympanel-befaft": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-spec-trio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-tri-axis": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-triple-badge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "compare"
+  },
+  "compare-vs-card-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "detail-anatomy-callout": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-badge-callout": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-infotag-overlay": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-overlap-bookend": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-pin-legend": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-section-explode": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-serif-altrow": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-serif-hero-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "event-circle-warranty": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-darkbg-pricedrop": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-kakao-coupon-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-oneplus-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-overlap-refund": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-overlay-pricebar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "event"
+  },
+  "faq-bubble-tail": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-chat-bubble": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "feature-alt-card-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-arrow-trio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-checklist-stat-banner": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-checkpoint-rail": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-dark-pill-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-hero-pill-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-highlight-caption": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-honeycomb-badge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-hotspot-callout": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-hotspot-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-pill-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-stack-imgcap": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-step-iconbox": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-step-overlay-panel": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "gallery-hero-hashtag-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "gallery"
+  },
+  "hero-badge-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-badge-stagger": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-bubble-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-bubble-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-cropmark-overlay": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-dot-duoweight": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-float-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-glint-brand": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-handscript-icon-trio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-numbered-trio": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-oval-badge": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-oval-mascot": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-pill-watermark": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-ribbon-panel": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-serif-icon-panel": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-split-orbit": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-stamp-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-tint-oval-drop": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-vertical-badge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-weight-slash": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "ingredient-bubble-float": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-card-bar-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-ellipse-bar-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-onion-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-ph-gauge-banner": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-ph-scale": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-pill-icon-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-radial-dot-map": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-step-panel-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "lineup-dual-price-seal": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-wordmark-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "point-badge-section-trio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-badge-word-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-bubble-chat": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-bubble-zigzag": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-card-split-check": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-circle-badge-panel": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-circle-grid-reveal": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-dark-grid-resolve": {
+    "tone": "dark",
+    "height": 910,
+    "archetype": "point"
+  },
+  "point-dual-circle-badge": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-glass-grid": {
+    "tone": "dark",
+    "height": 1621,
+    "archetype": "point"
+  },
+  "point-highlight-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-numeral-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-pill-cascade-review": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-ruled-chapter-overlap": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-serif-layer-callout": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-triple-badge": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-triple-scroll": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "promo-letter-badge-oval": {
+    "tone": "light",
+    "height": null,
+    "archetype": "promo"
+  },
+  "recommend-sky-oval": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "review-bubble-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-bubble-score": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-card-summarybar": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-donut-pillow": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-kpi-bubble-trio": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-laurel-bubble": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-stat-overlay": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "shipping-clock-urgency": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "shipping-coldchain-steps": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "shipping-poly-deadline-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "shipping-roundcard-cs": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "spec-battery-progress": {
+    "tone": "light",
+    "height": null,
+    "archetype": "spec"
+  },
+  "spec-dim-overlay": {
+    "tone": "light",
+    "height": null,
+    "archetype": "spec"
+  },
+  "spec-foot-measure-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "spec"
+  },
+  "spec-height-gauge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "spec"
+  },
+  "spec-silhouette-badge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "spec"
+  },
+  "stats-decibel-overlay": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "story-cause-flow": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "story-serif-ruled": {
+    "tone": "light",
+    "height": null,
+    "archetype": "story"
+  },
+  "usage-fanout-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-numbered-split": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "usage-scene-altcard": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "ingredient-badge-tile-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-circle-badge-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-oval-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-point-serif-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "spec-dim-blueprint": {
+    "tone": "light",
+    "height": null,
+    "archetype": "spec"
+  },
+  "award-sales-float-badges": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-serif-gold-decl": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-stage-burst": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-star-rank": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-trophy-flanked-stat": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "award"
+  },
+  "award-trophy-orb-flanked": {
+    "tone": "light",
+    "height": null,
+    "archetype": "award"
+  },
+  "banner-category-counter": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "banner-grand-mosaic": {
+    "tone": "light",
+    "height": null,
+    "archetype": "banner"
+  },
+  "cert-badge-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-point-badge-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "checklist-radial-ledger": {
+    "tone": "light",
+    "height": null,
+    "archetype": "checklist"
+  },
+  "compare-package-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "compare"
+  },
+  "cs-green-label-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "cs-notice-typo-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cs"
+  },
+  "cs-schedule-divider": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "cs-slogan-info-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "discount-bolt-split": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "discount"
+  },
+  "event-poly-price-list": {
+    "tone": "light",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-sale-asymcollage": {
+    "tone": "light",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-spotlight-type": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "event"
+  },
+  "event-stage-pillar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "event"
+  },
+  "faq-expert-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "faq-side-portrait-oval": {
+    "tone": "light",
+    "height": null,
+    "archetype": "faq"
+  },
+  "feature-bookmark-compare": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-dark-asymgrid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-dual-mosaic": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "hero-kanji-bead": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-typo-frame": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "ingredient-badge-table": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-dot-nav-mint": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-float-overlay": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "lineup-bento-compare": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-bento-gradient": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-dark-gauge": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-gradient-gallery": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-hashtag-duo": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-hero-tier-bar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-persona-overlap": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-spike-col": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-tiered-float": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "point-dual-bottle-bloom": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-spec-sandwich": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "promo-bokeh-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "promo"
+  },
+  "reason-alt-rows": {
+    "tone": "light",
+    "height": null,
+    "archetype": "reason"
+  },
+  "reason-bubble-badge-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "reason"
+  },
+  "reason-dot-connector": {
+    "tone": "light",
+    "height": null,
+    "archetype": "reason"
+  },
+  "reason-numbered-thumb-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "reason"
+  },
+  "reason-staircard-overlap": {
+    "tone": "light",
+    "height": null,
+    "archetype": "reason"
+  },
+  "recommend-cross-typo": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "review-dark-highlight-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-star-overlap": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "shipping-hero-ribbon-trio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "shipping-notice-twin-truck": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "stats-bottle-stat-rail": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "stats-satisfaction-dash": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "story-doubt-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "story"
+  },
+  "callout-dual-circle": {
+    "tone": "light",
+    "height": null,
+    "archetype": "callout"
+  },
+  "callout-pill-cascade": {
+    "tone": "light",
+    "height": null,
+    "archetype": "callout"
+  },
+  "cert-badge-triptych": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-derma-trio": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-photo-badge-strip": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "cert-pill-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cert"
+  },
+  "checklist-colorbar-diag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "checklist"
+  },
+  "checkpoint-fullbleed-numlist": {
+    "tone": "light",
+    "height": null,
+    "archetype": "checkpoint"
+  },
+  "cs-support-tricard": {
+    "tone": "light",
+    "height": null,
+    "archetype": "cs"
+  },
+  "detail-palette-card": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "detail-spec-icon-bar": {
+    "tone": "light",
+    "height": null,
+    "archetype": "detail"
+  },
+  "discount-shock-badge": {
+    "tone": "light",
+    "height": null,
+    "archetype": "discount"
+  },
+  "feature-hashtag-chip-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-mint-oval-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-offset-gallery": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-pivot-arc-shot": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-point-watermark": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-quad-imgcap-grid": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-quote-pill-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-sky-badge-overlap": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-sky-icon-quad": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-splitbox-keyword": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "feature-step-quote-reveal": {
+    "tone": "light",
+    "height": null,
+    "archetype": "feature"
+  },
+  "hero-badge-keypoint": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-bleed-ribbon": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-catalog-slide": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-floatcard-hand": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-marker-panel": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-olive-checklist": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-pill-serif-zones": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-rail-right": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-sandwich-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "hero"
+  },
+  "hero-wave-icons": {
+    "tone": "light",
+    "height": null,
+    "archetype": "hero"
+  },
+  "ingredient-badge-arc": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-orbit-badge-trio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "ingredient-serif-ratio": {
+    "tone": "light",
+    "height": null,
+    "archetype": "ingredient"
+  },
+  "lineup-arrow-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "lineup-swatch-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "lineup"
+  },
+  "point-fullbg-oval-stats": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-pill-flow": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "point"
+  },
+  "point-stagger-pill": {
+    "tone": "light",
+    "height": null,
+    "archetype": "point"
+  },
+  "reason-bubble-stack": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "reason"
+  },
+  "reason-quad-circle-gallery": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "reason"
+  },
+  "recommend-circle-zigzag": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "recommend-grid-label": {
+    "tone": "light",
+    "height": null,
+    "archetype": "recommend"
+  },
+  "review-altcircle-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-fillbar-before-after": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "review-speech-pair-grid": {
+    "tone": "light",
+    "height": null,
+    "archetype": "review"
+  },
+  "shipping-badge-dual-stack": {
+    "tone": "light",
+    "height": null,
+    "archetype": "shipping"
+  },
+  "spec-grid-cream-table": {
+    "tone": "light",
+    "height": null,
+    "archetype": "spec"
+  },
+  "stats-score-cascade": {
+    "tone": "light",
+    "height": null,
+    "archetype": "stats"
+  },
+  "usage-day-timeline": {
+    "tone": "light",
+    "height": null,
+    "archetype": "usage"
+  },
+  "shipping-numeral-schedule": {
+    "tone": "dark",
+    "height": null,
+    "archetype": "shipping"
+  }
+}
