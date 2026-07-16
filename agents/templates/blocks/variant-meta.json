@@ -1,7 +1,8 @@
 {
-  "_generated": "2026-07-16T05:07:03.071Z",
+  "_generated": "2026-07-16T06:03:08.141Z",
   "_measured": 52,
   "_total": 591,
+  "_offPalette": 40,
   "hero-centered": {
     "tone": "dark",
     "height": 277,
@@ -25,7 +26,8 @@
   "checkpoint-rows": {
     "tone": "light",
     "height": 565,
-    "archetype": "checkpoint"
+    "archetype": "checkpoint",
+    "offPalette": true
   },
   "checkpoint-grid": {
     "tone": "light",
@@ -45,7 +47,8 @@
   "callout-banner": {
     "tone": "dark",
     "height": 201,
-    "archetype": "callout"
+    "archetype": "callout",
+    "offPalette": true
   },
   "statement-serif": {
     "tone": "light",
@@ -240,7 +243,8 @@
   "discount-deal": {
     "tone": "dark",
     "height": 753,
-    "archetype": "discount"
+    "archetype": "discount",
+    "offPalette": true
   },
   "detail-showcase": {
     "tone": "light",
@@ -275,7 +279,8 @@
   "stats-figures": {
     "tone": "dark",
     "height": 342,
-    "archetype": "stats"
+    "archetype": "stats",
+    "offPalette": true
   },
   "stats-zigzag": {
     "tone": "light",
@@ -570,7 +575,8 @@
   "cs-authorized-retailer-badge": {
     "tone": "dark",
     "height": null,
-    "archetype": "cs"
+    "archetype": "cs",
+    "offPalette": true
   },
   "shipping-illust-hero": {
     "tone": "light",
@@ -600,7 +606,8 @@
   "compare-product-cards": {
     "tone": "light",
     "height": null,
-    "archetype": "compare"
+    "archetype": "compare",
+    "offPalette": true
   },
   "event-comment-prize-grid": {
     "tone": "dark",
@@ -735,7 +742,8 @@
   "point-heritage-split": {
     "tone": "dark",
     "height": null,
-    "archetype": "point"
+    "archetype": "point",
+    "offPalette": true
   },
   "point-ingredient-hero": {
     "tone": "light",
@@ -930,7 +938,8 @@
   "discount-coupon-stack": {
     "tone": "dark",
     "height": null,
-    "archetype": "discount"
+    "archetype": "discount",
+    "offPalette": true
   },
   "shipping-icon-hero": {
     "tone": "dark",
@@ -1315,12 +1324,14 @@
   "cert-clipboard": {
     "tone": "dark",
     "height": null,
-    "archetype": "cert"
+    "archetype": "cert",
+    "offPalette": true
   },
   "discount-coupon-grid": {
     "tone": "light",
     "height": null,
-    "archetype": "discount"
+    "archetype": "discount",
+    "offPalette": true
   },
   "discount-event-billboard": {
     "tone": "dark",
@@ -1330,7 +1341,8 @@
   "discount-price-bullets": {
     "tone": "dark",
     "height": null,
-    "archetype": "discount"
+    "archetype": "discount",
+    "offPalette": true
   },
   "shipping-chapter-hero": {
     "tone": "dark",
@@ -1445,7 +1457,8 @@
   "package-numbered-band-rows": {
     "tone": "dark",
     "height": null,
-    "archetype": "lineup"
+    "archetype": "lineup",
+    "offPalette": true
   },
   "package-split-icon-cards": {
     "tone": "dark",
@@ -1455,12 +1468,14 @@
   "package-gradient-bundle-discount": {
     "tone": "dark",
     "height": null,
-    "archetype": "promo"
+    "archetype": "promo",
+    "offPalette": true
   },
   "package-bundle-gift-rows": {
     "tone": "light",
     "height": null,
-    "archetype": "lineup"
+    "archetype": "lineup",
+    "offPalette": true
   },
   "product-lineup-dark-cards": {
     "tone": "dark",
@@ -1560,7 +1575,8 @@
   "review-photo-bg-dashed-cards": {
     "tone": "light",
     "height": null,
-    "archetype": "review"
+    "archetype": "review",
+    "offPalette": true
   },
   "review-hero-avatar-list": {
     "tone": "light",
@@ -1575,7 +1591,8 @@
   "review-instagram-dm-mockup": {
     "tone": "light",
     "height": null,
-    "archetype": "review"
+    "archetype": "review",
+    "offPalette": true
   },
   "review-icon-alternating-rows": {
     "tone": "dark",
@@ -1620,7 +1637,8 @@
   "faq-satisfaction-bar": {
     "tone": "dark",
     "height": null,
-    "archetype": "stats"
+    "archetype": "stats",
+    "offPalette": true
   },
   "faq-dual-circle": {
     "tone": "dark",
@@ -1825,7 +1843,8 @@
   "cert-fan-stack": {
     "tone": "dark",
     "height": null,
-    "archetype": "cert"
+    "archetype": "cert",
+    "offPalette": true
   },
   "cert-laurel-triple": {
     "tone": "light",
@@ -1915,27 +1934,32 @@
   "event-circle-warranty": {
     "tone": "dark",
     "height": null,
-    "archetype": "event"
+    "archetype": "event",
+    "offPalette": true
   },
   "event-darkbg-pricedrop": {
     "tone": "dark",
     "height": null,
-    "archetype": "event"
+    "archetype": "event",
+    "offPalette": true
   },
   "event-kakao-coupon-split": {
     "tone": "dark",
     "height": null,
-    "archetype": "event"
+    "archetype": "event",
+    "offPalette": true
   },
   "event-oneplus-stack": {
     "tone": "dark",
     "height": null,
-    "archetype": "event"
+    "archetype": "event",
+    "offPalette": true
   },
   "event-overlap-refund": {
     "tone": "dark",
     "height": null,
-    "archetype": "event"
+    "archetype": "event",
+    "offPalette": true
   },
   "event-overlay-pricebar": {
     "tone": "light",
@@ -2040,7 +2064,8 @@
   "hero-bubble-grid": {
     "tone": "light",
     "height": null,
-    "archetype": "hero"
+    "archetype": "hero",
+    "offPalette": true
   },
   "hero-bubble-stack": {
     "tone": "dark",
@@ -2055,7 +2080,8 @@
   "hero-dot-duoweight": {
     "tone": "light",
     "height": null,
-    "archetype": "hero"
+    "archetype": "hero",
+    "offPalette": true
   },
   "hero-float-split": {
     "tone": "light",
@@ -2155,7 +2181,8 @@
   "ingredient-ph-scale": {
     "tone": "dark",
     "height": null,
-    "archetype": "ingredient"
+    "archetype": "ingredient",
+    "offPalette": true
   },
   "ingredient-pill-icon-list": {
     "tone": "light",
@@ -2200,7 +2227,8 @@
   "point-bubble-zigzag": {
     "tone": "dark",
     "height": null,
-    "archetype": "point"
+    "archetype": "point",
+    "offPalette": true
   },
   "point-card-split-check": {
     "tone": "light",
@@ -2220,7 +2248,8 @@
   "point-dark-grid-resolve": {
     "tone": "dark",
     "height": 910,
-    "archetype": "point"
+    "archetype": "point",
+    "offPalette": true
   },
   "point-dual-circle-badge": {
     "tone": "light",
@@ -2320,12 +2349,14 @@
   "shipping-coldchain-steps": {
     "tone": "light",
     "height": null,
-    "archetype": "shipping"
+    "archetype": "shipping",
+    "offPalette": true
   },
   "shipping-poly-deadline-split": {
     "tone": "light",
     "height": null,
-    "archetype": "shipping"
+    "archetype": "shipping",
+    "offPalette": true
   },
   "shipping-roundcard-cs": {
     "tone": "dark",
@@ -2455,7 +2486,8 @@
   "cert-badge-split": {
     "tone": "dark",
     "height": null,
-    "archetype": "cert"
+    "archetype": "cert",
+    "offPalette": true
   },
   "cert-point-badge-stack": {
     "tone": "light",
@@ -2470,7 +2502,8 @@
   "compare-package-grid": {
     "tone": "light",
     "height": null,
-    "archetype": "compare"
+    "archetype": "compare",
+    "offPalette": true
   },
   "cs-green-label-table": {
     "tone": "light",
@@ -2495,7 +2528,8 @@
   "discount-bolt-split": {
     "tone": "dark",
     "height": null,
-    "archetype": "discount"
+    "archetype": "discount",
+    "offPalette": true
   },
   "event-poly-price-list": {
     "tone": "light",
@@ -2530,7 +2564,8 @@
   "feature-bookmark-compare": {
     "tone": "dark",
     "height": null,
-    "archetype": "feature"
+    "archetype": "feature",
+    "offPalette": true
   },
   "feature-dark-asymgrid": {
     "tone": "dark",
@@ -2545,7 +2580,8 @@
   "hero-kanji-bead": {
     "tone": "light",
     "height": null,
-    "archetype": "hero"
+    "archetype": "hero",
+    "offPalette": true
   },
   "hero-typo-frame": {
     "tone": "light",
@@ -2590,7 +2626,8 @@
   "lineup-hashtag-duo": {
     "tone": "dark",
     "height": null,
-    "archetype": "lineup"
+    "archetype": "lineup",
+    "offPalette": true
   },
   "lineup-hero-tier-bar": {
     "tone": "light",
@@ -2650,7 +2687,8 @@
   "reason-staircard-overlap": {
     "tone": "light",
     "height": null,
-    "archetype": "reason"
+    "archetype": "reason",
+    "offPalette": true
   },
   "recommend-cross-typo": {
     "tone": "dark",
@@ -2660,7 +2698,8 @@
   "review-dark-highlight-stack": {
     "tone": "light",
     "height": null,
-    "archetype": "review"
+    "archetype": "review",
+    "offPalette": true
   },
   "review-star-overlap": {
     "tone": "light",
@@ -2680,7 +2719,8 @@
   "stats-bottle-stat-rail": {
     "tone": "light",
     "height": null,
-    "archetype": "stats"
+    "archetype": "stats",
+    "offPalette": true
   },
   "stats-satisfaction-dash": {
     "tone": "light",
@@ -2955,6 +2995,7 @@
   "shipping-numeral-schedule": {
     "tone": "dark",
     "height": null,
-    "archetype": "shipping"
+    "archetype": "shipping",
+    "offPalette": true
   }
 }

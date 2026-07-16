@@ -733,6 +733,7 @@ RULES
 - IMAGE-SECTION SEMANTICS (CRITICAL): match each image's 컷 내용 note to the section's meaning. Lifestyle/연출 shots belong in hero, feature/point, story, usage, closing — NEVER inside spec tables, 성분/영양 정보, FAQ, shipping/CS blocks (those are text-led; leave their image fields empty instead). Texture/누끼 close-ups fit ingredient/detail sections. When in doubt, prioritize giving images to feature/point sections over tables. If a block truly has no fitting image, omit the field.
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인, 특별한 경험, 특별한 이유, 자연의 선택, 깊고 진한 — AI-cliché adjectives; replace with concrete facts (온도·질감·시간·수치의 맥락 등 물리적 구체어).
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
+- SPEC QUANTITIES (CRITICAL): 제품 스펙 수치(중량·용량·수량·개입 등)는 반드시 입력 자료(스크립트·청사진·브리프)에 기재된 값을 그대로 사용할 것. 유사 제품·일반 상식·LLM 사전지식으로 채우지 말 것.
 - IDENTITY DATA (CRITICAL): phone numbers, business/item registration numbers, addresses, courier/partner brand names, account numbers — use ONLY strings that appear verbatim in the brief. If the brief has none, OMIT the row/line entirely (e.g., write "고객센터로 문의해 주세요" without a number). A fabricated phone number sends real customers to a stranger.
 - IMAGE REALITY (CRITICAL): each image's 컷 내용 note starting with "실물 확인" describes what is ACTUALLY in the image — trust it over the filename or your assumption. A note marked "차선 — 소형 슬롯에만" may only fill small thumbnail slots, never hero/full-bleed.
 - ORIENTATION-FIT: notes mark each image [세로]/[가로]/[정방]. NEVER place a [세로] image into a wide panorama/full-width banner slot — it becomes a grotesque over-zoomed crop. Wide full-bleed slots take [가로] images only.
@@ -1093,7 +1094,11 @@ function walkStringFields(
     const v = obj[k]
     if (typeof v === 'string') fn(obj, k, v)
     else if (Array.isArray(v)) {
-      for (const item of v) if (item && typeof item === 'object') walkStringFields(item as Record<string, unknown>, fn)
+      for (let i = 0; i < v.length; i++) {
+        const item = v[i]
+        if (typeof item === 'string') fn(v as unknown as Record<string, unknown>, String(i), item)
+        else if (item && typeof item === 'object') walkStringFields(item as Record<string, unknown>, fn)
+      }
     } else if (v && typeof v === 'object') walkStringFields(v as Record<string, unknown>, fn)
   }
 }
@@ -1213,6 +1218,55 @@ export function applyPlacementGuards(
     console.warn(
       `[Blocks Composer] 배치 가드 — 표계열 이미지 제거 ${stats.textLedImg} · 이모지 정리 ${stats.emoji} · 누끼 오배치 제거 ${stats.cutoutMoved} · 스텝 균일화 ${stats.usageUniform} · 로고 오배치 ${stats.logoMoved} · 텍스트필드URL 수술 ${stats.urlInText} · 강조경계 공백 ${stats.emSpace} · 누끼전용슬롯 실사 제거 ${stats.containSlot} · 클로징 원본 제거 ${stats.closingOriginal ?? 0} · URL 중복 제거 ${stats.urlDup}`,
     )
+}
+
+/** 제품 스펙 수치 린터 — 중량·개입 패턴(예: "56g(14g×4개입)")이 원천 텍스트(groundingCorpus)에 없는
+ *  조합이면 결정적 치환(원본 집합이 정확히 1개일 때) 또는 위반 수집 후 경고. 순수 함수(테스트 가능).
+ *  패턴: /(\d+(?:\.\d+)?)g\s*\((\d+(?:\.\d+)?)g\s*[×xX]\s*(\d+)개입\)/ (내부 공백 유연). */
+function mkQtyRe(): RegExp {
+  return /(\d+(?:\.\d+)?)\s*g\s*\(\s*(\d+(?:\.\d+)?)\s*g\s*[×xX]\s*(\d+)\s*개입\s*\)/g
+}
+
+type QtyCombo = { total: string; perUnit: string; count: string; key: string }
+
+function extractQtyCombos(text: string): QtyCombo[] {
+  const result: QtyCombo[] = []
+  for (const m of text.matchAll(mkQtyRe())) {
+    result.push({ total: m[1], perUnit: m[2], count: m[3], key: `${m[1]}g(${m[2]}g×${m[3]}개입)` })
+  }
+  return result
+}
+
+export function fixSpecQuantities(spec: PageSpec, sourceText: string): void {
+  const srcCombos = extractQtyCombos(sourceText)
+  const srcKeys = new Set(srcCombos.map((c) => c.key))
+  let substituted = 0
+  const violations: string[] = []
+  for (const b of spec.blocks) {
+    walkStringFields((b.data ?? {}) as Record<string, unknown>, (parent, key, value) => {
+      const found = extractQtyCombos(value)
+      if (!found.length) return
+      const bad = found.filter((c) => !srcKeys.has(c.key))
+      if (!bad.length) return
+      if (srcCombos.length === 1) {
+        // 원본 집합이 정확히 1개 — 틀린 조합을 결정적으로 교정, 이미 올바른 조합은 보존
+        const replacement = srcCombos[0].key
+        parent[key] = (parent[key] as string).replace(mkQtyRe(), (_match, total, perUnit, count) => {
+          const k = `${total}g(${perUnit}g×${count}개입)`
+          return srcKeys.has(k) ? _match : replacement
+        })
+        substituted++
+      } else {
+        violations.push(...bad.map((c) => `${b.variantId}.${key}:${c.key}`))
+      }
+    })
+  }
+  if (substituted || violations.length) {
+    console.warn(
+      `[Blocks Composer] 수치 린터 — 중량·개입 치환 ${substituted}건 · 미매칭 위반 ${violations.length}건${violations.length ? ` (${violations.slice(0, 4).join(' · ')})` : ''}`,
+    )
+    reportAdd('quantity-lint', { substituted, violations: violations.slice(0, 8) })
+  }
 }
 
 /** 무근거 전화번호 수술 — 브리프에 없는 전화번호(하이픈 표기)가 든 문자열 필드를 제거한다.
@@ -1641,6 +1695,9 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
     new Set(input.logoUrls ?? []),
   )
 
+  // 제품 스펙 수치(중량·개입) 린터 — sourceText에 없는 조합은 결정적 치환(단일 원본) 또는 위반 경고
+  fixSpecQuantities(spec, groundingCorpus)
+
   // 무근거 전화번호가 든 필드 제거 — 깨진 스키마는 아래 수리 패스가 해당 항목만 들어낸다
   sanitizeUngroundedPhones(spec, groundingCorpus)
 
@@ -1713,6 +1770,19 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
           }
           result = rework
           console.log('[Blocks Composer] 평가자 반려 재작업 반영')
+          // 재작업 반영 후 평가자 1회 재실행 — 무한루프 금지(재반려 시 추가 재작업 없이 이슈만 리포트)
+          try {
+            const lintHints2 = [...lintCopyQuality(result.spec), ...lintImageDeficit(result.spec)]
+            const verdict2 = await runPageEvaluator({ brief: input.brief, blueprint: input.blueprint, spec: result.spec, lintHints: lintHints2 })
+            if (verdict2.success && verdict2.data) {
+              reportAdd('evaluator', { pass: verdict2.data.pass, issues: (verdict2.data.issues ?? []).slice(0, 6), rerun: true })
+              if (!verdict2.data.pass && verdict2.data.issues.length) {
+                console.warn(`[Blocks Composer] ⚠ 재평가 반려 — 재작업 미반영 이슈: ${verdict2.data.issues.slice(0, 3).join(' | ')}`)
+              }
+            }
+          } catch (rerunErr: unknown) {
+            console.warn('[Blocks Composer] 재평가 스킵:', (rerunErr as Error).message?.slice(0, 120))
+          }
         } catch (reworkErr: unknown) {
           console.warn('[Blocks Composer] 반려 재작업 실패 — 원안 유지:', (reworkErr as Error).message?.slice(0, 120))
         }

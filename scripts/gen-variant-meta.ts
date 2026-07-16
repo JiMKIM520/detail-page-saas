@@ -308,6 +308,53 @@ function detectTone(css: string, renderSrc: string): 'dark' | 'light' {
   return 'light'
 }
 
+// ── 오프팔레트 판정 ─────────────────────────────────────────────────────────────
+// CSS + render 소스에서 팔레트 외 유채색 하드코딩을 정적 탐색.
+// 무채색 판별: R≈G≈B 허용 오차 12, hsl s<12%.
+// 제외: var() 참조, rgba/hsla a<0.35(그림자 등 투명 장식).
+// 유채색 하드코딩 고유값 ≥3이면 offPalette:true.
+
+function isRGBChromatic(r: number, g: number, b: number): boolean {
+  return Math.max(r, g, b) - Math.min(r, g, b) > 12
+}
+
+function detectOffPalette(css: string, renderSrc: string): { offPalette: boolean; count: number } {
+  // var() 참조 제거 — CSS 커스텀 프로퍼티는 팔레트 준수
+  const stripped = (css + renderSrc).replace(/var\s*\([^)]+\)/g, '')
+  const chromatic = new Set<string>()
+
+  // 1. 6자리 hex (#RRGGBB)
+  const hex6Re = /(?<![0-9a-fA-F])#([0-9a-fA-F]{6})(?![0-9a-fA-F])/gi
+  let m: RegExpExecArray | null
+  while ((m = hex6Re.exec(stripped)) !== null) {
+    const h = m[1].toLowerCase()
+    const r = parseInt(h.slice(0, 2), 16)
+    const g = parseInt(h.slice(2, 4), 16)
+    const b = parseInt(h.slice(4, 6), 16)
+    if (isRGBChromatic(r, g, b)) chromatic.add(`#${h}`)
+  }
+
+  // 2. rgb() / rgba()
+  const rgbRe = /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/g
+  while ((m = rgbRe.exec(stripped)) !== null) {
+    const a = m[4] !== undefined ? parseFloat(m[4]) : 1
+    if (a < 0.35) continue // 투명 장식 제외
+    const r = parseInt(m[1], 10), g = parseInt(m[2], 10), b = parseInt(m[3], 10)
+    if (isRGBChromatic(r, g, b)) chromatic.add(`rgb(${r},${g},${b})`)
+  }
+
+  // 3. hsl() / hsla()
+  const hslRe = /hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%(?:\s*,\s*([\d.]+))?\s*\)/g
+  while ((m = hslRe.exec(stripped)) !== null) {
+    const a = m[4] !== undefined ? parseFloat(m[4]) : 1
+    if (a < 0.35) continue
+    const s = parseFloat(m[2])
+    if (s >= 12) chromatic.add(`hsl(${m[1]},${m[2]}%)`)
+  }
+
+  return { offPalette: chromatic.size >= 3, count: chromatic.size }
+}
+
 // ── Playwright 높이 실측 ────────────────────────────────────────────────────────
 // 브라우저 1회 기동 후 변형별 page를 순차 생성·측정·닫는다.
 async function measureHeights(
@@ -375,23 +422,33 @@ async function main(): Promise<void> {
   console.log(`\n실측 완료: ${measuredHeights.size}건`)
 
   // 결과 조립
+  let offPaletteCount = 0
+  const entries: Record<string, unknown> = {}
+  for (const v of variants) {
+    const { offPalette: rawOffPalette } = detectOffPalette(v.css, String(v.render))
+    // award 아키타입은 골드·은색이 커머스 권위 신호색으로 하드코딩 허용 — offPalette 판정 면제
+    const offPalette = rawOffPalette && v.archetype !== 'award'
+    if (offPalette) offPaletteCount++
+    entries[v.id] = {
+      tone: detectTone(v.css, String(v.render)),
+      height: measuredHeights.get(v.id) ?? null,
+      archetype: v.archetype,
+      ...(offPalette ? { offPalette: true } : {}),
+    }
+  }
+
   const result: Record<string, unknown> = {
     _generated: new Date().toISOString(),
     _measured: measuredHeights.size,
     _total: variants.length,
-  }
-
-  for (const v of variants) {
-    result[v.id] = {
-      tone: detectTone(v.css, String(v.render)),
-      height: measuredHeights.get(v.id) ?? null,
-      archetype: v.archetype,
-    }
+    _offPalette: offPaletteCount,
+    ...entries,
   }
 
   fs.writeFileSync(OUT_PATH, JSON.stringify(result, null, 2) + '\n', 'utf8')
   console.log(`\n✅ 저장 완료: ${OUT_PATH}`)
   console.log(`   총 ${variants.length}개 / 실측 ${measuredHeights.size}건 / light+dark 분류 완료`)
+  console.log(`   오프팔레트 변형: ${offPaletteCount}개`)
 }
 
 main().catch((err) => {

@@ -11,7 +11,7 @@ import { catalog } from './templates/blocks'
 import { containSlotKeys } from './templates/blocks/registry'
 import { SCRIPT_TYPE_TO_ARCHETYPES, HERO_STYLE_TO_VARIANTS } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
-import { variantTone, estimateHeight } from './templates/blocks/variant-meta'
+import { variantTone, estimateHeight, isOffPalette } from './templates/blocks/variant-meta'
 import type { AgentResult, ProjectBrief } from './types'
 
 export interface ImageNeed {
@@ -221,6 +221,7 @@ export function getCatalogBlock(seed: string): string {
   const byArch = new Map<string, ReturnType<typeof catalog>>()
   for (const c of catalog()) {
     if (!CONTRACTED_IDS.has(c.id)) continue
+    if (isOffPalette(c.id)) continue // 오프팔레트 변형은 LLM 카탈로그에서 제외
     const list = byArch.get(c.archetype) ?? []
     list.push(c)
     byArch.set(c.archetype, list)
@@ -301,14 +302,37 @@ function validateBlueprint(
   const gaps: string[] = []
   const arch = (id: string): string => String(catalog().find((c) => c.id === id)?.archetype ?? '')
 
-  // 수리 1: 미지 변형·중복 제거(첫 항목 유지), 이미지 풀 이탈 제거
+  // 수리 1: 미지 변형·중복 제거(첫 항목 유지), offPalette 교체, 이미지 풀 이탈 제거
   const seen = new Set<string>()
-  bp.sections = bp.sections.filter((s) => {
-    if (!CONTRACTED_IDS.has(s.variantId) || seen.has(s.variantId)) return false
+  const filteredSections: BlueprintSection[] = []
+  for (const s of bp.sections) {
+    if (!CONTRACTED_IDS.has(s.variantId) || seen.has(s.variantId)) continue
+    // offPalette 교체: 같은 아키타입·같은 톤의 온팔레트 변형으로 교체, 불가 시 제거+gaps
+    if (isOffPalette(s.variantId)) {
+      const ce = catalog().find((c) => c.id === s.variantId)
+      const targetArch = ce?.archetype ?? ''
+      const targetTone = variantTone(s.variantId)
+      const repl = catalog().find(
+        (c) =>
+          CONTRACTED_IDS.has(c.id) &&
+          c.archetype === targetArch &&
+          variantTone(c.id) === targetTone &&
+          !isOffPalette(c.id) &&
+          !seen.has(c.id),
+      )
+      if (repl) {
+        gaps.push(`offPalette 교체: ${s.variantId} → ${repl.id} (${targetArch}/${targetTone})`)
+        s.variantId = repl.id
+      } else {
+        gaps.push(`offPalette 제거: ${s.variantId} — ${targetArch}/${targetTone} 온팔레트 대체 없음`)
+        continue
+      }
+    }
     seen.add(s.variantId)
     s.imageUrls = s.imageUrls.filter((u) => allowedUrls.has(u))
-    return true
-  })
+    filteredSections.push(s)
+  }
+  bp.sections = filteredSections
 
   // 수리 1b: 브리프에 가격·할인 근거가 없으면 discount 계열 제거 — 조립 단계에서 무근거 가격
   // 차단→가격 공백→블록 드롭으로 이어져 니즈 컷만 고아가 되는 낭비를 기획에서 차단(루미트론 실사례)
@@ -439,6 +463,7 @@ function validateBlueprint(
             CONTRACTED_IDS.has(c.id) &&
             c.archetype === targetArch &&
             variantTone(c.id) === majorTone &&
+            !isOffPalette(c.id) &&
             !seen.has(c.id),
         )
         if (replacement) {

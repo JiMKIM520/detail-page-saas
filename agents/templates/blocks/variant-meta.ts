@@ -9,6 +9,8 @@ export interface VariantMetaEntry {
   tone: 'dark' | 'light'
   height: number | null
   archetype: string
+  /** 팔레트 외 유채색 하드코딩이 3개 이상인 변형 — 카탈로그에서 제외된다 */
+  offPalette?: boolean
 }
 
 // 내부 JSON 형상 — 메타 필드(_로 시작)와 변형 엔트리 혼재
@@ -33,6 +35,11 @@ export function getVariantMeta(variantId: string): VariantMetaEntry | undefined 
 /** 변형 배경 톤. 미등록이면 'light' 폴백. */
 export function variantTone(variantId: string): 'dark' | 'light' {
   return getVariantMeta(variantId)?.tone ?? 'light'
+}
+
+/** 변형이 오프팔레트(팔레트 외 유채색 하드코딩 ≥3)인지 여부. 미등록이면 false 폴백. */
+export function isOffPalette(variantId: string): boolean {
+  return getVariantMeta(variantId)?.offPalette === true
 }
 
 /**
