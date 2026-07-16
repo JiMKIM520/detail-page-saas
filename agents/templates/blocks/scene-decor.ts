@@ -47,6 +47,8 @@ export const DECOR_CSS = [
   '.dL-wave{position:absolute;top:0;left:0;width:100%;height:12px;opacity:.35}',
   /* 형광 마커 — 라이트 톤 섹션의 기존 강조(.em)에만. 다크 톤은 --em-dark 경로 유지 */
   '.dpg section[data-tone="light"] .em{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 30%,transparent) 62% 94%,transparent 94%);padding:0 .06em;border-radius:2px}',
+  /* 다크 톤 강조 대비 보정 — 어두운 배경에서 --accent-d(.em 기본색)가 침몰하는 결함 봉쇄 (룰 7-7) */
+  '.dpg section[data-tone="dark"] .em{color:var(--em-dark,#fff)}',
 ].join('\n')
 
 // ── 내부 상수 ────────────────────────────────────────────────────────────────
