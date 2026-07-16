@@ -10,6 +10,7 @@
 import { z } from 'zod'
 import { baseCss, buildFontLinks, esc, makeCtx } from './shared'
 import { getVariant } from './registry'
+import { decorateSection, DECOR_CSS } from './scene-decor'
 import type { PageSpec } from './types'
 
 const DEFAULT_WIDTH = 872
@@ -29,6 +30,17 @@ export function renderPage(spec: PageSpec): RenderResult {
   const sections: string[] = []
   const usedVariants: string[] = []
 
+  // ── 씬별 메타 선-계산 (decorateSection에 indexInScene·sceneSize·isLastScene 공급) ──
+  const sceneSizes = new Map<number, number>() // sceneId → 해당 씬의 총 섹션 수
+  for (const b of spec.blocks) {
+    if (b.sceneId !== undefined) {
+      sceneSizes.set(b.sceneId, (sceneSizes.get(b.sceneId) ?? 0) + 1)
+    }
+  }
+  const lastSceneId: number | undefined =
+    sceneSizes.size > 0 ? Math.max(...sceneSizes.keys()) : undefined
+  const sceneCounters = new Map<number, number>() // sceneId → 현재 처리한 인덱스
+
   // 씬 경계 추적 — sceneId가 정의된 블록은 <div class="scene"> 래퍼로 묶는다.
   // 전부 undefined이면 래퍼가 하나도 생성되지 않아 출력이 현행과 100% 동일하다.
   let prevSceneId: number | undefined = undefined
@@ -46,7 +58,21 @@ export function renderPage(spec: PageSpec): RenderResult {
     if (!cssById.has(variant.id)) cssById.set(variant.id, variant.css)
     usedVariants.push(variant.id)
 
+    // ── 장식 레이어 주입 — sceneId 없으면 decorateSection이 원본 그대로 반환 ──
+    const sectionHtml = variant.render(parsed.data, ctx)
     const sid = block.sceneId
+    const indexInScene = sid !== undefined ? (sceneCounters.get(sid) ?? 0) : 0
+    const sceneSize = sid !== undefined ? (sceneSizes.get(sid) ?? 1) : 1
+    const decorated = decorateSection(sectionHtml, {
+      sceneId: sid,
+      indexInScene,
+      sceneSize,
+      isLastScene: sid !== undefined && sid === lastSceneId,
+      archetype: variant.archetype,
+      globalIndex: i,
+    })
+    if (sid !== undefined) sceneCounters.set(sid, indexInScene + 1)
+
     if (sid !== undefined) {
       if (sid !== prevSceneId) {
         if (sceneOpen) sections.push('</div>')
@@ -61,7 +87,7 @@ export function renderPage(spec: PageSpec): RenderResult {
       prevSceneId = undefined
     }
 
-    sections.push(variant.render(parsed.data, ctx))
+    sections.push(decorated)
   })
 
   if (sceneOpen) sections.push('</div>')
@@ -69,7 +95,7 @@ export function renderPage(spec: PageSpec): RenderResult {
   // vw 단위를 페이지 고정폭 기준 px로 결정적 치환 — 데스크톱 브라우저는 viewport meta를
   // 무시하므로 vw가 실제 창 폭을 따라 커져 872px 설계가 와이드 화면에서 붕괴한다
   // (로모노소프 선물 타이틀-이미지 겹침 실사례). 모바일은 meta로 이미 872 가상폭 = 동일 결과.
-  const styles = [baseCss(spec.tokens, width), ...cssById.values()]
+  const styles = [baseCss(spec.tokens, width), DECOR_CSS, ...cssById.values()]
     .join('\n')
     .replace(/([\d.]+)vw/g, (_, n) => `${Math.round(parseFloat(n) * width) / 100}px`)
   const title = `${spec.meta.product}`.trim() || 'Detail'
@@ -121,5 +147,7 @@ export const pageSpecSchema = z.object({
     fontHand: cssToken,
   }),
   width: z.number().optional(),
-  blocks: z.array(z.object({ variantId: z.string().min(1), data: z.unknown() })).min(1),
+  blocks: z
+    .array(z.object({ variantId: z.string().min(1), data: z.unknown(), sceneId: z.number().optional() }))
+    .min(1),
 })

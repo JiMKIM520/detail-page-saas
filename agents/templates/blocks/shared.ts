@@ -246,6 +246,7 @@ export function baseCss(tokens: Tokens, width: number): string {
 body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);background:#cfc6ba;-webkit-font-smoothing:antialiased}
 .dpg{width:${width}px;margin:0 auto;background:var(--bg);overflow:hidden;word-break:keep-all;overflow-wrap:break-word;font-synthesis:none}
 .dpg img{display:block}
+.dpg section{position:relative}
 .disp{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;line-height:1.14}
 .serif{font-family:var(--font-serif)}
 .lat{font-family:var(--font-lat)}
