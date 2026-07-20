@@ -73,6 +73,8 @@ export const pointCircleGridReveal = defineBlock<Data>({
 /* 2×2 어두운 카드 그리드 */
 .phiu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;
   margin-top:32px;padding:0 var(--pad-x,56px)}
+/* 홀수 3개: 1행 3칸 (빈 칸 없음) */
+.phiu-grid[data-count="3"]{grid-template-columns:repeat(3,1fr)}
 .phiu-card{background:#363636;border-radius:calc(var(--r-scale,1)*10px);overflow:hidden;
   display:flex;flex-direction:column}
 /* 카드 이미지 영역 */
@@ -152,7 +154,7 @@ export const pointCircleGridReveal = defineBlock<Data>({
   <p class="phiu-keyword">${richSafe(d.keyword)}</p>
 
   <!-- 2×2 어두운 카드 그리드 -->
-  <div class="phiu-grid">
+  <div class="phiu-grid" data-count="${d.cards.length}">
     ${d.cards
       .map(
         (c) => `

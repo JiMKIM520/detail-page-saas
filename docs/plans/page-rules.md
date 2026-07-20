@@ -159,3 +159,103 @@
 > 2026-07-20 감사(v7 런)에서 5개 실패 지점
 > (① 플래너 imageNeeds 단절 ② 원본 5장 재배치 풀 제외 ③ 드롭 블록 고아화
 > ④ PairingQA 3차 재제거 ⑤ openSlots 4중 조건 과제한)으로 유명무실 확인.
+
+## 9. 룰 반영·충돌 감사 (2026-07-20)
+
+> 감사 범위: 폰트(A), 이미지(B), 씬·구조(C), 단계간 파이프라인(D) 4개 감사 종합.
+> 런 기준: f30fc599(SWITCH 여름 핸드크림 17블록), ef447805, fd45031f, f8ff27d7, 5f9da482.
+> **강제 방식** 표기: **코드** = 결정론적 가드 함수 / **프롬프트** = LLM 지시문 의존 / **없음** = 미집행.
+
+### 9-1 룰별 반영 현황
+
+| 코드 | 룰 요약 | 반영 상태 | 집행 방식 | 핵심 근거 |
+|---|---|---|---|---|
+| **F1** | 폰트 최대 5종 | 부분반영 | 없음 | `shared.ts` FONT_LINKS 상수가 매 페이지 8종+ family 무조건 선언, 캡 로직 없음 |
+| **F2** | 섹션 타이틀 1종 | 부분반영 | 프롬프트 | `baseCss .disp` 단일 클래스 정의, 일부 variant에서 `--font-hand` eyebrow 혼용 경로 열려 있음 |
+| **F3** | 서브 ≥30px | 부분반영 | 없음 | `remapFontScale` 앵커 [17→26px] — 서브 역할 요소가 26~29px에 집중, 30px 하한 4px 미달 |
+| **F4** | 본문 ≥23px | 부분반영 | 코드 | `render-audit.ts` 23px 플로어 강제; `.lab{font-size:17px}`(badge, `shared.ts:302`) remapFontScale 미적용 잔존 |
+| **F5** | 본문 고딕 계열 | 부분반영 | 프롬프트 | `art-director.ts:80` 프롬프트만, FONT_WHITELIST에 Nanum Myeongjo(명조) 포함 — bodyFont 코드 차단 없음 |
+| **F6** | 제공 폰트만 사용 | **미반영** | 없음 | 실제 렌더 2건 클라이언트 woff2 사용 0건; TOKEN_PRESETS 4종 전부 비제공 폰트 사용 |
+| **F7** | 가독성·대비 | 부분반영 | 코드+프롬프트 | `tokens.ts` WCAG 잉크/브랜드 대비 코드강제; 웨이트 최솟값·소형 요소 개별 대비 검사 없음 |
+| **I1** | 히어로 제품 잘림 금지 | 부분반영 | 프롬프트 | 재생성 루프에만 `ensureHeroFraming()`; 1차 생성 `shot-prompter.ts` 시스템 프롬프트 미적용 |
+| **I2** | 원료/소재 2~4컷 | 부분반영 | 프롬프트 | `page-planner.ts:168` 명세, 코드 강제 없음, 실측 구형 런 1컷(최솟값 2 미달) |
+| **I3** | 단색 바탕→누끼 | **미반영** | 없음 | 단색 배경 판정 로직 없음; `image-tagger.ts` roles에 배경 분류 미구현 |
+| **I4** | 수치→그래프(근거 있을 때만) | 부분반영 | 코드+프롬프트 | 그래프 블록 선택=프롬프트, `fixSpecQuantities()` 수치 무근거 차단=코드강제 이중 구조 |
+| **I5** | 동일 사진 최대 1회 | **반영** | 코드 | `applyPlacementGuards` urlCount 맵 결정론적 집행, 실측 3런 중복 URL 0 |
+| **I6** | 스타일링컷 전량 사용 | 부분반영 | 코드 | `redistributeUnusedImages` 4순위 재배치 존재; slotSum 하한 10 vs 12컷 → 구조적 2컷 미배치 위험 |
+| **I7** | 표계열 이미지 금지 | **반영** | 코드 | `TEXT_LED_ARCHETYPES` Set + `applyPlacementGuards:1171` 결정론적 제거, 실측 3런 표계열 0 |
+| **I8** | 12컷 표준 패키지 | 부분반영 | 코드 | 신형 경로 코드강제, 구형 art-director 경로 실측 8컷 고정 — 경로 이원화로 보장 불완전 |
+| **I9** | hero·closing 원본 금지 | 부분반영 | 코드 | closing 완전 차단; hero는 cutoutSet 예외로 `intake-files/` URL 진입 허용(실측 f30fc599 위반 확인) |
+| **S1** | 7씬 고정 | **반영** | 코드 | `validateBlueprint` 7씬 폴백 재그룹핑 결정론적, 실측 sceneCount=7 |
+| **S2** | 씬당 2,000px ±20% | 부분반영 | 코드 | repair-5 최대 7회 시도; stale `estimateHeight`(폰트 상향 4h14m 전 측정값)로 실측 7씬 중 5씬 이탈 |
+| **S3** | 전체 ≤25,000px | **반영** | 코드 | `render-audit.ts:178` >25,000px ruleViolation 코드강제, 실측 15,142px |
+| **S4** | 씬 바탕색 교차 | 부분반영 | 코드 | `--scene-bg-N` 순환 구현; 다크 섹션 `background:#111` 하드코딩이 틴트 무효화 |
+| **S5** | 씬 내 120~180px 리듬 | 부분반영 | 없음 | 씬 경계 여백 0 보장; 내부 리듬은 변형 자율(실측 sectionPaddingTop 0~96px) |
+| **S6** | 14~20블록, hero·closing 위치 | 부분반영 | 코드 | hero·closing 위치 코드강제; `blueprintSchema min(8)`, `composerOutputSchema min(10)` — 14블록 하한 미보장 |
+| **S7** | 씬7 재강조+구매유도 | 부분반영 | 프롬프트 | `page-planner.ts:188` 서사 명세, `validateBlueprint` gaps 기록만, 하드 강제 없음 |
+| **E1** | 홀수 포인트 1열 | 부분반영 | 코드 | `point-glass-grid`·`point-dark-grid-resolve` 2종 수정 완료; 나머지 7개 변형 미수정 |
+| **E3** | 872px 고정폭 | **반영** | 코드 | `composer.ts DEFAULT_WIDTH=872`, vw→px 치환, 실측 일치 |
+| **E4** | 플레이스홀더 미노출 | **반영** | 코드 | `render-audit.ts` phVisible DOM 검사, 실측 `.ph` count=0 |
+| **V1** | 타이틀 장식 | **반영** | 코드 | `scene-decor.ts injectDtClass()` 씬 첫 h1/h2/.disp에 dT-a/b/c 클래스 주입 |
+| **V4** | 이미지 내 제품 잘림 금지 | 부분반영 | 프롬프트 | I1과 동일 집행 경로 — shot-prompter 1차 생성 미적용 |
+| **V5** | 섹션 컬러 구간 분리 | 부분반영 | 코드 | S4와 동일 메커니즘, 다크 섹션 하드코딩 배경으로 라이트 씬에만 시각 반영 |
+| **V6** | 데이터 구간 그래프 | 부분반영 | 프롬프트 | `page-planner.ts:193` 프롬프트만, 블록 선택 후 코드 강제 없음 |
+| **V7** | How-to-use 이미지+넘버링 | 부분반영 | 프롬프트 | 블록 DATA_CONTRACTS에 STEP 0N 내장; 블록 선택 자체가 플래너 프롬프트 기반 |
+| **V10** | 강조 컬러박스 | **반영** | 코드 | `scene-decor.ts applyEmMarkers()` 씬당 2개 한도 코드강제 |
+| **V11** | 마지막 재강조+구매유도 | 부분반영 | 프롬프트 | 플래너 서사 명세; `validateBlueprint` gaps 기록만, 하드 강제 없음 |
+
+**집계**: 반영 9 / 부분반영 21 / 미반영 2 (F6, I3)
+
+---
+
+### 9-2 확인된 충돌 목록
+
+| # | 충돌 쌍 | 현재 우선권 | 해소 방안 |
+|---|---|---|---|
+| **D-C1** | 아트디렉터 accent 선택 ↔ `tokens.ts` 대비 가드 무음 교체 | tokens.ts 코드 | 아트디렉터 프롬프트에 "대비 3:1 미달 시 자동 교체" 명시; 교체 사유를 art-director 로그에 기록 |
+| **D-C2** | 아트디렉터 49종 폰트 목록 ↔ `resolveWhitelistFont` 30종 화이트리스트 무음 폴백 | 화이트리스트 코드 | 아트디렉터 프롬프트를 화이트리스트 30종(F6 적용 시 클라이언트 제공 6종)으로 축소 |
+| **D-C3** | 다크 비율 — 아트디렉터 25~40% ↔ 플래너 1~3씬 ↔ 컴포저 2~3블록 | 플래너(청사진 있을 때), 컴포저(없을 때) | 단일 기준("전체 블록의 25~35%는 dark 변형")으로 통일; 아트디렉터→플래너 전달 필드 추가 |
+| **D-C4** | 스크립트라이터 10섹션 상한 ↔ 플래너·컴포저 14~20블록 목표 | 플래너/컴포저 SPLIT 로직 | script-writer 상한 제거하거나 "섹션당 1~2블록 분할" 허용 명시 |
+| **D-C5** | 플래너 imageNeeds 12컷 기획 ↔ `blocks-pipeline`에서 shot-prompter 미호출 | 플래너(imageNeeds 빈 채로 전달) | `blocks-pipeline.ts`에 shot-prompter 호출 단계 삽입; 또는 imageNeeds→styledUrls 자동 브리지 |
+| **D-C6** | 컴포저 이미지 배치 지시 ↔ `applyPlacementGuards` 균일화 무음 제거 | 가드 코드 | 컴포저 SYSTEM_PROMPT에 "배열 전부-또는-0" 균일화 규칙 명시; repairNote에 제거 사유 포함 |
+| **D-C7** | `callOnce` 가드 체인 `dropPricelessDiscountBlocks` ↔ `redistributeUnusedImages` 체인 누락 | 재배치 후 드롭 없음 | `redistributeUnusedImages` 이후 가드 체인에 `dropPricelessDiscountBlocks` 추가 |
+| **D-C8** | `dropUngroundedNumericBlocks`(결정론적) ↔ `page-evaluator`(비결정적) 인덱스 불일치 | 가드 코드가 나중에 재수술 | 평가자가 가드 실행 후 블록 목록을 받도록 순서 조정; 또는 평가자 반려 이유를 블록 ID 기준으로 전환 |
+| **D-C9** | 아트디렉터 bgType/backgroundStyle ↔ 플래너 variantTone CSS 프리셋 — 계약 없음 | 런 경로에 따라 불확정 | 명시적 우선순위 계약 정의: "CSS 프리셋 variantTone이 최종 배경 결정자, bgType은 layer-image 경로 전용"으로 분리 |
+| **F1 vs FONT_LINKS** | F1 5종 상한 ↔ `shared.ts FONT_LINKS` 상수 8종+ 무조건 삽입 | FONT_LINKS 코드 | FONT_LINKS를 페이지 토큰에서 실제 사용 폰트만 동적으로 생성하도록 리팩토링 |
+| **I5 vs 플래너 프롬프트** | I5 최대 1회 ↔ `page-planner.ts:148` "at most 2 sections" | 컴포저 가드 코드 | 플래너 프롬프트를 "at most 1 section"으로 수정 |
+| **I6·I8 vs slotSum≥10** | I6 전량 사용·I8 12컷 ↔ slotSum 하한 10 (2컷 구조적 미배치) | slotSum 코드 | `page-planner.ts:428` 검사값을 12로 상향 |
+| **I9 vs heroPool 폴백** | I9 hero 원본 금지 ↔ `pipeline-bridge.ts:514` cutoutUrls→hero 직행 폴백 | 폴백 코드 | 폴백 경로에서도 `intake-files/` URL 차단; 스타일링샷 0건이면 hero 블록을 텍스트 전용 변형으로 강등 |
+| **S2 vs stale estimateHeight** | S2 씬당 2,000px ±20% ↔ 폰트 상향 4h14m 전 측정값 기반 수리 | stale 값 코드 | `scripts/gen-variant-meta.ts` 재실행으로 `variant-meta.json` 갱신; `remapFontScale` 배율을 `estimateHeight`에 반영 |
+| **S6 min(14) vs 스키마 min(8/10)** | S6 14블록 하한 ↔ `blueprintSchema min(8)` / `composerOutputSchema min(10)` | 스키마 코드 | `blueprintSchema sections.min → 14`, `composerOutputSchema blocks.min → 14`로 정렬 |
+
+---
+
+### 9-3 미반영 룰 — 난이도·영향
+
+| 룰 | 미반영 내용 | 구현 난이도 | 품질 영향 |
+|---|---|---|---|
+| **F6** 제공 폰트만 | TOKEN_PRESETS 4종·아트디렉터 49종 목록 전면 교체, woff2 self-host 파이프라인 완성 필요 | 높음 | 높음 — 클라이언트 계약 직결 |
+| **I3** 단색 바탕→누끼 | `image-tagger`에 배경 분류(AI 색 분산 판정 또는 Gemini vision) 추가 | 중간 | 중간 — 뷰티·식품 단독컷 품질 |
+| **S2 stale 수리** | `gen-variant-meta.ts` 재실행 + `estimateHeight`에 폰트 배율 상수 반영 | 낮음 | 높음 — 씬 높이 7씬 중 5씬 이탈 근본 원인 |
+| **E1 나머지 7변형** | `point-badge-section-trio` 외 6개 변형에 `[data-count="3"]{repeat(3,1fr)}` CSS 추가 | 낮음 | 중간 — 홀수 포인트 레이아웃 시각 품질 |
+| **D-C5 shot-prompter 단절** | `blocks-pipeline.ts`에 shot-prompter 호출 단계 삽입 | 중간 | 높음 — 12컷 패키지가 실제 이미지 생성으로 이어지지 않는 구조적 결함 |
+| **D-C7 재배치 후 가드 누락** | `redistributeUnusedImages` 뒤 `dropPricelessDiscountBlocks` 1줄 추가 | 낮음 | 중간 — 할인 블록 가격 미기재 노출 방지 |
+
+---
+
+### 9-4 수정 우선순위
+
+| 우선순위 | 항목 | 근거 |
+|---|---|---|
+| **P0** | `gen-variant-meta.ts` 재실행 → `variant-meta.json` 갱신 | S2 repair-5가 stale 값 기반으로 동작 — 씬 높이 5/7 이탈의 근본 원인이자 다른 씬 수리 작업의 전제조건 |
+| **P0** | `redistributeUnusedImages` 뒤 `dropPricelessDiscountBlocks` 추가 (D-C7) | 1줄 삽입으로 재배치 후 할인 블록 가격 미기재 노출 완전 차단 — 최저 난이도·즉각 영향 |
+| **P0** | `blueprintSchema sections.min` / `composerOutputSchema blocks.min` → 14 (S6) | 8~13블록 청사진이 스키마 통과하는 구조적 허점을 단순 상수 변경으로 봉쇄 |
+| **P1** | `blocks-pipeline.ts`에 shot-prompter 호출 단계 삽입 (D-C5) | 12컷 표준 패키지가 실제 이미지 생성으로 이어지지 않는 구조적 단절 해소 |
+| **P1** | `pipeline-bridge.ts:514` heroPool cutout 폴백 차단 (I9) | 실측 위반(f30fc599) 확인된 상태 — 폴백 경로에서 intake-files URL 차단 또는 텍스트 변형 강등 |
+| **P1** | `remapFontScale` FONT_ANCHORS 서브 앵커를 [17→30] 이상으로 상향 (F3) | 서브 폰트 30px 하한을 코드 수준에서 보장 — 현재 [17→26px] 앵커가 4px 미달 구조 유발 |
+| **P1** | `shot-prompter.ts` 시스템 프롬프트에 HERO FRAMING RULES 삽입 (I1/V4) | 재생성 루프에만 있는 잘림 방지 규칙을 1차 생성 경로에 적용 |
+| **P2** | `FONT_LINKS`를 페이지 토큰 기반 동적 생성으로 전환 (F1) | 8종+ 고정 선언 → 실사용 폰트만 CDN 로드, F1 준수와 성능 개선 동시 달성 |
+| **P2** | TOKEN_PRESETS 4종을 클라이언트 제공 woff2 폰트로 교체 (F6) | F6 클라이언트 계약 이행의 핵심 — woff2 self-host 파이프라인 완성과 병행 필요 |
+| **P2** | 나머지 E1 미수정 7개 point 변형 CSS 추가 | CSS 패턴 복사 수준이며 홀수 포인트 레이아웃 품질 완성 |
+| **P2** | `page-planner.ts:148` "at most 2 sections" → "at most 1 section" 수정 (I5 vs 플래너) | 프롬프트·코드 충돌 정합 — 1문자열 수정 |
+| **P2** | `page-planner.ts:428` slotSum 검사값 10 → 12 (I6·I8) | 12컷 전량 배치를 코드 수준에서 보장 |

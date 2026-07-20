@@ -126,6 +126,8 @@ const css = `
 
 /* 2×N 그리드 카드 (grid-cards) */
 .pbst-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:24px var(--pad-x,56px) 0;margin-top:0}
+/* 홀수 3개: 1행 3칸 (빈 칸 없음) */
+.pbst-grid[data-count="3"]{grid-template-columns:repeat(3,1fr)}
 .pbst-grid-card{border-radius:calc(var(--r-scale,1)*12px);overflow:hidden;background:var(--pbst-brand)}
 .pbst-grid-card-img{width:100%;aspect-ratio:370/300;overflow:hidden;background:var(--muted)}
 .pbst-grid-card-img img,.pbst-grid-card-img .ph{width:100%;height:100%;object-fit:cover}
@@ -225,7 +227,7 @@ ${renderSecBadge(sec.badgeHead, esc)}
           body = `
 ${renderSecBadge(sec.badgeHead, esc)}
 <p class="pbst-sec-badge-sub">${esc(sec.badgeSub)}</p>
-<div class="pbst-grid" role="list">
+<div class="pbst-grid" role="list" data-count="${sec.cards.length}">
   ${sec.cards
     .map(
       (c) => `

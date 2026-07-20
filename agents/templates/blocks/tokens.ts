@@ -3,7 +3,7 @@
  * 변형(블록)은 토큰 무관하게 동작하고, 토큰만 바꿔도 페이지 분위기가 달라진다.
  */
 import type { Tokens } from './types'
-import { resolveWhitelistFont } from './shared'
+import { resolveWhitelistFont, isBodySafeFont } from './shared'
 
 /** 스타일 A — 따뜻한 플레이풀 푸드 (Black Han Sans + 말풍선/워터마크). */
 export const warmPlayful: Tokens = {
@@ -291,7 +291,11 @@ export function deriveTokens(
       } else skipped.push(`${key}(${family.trim()})`)
     }
     setFont('fontDisplay', t.headlineFont, 'sans-serif')
-    setFont('fontBody', t.bodyFont, 'sans-serif')
+    // bodyFont: 세리프·손글씨·디스플레이 차단 — 산세리프만 허용 (art-director 규칙 강제)
+    if (!isBodySafeFont(t.bodyFont))
+      skipped.push(`fontBody(${t.bodyFont!.trim()})·비산세리프`)
+    else
+      setFont('fontBody', t.bodyFont, 'sans-serif')
     setFont('fontSerif', t.storyFont, 'serif')
     setFont('fontHand', t.accentFont, 'sans-serif')
 

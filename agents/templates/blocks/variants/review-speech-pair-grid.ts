@@ -70,6 +70,8 @@ export const reviewSpeechPairGrid = defineBlock<Data>({
 .rffe .em{color:var(--em-dark,#FFF7EA)}
 /* 카드 그리드 */
 .rffe-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:28px var(--pad-x,56px) 0}
+/* 홀수 3개: 1행 3칸 (빈 칸 없음) */
+.rffe-grid[data-count="3"]{grid-template-columns:repeat(3,1fr)}
 /* 카드 셀 */
 .rffe-cell{display:flex;flex-direction:column;align-items:flex-start}
 /* 카드 본체 */
@@ -148,7 +150,7 @@ export const reviewSpeechPairGrid = defineBlock<Data>({
       <span class="rffe-title">${richSafe(d.title)}</span>
     </div>
   </div>
-  <div class="rffe-grid">
+  <div class="rffe-grid" data-count="${d.reviews.length}">
     ${cells.join('')}
   </div>
 </section>`

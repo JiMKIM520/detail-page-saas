@@ -220,6 +220,28 @@ export function isWhitelistedFont(family: string): boolean {
   return resolveWhitelistFont(family) !== null
 }
 
+/** bodyFont 슬롯에 허용되지 않는 세리프·손글씨·디스플레이 폰트 (소문자 정식명 및 alias key).
+ *  art-director 규칙: "bodyFont — choose from [산세리프 · 범용/모던] group only". */
+const BODY_BLOCKED_FONTS = new Set([
+  // 세리프·명조 (storyFont/fontSerif 전용)
+  'gowun batang', 'noto serif kr', 'nanum myeongjo', 'hahmlet', 'song myung', 'maruburi',
+  // 한글명 alias
+  '나눔명조', '마루 부리', 'maru buri',
+  // 손글씨 (본문 사용 금지)
+  'gaegu', 'nanum pen script', 'nanum brush script', 'gamja flower', 'poor story',
+  // 디스플레이·특수 (본문 사용 금지)
+  'yeon sung', 'gugi', 'hi melody', 'cute font', 'single day', 'east sea dokdo', 'kirang haerang',
+  '가나초콜릿체', 'tvn 즐거운이야기', 'nanum gothic',
+])
+
+/** bodyFont 슬롯에 안전한 산세리프 폰트인지 확인. 빈 문자열·undefined는 true 반환(setFont 내부에서 skip). */
+export function isBodySafeFont(family: string | undefined): boolean {
+  if (!family?.trim()) return true
+  const key = family.trim().toLowerCase()
+  const canonical = (FONT_ALIASES[key] ?? key).toLowerCase()
+  return !BODY_BLOCKED_FONTS.has(key) && !BODY_BLOCKED_FONTS.has(canonical)
+}
+
 /**
  * 토큰의 폰트 패밀리에서 웹폰트 로드 태그 생성.
  * 1. 클라이언트 제공 폰트(client 속성): woff2 → base64 데이터 URI @font-face 주입 (CDN 불필요)

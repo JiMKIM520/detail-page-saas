@@ -51,14 +51,13 @@ Icon library selection guide:
 Available Korean fonts — grouped by character:
 
   [산세리프 · 범용/모던] — 가독성 최고, 본문·제목 모두 적합
-    Pretendard Variable, Noto Sans KR, IBM Plex Sans KR, Gothic A1, Sunflower, Stylish,
-    NanumSquareNeo, KoPub Dotum
+    Pretendard Variable, Noto Sans KR, IBM Plex Sans KR, Gothic A1, Sunflower, Stylish
 
   [세리프 · 고급/전통] — 고급스러운 본문, 브랜드 스토리, 전통적 무드
-    Noto Serif KR, Gowun Batang, Hahmlet, Nanum Myeongjo, Song Myung, KoPub Batang
+    Noto Serif KR, Gowun Batang, Hahmlet, Nanum Myeongjo, Song Myung
 
   [산세리프 · 개성/임팩트] — 제목 전용, 강한 인상
-    Black Han Sans, Do Hyeon, Jua, Gowun Dodum, GmarketSans, Paperlogy, Tenada
+    Black Han Sans, Do Hyeon, Jua, Gowun Dodum, Paperlogy
 
   [손글씨 · 감성 포인트] — 단문 헤드라인 강조, 따뜻한 감성
     Nanum Pen Script, Nanum Brush Script, Gamja Flower, Gaegu, Poor Story
@@ -81,9 +80,9 @@ Selection rules:
   - storyFont should match emotional register — [세리프 · 고급/전통] for warmth/premium, [손글씨] for handmade
   - headlineFont — choose from [개성/임팩트] or [범용/모던] group; AVOID repeating same font across runs
   - [손글씨] and [디스플레이 · 특수] fonts — use only for headlineFont or accentFont, NEVER for bodyFont
-  - Category guidance: food → GmarketSans/Paperlogy/Tenada/KoPub Batang 우선;
-                       beauty → NanumSquareNeo/Sunflower/GmarketSans 우선;
-                       electronics → Gothic A1/IBM Plex Sans KR/NanumSquareNeo 우선
+  - Category guidance: food → Black Han Sans/Paperlogy/Gowun Batang 우선;
+                       beauty → SUIT/Sunflower/Black Han Sans 우선;
+                       electronics → Gothic A1/IBM Plex Sans KR/SUIT 우선
 
   [클라이언트 제공 — 서브셋 woff2 내장 (CDN 불필요, 한글+라틴 완전 지원)] ★ 우선 추천
     SUIT                  → headlineFont·bodyFont 겸용 | 고딕 모던, 가독성 최상, 범용

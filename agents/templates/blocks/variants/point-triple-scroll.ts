@@ -176,6 +176,8 @@ export const pointTripleScroll = defineBlock<Data>({
 /* ── S1: 아이콘 카드 그리드 ─────────────────────────────────── */
 .pvii-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;
   padding:22px var(--pad-x,56px) 60px}
+/* 홀수 3개: 1행 3칸 (빈 칸 없음) */
+.pvii-cards[data-count="3"]{grid-template-columns:repeat(3,1fr)}
 .pvii-card{background:color-mix(in srgb,var(--accent) 12%,var(--paper));
   border-radius:calc(var(--r-scale,1)*28px);
   padding:28px 18px 22px;display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -278,7 +280,7 @@ export const pointTripleScroll = defineBlock<Data>({
     <div class="pvii-pill-div"></div>
     ${d.s1PillSub ? `<p class="pvii-pill-sub">${esc(d.s1PillSub)}</p>` : ''}
   </div>` : ''}
-  <div class="pvii-cards">
+  <div class="pvii-cards" data-count="${d.s1Cards.length}">
     ${d.s1Cards.map(c => `
     <div class="pvii-card">
       <div class="pvii-card-circle">${icon(c.icon)}</div>
