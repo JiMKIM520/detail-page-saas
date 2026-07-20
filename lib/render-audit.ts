@@ -155,11 +155,12 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
   // 전체 scrollHeight > 25000px
   if (measurements.scrollHeight > 25000)
     ruleViolations.push(`전체 높이 초과(>25000px): ${measurements.scrollHeight}px`)
-  // 본문 폰트 < 13px
-  const smallBody = measurements.fontSamples.body.filter((sz) => Number.isFinite(sz) && sz < 13)
+  // 본문 폰트 < 23px — 클라이언트 폰트 룰 v2(2026-07-20): 기본 정보 최소 23px(872px 캔버스 기준,
+  // 커머스 상세는 모바일에서 ~45%로 축소 표시되므로 웹 표준보다 큰 하한이 실무 기준)
+  const smallBody = measurements.fontSamples.body.filter((sz) => Number.isFinite(sz) && sz < 23)
   if (smallBody.length > 0)
     ruleViolations.push(
-      `본문 폰트 소형(<13px): ${smallBody.length}개, 최소 ${Math.min(...smallBody)}px`,
+      `본문 폰트 소형(<23px): ${smallBody.length}개, 최소 ${Math.min(...smallBody)}px`,
     )
   // 동일 이미지 중복
   if (measurements.imgDup.length > 0)
