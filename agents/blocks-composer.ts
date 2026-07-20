@@ -1977,6 +1977,22 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
             )
             break
           }
+          // 악화 방지 — 리밸런싱은 개선이 확실할 때만 적용한다.
+          // 블록 하나가 목표 상한보다 큰 페이지에서는 어떤 분할도 해가 없어, 최적화가
+          // 엉뚱한 방향으로 수렴할 수 있다(씬1 4,081 → 7,971px 실측 2026-07-21).
+          // 척도는 DP가 최소화하는 것과 같아야 한다 — 이탈 "개수"로 재면 판단이 뒤집힌다.
+          // 실측: [.., 3856, ..](이탈 1) vs [2808, 2540, 2870, ..](이탈 3)에서 개수 기준은
+          // 전자를 택하지만, 한 씬이 3,856px인 편이 세 씬이 조금씩 넘는 것보다 나쁘다.
+          const badness = (hs: readonly number[]): number =>
+            hs.reduce((s, h) => s + (h > 2500 ? (h - 2500) ** 2 : h < 1600 ? (1600 - h) ** 2 : 0), 0)
+          if (badness(bal.predicted) >= badness(before)) {
+            console.warn(
+              `[Blocks Composer] ⚠ 씬 리밸런싱 미적용(개선 없음) — [${before.join(', ')}] → 예상 [${bal.predicted.join(', ')}]. ` +
+                `블록 하나가 상한을 넘는 등 분할로 해소 불가한 구성이다.`,
+            )
+            reportAdd('scene-rebalance-skipped', { before, predicted: bal.predicted, reason: 'no-improvement' })
+            break
+          }
           result.spec.blocks.forEach((b, i) => {
             b.sceneId = bal.sceneIds[i]
           })

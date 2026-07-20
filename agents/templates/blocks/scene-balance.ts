@@ -36,11 +36,16 @@ export interface SceneBalanceResult {
   overHard: number
 }
 
-const BIG = 1e9
-
-/** 씬 하나의 예상 높이에 대한 비용 — 구간 밖일수록 제곱으로 커지고, 절대 상한 초과는 사실상 금지. */
+/**
+ * 씬 하나의 예상 높이에 대한 비용 — 목표 구간에서 벗어난 양의 제곱.
+ *
+ * 절대 상한 초과에 상수 페널티(BIG)를 쓰면 안 된다: 상수가 지배적이면 DP가 "초과한 씬의 개수"를
+ * 최소화하는 방향으로 최적화되어, 큰 블록을 한 씬에 몰아넣는 해가 최적이 된다.
+ * 실측(2026-07-21): 총 19,756px·큰 블록 다수인 페이지에서 씬1이 4,081 → 7,971px로 악화됐다.
+ * 초과분에 가중치를 주되 연속 함수로 두면 "고르게 분산"이 항상 더 싸다.
+ */
 function sceneCost(height: number, min: number, max: number, hardMax: number): number {
-  if (height > hardMax) return BIG + (height - hardMax) * 1000
+  if (height > hardMax) return (height - max) ** 2 + (height - hardMax) ** 2 * 12
   if (height > max) return (height - max) ** 2
   if (height < min) return (min - height) ** 2
   return 0
