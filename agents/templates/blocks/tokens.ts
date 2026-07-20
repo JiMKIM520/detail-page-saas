@@ -16,10 +16,10 @@ export const warmPlayful: Tokens = {
   accentDark: '#CE6A10',
   brand: '#2A2118',
   line: '#E4D7C5',
-  fontDisplay: "'Black Han Sans', sans-serif",
-  fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Gowun Batang', serif",
-  fontHand: "'Gaegu', cursive",
+  fontDisplay: "'가나초콜릿체', sans-serif",
+  fontBody: "'SUIT', sans-serif",
+  fontSerif: "'MaruBuri', serif",
+  fontHand: "'tvN 즐거운이야기', sans-serif",
 }
 
 /** 스타일 B — 모던 에디토리얼 (명조 + 헤어라인 + 여백). */
@@ -33,10 +33,10 @@ export const modernEditorial: Tokens = {
   accentDark: '#8F3F22',
   brand: '#1C1A17',
   line: '#DED7CA',
-  fontDisplay: "'Gowun Batang', serif",
-  fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Gowun Batang', serif",
-  fontHand: "'Gaegu', cursive",
+  fontDisplay: "'NanumSquare', sans-serif",
+  fontBody: "'SUIT', sans-serif",
+  fontSerif: "'Nanum Myeongjo', serif",
+  fontHand: "'가나초콜릿체', sans-serif",
 }
 
 /** 스타일 C — 코발트 프리미엄 (와디즈 200섹션 템플릿 시그니처: Paperlogy + Cafe24 + 코발트/딥플럼).
@@ -51,10 +51,10 @@ export const cobaltPremium: Tokens = {
   accentDark: '#3E57BE',
   brand: '#271633',
   line: '#DDE4FF',
-  fontDisplay: "'Paperlogy', sans-serif",
-  fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Paperlogy', sans-serif",
-  fontHand: "'Cafe24 Dangdanghae', sans-serif",
+  fontDisplay: "'SUIT', sans-serif",
+  fontBody: "'SUIT', sans-serif",
+  fontSerif: "'Nanum Myeongjo', serif",
+  fontHand: "'tvN 즐거운이야기', sans-serif",
 }
 
 /** 스타일 D — 샌드 럭셔리 (와디즈 템플릿 시그니처 폰트 + 따뜻한 캐러멜/크림 팔레트).
@@ -69,10 +69,10 @@ export const sandLuxury: Tokens = {
   accentDark: '#8C5C28',
   brand: '#2A1E13',
   line: '#E8DECB',
-  fontDisplay: "'Paperlogy', sans-serif",
-  fontBody: "'Pretendard', sans-serif",
-  fontSerif: "'Paperlogy', sans-serif",
-  fontHand: "'Cafe24 Dangdanghae', sans-serif",
+  fontDisplay: "'MaruBuri', serif",
+  fontBody: "'SUIT', sans-serif",
+  fontSerif: "'Nanum Myeongjo', serif",
+  fontHand: "'가나초콜릿체', sans-serif",
 }
 
 export const TOKEN_PRESETS: Record<string, Tokens> = {

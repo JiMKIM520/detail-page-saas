@@ -164,10 +164,20 @@ export function renderPage(spec: PageSpec): RenderResult {
   // (2026-07-20 채점에서 실측된 잔존 3건의 원인).
   const vwToPx = (css: string) =>
     css.replace(/([\d.]+)vw/g, (_, n: string) => `${Math.round(parseFloat(n) * width) / 100}px`)
+  // 폰트 역할 고정(F2·F4) — 변형마다 타이틀에 display/serif/body를 제각각 써서
+  // 한 페이지에 타이틀 3계열·본문 2계열이 섞였다(2026-07-20 실측). 룰은 각 1종이므로
+  // 렌더 계층에서 못박는다. 마지막에 붙이고 !important로 변형 선택자를 이긴다.
+  const FONT_ROLE_LOCK = [
+    '.dpg h1,.dpg h2,.dpg .disp{font-family:var(--font-display)!important}',
+    '.dpg p,.dpg li,.dpg dd,.dpg dt,.dpg th,.dpg td{font-family:var(--font-body)!important}',
+    // 서브타이틀 하한 30px(F3) — 부제 성격 클래스만. eyebrow·kicker는 라벨이라 본문 하한(23px) 적용.
+    '.dpg [class*="sub"],.dpg [class*="lead"]{font-size:max(30px,1rem)!important}',
+  ].join('\n')
   const styles = [
     remapFontScale(vwToPx(baseCss(spec.tokens, width))),
     vwToPx(DECOR_CSS), // 장식은 크기 불변 — 워터마크·세로 라벨은 읽는 텍스트가 아니다
     remapFontScale(vwToPx([...cssById.values()].join('\n'))),
+    FONT_ROLE_LOCK,
   ].join('\n')
   const title = `${spec.meta.product}`.trim() || 'Detail'
 
