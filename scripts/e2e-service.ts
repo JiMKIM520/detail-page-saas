@@ -70,11 +70,17 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
   return ok
 }
 
-async function fetchOutputs(svc: Svc, pid: string, slug: string): Promise<void> {
+async function fetchOutputs(svc: Svc, pid: string, slug: string, localOutputDir?: string): Promise<void> {
   const dest = path.join(OUT_BASE, 'results'); fs.mkdirSync(dest, { recursive: true })
   for (const rel of ['4_final/index.html']) {
-    const { data } = await svc.storage.from('designs').download(`projects/${pid}/${rel}`)
-    if (data) fs.writeFileSync(path.join(dest, `${slug}.html`), Buffer.from(await data.arrayBuffer()))
+    const localPath = localOutputDir ? path.join(localOutputDir, rel) : null
+    if (localPath && fs.existsSync(localPath)) {
+      // 로컬 파일 직접 복사 — Supabase upsert 직후 stale 반환(원자성 공백) 회피
+      fs.copyFileSync(localPath, path.join(dest, `${slug}.html`))
+    } else {
+      const { data } = await svc.storage.from('designs').download(`projects/${pid}/${rel}`)
+      if (data) fs.writeFileSync(path.join(dest, `${slug}.html`), Buffer.from(await data.arrayBuffer()))
+    }
   }
   // PNG(모바일) 탐색
   const { data: mob } = await svc.storage.from('designs').list(`projects/${pid}/4_final/mobile`)
@@ -118,7 +124,7 @@ async function main() {
   console.log('[e2e] design:', JSON.stringify(design))
 
   console.log('\n=== STEP 5: 산출물 회수 ===')
-  await fetchOutputs(svc, pid, slug)
+  await fetchOutputs(svc, pid, slug, design.outputDir)
 
   // ── STEP 6: 시각 감사 — 파이프라인 내장 감사(render-audit)와 동일 모듈 재사용.
   // 파이프라인이 이미 폐루프(반려 재조립 1회)를 돌므로 여기서는 최종 상태 리포트만.

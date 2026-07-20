@@ -95,6 +95,7 @@ function buildInputFromProject(
 export async function runPipelineForProject(projectId: string): Promise<{
   success: boolean
   error?: string
+  outputDir?: string
 }> {
   const supabase = createServiceClient()
   reportStart(projectId)
@@ -478,10 +479,37 @@ export async function runPipelineForProject(projectId: string): Promise<{
       const brandColors = await deriveBrandColors(supabase, projectId)
       const blocksInput: ProjectInput = { ...input, brandColors }
 
+      // ── 존재 검증 가드(방어선) ── 조립 직전 styling_real/ 재리스팅으로 죽은 URL 제거.
+      // Supabase upsert 직후 stale 반환 등 스토리지 원자성 공백으로 풀에 죽은 URL이 남는 경우를 차단.
+      let effectiveStyling = okStyling
+      try {
+        const { data: freshStyling } = await supabase.storage
+          .from('designs')
+          .list(`projects/${projectId}/styling_real`)
+        const liveNames = new Set(
+          (freshStyling ?? [])
+            .filter((f) => f.name && /\.(png|jpe?g|webp)$/i.test(f.name))
+            .map((f) => f.name!),
+        )
+        const dead = okStyling.filter((u) => !liveNames.has((u.split('/').pop() ?? '').split('?')[0]))
+        if (dead.length > 0) {
+          console.warn(
+            `[pipeline-bridge] 존재 검증 가드 — 죽은 URL ${dead.length}건 제거: ${dead.map((u) => (u.split('/').pop() ?? '').split('?')[0]).join(', ')}`,
+          )
+          reportAdd('stale-image-pruned', {
+            count: dead.length,
+            pruned: dead.map((u) => (u.split('/').pop() ?? '').split('?')[0]),
+          })
+          effectiveStyling = okStyling.filter((u) => !dead.includes(u))
+        }
+      } catch (guardErr) {
+        console.warn('[pipeline-bridge] 존재 검증 가드 스킵:', (guardErr as Error).message?.slice(0, 80))
+      }
+
       // 연출 풀: 스타일링샷 우선, 없으면 누끼컷 폴백
-      const heroPool = okStyling.length > 0 ? okStyling : cutoutUrls
+      const heroPool = effectiveStyling.length > 0 ? effectiveStyling : cutoutUrls
       console.log(
-        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${okStyling.length}(제외 ${stylingUrls.length - okStyling.length}) · 섹션이미지 ${okSection.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
+        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${effectiveStyling.length}(제외 ${stylingUrls.length - effectiveStyling.length}) · 섹션이미지 ${okSection.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
       )
       const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
       const composerOpts = {
@@ -599,7 +627,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
       }
     } catch { /* cleanup failure is non-fatal */ }
 
-    return { success: result.success }
+    return { success: result.success, outputDir: result.outputDir }
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('[pipeline-bridge] 파이프라인 실패:', message)
