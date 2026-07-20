@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const userSupabase = await createClient()
   const { data: { user } } = await userSupabase.auth.getUser()
   const role = user?.user_metadata?.role as string | undefined
-  if (!user || !['admin', 'planner', 'designer'].includes(role ?? '')) {
+  if (!user || !['admin', 'designer'].includes(role ?? '')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

@@ -27,7 +27,7 @@ export async function POST(
     .eq('id', projectId)
     .single()
 
-  const isAdmin = ['admin', 'planner', 'designer'].includes(user.user_metadata?.role)
+  const isAdmin = ['admin', 'designer'].includes(user.user_metadata?.role)
   if (!project || (!isAdmin && project.client_id !== user.id)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }

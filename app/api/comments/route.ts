@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   }
 
   const role = user.user_metadata?.role as string | undefined
-  const isAdmin = role === 'planner' || role === 'designer' || role === 'admin'
+  const isAdmin = role === 'designer' || role === 'admin'
 
   if (project.client_id !== user.id && !isAdmin) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -80,7 +80,7 @@ export async function POST(request: Request) {
   }
 
   const role = user.user_metadata?.role as string | undefined
-  const isAdmin = role === 'planner' || role === 'designer' || role === 'admin'
+  const isAdmin = role === 'designer' || role === 'admin'
 
   if (project.client_id !== user.id && !isAdmin) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

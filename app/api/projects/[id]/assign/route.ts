@@ -2,7 +2,8 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-/** 프로젝트 담당자 배정: planner_id / designer_id 업데이트 (admin·planner 허용) */
+/** 프로젝트 담당자 배정: designer_id 업데이트 (admin·designer 허용).
+ *  기획자 역할은 디자이너로 통합됐다 — planner_id는 더 이상 쓰지 않는다(레거시 컬럼). */
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const userSupabase = await createClient()
@@ -12,9 +13,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const body = (await request.json()) as { planner_id?: string | null; designer_id?: string | null }
+  const body = (await request.json()) as { designer_id?: string | null }
   const update: Record<string, string | null> = {}
-  if ('planner_id' in body) update.planner_id = body.planner_id || null
   if ('designer_id' in body) update.designer_id = body.designer_id || null
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ error: '변경할 담당자 정보가 없습니다' }, { status: 400 })

@@ -28,12 +28,10 @@ export function AssignPanel({ projectId, designerId }: AssignPanelProps) {
     let active = true
     fetch('/api/admin/staff')
       .then((r) => r.json())
-      .then((d: { planners?: Staff[]; designers?: Staff[] }) => {
+      .then((d: { designers?: Staff[] }) => {
         if (!active) return
-        // 역할 통합: planners/designers 합쳐 중복 제거 후 전원 후보로
-        const merged = [...(d.designers ?? []), ...(d.planners ?? [])]
-        const seen = new Set<string>()
-        setDesigners(merged.filter((s) => (seen.has(s.id) ? false : (seen.add(s.id), true))))
+        // 담당자는 디자이너 하나로 통합 — 기획자 역할은 폐지됐다
+        setDesigners(d.designers ?? [])
       })
       .catch(() => {})
     return () => { active = false }
@@ -47,7 +45,7 @@ export function AssignPanel({ projectId, designerId }: AssignPanelProps) {
       const res = await fetch(`/api/projects/${projectId}/assign`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planner_id: null, designer_id: designer || null }),
+        body: JSON.stringify({ designer_id: designer || null }),
       })
       if (!res.ok) {
         const d = (await res.json().catch(() => ({}))) as { error?: string }
