@@ -1,13 +1,9 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { clientPassword } from '@/lib/auth/client-credentials'
 import { useRouter } from 'next/navigation'
 
-type LoginTab = 'business' | 'email'
-
 export default function LoginPage() {
-  const [tab, setTab] = useState<LoginTab>('business')
   const router = useRouter()
 
   return (
@@ -28,37 +24,7 @@ export default function LoginPage() {
             <h2 className="text-lg font-semibold text-text-primary">로그인</h2>
           </div>
 
-          {/* 탭 */}
-          <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
-            <button
-              type="button"
-              onClick={() => setTab('business')}
-              className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${
-                tab === 'business'
-                  ? 'bg-white text-text-primary shadow-sm'
-                  : 'text-text-tertiary hover:text-text-secondary'
-              }`}
-            >
-              기업 로그인
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab('email')}
-              className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${
-                tab === 'email'
-                  ? 'bg-white text-text-primary shadow-sm'
-                  : 'text-text-tertiary hover:text-text-secondary'
-              }`}
-            >
-              이메일 로그인
-            </button>
-          </div>
-
-          {tab === 'business' ? (
-            <BusinessLoginForm router={router} />
-          ) : (
-            <EmailLoginForm router={router} />
-          )}
+          <BusinessLoginForm router={router} />
         </div>
       </div>
     </div>
@@ -144,88 +110,6 @@ function BusinessLoginForm({ router }: { router: ReturnType<typeof useRouter> })
             className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary tracking-widest"
           />
           <p className="text-xs text-text-tertiary mt-1.5">사업자등록번호 10자리 중 마지막 5자리</p>
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-primary-600 text-white rounded-xl py-2.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm transition-all"
-        >
-          {loading ? '로그인 중...' : '로그인'}
-        </button>
-      </form>
-    </>
-  )
-}
-
-/* ─── 이메일 로그인 (기존 방식 — 폴백) ──────────────────────────────── */
-function EmailLoginForm({ router }: { router: ReturnType<typeof useRouter> }) {
-  const [email, setEmail] = useState('')
-  const [phoneLast4, setPhoneLast4] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-
-    const supabase = createClient()
-    const { data, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password: clientPassword(phoneLast4),
-    })
-    setLoading(false)
-
-    if (authError) {
-      setError('이메일 또는 전화번호 뒷 4자리가 올바르지 않습니다.')
-      return
-    }
-
-    const role = data.user?.user_metadata?.role ?? 'client'
-    const dest =
-      role === 'designer' ? '/designer'
-      : role === 'admin' ? '/dashboard'
-      : '/projects'
-    router.push(dest)
-  }
-
-  return (
-    <>
-      <p className="text-sm text-text-tertiary -mt-2">
-        이메일과 전화번호 뒷 4자리로 로그인하세요
-      </p>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-          <p className="text-red-600 text-sm">{error}</p>
-        </div>
-      )}
-
-      <form onSubmit={handleLogin} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1.5">이메일</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="email@example.com"
-            required
-            className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1.5">전화번호 뒷 4자리</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={4}
-            value={phoneLast4}
-            onChange={e => setPhoneLast4(e.target.value.replace(/\D/g, '').slice(0, 4))}
-            placeholder="0000"
-            required
-            className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary tracking-widest"
-          />
-          <p className="text-xs text-text-tertiary mt-1.5">가입 시 등록한 연락처의 마지막 4자리 숫자</p>
         </div>
         <button
           type="submit"

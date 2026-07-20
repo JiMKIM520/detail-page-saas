@@ -1,11 +1,15 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { staffPassword } from '@/lib/auth/client-credentials'
 
+/** 운영팀 아이디 → 실제 계정 이메일. 사용자는 이메일을 몰라도 되고 admin·designer1~4만 기억한다. */
 const ADMIN_ID_MAP: Record<string, string> = {
-  // 아이디 'admin' → ADMIN_EMAIL 환경변수, 없으면 기본 계정.
-  // 다른 이메일을 쓰려면 Vercel/로컬 env에 ADMIN_EMAIL 설정.
-  admin: process.env.ADMIN_EMAIL ?? 'admin@detailai.app',
+  admin: process.env.ADMIN_EMAIL ?? 'admin@kompa.kr',
+  designer1: 'designer1@detailai.app',
+  designer2: 'designer2@detailai.app',
+  designer3: 'designer3@detailai.app',
+  designer4: 'designer4@detailai.app',
 }
 
 export async function adminLogin(adminId: string, password: string): Promise<{
@@ -13,15 +17,19 @@ export async function adminLogin(adminId: string, password: string): Promise<{
   error?: string
   redirectTo?: string
 }> {
-  // 'admin' 아이디는 매핑으로, 그 외 이메일 형태면 직접 사용 (기획자/디자이너 등 운영팀 계정).
+  // 등록된 아이디(admin·designer1~4)는 매핑으로, 이메일을 직접 넣어도 허용(운영 전환 대비).
   const mapped = ADMIN_ID_MAP[adminId.trim().toLowerCase()]
   const email = mapped ?? (adminId.includes('@') ? adminId.trim().toLowerCase() : undefined)
   if (!email) {
-    return { error: '등록되지 않은 관리자 ID입니다.' }
+    return { error: '등록되지 않은 아이디입니다.' }
   }
 
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+  // 입력 비밀번호(1234)는 Supabase 최소 6자 제약 때문에 저장값으로 변환해 조회한다
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password: staffPassword(password),
+  })
 
   if (error) {
     return { error: '아이디 또는 비밀번호가 올바르지 않습니다.' }
