@@ -24,6 +24,10 @@ export interface PageMeasurements {
   imgDup: Array<{ src: string; count: number }>
   /** 솔리드 장식과 텍스트의 bbox 교차 — "장식클래스 ↔ 텍스트 앞부분" */
   decoOverlaps?: string[]
+  /** 최종 렌더에 실제로 보이는 빈 플레이스홀더(.ph) — 소속 섹션 data-name */
+  phVisible?: string[]
+  /** 로드 실패 이미지(naturalWidth===0)의 src 말미 */
+  brokenImg?: string[]
 }
 
 export interface RenderAuditResult {
@@ -105,13 +109,29 @@ export async function captureSegments(
           const ix = Math.min(d.right, r.right) - Math.max(d.left, r.left)
           const iy = Math.min(d.bottom, r.bottom) - Math.max(d.top, r.top)
           if (ix > 6 && iy > 6 && ix * iy > 40) {
-            decoOverlaps.push(
-              `${deco.className.split(' ')[0]} ↔ "${(t.textContent ?? '').trim().slice(0, 24)}"`,
-            )
+            // SVG 요소의 className은 SVGAnimatedString이라 split 불가 — getAttribute로 통일
+            // (이 버그로 장식 SVG가 있는 페이지에서 감사 전체가 예외 → ran:false로 무력화됐다)
+            const cls = (deco.getAttribute('class') ?? '').split(' ')[0]
+            decoOverlaps.push(`${cls} ↔ "${(t.textContent ?? '').trim().slice(0, 24)}"`)
             break
           }
         }
       }
+      // §5 P0 — 빈 플레이스홀더가 최종 렌더에 실제로 보이는지 결정적 검사
+      // (dropEmptyPhotoBlocks는 URL 0장 기준 사전 드롭일 뿐, DOM 노출 검사는 없었다)
+      const phVisible = Array.from(document.querySelectorAll('.dpg .ph'))
+        .filter((el) => {
+          const e = el as HTMLElement
+          if (e.offsetWidth === 0 || e.offsetHeight === 0) return false
+          const cs = getComputedStyle(e)
+          return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.05
+        })
+        .slice(0, 10)
+        .map((el) => el.closest('section')?.getAttribute('data-name') ?? '(unknown)')
+      const brokenImg = Array.from(document.querySelectorAll('.dpg img'))
+        .filter((img) => (img as HTMLImageElement).naturalWidth === 0)
+        .slice(0, 10)
+        .map((img) => (img as HTMLImageElement).src.slice(-60))
       return {
         scrollHeight,
         sceneHeights,
@@ -120,6 +140,8 @@ export async function captureSegments(
         fontSamples: { title: titleFonts, body: bodyFonts },
         imgDup,
         decoOverlaps,
+        phVisible,
+        brokenImg,
       }
     })) as PageMeasurements
     const segments: string[] = []
@@ -198,6 +220,17 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
       if (rhythmTall.length > 0) parts.push(`2400px 초과 ${rhythmTall.length}개`)
       ruleViolations.push(`씬 높이 리듬 이탈: ${parts.join(', ')} (목표 1600~2400px)`)
     }
+  }
+  // 플레이스홀더 노출·깨진 이미지 — §5 P0 결정적 검사(AI 감사 변동성의 보완 그물)
+  if (measurements.phVisible && measurements.phVisible.length > 0) {
+    ruleViolations.push(
+      `빈 플레이스홀더 노출 ${measurements.phVisible.length}건: ${measurements.phVisible.slice(0, 5).join(', ')}`,
+    )
+  }
+  if (measurements.brokenImg && measurements.brokenImg.length > 0) {
+    ruleViolations.push(
+      `이미지 로드 실패 ${measurements.brokenImg.length}건: ${measurements.brokenImg.slice(0, 3).join(', ')}`,
+    )
   }
   // 솔리드 장식-텍스트 겹침 — 결정적 bbox 교차 (AI 감사 변동성의 보완 그물)
   if (measurements.decoOverlaps && measurements.decoOverlaps.length > 0) {

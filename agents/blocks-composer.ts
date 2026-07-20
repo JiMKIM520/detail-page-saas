@@ -1195,7 +1195,12 @@ export function applyPlacementGuards(
       // 클로징 무드 배경에 업로드 원본 금지 — 원본은 앵글·라벨 방향이 통제되지 않아
       // 풀블리드 배경에서 거꾸로 팩이 그대로 노출된다(매일 실사례). 태거는 고객 원본을
       // reject하지 않는 설계(실물=정답 기준)라 이 가드가 유일한 방벽. 무드 배경은 연출 생성컷만.
-      if (isUrl && arch === 'closing' && value.includes('/intake-files/')) {
+      // 히어로도 동일 — §4는 "hero = 연출 생성컷만(로고는 소형 슬롯만)"인데 코드 가드가
+      // closing에만 있어 프롬프트 지시에만 의존하던 비대칭을 해소한다(룰 감사 §8 공백 목록).
+      // 로고·누끼는 §4가 명시 허용하므로 예외 — 위 logoSet/cutoutSet 가드가 별도로 통제한다.
+      const heroOriginalBanned =
+        arch === 'hero' && !logoSet.has(value) && !cutoutSet.has(value)
+      if (isUrl && (arch === 'closing' || heroOriginalBanned) && value.includes('/intake-files/')) {
         delete parent[key]
         stats.closingOriginal = (stats.closingOriginal ?? 0) + 1
         return
@@ -1416,10 +1421,11 @@ function redistributeUnusedImages(
     walkStringFields((b.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
       if (/^https?:\/\//.test(v)) usedUrls.add(v)
     })
-  // 재배치 풀은 생성컷만 — 업로드 원본은 앵글·배경 통제가 안 돼 자동 주입 시 프레임과
-  // 부조화한다(매일 usage 풀블리드에 기울어진 원본 팩 실사례). 원본 배치는 니즈 매핑
-  // (useOriginal, 파일명 토큰 근거)만 허용.
-  const pool = Object.entries(candidates).filter(([url]) => !usedUrls.has(url) && !url.includes('/intake-files/'))
+  // 재배치 풀 = 미사용 후보 전량(2026-07-20 룰 감사: 원본 전면 배제가 "스타일링컷 전량 사용"
+  // (룰 7-16)의 구조적 미달 원인 — v7에서 원본 5장이 회수 경로 자체가 없었다).
+  // 원본의 앵글·배경 미통제 리스크(매일 usage 풀블리드 기울어진 팩 실사례)는 배치 대상을
+  // 제한해 통제한다: hero·closing 금지(가드와 동일), 배열 일괄 주입 금지(단일 슬롯만).
+  const pool = Object.entries(candidates).filter(([url]) => !usedUrls.has(url))
   if (!pool.length) return { reassigned: 0, unused: 0, used: usedUrls.size }
 
   // 니즈 id(파일명) → 청사진 소속 variantId 매핑 — 1순위 복귀 근거
@@ -1512,8 +1518,10 @@ function redistributeUnusedImages(
       if (items.some((it) => typeof it[key] === 'string' && /^https?:\/\//.test(String(it[key])))) continue
       // 노트가 이 아키타입과 어울리는 컷 우선으로 아이템 수만큼 소진
       const kw = ARCH_NOTE_KEYWORDS[arch]
+      // 배열 일괄 주입은 생성컷만 — 원본이 섞이면 스텝 레일에서 앵글이 튄다
       const ranked = remaining
         .map(([u, n], idx) => ({ idx, score: kw?.test(n) ? 1 : 0, u }))
+        .filter((r) => !r.u.includes('/intake-files/'))
         .sort((a, b2) => b2.score - a.score)
         .slice(0, items.length)
       if (ranked.length < items.length) continue
@@ -1524,6 +1532,21 @@ function redistributeUnusedImages(
       })
       reassigned += items.length
       break
+    }
+  }
+
+  // 4순위: 아키타입 무관 순차 폴백 — 키워드 매칭에 실패한 컷이 통째로 사장되는 것을 막는다
+  // (룰 감사 v7: 노트-아키타입 키워드가 좁아 미회수 11장 중 1장만 복구). 위 가드가 이미
+  // 걸러낸 openSlots(표계열·오버레이·누끼전용·기점유 제외)만 대상이라 안전하고,
+  // hero(대표컷 계획 유지)·closing(무드 배경)은 slice로 제외한다.
+  for (const b of spec.blocks.slice(1, -1)) {
+    if (remaining.length === 0) break
+    const arch = String(getVariant(b.variantId)?.archetype ?? '')
+    if (arch === 'closing' || arch === 'hero') continue
+    for (const slot of openSlots(b)) {
+      if (remaining.length === 0) break
+      ;((b.data ??= {}) as Record<string, unknown>)[slot] = take(0)
+      reassigned++
     }
   }
 
