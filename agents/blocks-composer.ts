@@ -1241,11 +1241,25 @@ function extractQtyCombos(text: string): QtyCombo[] {
   return result
 }
 
+/** 단독 중량 라벨 패턴 — 실제중량·총중량 등 라벨 키워드 뒤에 단독으로 오는 g값.
+ *  - 콤보 패턴(56g(14g×4개입))은 mkQtyRe()가 담당 — 여기선 괄호/쉼표 시작을 negative lookahead로 제외.
+ *  - 영양성분(단백질 10g), 급여량(1일 30g) 등은 라벨 키워드가 없어 오탐 발생 안 함(라벨 문맥 한정). */
+const WEIGHT_LABEL_RE_SRC =
+  '(실제중량|총중량|순중량|내용량|단위중량)\\s*[:：]?\\s*(\\d+(?:\\.\\d+)?)\\s*g(?!\\s*[,(×xX])'
+
+export function extractSrcWeights(text: string): Set<string> {
+  const result = new Set<string>()
+  for (const m of text.matchAll(new RegExp(WEIGHT_LABEL_RE_SRC, 'g'))) result.add(m[2])
+  return result
+}
+
 export function fixSpecQuantities(spec: PageSpec, sourceText: string): void {
   const srcCombos = extractQtyCombos(sourceText)
   const srcKeys = new Set(srcCombos.map((c) => c.key))
   let substituted = 0
   const violations: string[] = []
+
+  // ── 콤보 중량·개입 체크 (56g(14g×4개입) 패턴) ───────────────────────────────
   for (const b of spec.blocks) {
     walkStringFields((b.data ?? {}) as Record<string, unknown>, (parent, key, value) => {
       const found = extractQtyCombos(value)
@@ -1265,6 +1279,29 @@ export function fixSpecQuantities(spec: PageSpec, sourceText: string): void {
       }
     })
   }
+
+  // ── 단독 중량 라벨 체크 (실제중량 56g 등) ────────────────────────────────────
+  // 원문에 없는 g값이 중량 라벨 문맥에 나오면 원문 유일값으로 치환, 복수·부재 시 위반 기록.
+  // 영양성분 %·급여량 등 다른 수치는 라벨 키워드 문맥이 아니므로 오탐 안 됨.
+  const srcWeights = extractSrcWeights(sourceText)
+  const srcWeightArr = [...srcWeights]
+  const weightLabelRe = new RegExp(WEIGHT_LABEL_RE_SRC, 'g')
+  for (const b of spec.blocks) {
+    walkStringFields((b.data ?? {}) as Record<string, unknown>, (parent, key, value) => {
+      const bad = [...value.matchAll(new RegExp(WEIGHT_LABEL_RE_SRC, 'g'))].filter((m) => !srcWeights.has(m[2]))
+      if (!bad.length) return
+      if (srcWeightArr.length === 1) {
+        const target = srcWeightArr[0]
+        parent[key] = (parent[key] as string).replace(weightLabelRe, (_m, label, val) =>
+          srcWeights.has(val) ? _m : `${label}${target}g`,
+        )
+        substituted++
+      } else {
+        violations.push(...bad.map((m) => `${b.variantId}.${key}:weight-label-${m[2]}g`))
+      }
+    })
+  }
+
   if (substituted || violations.length) {
     console.warn(
       `[Blocks Composer] 수치 린터 — 중량·개입 치환 ${substituted}건 · 미매칭 위반 ${violations.length}건${violations.length ? ` (${violations.slice(0, 4).join(' · ')})` : ''}`,
@@ -1689,7 +1726,7 @@ async function callOnce(input: BlocksComposerInput, repairNote?: string): Promis
   const groundingCorpus =
     JSON.stringify(input.brief) +
     JSON.stringify(input.imageNotes ?? {}) +
-    (input.script ? JSON.stringify(input.script.sections) : '') +
+    (input.script ? JSON.stringify(input.script) : '') +
     (input.blueprint ? JSON.stringify(input.blueprint.sections.map((s) => s.copyBrief)) : '')
 
   // 배치 결함 가드 — 표계열 이미지·이모지·누끼 오배치를 코드로 봉쇄 (깨진 스키마는 수리 패스가 수습)

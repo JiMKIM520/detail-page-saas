@@ -839,10 +839,45 @@ export async function runPlanningForProject(projectId: string): Promise<{
               `[pipeline-bridge/planning] 수요 기반 이미지 계획 — 청사진 ${planned.data.sections.length}블록 · 니즈 컷 ${prompted.data.length}건(제품 미포함 ${prompted.data.filter((s) => !s.withProduct).length}건)`,
             )
           } else {
-            console.warn('[pipeline-bridge/planning] 샷 프롬프터 미달 — 아트디렉터 8컷 공식 유지')
+            // 침묵 금지: 실패·미달 모두 로그 + reportAdd
+            const shotReason = !prompted.success
+              ? `shot-prompter 실패: ${prompted.error?.slice(0, 120) ?? 'unknown'}`
+              : `컷 미달 (${prompted.data?.length ?? 0}/${needs.length})`
+            console.warn(`[pipeline-bridge/planning] 샷 프롬프터 미달 — ${shotReason}`)
+            reportAdd('shot-prompter-failure', { reason: shotReason, needs: needs.length, shots: prompted.data?.length ?? 0 })
+            // 결정적 폴백: blueprint imageNeeds에서 최소 샷 목록 합성 (LLM 없이)
+            // id=filename 보장 → 니즈-샷 체계 불일치가 구조적으로 불가능
+            if (needs.length > 0) {
+              const fallbackShots = needs.map((n) => ({
+                name: n.subject.slice(0, 80),
+                filename: `${n.id}.png`,
+                finalPrompt: `${n.subject}. ${n.style} style, Korean e-commerce. [OUTPUT SPECS] 1000x1333px vertical 3:4, editorial Korean e-commerce detail page photography, no text overlays, no watermarks.`,
+                withProduct: n.withProduct,
+                prominence: n.prominence,
+              }))
+              let existingFb: Record<string, unknown> = {}
+              try {
+                if (result.artifacts.stylingPrompts)
+                  existingFb = JSON.parse(fs.readFileSync(result.artifacts.stylingPrompts, 'utf8'))
+              } catch { /* 기존 파일 없으면 새로 구성 */ }
+              const mergedFb = { ...existingFb, shots: fallbackShots, shotsSource: 'blueprint-needs-fallback' }
+              await uploadToStorage(
+                `projects/${projectId}/planning/styling-final-prompts.json`,
+                Buffer.from(JSON.stringify(mergedFb, null, 2)),
+                'application/json',
+              )
+              await uploadToStorage(
+                `projects/${projectId}/planning/blueprint.json`,
+                Buffer.from(JSON.stringify(planned.data, null, 2)),
+                'application/json',
+              )
+              console.warn(`[pipeline-bridge/planning] 폴백 샷 합성 — ${fallbackShots.length}건 (blueprint-needs-fallback)`)
+            }
           }
         } else {
-          console.warn('[pipeline-bridge/planning] 청사진 실패 — 아트디렉터 8컷 공식 유지')
+          // 침묵 금지: 청사진 실패 시 항상 로그 + reportAdd
+          console.warn(`[pipeline-bridge/planning] 청사진 실패 — 아트디렉터 8컷 공식 유지: ${planned.error?.slice(0, 120) ?? 'unknown'}`)
+          reportAdd('page-planner-failure', { error: planned.error?.slice(0, 200) ?? 'unknown' })
         }
       } else {
         console.warn('[pipeline-bridge/planning] 승인 스크립트 없음 — 수요 기반 계획 생략')

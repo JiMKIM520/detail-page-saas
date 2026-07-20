@@ -8,6 +8,7 @@
 import { anthropicClient, parseJsonResponse, timer, MODELS, extractText } from './utils'
 import type { AgentResult, StyleGuide } from './types'
 import type { ImageNeed } from './page-planner'
+import { reportAdd } from '@/lib/run-report'
 
 export interface PromptedShot {
   name: string
@@ -61,7 +62,7 @@ export async function runShotPrompter(input: {
 
     const message = await anthropicClient.messages.create({
       model: MODELS.CLAUDE_SONNET,
-      max_tokens: 12000, // 니즈 12건 × 상세 프롬프트 — S5 토크나이저 여유
+      max_tokens: 16000, // 니즈 최대 20건 × 상세 프롬프트 여유 (12000에서 증가)
       system: SYSTEM_PROMPT,
       messages: [
         {
@@ -100,6 +101,7 @@ ${needLines}
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
     console.warn('[Shot Prompter] 실패:', msg.slice(0, 160))
+    reportAdd('shot-prompter-agent-failure', { error: msg.slice(0, 200), needs: input.needs.length })
     return { success: false, error: msg, durationMs: elapsed() }
   }
 }

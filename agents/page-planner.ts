@@ -570,12 +570,13 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
   const allowedUrls = new Set(Object.keys(input.imageNotes))
 
   const callOnce = async (repairNote?: string): Promise<PageBlueprint> => {
-    // 12컷 상세 명세로 출력이 16000을 초과(잘림 → JSON 손상 → 청사진 폴백 실사례) —
-    // 컴포저와 동일하게 32000+스트리밍(S5는 동일 JSON에 ~30k 토큰, 논스트리밍은 SDK가 거부)
+    // 출력 잘림 재발 이력 3회: 16000(12컷 명세) → 32000(씬 컴포지션+서사 규칙 확장으로 재잘림,
+    // shot-prompter 미호출 연쇄의 근본 원인 — 2026-07-20 확정) → 64000. 프롬프트를 늘리면
+    // 출력도 늘어난다 — 규칙 추가 시 이 상한과 잘림 치명 처리를 함께 점검할 것.
     const message = await anthropicClient.messages
       .stream({
       model: MODELS.CLAUDE_SONNET,
-      max_tokens: 32000,
+      max_tokens: 64000,
       system: [
         { type: 'text', text: SYSTEM_PROMPT },
         // 시드 표본 카탈로그 — 프로젝트별 상이하지만 같은 프로젝트 재시도는 동일 텍스트 → 캐시 유효
@@ -585,7 +586,10 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
       })
       .finalMessage()
     if (message.stop_reason === 'max_tokens')
-      console.warn('[Page Planner] ⚠ 출력이 max_tokens로 잘림 — JSON 불완전')
+      // 잘린 JSON은 파싱 시도조차 무의미 — 치명 처리해 재시도 노트로 간결화를 지시한다
+      throw new Error(
+        '출력이 max_tokens로 잘림 — copyBrief는 40자, imageNeeds prompt는 60자 이내로 간결하게 줄여 총 출력량을 절반으로 축소할 것',
+      )
     const bp = blueprintSchema.parse(parseJsonResponse<unknown>(extractText(message.content))) as PageBlueprint
     bp.sections.sort((a, b) => a.order - b.order)
     const { issues, gaps } = validateBlueprint(bp, allowedUrls, JSON.stringify(input.brief))
