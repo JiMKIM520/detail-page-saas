@@ -131,7 +131,7 @@ Detect ONLY rendering defects:
 2. Collapsed sections or huge unintended empty gaps
 3. Sentences visibly cut off mid-word
 4. Broken image icons / grossly distorted layout
-5. Product image in the hero (topmost) section visibly cropped at the frame edges
+5. Product image (package or product body) unnaturally cropped at the frame edges in ANY section — intentional close-up texture shots where cropping is deliberate are NOT a defect
 Do NOT comment on content, copy quality, taste, or design preferences. When unsure, pass.
 Output raw compact JSON only: {"pass":true,"issues":[]} or {"pass":false,"issues":["세그먼트 2: ..."]}`
 

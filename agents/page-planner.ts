@@ -179,6 +179,20 @@ system prompt). Your job:
    variant descriptions and match the brand's personality. Record WHY in top-level "heroRationale"
    (one Korean sentence: 제품 성격→아형→변형 근거). Same-style products SHOULD get similar heroes —
    difference must come from the product, never from novelty.
+7. NARRATIVE PREFERENCES (서사·선호 규칙):
+   (a) SCENE 7 STRUCTURE (CRITICAL): scene 7 (the final scene) MUST follow this order:
+       ① a point/recap-family block re-emphasizing the top selling points (포인트 요약형) THEN
+       ② the closing block. FAQ and CS belong in scene 6 — never in scene 7.
+   (b) CALLOUT RULE: place 1–2 callout-family blocks at the page's most critical emphasis moments —
+       do NOT bury peak emphasis in ordinary body-list blocks.
+   (c) DATA → GAUGE/CHART: if the script or brief contains numeric data (성분 함량·함유량·%) choose a
+       gauge/chart-type variant for that block. NEVER invent numeric values not present in the input
+       (existing no-fabrication constraint, re-confirmed).
+   (d) DISPLAY TYPOGRAPHY PER SCENE: each scene must include at least one large-display-typography
+       variant (title scale ≥ 3× body — high type-hierarchy contrast). Do not fill a scene with only
+       text-dense, low-hierarchy variants.
+   (e) COMPARE → CARD VARIANT: when script content is comparative (vs 경쟁사/before-after/원료 비교)
+       prefer card-grid compare variants over plain list or text blocks.
 
 Output raw compact JSON only (no prose, no markdown, minimal whitespace):
 {"sections":[{"order":0,"variantId":"hero-arch","scriptType":"hero","scene":1,"copyBrief":"...","imageUrls":["https://..."]}]}`
@@ -527,6 +541,18 @@ function validateBlueprint(
           `톤 시퀀스 경고: 씬${sortedNums[i]}~씬${sortedNums[i + 2]} 3연속 ${sceneTones[i]} — 재기획 권고`,
         )
       }
+    }
+  }
+
+  // 갭 체크: 씬7 closing 앞 point/recap류 블록 존재 여부 — 수리 없음, 서사 완결성 관측 데이터
+  {
+    const scene7 = bp.sections.filter((s) => s.scene === 7)
+    const lastIsClosing = scene7.length > 0 && arch(scene7[scene7.length - 1].variantId) === 'closing'
+    if (lastIsClosing) {
+      const RECAP_ARCHETYPES = new Set(['point', 'recap', 'stats', 'callout', 'feature'])
+      const hasRecap = scene7.slice(0, -1).some((s) => RECAP_ARCHETYPES.has(arch(s.variantId)))
+      if (!hasRecap)
+        gaps.push('씬7 closing 앞 point/recap류 블록 없음 — 셀링포인트 재강조 블록을 closing 직전에 배치 권고')
     }
   }
 
