@@ -41,6 +41,7 @@ export async function adminLogin(adminId: string, password: string): Promise<{
     return { error: '관리자 계정이 아닙니다.' }
   }
 
-  const dest = role === 'designer' ? '/designer' : '/dashboard' // admin
+  // 디자이너는 단계별 통합 보드(내 작업)로 — 구 목록 화면(/designer)은 상세 진입용으로만 남긴다
+  const dest = role === 'designer' ? '/my-work' : '/dashboard' // admin
   return { success: true, redirectTo: dest }
 }
