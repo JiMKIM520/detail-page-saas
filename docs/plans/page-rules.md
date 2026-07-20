@@ -111,3 +111,51 @@
 3. 아로마티카 PRODUCT EFFECT 좌측 공백 → §4 2컬럼 강등
 4. 로모노소프 선물 타이틀-이미지 겹침(1440px 재현) → §1 고정폭 — **최상위 원인, 타 건도 와이드에서 악화**
 5. 매일 지그재그 누끼 과대·회전 잘림 → §4 누끼 점유 상한
+
+## 8. 섹션별 룰 인벤토리 — 현행 강제 실태 (2026-07-20 감사 기준)
+
+> 이 표는 §4에서 선언한 룰이 실제 코드에서 어떤 방식으로 집행되는지
+> 파일 추적(감사 A·B·C, v7 런 ba59d5e1 기준)으로 확인한 결과다.
+> **강제 방식** 3단계: **코드** (코드 가드 함수가 결정론적으로 집행) /
+> **프롬프트** (LLM 지시문에만 의존, 생성 결과에 따라 달라짐) /
+> **없음** (문서에 선언됐으나 코드·프롬프트 모두 미집행).
+
+### 아키타입 × 이미지 룰 강제 실태
+
+| 아키타입 | 허용 이미지 소스 | 결손 처리 | 강제 방식 | 집행 함수 / 위치 |
+|---|---|---|---|---|
+| **hero** | 연출 생성컷만 (원본·누끼 금지, 로고는 소형 슬롯만) | 페이지 실패→재생성 | 프롬프트 | `page-planner.ts` SYSTEM_PROMPT L162 (코드 가드 없음 — closing L1198 패턴과 비대칭) |
+| **story · gallery** | 무드/라이프컷, 텍스트 스크림 필수 | 텍스트 강등 | 없음 | — |
+| **ingredient** | 원료·텍스처; 누끼전용 프레임=누끼만 | 리스트 전부-또는-0 | 코드 | `applyPlacementGuards` L1187–1193 (`containSlotKeys` 자동 식별) |
+| **usage · feature** 스텝/배열 | 배열 아이템 이미지 전부-또는-0 | 아이콘/번호 강등 | 코드 | `applyPlacementGuards` L1144–1161 (`mediaSlotKeys` 자동 식별) |
+| **detail · point · stats** | 제품·디테일컷; 2컬럼 이미지 없으면 1컬럼 강등 | 1컬럼 강등 | 없음 | — (변형 noimg-safe 렌더 분기에만 위임) |
+| **compare** | 좌우 각 1 또는 0 (누끼 OK — `CUTOUT_OK_ARCHETYPES`) | 텍스트 표 강등 | 없음 | — |
+| **spec · faq · cs · shipping** | 금지 | — | 코드 | `TEXT_LED_ARCHETYPES` Set + `applyPlacementGuards` L1171 + `redistributeUnusedImages` `openSlots` L1439 |
+| **cs** (로고 예외) | 로고 슬롯만 허용 | — | 코드 | `LOGO_OK_ARCHETYPES` Set |
+| **closing** | 생성 무드컷만 (원본 금지) | 그라데이션 강등 | 코드 | `applyPlacementGuards` L1195–1201 (`/intake-files/` 차단) + `redistributeUnusedImages` L1477 재배치 금지 |
+| **공통 — URL 1회 사용** | 동일 URL 2회+ 금지 | 2번째+ 슬롯 삭제 | 코드 | `applyPlacementGuards` L1122–1136 `urlCount` 맵 |
+| **공통 — 누끼전용 슬롯** | 누끼(배경 없는 단독컷)만 | 슬롯 비움→noimg-safe 강등 | 코드 | `containSlotKeys` + `applyPlacementGuards` L1187 |
+| **공통 — 이미지 블록 하한** | 슬롯 합 ≥ 10 (전체 50%+) | 재시도 | 코드 | `validateBlueprint` `page-planner.ts` L424–429 |
+| **공통 — 빈 사진 블록 드롭** | imageSlots≥2 + 이미지 0장 → 드롭 (hero/closing 제외) | 블록 드롭 | 코드 | `dropEmptyPhotoBlocks` L1365–1388 |
+| **공통 — 누끼 점유 상한** | 과대 확대·잘림 금지 (§4 P0 명시) | — | 없음 (P0 미구현) | — |
+
+### 코드 강제 없는 룰 — 집행 공백 목록
+
+문서에 선언됐으나 코드 가드가 없어 LLM 재량에 맡겨지는 항목.
+
+| 룰 | 선언 위치 | 공백 내용 | 수정 우선순위 |
+|---|---|---|---|
+| hero 원본 코드 가드 | §4 + page-planner SYSTEM_PROMPT L162 | closing L1198 패턴과 비대칭 — 코드 레벨 차단 없음 | P1 |
+| §7-11 히어로 잘림 금지 framing | §7-11 + `buildShotPrompt heroFramingBlock` | `e2e-service.ts:47` bypass로 `buildShotPrompt` 미실행 | P1 |
+| 공통 누끼 점유 상한 | §4 P0 명시 | 코드 가드 완전 미구현 (매일 지그재그 실사례 반복) | P0 |
+| §5 렌더 후 플레이스홀더 DOM 감지·드롭 | §5 | `dropEmptyPhotoBlocks`는 URL 0장 기준 사전 드롭; 실제 `.ph` DOM 감지 로직 없음 | P0 |
+| detail·point·stats 2컬럼→1컬럼 강등 | §4 | 변형 noimg-safe에만 위임, 코드 강등 분기 없음 | P2 |
+| story·gallery 텍스트 강등 | §4 | 코드 없음 | P2 |
+| compare 텍스트 표 강등 | §4 | 코드 없음 | P2 |
+| §7-17 홀수 포인트 1열 배치 | §7-17 | 코드 없음 | P3 |
+
+> **참고** 7-15 "동일 이미지 최대 1회"는 `applyPlacementGuards` L1122 코드 집행 중.
+> 7-16 "스타일링컷 전량 사용"은 `redistributeUnusedImages`가 존재하나
+> 2026-07-20 감사(v7 런)에서 5개 실패 지점
+> (① 플래너 imageNeeds 단절 ② 원본 5장 재배치 풀 제외 ③ 드롭 블록 고아화
+> ④ PairingQA 3차 재제거 ⑤ openSlots 4중 조건 과제한)으로 유명무실 확인.
