@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { ProjectStatus } from '@/lib/status-machine'
-import { CLIENT_STATUS_LABELS } from '@/lib/status-machine'
+import { CLIENT_STATUS_LABELS, canRequestRevision } from '@/lib/status-machine'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { ProtectedImage } from '@/components/client/ProtectedImage'
 import { CommentSection } from '@/components/client/CommentSection'
@@ -86,6 +86,9 @@ export default async function ClientProjectDetailPage({
   // 수정 회차: design version 1 = 초안, 2 = 1차 수정본, 3 = 2차 수정본 (최대 2회)
   const revisionUsed = Math.min(Math.max((design?.version ?? 1) - 1, 0), 2)
   const reviewLabel = revisionUsed === 0 ? '초안 확인 요청' : `${revisionUsed}차 수정본 확인`
+  // 수정요청 CTA 표시 여부: 기업이 초안을 보고 있고 수정 횟수가 남아 있을 때
+  const projectRevisionCount = (project as unknown as { revision_count?: number | null }).revision_count ?? 0
+  const canRevise = clientStage === 'review' && canRequestRevision({ revision_count: projectRevisionCount })
 
   // output_url JSON 파싱 (mobile_zip, pc_zip, designer_zip)
   let downloadUrls: { mobile_zip?: string; pc_zip?: string; designer_zip?: string } = {}
@@ -294,8 +297,8 @@ export default async function ClientProjectDetailPage({
         </div>
       )}
 
-      {/* 코멘트 */}
-      <CommentSection projectId={id} />
+      {/* 코멘트 + 수정요청 CTA */}
+      <CommentSection projectId={id} canRevise={canRevise} />
     </div>
   )
 }

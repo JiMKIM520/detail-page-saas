@@ -9,7 +9,18 @@ export function RevisionGuide({ used = 0 }: { used?: number }) {
           </svg>
         </div>
         <div className="flex-1">
-          <p className="text-sm font-semibold text-blue-800 mb-1">수정 안내</p>
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-sm font-semibold text-blue-800">수정 안내</p>
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+              used >= 2
+                ? 'bg-red-100 text-red-700'
+                : used === 1
+                ? 'bg-amber-100 text-amber-700'
+                : 'bg-blue-100 text-blue-700'
+            }`}>
+              {used}/2 사용
+            </span>
+          </div>
           <ul className="text-sm text-blue-700 space-y-1">
             <li>초안 확인 후 아래 코멘트로 수정 요청이 가능합니다.</li>
             <li>수정은 <span className="font-semibold">1차 · 2차 총 2회</span>까지 가능합니다.</li>

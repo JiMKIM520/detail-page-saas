@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 interface Comment {
@@ -11,12 +12,19 @@ interface Comment {
   user_profiles: { name: string } | null
 }
 
-export function CommentSection({ projectId }: { projectId: string }) {
+interface CommentSectionProps {
+  projectId: string
+  canRevise?: boolean
+}
+
+export function CommentSection({ projectId, canRevise = false }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([])
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [revisionDone, setRevisionDone] = useState(false)
 
+  const router = useRouter()
   const supabase = createClient()
 
   const fetchComments = useCallback(async () => {
@@ -57,6 +65,28 @@ export function CommentSection({ projectId }: { projectId: string }) {
         setContent('')
         await fetchComments()
       }
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function handleRevisionRequest() {
+    if (!content.trim() || submitting) return
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/designs/revision-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project_id: projectId, content: content.trim() }),
+      })
+      const body = await res.json().catch(() => null)
+      if (!res.ok) {
+        alert(body?.error ?? '수정요청 처리 중 오류가 발생했습니다.')
+        return
+      }
+      setContent('')
+      setRevisionDone(true)
+      router.refresh()
     } finally {
       setSubmitting(false)
     }
@@ -128,16 +158,48 @@ export function CommentSection({ projectId }: { projectId: string }) {
         </p>
       )}
 
+      {/* 수정요청 완료 안내 */}
+      {revisionDone && (
+        <div className="mb-4 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-700">
+          수정요청이 접수되었습니다. 담당자가 확인 후 수정 작업을 시작합니다.
+        </div>
+      )}
+
       {/* Comment form */}
       <form onSubmit={handleSubmit} className="space-y-3">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="코멘트를 입력하세요..."
+          placeholder={
+            canRevise && !revisionDone
+              ? '수정 요청 내용을 입력하세요 (수정요청 제출) 또는 일반 코멘트를 남기세요…'
+              : '코멘트를 입력하세요...'
+          }
           rows={3}
           className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
         />
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-2">
+          {/* 수정요청 제출 — review 단계이고 한도 미소진 시에만 표시 */}
+          {canRevise && !revisionDone && (
+            <button
+              type="button"
+              onClick={handleRevisionRequest}
+              disabled={!content.trim() || submitting}
+              className="inline-flex items-center gap-2 bg-orange-500 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {submitting ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  처리 중...
+                </>
+              ) : (
+                '수정요청 제출'
+              )}
+            </button>
+          )}
           <button
             type="submit"
             disabled={!content.trim() || submitting}
