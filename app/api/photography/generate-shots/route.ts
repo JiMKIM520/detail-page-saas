@@ -58,7 +58,10 @@ export async function POST(request: Request) {
 
   // 3) 최대 8컷 생성 + 업로드 (블록이 12~18개라 이미지가 많아야 텍스트만 남는 섹션이 안 생김 — 전 제품 품질 바닥)
   const { data: project } = await svc.from('projects').select('category, platforms(slug)').eq('id', project_id).single()
-  const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', brandColorHex: '#A8682E', aspectRatio: '3:4' }
+  // brandColorHex를 '#A8682E'로 하드코딩하고 있었다 — 제품과 무관한 갈색 힌트가 전 샷에 주입돼
+  // 크림·베이지 배경이 일괄로 나왔고, 페이지 배경과 어긋나 "사진이 떠 있는" 인상을 만들었다.
+  // 근거 없는 힌트보다 없는 편이 낫다(brandColorLine은 값이 있을 때만 붙는다).
+  const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', aspectRatio: '3:4' }
   const out: { name: string; url: string }[] = []
   const errors: string[] = []
   const targetShots = shots.slice(0, 18).slice(batchFrom, batchCount ? batchFrom + batchCount : undefined)

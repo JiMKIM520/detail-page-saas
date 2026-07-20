@@ -26,6 +26,8 @@ export interface PageMeasurements {
   decoOverlaps?: string[]
   /** 절대 배치 라벨끼리의 bbox 교차 — 폰트 확대가 좌표 고정 오버레이를 무너뜨린 경우 */
   labelOverlaps?: string[]
+  /** I10 — 히어로 섹션 면적 대비 이미지 면적 비율(%). 히어로가 없거나 측정 불가면 -1 */
+  heroImageRatio?: number
   /** 최종 렌더에 실제로 보이는 빈 플레이스홀더(.ph) — 소속 섹션 data-name */
   phVisible?: string[]
   /** 로드 실패 이미지(naturalWidth===0)의 src 말미 */
@@ -119,6 +121,26 @@ export async function captureSegments(
           }
         }
       }
+      // I10 히어로 이미지 면적 — 히어로는 첫인상이라 사진이 화면을 지배해야 한다.
+      // 260×280px 위젯 박스에 사진을 가둔 변형이 뽑혀 "억지로 집어넣은" 인상을 준 실측(2026-07-21).
+      // 변형 선택 경로가 여럿이라(heroStyle 풀 → LLM 선택) 출구에서 면적으로 잡는다.
+      const heroSection = document.querySelector('.dpg section')
+      let heroImageRatio = -1
+      if (heroSection) {
+        const hr = (heroSection as HTMLElement)
+        const secArea = hr.offsetWidth * hr.offsetHeight
+        if (secArea > 0) {
+          let imgArea = 0
+          Array.from(heroSection.querySelectorAll('img')).forEach((img) => {
+            const e = img as HTMLImageElement
+            if (e.naturalWidth === 0) return // 깨진 이미지는 면적으로 치지 않는다
+            const cs = getComputedStyle(e)
+            if (cs.display === 'none' || cs.visibility === 'hidden') return
+            imgArea += e.offsetWidth * e.offsetHeight
+          })
+          heroImageRatio = Math.round((imgArea / secArea) * 1000) / 10
+        }
+      }
       // 좌표 고정 라벨끼리의 겹침 — 폰트 확대가 절대 배치 오버레이를 무너뜨리는 경로를 상시 감시한다.
       // (F4 하한 적용으로 16px 알약 태그가 28px가 되며 서로 가린 실측 2026-07-21 반영)
       const labelOverlaps: string[] = []
@@ -169,6 +191,7 @@ export async function captureSegments(
         imgDup,
         decoOverlaps,
         labelOverlaps,
+        heroImageRatio,
         phVisible,
         brokenImg,
       }
@@ -265,6 +288,14 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
   if (measurements.decoOverlaps && measurements.decoOverlaps.length > 0) {
     ruleViolations.push(
       `장식-텍스트 겹침 ${measurements.decoOverlaps.length}건: ${measurements.decoOverlaps.slice(0, 5).join(' / ')}`,
+    )
+  }
+  // I10 히어로 이미지 면적 — 위젯 박스에 사진을 가둔 히어로를 출구에서 잡는다.
+  // 25%는 실측 기준: 위젯형(hero-bubble-points 260×280px)이 약 10%, 풀폭형이 50~70%다.
+  if (typeof measurements.heroImageRatio === 'number' && measurements.heroImageRatio >= 0 &&
+      measurements.heroImageRatio < 25) {
+    ruleViolations.push(
+      `히어로 이미지 면적 부족: 씬1 면적의 ${measurements.heroImageRatio}% (목표 25% 이상) — 사진을 크게 쓰는 히어로 변형으로 교체 필요`,
     )
   }
   // 좌표 고정 라벨끼리의 겹침 — 폰트 확대가 절대 배치 오버레이를 무너뜨리면 여기서 잡힌다

@@ -90,6 +90,18 @@ async function main(): Promise<void> {
       imgDup: Array.from(srcCount.values()).filter((c) => c > 1).length,
       imgBroken: imgs.filter((i) => i.naturalWidth === 0).length,
       heroHasImg: sections[0] ? sections[0].querySelectorAll('img').length > 0 : false,
+      heroImageRatio: (() => {
+        const h = sections[0]
+        if (!h || !h.offsetWidth || !h.offsetHeight) return -1
+        let a = 0
+        Array.from(h.querySelectorAll('img')).forEach((img) => {
+          if (img.naturalWidth === 0) return
+          const cs = getComputedStyle(img)
+          if (cs.display === 'none' || cs.visibility === 'hidden') return
+          a += img.offsetWidth * img.offsetHeight
+        })
+        return Math.round((a / (h.offsetWidth * h.offsetHeight)) * 1000) / 10
+      })(),
       phVisible: Array.from(document.querySelectorAll('.dpg .ph')).filter(vis).length,
       textLedWithImg: textLed.filter((s) => s.querySelectorAll('img').length > 0).length,
       fontFaces: faces,
@@ -100,7 +112,7 @@ async function main(): Promise<void> {
     sectionCount: number; namedSections: number; allFamilies: string[]
     titleFamilies: string[]; subFamilies: string[]; bodyFamilies: string[]
     titleSizes: number[]; subSizes: number[]; bodySizes: number[]
-    imgCount: number; imgDup: number; imgBroken: number; heroHasImg: boolean
+    imgCount: number; imgDup: number; imgBroken: number; heroHasImg: boolean; heroImageRatio: number
     phVisible: number; textLedWithImg: number; fontFaces: number; canvasWidth: number
   }
   await browser.close()
@@ -119,6 +131,7 @@ async function main(): Promise<void> {
     { code: 'S4', rule: '씬 배경 교차', pass: new Set(m.sceneBgs).size >= 2, detail: `배경 ${new Set(m.sceneBgs).size}종` },
     { code: 'S6', rule: '14~20블록', pass: m.sectionCount >= 14 && m.sectionCount <= 20, detail: `${m.sectionCount}블록` },
     { code: 'I1', rule: '히어로 이미지 존재', pass: m.heroHasImg, detail: m.heroHasImg ? '있음' : '없음' },
+    { code: 'I10', rule: '히어로 이미지 면적 25%+', pass: m.heroImageRatio >= 25, detail: `씬1 면적의 ${m.heroImageRatio}%` },
     { code: 'I5', rule: '동일 사진 1회', pass: m.imgDup === 0, detail: `중복 ${m.imgDup}건 / 총 ${m.imgCount}장` },
     { code: 'I7', rule: '표계열 이미지 금지', pass: m.textLedWithImg === 0, detail: `위반 ${m.textLedWithImg}개 섹션` },
     { code: 'E3', rule: '고정폭 872px', pass: m.canvasWidth === 872, detail: `${m.canvasWidth}px` },

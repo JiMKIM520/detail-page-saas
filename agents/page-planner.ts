@@ -8,10 +8,11 @@
 import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, timer, MODELS, extractText } from './utils'
 import { catalog } from './templates/blocks'
-import { containSlotKeys } from './templates/blocks/registry'
+import { containSlotKeys, getVariant } from './templates/blocks/registry'
 import { SCRIPT_TYPE_TO_ARCHETYPES, HERO_STYLE_TO_VARIANTS } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
 import { variantTone, estimateHeight, isOffPalette } from './templates/blocks/variant-meta'
+import { detectImageScale } from './templates/blocks/image-scale'
 import type { AgentResult, ProjectBrief } from './types'
 
 export interface ImageNeed {
@@ -569,6 +570,56 @@ function validateBlueprint(
   return { issues, gaps }
 }
 
+/**
+ * I10 히어로 이미지 임팩트 강제 — 히어로에 사진이 배정되는데 이미지를 작게 쓰는 변형이
+ * 뽑혔으면, 같은 heroStyle 풀 안에서 이미지를 크게 쓰는 변형으로 결정적으로 교체한다.
+ *
+ * 왜 청사진 단계인가: 이 시점의 섹션은 variantId + copyBrief뿐이라 슬롯 데이터가 아직 없다.
+ * 컴포저 이후에 교체하면 변형마다 다른 스키마로 슬롯을 재매핑해야 해서 위험하다.
+ *
+ * 왜 결정적인가: LLM에게 "임팩트 있는 걸 골라라"라고 지시해도, 카탈로그에 이미지 크기 정보가
+ * 없어 판단 근거가 없다(히어로 빈약의 근본 원인 — 2026-07-21 4축 진단). 등급을 계산해
+ * 코드가 고른다. 풀은 건드리지 않으므로 heroStyle의 의미(points=USP 소구)는 보존된다.
+ *
+ * points 풀에도 large 등급이 5종 있음을 실측 확인했다 — 풀 확장 없이 해결된다.
+ */
+function enforceHeroImageImpact(bp: PageBlueprint, input: PagePlannerInput): void {
+  const hero = bp.sections[0]
+  if (!hero) return
+  const heroVariant = getVariant(hero.variantId)
+  if (!heroVariant || heroVariant.archetype !== 'hero') return
+
+  // 사진이 배정되지 않는 히어로는 대상 밖 — 텍스트 전용 히어로까지 바꾸면 의도를 훼손한다
+  const hasImage = (hero.imageUrls?.length ?? 0) > 0 || (hero.imageNeeds?.length ?? 0) > 0
+  if (!hasImage) return
+
+  if (detectImageScale(heroVariant.css, heroVariant.imageSlots) === 'large') return
+
+  const heroSection = input.script.sections.find((s) => String(s.type ?? s.sectionType ?? '') === 'hero')
+  const heroStyle = String((heroSection as { heroStyle?: string } | undefined)?.heroStyle ?? '').toLowerCase()
+  const pool = HERO_STYLE_TO_VARIANTS[heroStyle] ?? []
+  const candidates = pool.filter((id) => {
+    if (id === hero.variantId) return false
+    const v = getVariant(id)
+    if (!v || !CONTRACTED_IDS.has(id) || isOffPalette(id)) return false
+    // 슬롯 수가 늘면 채울 이미지가 모자라 빈 프레임이 생긴다 — 현재 이하만 허용
+    if (v.imageSlots > Math.max(1, heroVariant.imageSlots)) return false
+    return detectImageScale(v.css, v.imageSlots) === 'large'
+  })
+  if (candidates.length === 0) {
+    console.warn(
+      `[Page Planner] 히어로 임팩트 교체 불가 — heroStyle="${heroStyle}" 풀에 large 등급 후보 없음 (현행 ${hero.variantId} 유지)`,
+    )
+    return
+  }
+  // 시드 결정적 선택 — 같은 프로젝트는 항상 같은 히어로(재시도 간 흔들림 방지)
+  const picked = seededShuffle(candidates, seededRandom(`heroimpact:${input.seed ?? input.brief.productName}`))[0]
+  console.log(
+    `[Page Planner] 히어로 임팩트 교체 — ${hero.variantId}(이미지 작음) → ${picked}(large) · 풀 "${heroStyle}" 후보 ${candidates.length}종`,
+  )
+  hero.variantId = picked
+}
+
 export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResult<PageBlueprint>> {
   const elapsed = timer()
   console.log(`[Page Planner] 시작 — 스크립트 ${input.script.sections.length}섹션 · 이미지 ${Object.keys(input.imageNotes).length}장`)
@@ -590,13 +641,33 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
       messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
       })
       .finalMessage()
-    if (message.stop_reason === 'max_tokens')
+    // 계측 — 상한을 세 번(16k→32k→64k) 올리면서도 실제 출력량을 한 번도 재지 않았다.
+    // 다음 잘림 때 "정말 큰가 / 반복 degeneration인가"를 데이터로 가른다.
+    const usage = message.usage as {
+      input_tokens: number
+      output_tokens: number
+      cache_read_input_tokens?: number
+      output_tokens_details?: { thinking_tokens?: number }
+    }
+    console.log(
+      `[Page Planner] usage — in:${usage.input_tokens} cacheR:${usage.cache_read_input_tokens ?? 0} out:${usage.output_tokens} think:${usage.output_tokens_details?.thinking_tokens ?? 0} stop:${message.stop_reason}`,
+    )
+    if (message.stop_reason === 'max_tokens') {
+      // 잘린 지점의 형태로 원인을 가른다: 섹션 수가 정상 범위(14~20)인데 잘렸다면 섹션당 출력이
+      // 과한 것이고, 수십 개로 불어났다면 모델이 반복에 빠진 것이다 — 처방이 정반대다.
+      const partial = extractText(message.content)
+      const sectionCount = (partial.match(/"variantId"/g) ?? []).length
+      console.warn(
+        `[Page Planner] 잘림 진단 — 출력 ${usage.output_tokens}tok · ${partial.length}자 · 섹션 ${sectionCount}개 · 말미 200자: ${partial.slice(-200).replace(/\s+/g, ' ')}`,
+      )
       // 잘린 JSON은 파싱 시도조차 무의미 — 치명 처리해 재시도 노트로 간결화를 지시한다
       throw new Error(
-        '출력이 max_tokens로 잘림 — copyBrief는 40자, imageNeeds prompt는 60자 이내로 간결하게 줄여 총 출력량을 절반으로 축소할 것',
+        `출력이 max_tokens로 잘림(${usage.output_tokens}tok·섹션 ${sectionCount}개) — copyBrief는 40자, imageNeeds prompt는 60자 이내로 간결하게 줄여 총 출력량을 절반으로 축소할 것`,
       )
+    }
     const bp = blueprintSchema.parse(parseJsonResponse<unknown>(extractText(message.content))) as PageBlueprint
     bp.sections.sort((a, b) => a.order - b.order)
+    enforceHeroImageImpact(bp, input)
     const { issues, gaps } = validateBlueprint(bp, allowedUrls, JSON.stringify(input.brief))
     // 커버리지 갭(Sprint 4-C) — 실패가 아니라 "어떤 블록 계열을 만들어야 하는가"의 데이터
     if (gaps.length) console.warn(`[Coverage Gap] 매핑 테이블 미등재 스크립트 type: ${gaps.join(' · ')}`)

@@ -65,13 +65,20 @@ const CATEGORY_ROLE: Record<string, string> = {
   pet: 'professional Korean e-commerce pet product photographer',
 }
 
-/** 히어로 프레이밍 규칙 본문 — 제품 전신 노출 강제 (룰 7-11) */
+/** 히어로 프레이밍 규칙 본문 — 제품 전신 노출 강제 (룰 7-11)
+ *
+ *  2026-07-21 완화: 이전 규칙은 "풀블리드 배너에 깔려 상하 20%가 잘린다"를 전제로
+ *  중앙 60% 배치 + 사방 10% 안전 여백을 요구했는데, 실제 레이아웃은 260×280px 박스에
+ *  사진을 통째로 넣는 경우가 많았다. 잘리지 않으니 여백까지 전부 박스 안에 들어가
+ *  제품이 작게 보였다("억지로 집어넣은 느낌"의 직접 원인).
+ *  전제를 없애고 화면을 채우는 연출로 바꾼다 — 잘림 방지(I1)는 유지한다. */
 export function heroFramingRules(): string {
   return `HERO FRAMING RULES (MANDATORY):
 Entire product must be FULLY VISIBLE within the frame — full body, no cropping, no partial framing allowed.
-The product package is the PRIMARY subject: it must occupy at least 35% of the frame area. People, pets, and props are secondary and must never occlude or overshadow the product.
-Safe margin: product edges must not touch or bleed beyond 10% from any frame boundary.
-Place the main subject within the CENTER 60% of the frame height — top and bottom 20% may be cropped by object-fit:cover in the detail page hero banner.`
+The product package is the PRIMARY subject and must DOMINATE the frame: it must occupy at least 55% of the frame area. People, pets, and props are secondary and must never occlude or overshadow the product.
+Fill the frame — this is a hero banner, not a catalog cutout. Avoid large empty margins; the composition should feel close-up and immersive.
+Safe margin: keep product edges within 4% of any frame boundary (tight but not bleeding).
+Place the main subject within the CENTER 80% of the frame height.`
 }
 
 /** name·filename에 hero가 있으면 히어로 샷 */
@@ -112,12 +119,19 @@ export function buildShotPrompt(shot: StylingShot, rules: string[], meta?: ShotM
   // 상세페이지 히어로는 object-fit:cover로 상하가 잘리므로 별도 프레이밍 규칙 적용
   const heroFramingBlock = isHeroShot(shot) ? heroFramingRules() : ''
 
+  // 히어로는 30% 네거티브 스페이스를 요구하지 않는다 — heroFramingRules가 "프레임을 채우라"고
+  // 지시하는데 같은 프롬프트에 "가장자리 30%를 비우라"가 함께 들어가면 정면 충돌한다.
+  // 두 제약이 겹쳐 제품이 작고 여백만 넓은 사진이 나온 실측(2026-07-21) 반영.
+  const negativeSpaceLine = isHeroShot(shot)
+    ? ''
+    : 'Leave 30% of top OR bottom edge as clean negative space for text overlay.'
+
   const positiveBody = `${buildPreservationPrefix(rules)}
 [ROLE] You are a ${role}.
 
 [OUTPUT SPECS]
 Output aspect ratio: ${aspectRatio} (portrait), do not crop subject.
-Leave 30% of top OR bottom edge as clean negative space for text overlay.
+${negativeSpaceLine}
 ${heroFramingBlock}
 ${brandColorLine}
 
