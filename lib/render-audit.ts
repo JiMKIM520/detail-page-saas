@@ -24,6 +24,8 @@ export interface PageMeasurements {
   imgDup: Array<{ src: string; count: number }>
   /** 솔리드 장식과 텍스트의 bbox 교차 — "장식클래스 ↔ 텍스트 앞부분" */
   decoOverlaps?: string[]
+  /** 절대 배치 라벨끼리의 bbox 교차 — 폰트 확대가 좌표 고정 오버레이를 무너뜨린 경우 */
+  labelOverlaps?: string[]
   /** 최종 렌더에 실제로 보이는 빈 플레이스홀더(.ph) — 소속 섹션 data-name */
   phVisible?: string[]
   /** 로드 실패 이미지(naturalWidth===0)의 src 말미 */
@@ -117,6 +119,32 @@ export async function captureSegments(
           }
         }
       }
+      // 좌표 고정 라벨끼리의 겹침 — 폰트 확대가 절대 배치 오버레이를 무너뜨리는 경로를 상시 감시한다.
+      // (F4 하한 적용으로 16px 알약 태그가 28px가 되며 서로 가린 실측 2026-07-21 반영)
+      const labelOverlaps: string[] = []
+      const positioned = Array.from(document.querySelectorAll('.dpg section *')).filter((el) => {
+        const e = el as HTMLElement
+        if (e.offsetWidth === 0 || e.offsetHeight === 0) return false
+        if ((el.textContent ?? '').trim().length < 2) return false
+        // 텍스트를 직접 들고 있는 최말단만 — 조상 컨테이너까지 세면 정상 중첩이 전부 걸린다
+        if (Array.from(el.children).some((c) => (c.textContent ?? '').trim().length >= 2)) return false
+        return getComputedStyle(e).position === 'absolute'
+      })
+      for (let a = 0; a < positioned.length && labelOverlaps.length < 10; a++) {
+        for (let b = a + 1; b < positioned.length; b++) {
+          if (positioned[a].closest('section') !== positioned[b].closest('section')) continue
+          const ra = positioned[a].getBoundingClientRect()
+          const rb = positioned[b].getBoundingClientRect()
+          const ix = Math.min(ra.right, rb.right) - Math.max(ra.left, rb.left)
+          const iy = Math.min(ra.bottom, rb.bottom) - Math.max(ra.top, rb.top)
+          if (ix > 4 && iy > 4 && ix * iy > 100) {
+            const ta = (positioned[a].textContent ?? '').trim().slice(0, 16)
+            const tb = (positioned[b].textContent ?? '').trim().slice(0, 16)
+            labelOverlaps.push(`"${ta}" ↔ "${tb}"`)
+            break
+          }
+        }
+      }
       // §5 P0 — 빈 플레이스홀더가 최종 렌더에 실제로 보이는지 결정적 검사
       // (dropEmptyPhotoBlocks는 URL 0장 기준 사전 드롭일 뿐, DOM 노출 검사는 없었다)
       const phVisible = Array.from(document.querySelectorAll('.dpg .ph'))
@@ -140,6 +168,7 @@ export async function captureSegments(
         fontSamples: { title: titleFonts, body: bodyFonts },
         imgDup,
         decoOverlaps,
+        labelOverlaps,
         phVisible,
         brokenImg,
       }
@@ -236,6 +265,12 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
   if (measurements.decoOverlaps && measurements.decoOverlaps.length > 0) {
     ruleViolations.push(
       `장식-텍스트 겹침 ${measurements.decoOverlaps.length}건: ${measurements.decoOverlaps.slice(0, 5).join(' / ')}`,
+    )
+  }
+  // 좌표 고정 라벨끼리의 겹침 — 폰트 확대가 절대 배치 오버레이를 무너뜨리면 여기서 잡힌다
+  if (measurements.labelOverlaps && measurements.labelOverlaps.length > 0) {
+    ruleViolations.push(
+      `라벨 겹침 ${measurements.labelOverlaps.length}건: ${measurements.labelOverlaps.slice(0, 5).join(' / ')}`,
     )
   }
   // 타이틀 분포 — 위반 판정 없이 측정값만 보존(오탐 방지, 분포 확보 후 기준 확정)

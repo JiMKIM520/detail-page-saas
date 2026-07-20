@@ -74,12 +74,17 @@ export const ingredientFloatOverlay = defineBlock<Data>({
   white-space:nowrap;
   line-height:1;
 }
-/* 배치: 태그별 고정 좌표 (0~4번째) */
-.ifo-tag:nth-child(1){top:6%;left:50%}
-.ifo-tag:nth-child(2){top:36%;right:0}
-.ifo-tag:nth-child(3){bottom:22%;right:0}
-.ifo-tag:nth-child(4){top:18%;left:0;transform:translateX(-40%)}
-.ifo-tag:nth-child(5){bottom:36%;left:0;transform:translateX(-30%)}
+/* 배치: 좌/우 두 열의 어긋난 세로 슬롯.
+   태그와 배지는 별개 컨테이너라 nth-child 좌표가 서로를 모른다. 같은 좌표 공간을 쓰면서
+   각자 배치하면 한글 라벨(영문 대비 폭이 넓다)이 이미지 폭 294px을 넘겨 충돌한다
+   — '가다랑어 흰살'↔'휴먼그레이드 원료' 겹침 실측(2026-07-21).
+   태그는 좌열 짝/우열 홀, 배지는 그 사이 빈 슬롯만 쓰도록 세로 위치를 통째로 나눠 갖는다.
+   슬롯 간 세로 간격 ≥62px > 라벨 높이(~45px)라 폭과 무관하게 겹치지 않는다. */
+.ifo-tag:nth-child(1){top:2%;left:0;transform:translateX(-32%)}
+.ifo-tag:nth-child(2){top:13%;right:0;transform:translateX(32%)}
+.ifo-tag:nth-child(3){top:24%;left:0;transform:translateX(-32%)}
+.ifo-tag:nth-child(4){top:35%;right:0;transform:translateX(32%)}
+.ifo-tag:nth-child(5){top:46%;left:0;transform:translateX(-32%)}
 
 /* 효능 배지 (흰 배경 + 색상 텍스트 + 컬러 도트) */
 .ifo-badges{position:absolute;left:0;top:0;width:100%;height:100%}
@@ -100,16 +105,18 @@ export const ingredientFloatOverlay = defineBlock<Data>({
 }
 /* dot 내부 십자선 SVG */
 .ifo-badge-dot svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
-/* 배지 배치 */
-.ifo-badge:nth-child(1){top:10%;right:0}
-.ifo-badge:nth-child(2){bottom:30%;right:0}
-.ifo-badge:nth-child(3){top:58%;right:0}
-.ifo-badge:nth-child(4){bottom:14%;left:50%}
+/* 배지 배치 — 태그가 쓰지 않는 아래쪽 슬롯(57%~)만 사용해 세로 영역을 나눠 갖는다 */
+.ifo-badge:nth-child(1){top:57%;right:0;transform:translateX(32%)}
+.ifo-badge:nth-child(2){top:68%;left:0;transform:translateX(-32%)}
+.ifo-badge:nth-child(3){top:79%;right:0;transform:translateX(32%)}
+.ifo-badge:nth-child(4){top:90%;left:0;transform:translateX(-32%)}
 
-/* 성분 서브라벨 패널 (이미지 오른쪽에 앵커됨) */
+/* 성분 서브라벨 패널 (이미지 오른쪽에 앵커됨)
+   .ifo-stage는 justify-content:center라 이미지가 중앙에 온다. 좌측 패딩 기준으로 좌표를 잡으면
+   이미지 위에 겹쳐 사진 위 텍스트가 되어버린다(실측 2026-07-21) — 중앙 기준으로 앵커한다. */
 .ifo-sublabels{
   position:absolute;
-  left:calc(var(--pad-x,56px) + 294px + 20px);
+  left:calc(50% + 147px + 20px);
   top:50%;transform:translateY(-50%);
   display:flex;flex-direction:column;gap:0;
 }
@@ -179,13 +186,14 @@ export const ingredientFloatOverlay = defineBlock<Data>({
 
     // 장식 커넥터 라인 SVG (이미지가 있을 때만)
     const connectorSvg = hasImg
-      ? `<svg class="ifo-connector" viewBox="0 0 294 560" preserveAspectRatio="none">
-        <line x1="180" y1="42" x2="260" y2="42" stroke="white" stroke-width="2.5" opacity=".85"/>
-        <line x1="240" y1="200" x2="294" y2="200" stroke="white" stroke-width="2.5" opacity=".85"/>
-        <line x1="240" y1="430" x2="294" y2="430" stroke="white" stroke-width="2.5" opacity=".85"/>
-        <circle cx="180" cy="42" r="3" fill="white" opacity=".7"/>
-        <circle cx="240" cy="200" r="3" fill="white" opacity=".7"/>
-        <circle cx="240" cy="430" r="3" fill="white" opacity=".7"/>
+      ? // 좌표는 태그·배지의 세로 슬롯(13%·35%·68%)과 맞춘다 — 슬롯을 바꾸면 여기도 함께 옮길 것
+        `<svg class="ifo-connector" viewBox="0 0 294 560" preserveAspectRatio="none">
+        <line x1="228" y1="73" x2="294" y2="73" stroke="white" stroke-width="2.5" opacity=".85"/>
+        <line x1="228" y1="196" x2="294" y2="196" stroke="white" stroke-width="2.5" opacity=".85"/>
+        <line x1="66" y1="381" x2="0" y2="381" stroke="white" stroke-width="2.5" opacity=".85"/>
+        <circle cx="228" cy="73" r="3" fill="white" opacity=".7"/>
+        <circle cx="228" cy="196" r="3" fill="white" opacity=".7"/>
+        <circle cx="66" cy="381" r="3" fill="white" opacity=".7"/>
       </svg>`
       : ''
 

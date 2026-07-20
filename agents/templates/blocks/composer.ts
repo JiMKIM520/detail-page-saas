@@ -54,21 +54,44 @@ function mapFontPx(n: number): number {
 }
 
 /**
+ * 절대 좌표로 배치된 요소용 완화 매핑.
+ *
+ * 왜 분리하는가: 흐름(flow) 텍스트는 커지면 아래로 밀리며 재배치되지만, `position:absolute`로
+ * 좌표가 고정된 라벨·배지는 커져도 자리를 못 옮겨 서로 겹친다. 16px 기준으로 좌표를 설계한
+ * 오버레이에 본문 하한(23px)을 그대로 적용하자 알약 태그가 28px가 되며 충돌한 실측
+ * (2026-07-21 동원 씬2 '가다랑어 흰살'↔'휴먼그레이드 원료' 겹침) 반영.
+ * 읽는 텍스트인 건 같으므로 하한 20px은 유지하되, 원본 대비 1.25배까지만 키운다.
+ */
+function mapFontPxPositioned(n: number): number {
+  if (n <= 10) return n
+  return Math.min(mapFontPx(n), Math.max(20, Math.round(n * 1.25)))
+}
+
+/**
  * 변형 CSS 문자열의 font-size·line-height px 값을 앵커 테이블로 재매핑한다.
  * - `font-size:Npx` / `font-size: Npx` 형태만 대상 (clamp/em/rem 불변).
  * - `line-height:Npx` / `line-height: Npx` px 명시형만 대상 (숫자단리·em 불변).
  * - 다른 속성(letter-spacing 등)은 불변.
+ * - `position:absolute`를 선언한 규칙 블록은 완화 매핑 — 좌표 고정 요소는 확대가 곧 겹침이다.
  * 순수 함수 — 입력 문자열을 변경하지 않는다.
  */
 export function remapFontScale(css: string): string {
   // 선언 값 전체를 잡아 그 안의 모든 px를 재매핑한다 — clamp()/min()/max() 안에 든 px가
   // 단순 패턴을 빠져나가 하한 미달로 남던 실측(clamp(15px,3.2vw,18px) → 18px) 봉쇄.
-  const remapDecl = (prop: 'font-size' | 'line-height') => (css2: string) =>
-    css2.replace(new RegExp(`${prop}\\s*:\\s*([^;}]+)`, 'g'), (_m, val: string) => {
-      const mapped = val.replace(/([\d.]+)px/g, (_p, n: string) => `${mapFontPx(parseFloat(n))}px`)
-      return `${prop}:${mapped}`
-    })
-  return remapDecl('line-height')(remapDecl('font-size')(css))
+  const remapDecls = (body: string, positioned: boolean): string => {
+    const mapper = positioned ? mapFontPxPositioned : mapFontPx
+    const remapDecl = (prop: 'font-size' | 'line-height') => (css2: string) =>
+      css2.replace(new RegExp(`${prop}\\s*:\\s*([^;}]+)`, 'g'), (_m, val: string) => {
+        const mapped = val.replace(/([\d.]+)px/g, (_p, n: string) => `${mapper(parseFloat(n))}px`)
+        return `${prop}:${mapped}`
+      })
+    return remapDecl('line-height')(remapDecl('font-size')(body))
+  }
+  // 최내곽 중괄호 = 선언 블록. @media 등 중첩 규칙도 안쪽 블록만 잡히므로 그대로 동작한다.
+  return css.replace(/\{([^{}]*)\}/g, (_whole, body: string) => {
+    const positioned = /position\s*:\s*absolute/.test(body)
+    return `{${remapDecls(body, positioned)}}`
+  })
 }
 
 export interface RenderResult {
