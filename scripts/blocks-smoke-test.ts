@@ -416,6 +416,24 @@ const VARIANT_DATA: Record<string, any> = {
     resolveLabel: '기존 제품이 가진 불편함',
     resolveBox: '이제는 달라질 때입니다',
   },
+  // ── 트랙 B 변형 보강 5종 ──────────────────────────────────────────────────────
+  'usage-steps-photo': {
+    steps: [
+      { icon: 'check', text: '첫 번째 사용 단계' },
+      { icon: 'drop', text: '두 번째 사용 단계' },
+      { icon: 'star', text: '세 번째 사용 단계' },
+    ],
+  },
+  'feeding-guide-blocks': {
+    blocks: [
+      { range: '소형견 1~5kg', value: '30g', icon: 'star' },
+      { range: '중형견 5~10kg', value: '50g', icon: 'badge' },
+    ],
+  },
+  'callout-icon-box': {
+    title: '이것만은 꼭 확인하세요',
+    body: '사용 전 반드시 확인이 필요한 핵심 정보입니다.',
+  },
 }
 
 // ── 공통 PageSpec meta / tokens ───────────────────────────────────────────────

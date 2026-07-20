@@ -6,6 +6,10 @@ import { z } from 'zod'
 import { defineBlock } from '../types'
 import { media } from '../shared'
 
+// 도트 불릿 SVG — 원형 8px, fill=currentColor (밀도 문법 §4 도트 궤적 recipe)
+const SVG_DOT =
+  '<svg viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><circle cx="4" cy="4" r="3.2"/></svg>'
+
 const schema = z.object({
   title: z.string().min(1).optional(),      // 기본 "HOW TO USE" — em,br 가능
   tagline: z.string().min(1).optional(),    // 히어로 소제목 (예: "제품의 사용법에 대해서 알려주세요!")
@@ -48,10 +52,12 @@ export const usageTextRows = defineBlock<Data>({
 .utr-rows{padding:0 48px}
 .utr-row{position:relative;padding:30px 0 28px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .utr-label{font-family:var(--font-display);font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.06em;line-height:1}
-.utr-desc{margin-top:12px;font-size:16px;color:var(--ink);line-height:1.65;max-width:72%}
+/* 도트 불릿 행 — 원형 SVG (8px, currentColor=var(--accent), 밀도 문법 §4 도트 궤적 recipe) */
+.utr-desc-row{display:flex;align-items:flex-start;gap:10px;margin-top:12px}
+.utr-dot{flex:0 0 8px;width:8px;height:8px;color:var(--accent);margin-top:5px;flex-shrink:0}
+.utr-dot svg{width:8px;height:8px}
+.utr-desc{font-size:16px;color:var(--ink);line-height:1.65}
 .utr-desc .em{color:var(--accent);font-weight:700}
-/* 우측 인용부호 장식 */
-.utr-quote{position:absolute;right:0;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-weight:800;font-size:56px;line-height:1;color:color-mix(in srgb,var(--accent) 28%,transparent);user-select:none;pointer-events:none}
 /* ── 마무리 ── */
 .utr-closer{padding:36px 48px 52px;font-family:var(--font-display);font-weight:800;font-size:28px;color:var(--ink);line-height:1.4;text-align:center}
 .utr-closer .em{color:var(--accent)}
@@ -74,8 +80,10 @@ export const usageTextRows = defineBlock<Data>({
         (s, i) => `
     <div class="utr-row">
       <div class="utr-label">${esc(s.label ?? `STEP  ${pad2(i + 1)}`)}</div>
-      <div class="utr-desc">${richSafe(s.desc)}</div>
-      <span class="utr-quote">&rdquo;</span>
+      <div class="utr-desc-row">
+        <span class="utr-dot">${SVG_DOT}</span>
+        <div class="utr-desc">${richSafe(s.desc)}</div>
+      </div>
     </div>`,
       )
       .join('')}

@@ -229,6 +229,21 @@ export const specNutritionMacroTable = defineBlock<Data>({
   font-size:11px;
 }
 
+/* 가로 게이지 바 (주영양소 행 — pct 있고 sub 아닐 때만) */
+.snmt-gauge-track{
+  height:3px;
+  background:rgba(255,255,255,.12);
+  border-radius:999px;
+  margin-top:5px;
+  overflow:hidden;
+}
+.snmt-gauge-fill{
+  height:3px;
+  background:var(--accent);
+  border-radius:999px;
+  min-width:4px;
+}
+
 /* 주석 */
 .snmt-footnote{
   font-family:var(--font-body);
@@ -240,6 +255,11 @@ export const specNutritionMacroTable = defineBlock<Data>({
 }
 `,
   render: (d, { esc, richSafe }) => {
+    /** pct 문자열("40%") → 0~100 숫자. 데이터 없는 행은 게이지 숨김. */
+    const parsePct = (pct: string): number => {
+      const n = parseFloat(pct.replace('%', ''))
+      return isNaN(n) ? 0 : Math.min(100, Math.max(0, n))
+    }
     // 매크로 배지
     const badgesHtml = d.macros
       .map((m) => {
@@ -260,9 +280,13 @@ export const specNutritionMacroTable = defineBlock<Data>({
         const pctHtml = r.pct
           ? `<td class="snmt-td">${r.highlight ? `<span class="snmt-pct-hl">${esc(r.pct)}</span>` : esc(r.pct)}</td>`
           : `<td class="snmt-td">—</td>`
+        const gaugeHtml =
+          r.pct && !r.sub
+            ? `<div class="snmt-gauge-track"><div class="snmt-gauge-fill" style="width:${parsePct(r.pct)}%"></div></div>`
+            : ''
         return `
       <tr class="${rowCls}">
-        <td class="snmt-td">${richSafe(r.label)}</td>
+        <td class="snmt-td">${richSafe(r.label)}${gaugeHtml}</td>
         <td class="snmt-td">${esc(r.amount)}</td>
         ${pctHtml}
       </tr>`

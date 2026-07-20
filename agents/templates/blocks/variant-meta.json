@@ -1,7 +1,7 @@
 {
-  "_generated": "2026-07-16T06:03:08.141Z",
-  "_measured": 52,
-  "_total": 591,
+  "_generated": "2026-07-20T00:56:09.571Z",
+  "_measured": 55,
+  "_total": 594,
   "_offPalette": 40,
   "hero-centered": {
     "tone": "dark",
@@ -82,7 +82,7 @@
   },
   "checklist-checks": {
     "tone": "light",
-    "height": 358,
+    "height": 354,
     "archetype": "checklist"
   },
   "strip-band": {
@@ -181,7 +181,7 @@
     "archetype": "ingredient"
   },
   "compare-beforeafter": {
-    "tone": "light",
+    "tone": "dark",
     "height": 397,
     "archetype": "compare"
   },
@@ -2997,5 +2997,20 @@
     "height": null,
     "archetype": "shipping",
     "offPalette": true
+  },
+  "usage-steps-photo": {
+    "tone": "light",
+    "height": 632,
+    "archetype": "usage"
+  },
+  "feeding-guide-blocks": {
+    "tone": "light",
+    "height": 356,
+    "archetype": "usage"
+  },
+  "callout-icon-box": {
+    "tone": "light",
+    "height": 174,
+    "archetype": "callout"
   }
 }

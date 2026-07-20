@@ -68,6 +68,18 @@ export const DECOR_CSS = [
   '.dpg section[data-tone="light"] .em-mk{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 30%,transparent) 62% 94%,transparent 94%);padding:0 .06em;border-radius:2px}',
   /* 다크 톤 강조 대비 보정 — 어두운 배경에서 --accent-d(.em 기본색)가 침몰하는 결함 봉쇄 (룰 7-7) */
   '.dpg section[data-tone="dark"] .em{color:var(--em-dark,#fff)}',
+  /* 타이틀 장식 .dT — sceneId%3 결정적 3종 (::before/::after·background만 사용, 레이아웃 최소 영향) */
+  '.dT{display:block}',
+  /* variant a: 좌측 굵은 악센트 획 + 하단 손그림 밑줄 */
+  '.dT.dT-a{position:relative;padding-left:14px}',
+  '.dT.dT-a::before{content:"";position:absolute;left:0;top:.1em;bottom:.1em;width:4px;background:var(--accent);border-radius:2px}',
+  '.dT.dT-a::after{content:"";display:block;height:0;border-bottom:2px solid var(--accent);width:60%;margin-top:6px;opacity:.65}',
+  /* variant b: 타이틀 뒤 고스트 하이라이트 블록 (accent 12%) */
+  '.dT.dT-b{background:linear-gradient(transparent 50%,color-mix(in srgb,var(--accent) 12%,transparent) 50%);padding-bottom:.05em}',
+  /* variant c: 양옆 짧은 대시 (하단 좌/우 코너 절대배치) */
+  '.dT.dT-c{position:relative;padding-bottom:10px}',
+  '.dT.dT-c::before{content:"";position:absolute;bottom:0;left:0;width:24px;height:2px;background:var(--accent);border-radius:1px;opacity:.8}',
+  '.dT.dT-c::after{content:"";position:absolute;bottom:0;right:0;width:24px;height:2px;background:var(--accent);border-radius:1px;opacity:.8}',
 ].join('\n')
 
 // ── 마커 희소성 상태 ─────────────────────────────────────────────────────────
@@ -253,6 +265,38 @@ function applyEmMarkers(html: string, budget: number): { html: string; used: num
   return { html: result, used }
 }
 
+/**
+ * 씬 첫 섹션 HTML에서 첫 h1/h2 또는 .disp 요소에 dT 클래스를 주입한다.
+ * sceneId % 3 → 변형 'a' / 'b' / 'c' 결정적 선택.
+ * 첫 매치만 치환 — 기존 class 속성 유무 모두 처리.
+ */
+function injectDtClass(html: string, sceneId: number): string {
+  const suffix = (['a', 'b', 'c'] as const)[sceneId % 3]
+  const extra = `dT dT-${suffix}`
+
+  // .disp 클래스와 h1/h2 태그 중 HTML에서 먼저 나오는 것을 선택
+  const dispIdx = html.search(/class="[^"]*\bdisp\b[^"]*"/)
+  const h12Idx = html.search(/<h[123][\s>]/)
+
+  if (dispIdx === -1 && h12Idx === -1) return html
+
+  const useDisp = dispIdx !== -1 && (h12Idx === -1 || dispIdx < h12Idx)
+
+  if (useDisp) {
+    // class="... disp ..." → 앞에 extra 클래스 추가 (첫 매치만)
+    return html.replace(/class="([^"]*\bdisp\b[^"]*)"/, `class="${extra} $1"`)
+  }
+
+  // h1/h2 — 오프닝 태그 전체를 매치해 class 속성 유무에 따라 분기 (첫 매치만)
+  return html.replace(/<(h[123])(\s[^>]*)?>/, (_m, tag: string, attrs?: string) => {
+    if (!attrs) return `<${tag} class="${extra}">`
+    if (/\bclass="/.test(attrs)) {
+      return `<${tag}${attrs.replace(/\bclass="([^"]*)"/, `class="${extra} $1"`)}>`
+    }
+    return `<${tag} class="${extra}"${attrs}>`
+  })
+}
+
 // ── 공개 API ─────────────────────────────────────────────────────────────────
 
 /**
@@ -352,13 +396,17 @@ export function decorateSection(html: string, meta: DecorMeta): string {
 
   // ── 마커 희소성: 씬당 최대 2개 .em만 em-mk로 승격 ─────────────────────────
   // 다크 섹션은 .em이 색 변환만 하므로 마커 적용 불필요
+  let finalHtml = decorated
   if (!dark) {
     const used = sceneEmUsed.get(sceneId) ?? 0
     const budget = EM_BUDGET - used
     const { html: markedHtml, used: newlyUsed } = applyEmMarkers(decorated, budget)
     sceneEmUsed.set(sceneId, used + newlyUsed)
-    return markedHtml
+    finalHtml = markedHtml
   }
 
-  return decorated
+  // ── 씬 첫 섹션: 첫 h1/h2/.disp에 dT 클래스 주입 (sceneId 가드 내) ─────────
+  if (isFirst) finalHtml = injectDtClass(finalHtml, sceneId)
+
+  return finalHtml
 }

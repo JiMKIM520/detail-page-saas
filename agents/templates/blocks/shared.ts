@@ -241,6 +241,9 @@ export function baseCss(tokens: Tokens, width: number): string {
   --font-serif:${t.fontSerif}; --font-hand:${t.fontHand};
   --font-lat:'Cormorant Garamond',serif;
   --r-scale:${rScale}; --pad-x:${padX}px; --em-dark:${emDark};${shapePhoto}
+  --scene-bg-1:var(--bg);
+  --scene-bg-2:color-mix(in srgb,var(--accent) 5%,var(--bg));
+  --scene-bg-3:color-mix(in srgb,var(--ink) 3%,var(--bg));
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font-body),'Pretendard',sans-serif;color:var(--ink);background:#cfc6ba;-webkit-font-smoothing:antialiased}

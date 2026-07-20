@@ -1,9 +1,17 @@
 /** COMPARE 아키타입(템플릿 충실 재현): compare-beforeafter.
  *  와디즈 200섹션 07_차별화 비교 _02(2단 BEFORE/AFTER 카드) 패턴을 토큰 기반으로 재구성.
- *  BEFORE(그레이) vs AFTER(accent) 두 컬럼 + 행별 대비 + 마무리. 어떤 프리셋이든 적응. */
+ *  BEFORE(다크 헤더) vs AFTER(accent 헤더) 두 컬럼 + 행별 ✗/✓ 아이콘 + 마무리.
+ *  밀도 문법 §4 체크마크 시스템(currentColor, V획/X획 인라인) 적용. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
 import { media } from '../shared'
+
+// ✗ X-mark SVG (14px, stroke=currentColor)
+const SVG_X =
+  '<svg class="cba-ri" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 3l8 8M11 3L3 11"/></svg>'
+// ✓ V획 체크 SVG (14px, stroke=currentColor)
+const SVG_CHECK =
+  '<svg class="cba-ri" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7.5l3.5 3.5 6.5-6"/></svg>'
 
 const schema = z.object({
   title: z.string().min(1), // 예 "왜 특별할까요?"
@@ -36,11 +44,13 @@ export const compareBeforeAfter = defineBlock<Data>({
 .cba-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .cba-col{border-radius:var(--shape-photo, calc(var(--r-scale,1)*18px));overflow:hidden;background:var(--paper);box-shadow:0 16px 34px -22px rgba(0,0,0,.35)}
 .cba-h{text-align:center;font-family:var(--font-display);font-weight:800;font-size:20px;padding:16px;letter-spacing:.06em}
-.cba-h.b{background:#EAEAEE;color:#8A8A93}
+.cba-h.b{background:var(--ink);color:var(--paper)}
 .cba-h.a{background:var(--accent);color:#fff}
 .cba-media{width:100%;height:172px;object-fit:cover}
 .cba-rows{padding:6px 20px 18px}
-.cba-r{text-align:center;font-size:15px;padding:18px 6px;line-height:1.5}
+/* 행 아이콘 — 인라인 SVG (14px, stroke/fill=currentColor, 밀도 문법 §4) */
+.cba-ri{display:inline-block;width:14px;height:14px;vertical-align:middle;margin-right:6px;flex-shrink:0}
+.cba-r{display:flex;align-items:center;justify-content:center;font-size:15px;padding:18px 6px;line-height:1.5}
 .cba-r.b{color:var(--muted)}
 .cba-r.a{color:var(--ink);font-weight:700}
 .cba-r.a .em{color:var(--accent)}
@@ -51,8 +61,8 @@ export const compareBeforeAfter = defineBlock<Data>({
   render: (d, { esc, richSafe }) => {
     const bLabel = esc(d.beforeLabel ?? 'BEFORE')
     const aLabel = esc(d.afterLabel ?? 'AFTER')
-    const beforeRows = d.rows.map((r) => `<div class="cba-r b">${richSafe(r.before)}</div>`).join('')
-    const afterRows = d.rows.map((r) => `<div class="cba-r a">${richSafe(r.after)}</div>`).join('')
+    const beforeRows = d.rows.map((r) => `<div class="cba-r b">${SVG_X}<span>${richSafe(r.before)}</span></div>`).join('')
+    const afterRows = d.rows.map((r) => `<div class="cba-r a">${SVG_CHECK}<span>${richSafe(r.after)}</span></div>`).join('')
     return `
 <section class="cba">
   <div class="cba-hd">

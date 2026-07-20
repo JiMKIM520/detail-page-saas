@@ -588,6 +588,10 @@ import { specGridCreamTable } from './variants/spec-grid-cream-table'
 import { statsScoreCascade } from './variants/stats-score-cascade'
 import { usageDayTimeline } from './variants/usage-day-timeline'
 import { shippingNumeralSchedule } from './variants/shipping-numeral-schedule'
+// 트랙 B 변형 보강 5종 (usage-steps-photo, feeding-guide-blocks, callout-icon-box)
+import { usageStepsPhoto } from './variants/usage-steps-photo'
+import { feedingGuideBlocks } from './variants/feeding-guide-blocks'
+import { calloutIconBox } from './variants/callout-icon-box'
 
 registerBlocks([
   heroCentered,
@@ -1207,6 +1211,10 @@ registerBlocks([
   statsScoreCascade,
   usageDayTimeline,
   shippingNumeralSchedule,
+  // 트랙 B 변형 보강 5종
+  usageStepsPhoto,
+  feedingGuideBlocks,
+  calloutIconBox,
 ])
 
 export { renderPage, pageSpecSchema } from './composer'

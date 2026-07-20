@@ -78,7 +78,8 @@ export function renderPage(spec: PageSpec): RenderResult {
     if (sid !== undefined) {
       if (sid !== prevSceneId) {
         if (sceneOpen) sections.push('</div>')
-        sections.push(`<div class="scene" data-scene="${sid}">`)
+        const tintN = ((sid - 1) % 3) + 1
+        sections.push(`<div class="scene" data-scene="${sid}" style="--bg:var(--scene-bg-${tintN})">`)
         sceneOpen = true
         prevSceneId = sid
       }
