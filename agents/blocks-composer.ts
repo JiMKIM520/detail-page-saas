@@ -1929,6 +1929,69 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
       result = { spec: result.spec, html: reScene.html, usedVariants: reScene.usedVariants }
     }
 
+    // ── S2 씬 높이 리밸런싱 — 실측 → 경계 재분할 → 재렌더 ──
+    // 플래너의 사전 높이 추정은 폰트 확대·장식 밀도가 렌더 시점에 결정되므로 구조적으로 빗나간다.
+    // 렌더 후 실측값으로 씬 경계만 옮긴다(블록 순서·개수·씬 개수 불변 → 서사 훼손 없음).
+    // 경계가 바뀌면 장식(indexInScene·isLastScene)이 달라져 높이가 미세하게 변하므로 최대 2패스.
+    try {
+      const sceneIdsPresent = result.spec.blocks
+        .map((b) => b.sceneId)
+        .filter((s): s is number => s !== undefined)
+      if (sceneIdsPresent.length === result.spec.blocks.length && sceneIdsPresent.length > 0) {
+        const sceneCount = new Set(sceneIdsPresent).size
+        const { measureSectionLayout } = await import('@/lib/render-audit')
+        const { balanceScenes, estimateSceneOverhead } = await import('./templates/blocks/scene-balance')
+        for (let pass = 1; pass <= 2; pass++) {
+          const layout = await measureSectionLayout(result.html)
+          if (!layout) {
+            console.warn('[Blocks Composer] 씬 리밸런싱 스킵 — chromium 없음(환경 미지원)')
+            break
+          }
+          const before = layout.sceneHeights
+          const bad = before.filter((h) => h < 1600 || h > 2500).length
+          if (bad === 0) {
+            if (pass === 1) console.log(`[Blocks Composer] 씬 높이 적합 — [${before.join(', ')}]`)
+            break
+          }
+          // 섹션 1개 = 블록 1개 전제가 깨지면(변형이 section을 0개/2개 렌더) 인덱스 대응이 어긋난다
+          if (layout.sectionHeights.length !== result.spec.blocks.length) {
+            console.warn(
+              `[Blocks Composer] 씬 리밸런싱 스킵 — 섹션 ${layout.sectionHeights.length} ≠ 블록 ${result.spec.blocks.length}`,
+            )
+            break
+          }
+          const overhead = estimateSceneOverhead(
+            layout.sceneHeights,
+            layout.sectionHeights,
+            layout.sceneOfSection,
+          )
+          const bal = balanceScenes(layout.sectionHeights, { sceneCount, overhead })
+          if (!bal) {
+            console.warn(`[Blocks Composer] 씬 리밸런싱 해 없음 — 블록 ${result.spec.blocks.length}/씬 ${sceneCount}`)
+            break
+          }
+          const moved = result.spec.blocks.filter((b, i) => b.sceneId !== bal.sceneIds[i]).length
+          if (moved === 0) {
+            console.warn(
+              `[Blocks Composer] ⚠ 씬 높이 이탈 ${bad}개 — 현재 분할이 이미 최적(블록 단위로는 해소 불가): [${before.join(', ')}]`,
+            )
+            break
+          }
+          result.spec.blocks.forEach((b, i) => {
+            b.sceneId = bal.sceneIds[i]
+          })
+          const reBal = renderPage(result.spec)
+          result = { spec: result.spec, html: reBal.html, usedVariants: reBal.usedVariants }
+          console.log(
+            `[Blocks Composer] 씬 리밸런싱 ${pass}패스 — 이탈 ${bad}개 · 블록 ${moved}개 이동 · [${before.join(', ')}] → 예상 [${bal.predicted.join(', ')}]`,
+          )
+          reportAdd('scene-rebalance', { pass, before, moved, predicted: bal.predicted, overhead })
+        }
+      }
+    } catch (e) {
+      console.warn('[Blocks Composer] 씬 리밸런싱 스킵:', (e as Error).message?.slice(0, 120))
+    }
+
     saveJson(result.spec, `${input.outputDir}/page-spec.json`)
     const ms = elapsed()
     console.log(`[Blocks Composer] 완료 (${ms}ms) — ${result.usedVariants.length} blocks`)

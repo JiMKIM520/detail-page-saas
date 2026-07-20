@@ -262,3 +262,50 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
     }
   return { ran: true, pass: audit.data.pass, issues: audit.data.issues, ruleViolations, measurements: measurementsOut }
 }
+
+/** 씬 리밸런싱용 레이아웃 실측 — 섹션별 높이와 소속 씬. 비전 감사 없이 렌더만 한다(빠름). */
+export interface SectionLayout {
+  /** 문서 순서대로의 섹션 높이(px) — margin 포함 */
+  sectionHeights: number[]
+  /** 섹션별 소속 sceneId(1-base). 씬 래퍼 밖 섹션은 0 */
+  sceneOfSection: number[]
+  /** 씬 래퍼 높이(px) */
+  sceneHeights: number[]
+}
+
+/**
+ * 렌더된 HTML의 섹션·씬 높이를 실측한다. chromium이 없으면 null(조용한 실패 아님 — 호출부가 스킵 로그).
+ * 씬 높이 = 소속 섹션 높이 합 + 래퍼 오버헤드이므로, 경계를 옮겼을 때의 높이를 이 값으로 예측할 수 있다.
+ */
+export async function measureSectionLayout(html: string): Promise<SectionLayout | null> {
+  const shell = chromiumShellPath()
+  if (!shell) return null
+  const { chromium } = await import('playwright-core')
+  const browser = await chromium.launch({ executablePath: shell })
+  try {
+    const page = await browser.newPage({ viewport: { width: 872, height: 1200 } })
+    await page.setContent(html, { waitUntil: 'networkidle', timeout: 90000 })
+    // 주의: page.evaluate에 함수를 넘기면 tsx(esbuild) 계측이 이름 있는 화살표 상수에 __name을 붙여
+    // "__name is not defined"로 죽는다. 문자열 평가식으로만 작성한다(check-rules.ts와 동일 제약).
+    return (await page.evaluate(`(() => {
+      const scenes = Array.from(document.querySelectorAll('.dpg > .scene'))
+      const sceneIndex = new Map()
+      scenes.forEach((s, i) => sceneIndex.set(s, i + 1))
+      const sections = Array.from(document.querySelectorAll('.dpg section'))
+      return {
+        sectionHeights: sections.map((s) => {
+          // margin까지 포함해야 씬 높이 합과 맞는다 — offsetHeight만 쓰면 섹션 간 여백이 새어나간다
+          const cs = getComputedStyle(s)
+          return Math.round(s.offsetHeight + parseFloat(cs.marginTop || '0') + parseFloat(cs.marginBottom || '0'))
+        }),
+        sceneOfSection: sections.map((s) => {
+          const parent = s.closest('.scene')
+          return parent ? (sceneIndex.get(parent) || 0) : 0
+        }),
+        sceneHeights: scenes.map((s) => s.offsetHeight),
+      }
+    })()`)) as SectionLayout
+  } finally {
+    await browser.close()
+  }
+}

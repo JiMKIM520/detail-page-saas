@@ -542,32 +542,53 @@ export async function runPipelineForProject(projectId: string): Promise<{
             let audit = await auditRenderedHtml(fs.readFileSync(htmlPath, 'utf8'))
             reportAdd('visual-audit', audit as unknown as Record<string, unknown>)
             reportAdd('rule-check', { violations: audit.ruleViolations ?? [], measurements: audit.measurements ?? null })
-            if (audit.ran && !audit.pass) {
-              console.warn(`[pipeline-bridge] 시각 감사 결함 ${audit.issues.length}건 → 반려 재조립 1회`)
+            // 룰 게이트 — 글로벌 룰 위반도 시각 결함과 동등하게 재조립을 촉발한다.
+            // 이전에는 ruleViolations가 리포트에만 남고 산출물은 그대로 나갔다("검사는 하되 막지 않음").
+            // 룰을 산출 조건으로 승격: 결함 점수 = 시각 결함 + 룰 위반.
+            const defectScore = (a: typeof audit): number =>
+              (a.pass ? 0 : a.issues.length) + (a.ruleViolations?.length ?? 0)
+            if (audit.ran && defectScore(audit) > 0) {
+              const violations = audit.ruleViolations ?? []
+              console.warn(
+                `[pipeline-bridge] 시각 결함 ${audit.pass ? 0 : audit.issues.length}건 · 룰 위반 ${violations.length}건 → 반려 재조립 1회`,
+              )
+              const reworkNote = [
+                ...(audit.pass ? [] : audit.issues),
+                ...violations.map((v) => `[글로벌 룰 위반] ${v}`),
+              ].join('\n')
               const rework = await runBlocksPipeline(blocksInput, {
                 ...composerOpts,
-                auditReworkNote: audit.issues.join('\n'),
+                auditReworkNote: reworkNote,
               })
               if (rework.success) {
                 const html2 = path.join(rework.outputDir, '4_final', 'index.html')
                 if (fs.existsSync(html2)) {
                   const audit2 = await auditRenderedHtml(fs.readFileSync(html2, 'utf8'))
                   reportAdd('visual-audit-rework', audit2 as unknown as Record<string, unknown>)
-                  // 재조립본이 감사를 통과했거나 결함이 줄었을 때만 교체 — 악화 방지
-                  if (!audit2.ran || audit2.pass || audit2.issues.length < audit.issues.length) {
+                  reportAdd('rule-check-rework', {
+                    violations: audit2.ruleViolations ?? [],
+                    measurements: audit2.measurements ?? null,
+                  })
+                  // 재조립본의 결함 총점이 줄었을 때만 교체 — 악화 방지
+                  if (!audit2.ran || defectScore(audit2) < defectScore(audit)) {
                     result = rework
                     audit = audit2
                   }
                 }
               }
             }
-            if (audit.ran && !audit.pass) {
+            if (audit.ran && defectScore(audit) > 0) {
+              const parts = [
+                ...(audit.pass ? [] : audit.issues),
+                ...(audit.ruleViolations ?? []).map((v) => `룰 위반: ${v}`),
+              ]
+              // 잔존 결함은 프로젝트에 남겨 운영자 보드에서 '보완' 대상으로 드러난다 — 조용한 납품 금지
               await supabase.from('project_logs').insert({
                 project_id: projectId,
                 from_status: 'design_generating',
                 to_status: 'design_generating',
                 changed_by: null,
-                note: `⚠ 시각 감사 결함 잔존(운영자 확인 필요): ${audit.issues.join(' / ').slice(0, 280)}`,
+                note: `⚠ 품질 게이트 잔존(운영자 확인 필요): ${parts.join(' / ').slice(0, 280)}`,
               })
             }
           }
