@@ -65,6 +65,37 @@ const CATEGORY_ROLE: Record<string, string> = {
   pet: 'professional Korean e-commerce pet product photographer',
 }
 
+/** 히어로 프레이밍 규칙 본문 — 제품 전신 노출 강제 (룰 7-11) */
+export function heroFramingRules(): string {
+  return `HERO FRAMING RULES (MANDATORY):
+Entire product must be FULLY VISIBLE within the frame — full body, no cropping, no partial framing allowed.
+The product package is the PRIMARY subject: it must occupy at least 35% of the frame area. People, pets, and props are secondary and must never occlude or overshadow the product.
+Safe margin: product edges must not touch or bleed beyond 10% from any frame boundary.
+Place the main subject within the CENTER 60% of the frame height — top and bottom 20% may be cropped by object-fit:cover in the detail page hero banner.`
+}
+
+/** name·filename에 hero가 있으면 히어로 샷 */
+export function isHeroShot(shot: { name?: string; filename?: string }): boolean {
+  return /hero/i.test(shot.name ?? '') || /hero/i.test(shot.filename ?? '')
+}
+
+/**
+ * 히어로 샷 프롬프트에 프레이밍 규칙을 보장한다(멱등).
+ * shot-prompter가 만든 finalPrompt는 buildShotPrompt를 우회하므로(2026-07-20 감사에서
+ * 히어로 규칙이 실경로에 한 번도 적용되지 않은 것을 확인) 생성 직전 모든 경로에서 호출한다.
+ */
+export function ensureHeroFraming(prompt: string, shot: { name?: string; filename?: string }): string {
+  if (!isHeroShot(shot)) return prompt
+  if (/HERO FRAMING RULES/.test(prompt)) return prompt
+  const rules = heroFramingRules()
+  // [OUTPUT SPECS] 블록이 있으면 그 직후에, 없으면 말미에 삽입
+  const idx = prompt.indexOf('[OUTPUT SPECS]')
+  if (idx === -1) return `${prompt}\n\n${rules}`
+  const lineEnd = prompt.indexOf('\n', idx)
+  const at = lineEnd === -1 ? prompt.length : lineEnd
+  return `${prompt.slice(0, at)}\n${rules}${prompt.slice(at)}`
+}
+
 export function buildShotPrompt(shot: StylingShot, rules: string[], meta?: ShotMeta): string {
   const role = (meta?.category ? CATEGORY_ROLE[meta.category] : undefined)
     ?? 'professional Korean e-commerce product photographer'
@@ -78,15 +109,8 @@ export function buildShotPrompt(shot: StylingShot, rules: string[], meta?: ShotM
   // P2: 색온도
   const colorTempLine = 'Color temperature: 3200–4500K warm natural light.'
 
-  // 히어로 샷 감지 — name 또는 filename에 'hero' 포함 (대소문자 무관)
   // 상세페이지 히어로는 object-fit:cover로 상하가 잘리므로 별도 프레이밍 규칙 적용
-  const isHeroShot = /hero/i.test(shot.name) || /hero/i.test(shot.filename)
-  const heroFramingBlock = isHeroShot
-    ? `HERO FRAMING RULES (MANDATORY):
-Entire product must be FULLY VISIBLE within the frame — full body, no cropping, no partial framing allowed.
-Safe margin: product edges must not touch or bleed beyond 10% from any frame boundary.
-Place the main subject within the CENTER 60% of the frame height — top and bottom 20% may be cropped by object-fit:cover in the detail page hero banner.`
-    : ''
+  const heroFramingBlock = isHeroShot(shot) ? heroFramingRules() : ''
 
   const positiveBody = `${buildPreservationPrefix(rules)}
 [ROLE] You are a ${role}.

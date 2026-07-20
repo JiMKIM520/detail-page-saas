@@ -15,6 +15,7 @@ import { composeProductContext } from '@/lib/ai/project-brief'
 import { extractBrandColor } from '@/lib/ai/brand-color'
 import { presetForCategory } from '@/agents/templates/blocks'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { ensureHeroFraming } from '@/agents/styling-shots'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -288,7 +289,10 @@ export async function runPipelineForProject(projectId: string): Promise<{
           for (const t of targets) {
             const defect = defectsByUrl.get(t.url) ?? '라벨/피사체 훼손'
             const noProduct = t.meta!.withProduct === false
-            const prompt = `${t.meta!.finalPrompt}\n\n[QA FEEDBACK — MUST FIX] ${defect}. ${noProduct ? 'No product, no packaging, no text anywhere in frame.' : 'Product label text MUST match the reference photos EXACTLY, character by character.'}`
+            const prompt = ensureHeroFraming(
+              `${t.meta!.finalPrompt}\n\n[QA FEEDBACK — MUST FIX] ${defect}. ${noProduct ? 'No product, no packaging, no text anywhere in frame.' : 'Product label text MUST match the reference photos EXACTLY, character by character.'}`,
+              { filename: t.base },
+            )
             try {
               const buf = await generateDesignImage({ prompt, referenceImages: noProduct ? [] : nukkiB64, aspectRatio: '3:4', model: 'pro' })
               const newName = `regen_${t.base}`

@@ -13,7 +13,7 @@ import path from 'node:path'
 import { createServiceClient } from '@/lib/supabase/service'
 import { runPlanningForProject, runPipelineForProject } from '@/lib/pipeline-bridge'
 import { generateDesignImage } from '@/lib/ai/gemini-image'
-import { buildShotPrompt } from '@/agents/styling-shots'
+import { buildShotPrompt, ensureHeroFraming } from '@/agents/styling-shots'
 
 const ARG = process.argv[2]
 const FROM_PIPELINE = process.argv.includes('--from-pipeline')
@@ -50,7 +50,8 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
       // 니즈 매칭 레퍼런스 (Sprint 9-C) — 샷 텍스트·파일명 토큰 겹침 우선, 동점 최신순
       const refIdx = pickShotReferences(String((shot as any).name ?? '') + ' ' + String((shot as any).filename ?? ''), photoNames)
       const refs = (shot as any).withProduct === false ? [] : refIdx.map((i) => nukki[i]).filter(Boolean)
-      const buf = await generateDesignImage({ prompt: fp, referenceImages: refs, aspectRatio: '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
+      // 히어로는 shot-prompter 프롬프트가 buildShotPrompt를 우회하므로 생성 직전 규칙 보장 (룰 7-11)
+      const buf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
       const p = `projects/${pid}/styling_real/${shot.filename || shot.name + '.png'}`
       const { error } = await svc.storage.from('designs').upload(p, buf, { contentType: 'image/png', upsert: true })
       if (error) throw new Error(error.message)
