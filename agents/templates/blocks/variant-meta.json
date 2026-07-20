@@ -1,68 +1,68 @@
 {
-  "_generated": "2026-07-20T00:56:09.571Z",
+  "_generated": "2026-07-20T11:41:06.263Z",
   "_measured": 55,
   "_total": 594,
   "_offPalette": 40,
   "hero-centered": {
     "tone": "dark",
-    "height": 277,
+    "height": 287,
     "archetype": "hero"
   },
   "hero-editorial": {
     "tone": "light",
-    "height": 202,
+    "height": 204,
     "archetype": "hero"
   },
   "hero-points": {
     "tone": "light",
-    "height": 402,
+    "height": 455,
     "archetype": "hero"
   },
   "hero-arch": {
     "tone": "light",
-    "height": 360,
+    "height": 415,
     "archetype": "hero"
   },
   "checkpoint-rows": {
     "tone": "light",
-    "height": 565,
+    "height": 571,
     "archetype": "checkpoint",
     "offPalette": true
   },
   "checkpoint-grid": {
     "tone": "light",
-    "height": 471,
+    "height": 511,
     "archetype": "checkpoint"
   },
   "point-bubble": {
     "tone": "light",
-    "height": 192,
+    "height": 197,
     "archetype": "point"
   },
   "feature-fullbleed": {
     "tone": "dark",
-    "height": 216,
+    "height": 212,
     "archetype": "feature"
   },
   "callout-banner": {
     "tone": "dark",
-    "height": 201,
+    "height": 212,
     "archetype": "callout",
     "offPalette": true
   },
   "statement-serif": {
     "tone": "light",
-    "height": 245,
+    "height": 254,
     "archetype": "callout"
   },
   "compare-cooking": {
     "tone": "dark",
-    "height": 477,
+    "height": 506,
     "archetype": "compare"
   },
   "spec-table": {
     "tone": "light",
-    "height": 386,
+    "height": 421,
     "archetype": "spec"
   },
   "closing-mood": {
@@ -72,27 +72,27 @@
   },
   "closing-light": {
     "tone": "light",
-    "height": 274,
+    "height": 279,
     "archetype": "closing"
   },
   "recommend-dark": {
     "tone": "dark",
-    "height": 168,
+    "height": 174,
     "archetype": "recommend"
   },
   "checklist-checks": {
     "tone": "light",
-    "height": 354,
+    "height": 369,
     "archetype": "checklist"
   },
   "strip-band": {
     "tone": "dark",
-    "height": 51,
+    "height": 64,
     "archetype": "strip"
   },
   "reason-question": {
     "tone": "light",
-    "height": 238,
+    "height": 248,
     "archetype": "reason"
   },
   "feature-seal": {
@@ -102,47 +102,47 @@
   },
   "equation-visual": {
     "tone": "light",
-    "height": 164,
+    "height": 166,
     "archetype": "equation"
   },
   "story-pair": {
     "tone": "light",
-    "height": 191,
+    "height": 197,
     "archetype": "story"
   },
   "cert-rosette": {
     "tone": "light",
-    "height": 359,
+    "height": 366,
     "archetype": "cert"
   },
   "review-bubbles": {
     "tone": "light",
-    "height": 487,
+    "height": 568,
     "archetype": "review"
   },
   "review-cards": {
     "tone": "light",
-    "height": 432,
+    "height": 504,
     "archetype": "review"
   },
   "faq-chat": {
     "tone": "light",
-    "height": 561,
+    "height": 650,
     "archetype": "faq"
   },
   "shipping-info": {
     "tone": "light",
-    "height": 234,
+    "height": 284,
     "archetype": "shipping"
   },
   "stats-highlight": {
     "tone": "light",
-    "height": 376,
+    "height": 412,
     "archetype": "stats"
   },
   "gallery-options": {
     "tone": "dark",
-    "height": 263,
+    "height": 288,
     "archetype": "gallery"
   },
   "banner-event": {
@@ -152,27 +152,27 @@
   },
   "feature-editorial": {
     "tone": "light",
-    "height": 662,
+    "height": 724,
     "archetype": "feature"
   },
   "feature-cards": {
     "tone": "light",
-    "height": 1010,
+    "height": 1074,
     "archetype": "feature"
   },
   "feature-dark": {
     "tone": "dark",
-    "height": 485,
+    "height": 543,
     "archetype": "feature"
   },
   "ingredient-accent": {
     "tone": "light",
-    "height": 471,
+    "height": 541,
     "archetype": "ingredient"
   },
   "ingredient-grid": {
     "tone": "dark",
-    "height": 311,
+    "height": 347,
     "archetype": "ingredient"
   },
   "ingredient-spotlight": {
@@ -182,12 +182,12 @@
   },
   "compare-beforeafter": {
     "tone": "dark",
-    "height": 397,
+    "height": 451,
     "archetype": "compare"
   },
   "review-list": {
     "tone": "light",
-    "height": 515,
+    "height": 589,
     "archetype": "review"
   },
   "review-chat-bubbles": {
@@ -197,7 +197,7 @@
   },
   "usage-steps": {
     "tone": "light",
-    "height": 434,
+    "height": 456,
     "archetype": "usage"
   },
   "usage-flow": {
@@ -212,7 +212,7 @@
   },
   "package-list": {
     "tone": "light",
-    "height": 514,
+    "height": 589,
     "archetype": "lineup"
   },
   "package-cards": {
@@ -227,28 +227,28 @@
   },
   "cert-frame": {
     "tone": "light",
-    "height": 334,
+    "height": 364,
     "archetype": "cert"
   },
   "gallery-grid": {
     "tone": "light",
-    "height": 419,
+    "height": 459,
     "archetype": "gallery"
   },
   "event-promo": {
     "tone": "dark",
-    "height": 573,
+    "height": 617,
     "archetype": "event"
   },
   "discount-deal": {
     "tone": "dark",
-    "height": 753,
+    "height": 765,
     "archetype": "discount",
     "offPalette": true
   },
   "detail-showcase": {
     "tone": "light",
-    "height": 391,
+    "height": 448,
     "archetype": "detail"
   },
   "detail-points": {
@@ -263,7 +263,7 @@
   },
   "story-brand": {
     "tone": "light",
-    "height": 604,
+    "height": 651,
     "archetype": "story"
   },
   "banner-seasonal": {
@@ -273,12 +273,12 @@
   },
   "intro-cover": {
     "tone": "light",
-    "height": 776,
+    "height": 868,
     "archetype": "hero"
   },
   "stats-figures": {
     "tone": "dark",
-    "height": 342,
+    "height": 366,
     "archetype": "stats",
     "offPalette": true
   },
@@ -289,17 +289,17 @@
   },
   "faq-list": {
     "tone": "light",
-    "height": 659,
+    "height": 794,
     "archetype": "faq"
   },
   "hero-photo": {
     "tone": "light",
-    "height": 731,
+    "height": 765,
     "archetype": "hero"
   },
   "shipping-notice": {
     "tone": "dark",
-    "height": 447,
+    "height": 511,
     "archetype": "shipping"
   },
   "hero-split-list": {
@@ -2247,7 +2247,7 @@
   },
   "point-dark-grid-resolve": {
     "tone": "dark",
-    "height": 910,
+    "height": 980,
     "archetype": "point",
     "offPalette": true
   },
@@ -2258,7 +2258,7 @@
   },
   "point-glass-grid": {
     "tone": "dark",
-    "height": 1621,
+    "height": 1711,
     "archetype": "point"
   },
   "point-highlight-stack": {
@@ -3000,17 +3000,17 @@
   },
   "usage-steps-photo": {
     "tone": "light",
-    "height": 632,
+    "height": 635,
     "archetype": "usage"
   },
   "feeding-guide-blocks": {
     "tone": "light",
-    "height": 356,
+    "height": 377,
     "archetype": "usage"
   },
   "callout-icon-box": {
     "tone": "light",
-    "height": 174,
+    "height": 210,
     "archetype": "callout"
   }
 }

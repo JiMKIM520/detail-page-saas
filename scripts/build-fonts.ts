@@ -46,6 +46,7 @@ interface FontJob {
 }
 
 const PRIORITY_FONTS: FontJob[] = [
+  // ── 기존 6종 (이미 변환 완료, 재실행 시 덮어씀) ──────────────────────────────
   {
     folder: 'SUIT',
     sourceFile: 'SUIT-Bold.otf',
@@ -88,6 +89,43 @@ const PRIORITY_FONTS: FontJob[] = [
     cssFamily: 'tvN 즐거운이야기',
     weight: 700,
   },
+  // ── 추가 변환 (클라이언트 제공 전량) ────────────────────────────────────────
+  // 나눔브러쉬 — 손글씨 포인트 (handFont 역할)
+  {
+    folder: '나눔브러쉬',
+    sourceFile: 'NanumBrush.otf',
+    outputFile: 'NanumBrush-Regular.woff2',
+    cssFamily: 'NanumBrushScript',
+    weight: 400,
+  },
+  // 나눔손글씨 부장님 눈치체 — 서브셋 결과 2.96MB (> 700KB 한도) → 스킵
+  // 땅스부대찌개체 — SVG 테이블 포함 폰트라 lxml 없이는 pyftsubset 실패 → 스킵
+  // 문경감홍사과체 — 지역 특화 디스플레이
+  {
+    folder: '문경감홍사과체폰트파일',
+    sourceFile: 'Mungyeong-Gamhong-Apple.otf',
+    outputFile: 'Mungyeong-Bold.woff2',
+    cssFamily: '문경감홍사과체',
+    weight: 400,
+  },
+  // 빛고을광주체 — 도시 감성 디스플레이
+  {
+    folder: '빛고을광주체',
+    sourceFile: '빛고을광주_Bold.ttf',
+    outputFile: 'Bitgoeul-Bold.woff2',
+    cssFamily: '빛고을광주체',
+    weight: 700,
+  },
+  // 상주곶감체 — 전통/감성 디스플레이 (대표 1웨이트 Gotgam 계열)
+  {
+    folder: '상주곶감체',
+    sourceFile: 'SANGJU Gotgam.ttf',
+    outputFile: 'SangjuGotgam.woff2',
+    cssFamily: '상주곶감체',
+    weight: 400,
+  },
+  // 더페이스샵 잉크립퀴드체 — .exe 전용 배포라 변환 불가 (스킵)
+  // 수성혜정체_윈도우용 — 소스 파일 없음 (스킵)
 ]
 
 // ── 유틸 ─────────────────────────────────────────────────────────────────────

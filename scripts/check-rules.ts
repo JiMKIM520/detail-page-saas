@@ -65,7 +65,7 @@ async function main(): Promise<void> {
     const imgs = Array.from(document.querySelectorAll('.dpg img'))
     const srcCount = new Map()
     imgs.forEach((i) => srcCount.set(i.src, (srcCount.get(i.src) || 0) + 1))
-    const textLed = sections.filter((s) => /spec|faq|cs-|shipping/.test(s.getAttribute('data-name') || ''))
+    const textLed = sections.filter((s) => ['spec','faq','cs','shipping'].includes(s.getAttribute('data-arch') || ''))
     let faces = 0
     for (const sheet of Array.from(document.styleSheets)) {
       try {

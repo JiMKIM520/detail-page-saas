@@ -147,7 +147,11 @@ export function renderPage(spec: PageSpec): RenderResult {
 
     // Figma 임포트(html.to.design) 레이어 식별용 — sN-{variantId} 형태
     const dataName = sid !== undefined ? `s${sid}-${variant.id}` : variant.id
-    const taggedSection = decorated.replace(/(<section)(\s|>)/, `$1 data-name="${dataName}"$2`)
+    // data-arch = 아키타입 — 변형 이름에 'spec'이 들어갔다고 표계열로 오판하던 채점 오탐 봉쇄
+    const taggedSection = decorated.replace(
+      /(<section)(\s|>)/,
+      `$1 data-name="${dataName}" data-arch="${variant.archetype}"$2`,
+    )
     sections.push(taggedSection)
   })
 
