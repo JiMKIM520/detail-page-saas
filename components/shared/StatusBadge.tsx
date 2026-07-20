@@ -1,20 +1,27 @@
 import { STATUS_LABELS, CLIENT_STATUS_LABELS, type ProjectStatus } from '@/lib/status-machine'
 
 const STATUS_STYLES: Record<ProjectStatus, { bg: string; text: string; dot: string }> = {
-  intake_submitted:  { bg: 'bg-gray-50',    text: 'text-gray-600',    dot: 'bg-gray-400' },
-  script_generating: { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-400' },
-  script_review:     { bg: 'bg-orange-50',  text: 'text-orange-700',  dot: 'bg-orange-400' },
-  script_approved:   { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400' },
-  design_planning:   { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-400' },
-  design_plan_review:{ bg: 'bg-orange-50',  text: 'text-orange-700',  dot: 'bg-orange-400' },
-  prompt_ready:      { bg: 'bg-cyan-50',    text: 'text-cyan-700',    dot: 'bg-cyan-400' },
-  photo_scheduled:   { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400' },
-  photo_uploaded:    { bg: 'bg-indigo-50',  text: 'text-indigo-700',  dot: 'bg-indigo-400' },
-  design_generating: { bg: 'bg-violet-50',  text: 'text-violet-700',  dot: 'bg-violet-400' },
-  design_failed:     { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500' },
-  design_review:     { bg: 'bg-pink-50',    text: 'text-pink-700',    dot: 'bg-pink-400' },
-  design_approved:   { bg: 'bg-teal-50',    text: 'text-teal-700',    dot: 'bg-teal-400' },
-  delivered:         { bg: 'bg-slate-100',  text: 'text-slate-600',   dot: 'bg-slate-400' },
+  // 신규 5종 (S1)
+  invited:            { bg: 'bg-sky-50',     text: 'text-sky-700',     dot: 'bg-sky-400' },
+  designer_working:   { bg: 'bg-violet-50',  text: 'text-violet-700',  dot: 'bg-violet-400' },
+  draft_submitted:    { bg: 'bg-orange-50',  text: 'text-orange-700',  dot: 'bg-orange-400' },
+  revision_1:         { bg: 'bg-yellow-50',  text: 'text-yellow-700',  dot: 'bg-yellow-400' },
+  revision_2:         { bg: 'bg-rose-50',    text: 'text-rose-700',    dot: 'bg-rose-400' },
+  // 기존 14종
+  intake_submitted:   { bg: 'bg-gray-50',    text: 'text-gray-600',    dot: 'bg-gray-400' },
+  script_generating:  { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-400' },
+  script_review:      { bg: 'bg-orange-50',  text: 'text-orange-700',  dot: 'bg-orange-400' },
+  script_approved:    { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400' },
+  design_planning:    { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-400' },
+  design_plan_review: { bg: 'bg-orange-50',  text: 'text-orange-700',  dot: 'bg-orange-400' },
+  prompt_ready:       { bg: 'bg-cyan-50',    text: 'text-cyan-700',    dot: 'bg-cyan-400' },
+  photo_scheduled:    { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400' },
+  photo_uploaded:     { bg: 'bg-indigo-50',  text: 'text-indigo-700',  dot: 'bg-indigo-400' },
+  design_generating:  { bg: 'bg-violet-50',  text: 'text-violet-700',  dot: 'bg-violet-400' },
+  design_failed:      { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500' },
+  design_review:      { bg: 'bg-pink-50',    text: 'text-pink-700',    dot: 'bg-pink-400' },
+  design_approved:    { bg: 'bg-teal-50',    text: 'text-teal-700',    dot: 'bg-teal-400' },
+  delivered:          { bg: 'bg-slate-100',  text: 'text-slate-600',   dot: 'bg-slate-400' },
 }
 
 export function StatusBadge({ status, clientFacing = false }: { status: ProjectStatus; clientFacing?: boolean }) {

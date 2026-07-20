@@ -16,9 +16,9 @@ export interface Database {
         Relationships: []
       }
       projects: {
-        Row: { id: string; client_id: string; planner_id: string | null; designer_id: string | null; status: string; company_name: string; homepage_url: string | null; detail_page_url: string | null; product_highlights: string | null; product_name: string | null; product_description: string | null; selling_points: Json | null; reference_notes: string | null; platform_id: string | null; category: string | null; category_id: string | null; brand_name: string | null; target_audience: Json | null; design_preference: string | null; created_at: string; updated_at: string }
-        Insert: { id?: string; client_id: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; product_name?: string | null; product_description?: string | null; selling_points?: Json | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; category_id?: string | null; brand_name?: string | null; target_audience?: Json | null; design_preference?: string | null; created_at?: string; updated_at?: string }
-        Update: { id?: string; client_id?: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name?: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; product_name?: string | null; product_description?: string | null; selling_points?: Json | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; category_id?: string | null; brand_name?: string | null; target_audience?: Json | null; design_preference?: string | null; created_at?: string; updated_at?: string }
+        Row: { id: string; client_id: string; planner_id: string | null; designer_id: string | null; status: string; company_name: string; homepage_url: string | null; detail_page_url: string | null; product_highlights: string | null; product_name: string | null; product_description: string | null; selling_points: Json | null; reference_notes: string | null; platform_id: string | null; category: string | null; category_id: string | null; brand_name: string | null; target_audience: Json | null; design_preference: string | null; due_date: string | null; product_received_at: string | null; intake_approved_at: string | null; revision_count: number; client_viewed_at: string | null; client_delivered_at: string | null; tags: Json; created_at: string; updated_at: string }
+        Insert: { id?: string; client_id: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; product_name?: string | null; product_description?: string | null; selling_points?: Json | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; category_id?: string | null; brand_name?: string | null; target_audience?: Json | null; design_preference?: string | null; due_date?: string | null; product_received_at?: string | null; intake_approved_at?: string | null; revision_count?: number; client_viewed_at?: string | null; client_delivered_at?: string | null; tags?: Json; created_at?: string; updated_at?: string }
+        Update: { id?: string; client_id?: string; planner_id?: string | null; designer_id?: string | null; status?: string; company_name?: string; homepage_url?: string | null; detail_page_url?: string | null; product_highlights?: string | null; product_name?: string | null; product_description?: string | null; selling_points?: Json | null; reference_notes?: string | null; platform_id?: string | null; category?: string | null; category_id?: string | null; brand_name?: string | null; target_audience?: Json | null; design_preference?: string | null; due_date?: string | null; product_received_at?: string | null; intake_approved_at?: string | null; revision_count?: number; client_viewed_at?: string | null; client_delivered_at?: string | null; tags?: Json; created_at?: string; updated_at?: string }
         Relationships: [
           { foreignKeyName: "projects_platform_id_fkey"; columns: ["platform_id"]; isOneToOne: false; referencedRelation: "platforms"; referencedColumns: ["id"] },
           { foreignKeyName: "projects_category_id_fkey"; columns: ["category_id"]; isOneToOne: false; referencedRelation: "categories"; referencedColumns: ["id"] },
@@ -48,10 +48,22 @@ export interface Database {
         Update: { id?: string; project_id?: string; from_status?: string | null; to_status?: string; changed_by?: string | null; note?: string | null; created_at?: string }
         Relationships: []
       }
+      project_assignments: {
+        Row: { id: string; project_id: string; role: string; staff_id: string; assigned_by: string | null; created_at: string }
+        Insert: { id?: string; project_id: string; role: string; staff_id: string; assigned_by?: string | null; created_at?: string }
+        Update: { id?: string; project_id?: string; role?: string; staff_id?: string; assigned_by?: string | null; created_at?: string }
+        Relationships: []
+      }
+      notifications: {
+        Row: { id: string; project_id: string | null; channel: string; template: string; recipient: string; status: string; sent_at: string | null; meta: Json; created_at: string }
+        Insert: { id?: string; project_id?: string | null; channel: string; template: string; recipient: string; status?: string; sent_at?: string | null; meta?: Json; created_at?: string }
+        Update: { id?: string; project_id?: string | null; channel?: string; template?: string; recipient?: string; status?: string; sent_at?: string | null; meta?: Json; created_at?: string }
+        Relationships: []
+      }
       user_profiles: {
-        Row: { id: string; name: string | null; avatar_url: string | null; role: string; usage_count: number; usage_limit: number; created_at: string; updated_at: string }
-        Insert: { id: string; name?: string | null; avatar_url?: string | null; role?: string; usage_count?: number; usage_limit?: number; created_at?: string; updated_at?: string }
-        Update: { id?: string; name?: string | null; avatar_url?: string | null; role?: string; usage_count?: number; usage_limit?: number; created_at?: string; updated_at?: string }
+        Row: { id: string; name: string | null; avatar_url: string | null; role: string; usage_count: number; usage_limit: number; business_number: string | null; created_at: string; updated_at: string }
+        Insert: { id: string; name?: string | null; avatar_url?: string | null; role?: string; usage_count?: number; usage_limit?: number; business_number?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; name?: string | null; avatar_url?: string | null; role?: string; usage_count?: number; usage_limit?: number; business_number?: string | null; created_at?: string; updated_at?: string }
         Relationships: []
       }
       intake_files: {
