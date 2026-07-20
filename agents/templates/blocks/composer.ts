@@ -23,8 +23,12 @@ const DEFAULT_WIDTH = 872
 
 /** 앵커 테이블 [원본px, 출력px] — 단조 연속, 10 이하·64 이상은 그대로. */
 const FONT_ANCHORS: [number, number][] = [
+  // 10px 이하는 장식(워터마크·세로 라벨)만 — 그대로 둔다.
+  // 11px부터는 읽는 텍스트로 보고 본문 하한 23px을 보장한다(F4). 12~13px 원본이
+  // 보간으로 18~20px에 머물러 하한을 못 넘던 실측(2026-07-20 채점) 반영.
   [10, 10],
-  [14, 23],
+  [11, 23],
+  [14, 25],
   [17, 30],
   [24, 34],
   [34, 40],
@@ -41,7 +45,9 @@ function mapFontPx(n: number): number {
     const [x1, y1] = FONT_ANCHORS[i + 1]
     if (n >= x0 && n <= x1) {
       const t = (n - x0) / (x1 - x0)
-      return Math.round(y0 + t * (y1 - y0))
+      const mapped = Math.round(y0 + t * (y1 - y0))
+      // 10px 초과 = 읽는 텍스트 → 본문 하한 23px 보장(앵커 보간 사각지대 봉쇄)
+      return mapped < 23 ? 23 : mapped
     }
   }
   return n
@@ -55,13 +61,14 @@ function mapFontPx(n: number): number {
  * 순수 함수 — 입력 문자열을 변경하지 않는다.
  */
 export function remapFontScale(css: string): string {
-  return css
-    .replace(/font-size\s*:\s*([\d.]+)px/g, (_, nStr: string) =>
-      `font-size:${mapFontPx(parseFloat(nStr))}px`,
-    )
-    .replace(/line-height\s*:\s*([\d.]+)px/g, (_, nStr: string) =>
-      `line-height:${mapFontPx(parseFloat(nStr))}px`,
-    )
+  // 선언 값 전체를 잡아 그 안의 모든 px를 재매핑한다 — clamp()/min()/max() 안에 든 px가
+  // 단순 패턴을 빠져나가 하한 미달로 남던 실측(clamp(15px,3.2vw,18px) → 18px) 봉쇄.
+  const remapDecl = (prop: 'font-size' | 'line-height') => (css2: string) =>
+    css2.replace(new RegExp(`${prop}\\s*:\\s*([^;}]+)`, 'g'), (_m, val: string) => {
+      const mapped = val.replace(/([\d.]+)px/g, (_p, n: string) => `${mapFontPx(parseFloat(n))}px`)
+      return `${prop}:${mapped}`
+    })
+  return remapDecl('line-height')(remapDecl('font-size')(css))
 }
 
 export interface RenderResult {
@@ -150,10 +157,18 @@ export function renderPage(spec: PageSpec): RenderResult {
   // 무시하므로 vw가 실제 창 폭을 따라 커져 872px 설계가 와이드 화면에서 붕괴한다
   // (로모노소프 선물 타이틀-이미지 겹침 실사례). 모바일은 meta로 이미 872 가상폭 = 동일 결과.
   // 변형 CSS에만 폰트 스케일 재매핑 적용 — baseCss·DECOR_CSS는 불변.
-  const remappedVariantCss = [...cssById.values()].map(remapFontScale).join('\n')
-  const styles = [baseCss(spec.tokens, width), DECOR_CSS, remappedVariantCss]
-    .join('\n')
-    .replace(/([\d.]+)vw/g, (_, n) => `${Math.round(parseFloat(n) * width) / 100}px`)
+  // baseCss도 재매핑 대상 — .lab 같은 공용 라벨이 17px로 남아 본문 하한을 깨뜨렸다(2026-07-20 채점).
+  // DECOR_CSS만 제외한다(장식 워터마크·세로 라벨은 읽는 텍스트가 아니다).
+  // 순서가 중요하다: vw→px를 먼저 하고 그다음 폰트 재매핑.
+  // 반대로 하면 vw로 선언된 폰트(2.2vw 등)가 재매핑을 통과해 19.18px 같은 하한 미달로 남는다
+  // (2026-07-20 채점에서 실측된 잔존 3건의 원인).
+  const vwToPx = (css: string) =>
+    css.replace(/([\d.]+)vw/g, (_, n: string) => `${Math.round(parseFloat(n) * width) / 100}px`)
+  const styles = [
+    remapFontScale(vwToPx(baseCss(spec.tokens, width))),
+    vwToPx(DECOR_CSS), // 장식은 크기 불변 — 워터마크·세로 라벨은 읽는 텍스트가 아니다
+    remapFontScale(vwToPx([...cssById.values()].join('\n'))),
+  ].join('\n')
   const title = `${spec.meta.product}`.trim() || 'Detail'
 
   const html = `<!DOCTYPE html>
