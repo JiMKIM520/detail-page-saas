@@ -876,8 +876,41 @@ export async function runPlanningForProject(projectId: string): Promise<{
           }
         } else {
           // 침묵 금지: 청사진 실패 시 항상 로그 + reportAdd
-          console.warn(`[pipeline-bridge/planning] 청사진 실패 — 아트디렉터 8컷 공식 유지: ${planned.error?.slice(0, 120) ?? 'unknown'}`)
+          console.warn(`[pipeline-bridge/planning] 청사진 실패 — ${planned.error?.slice(0, 120) ?? 'unknown'}`)
           reportAdd('page-planner-failure', { error: planned.error?.slice(0, 200) ?? 'unknown' })
+          // 결정적 폴백: 조립 단계는 "저장 청사진"을 재사용하므로, 컷도 저장 청사진의
+          // 니즈로 합성해야 니즈-샷 체계가 정합한다 (v6 실사례: 구 need_ 청사진 + 신
+          // 아트디렉터 8컷 → 매핑 5/12 → 히어로 이미지 공백)
+          try {
+            const { data: bpRaw } = await supabase.storage
+              .from('designs')
+              .download(`projects/${projectId}/planning/blueprint.json`)
+            if (bpRaw) {
+              const storedBp = JSON.parse(await bpRaw.text()) as {
+                sections?: Array<{ imageNeeds?: Array<{ id: string; subject: string; style: string; withProduct: boolean; useOriginal?: boolean; prominence?: string }> }>
+              }
+              const storedNeeds = (storedBp.sections ?? [])
+                .flatMap((s) => s.imageNeeds ?? [])
+                .filter((n) => !n.useOriginal)
+              if (storedNeeds.length > 0) {
+                const fbShots = storedNeeds.map((n) => ({
+                  name: n.subject.slice(0, 80),
+                  filename: `${n.id}.png`,
+                  finalPrompt: `${n.subject}. ${n.style} style, Korean e-commerce. [OUTPUT SPECS] 1000x1333px vertical 3:4, editorial Korean e-commerce detail page photography, no text overlays, no watermarks.`,
+                  withProduct: n.withProduct,
+                  prominence: n.prominence,
+                }))
+                await uploadToStorage(
+                  `projects/${projectId}/planning/styling-final-prompts.json`,
+                  Buffer.from(JSON.stringify({ shots: fbShots, shotsSource: 'stored-blueprint-fallback' }, null, 2)),
+                  'application/json',
+                )
+                console.warn(`[pipeline-bridge/planning] 저장 청사진 니즈로 폴백 샷 합성 — ${fbShots.length}건 (stored-blueprint-fallback)`)
+              }
+            }
+          } catch (fbErr) {
+            console.warn('[pipeline-bridge/planning] 저장 청사진 폴백 실패:', (fbErr as Error).message?.slice(0, 100))
+          }
         }
       } else {
         console.warn('[pipeline-bridge/planning] 승인 스크립트 없음 — 수요 기반 계획 생략')

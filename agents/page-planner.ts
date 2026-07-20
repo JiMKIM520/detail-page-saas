@@ -605,16 +605,23 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
   }
 
   try {
-    let bp: PageBlueprint
-    try {
-      bp = await callOnce()
-    } catch (firstErr: unknown) {
-      let note = firstErr instanceof Error ? firstErr.message.slice(0, 500) : String(firstErr)
-      // JSON 파싱 실패는 대개 문자열 내 개행 — 재시도에 형식 지시를 명시
-      if (/JSON/i.test(note)) note += ' — 문자열 안에 개행 금지, 공백 최소화한 한 줄 JSON으로만 출력'
-      console.warn('[Page Planner] 1차 검증 실패 → 재시도:', note.slice(0, 140))
-      bp = await callOnce(note)
+    // 잘림·검증 실패 모두 확률적 재현(v6: 1차 검증 실패 → 2차 잘림으로 전멸 실사례) — 재시도 2회
+    let bp: PageBlueprint | undefined
+    let lastNote: string | undefined
+    for (let attempt = 0; attempt <= 2; attempt++) {
+      try {
+        bp = await callOnce(lastNote)
+        break
+      } catch (err: unknown) {
+        let note = err instanceof Error ? err.message.slice(0, 500) : String(err)
+        // JSON 파싱 실패는 대개 문자열 내 개행 — 재시도에 형식 지시를 명시
+        if (/JSON/i.test(note)) note += ' — 문자열 안에 개행 금지, 공백 최소화한 한 줄 JSON으로만 출력'
+        if (attempt === 2) throw err
+        console.warn(`[Page Planner] ${attempt + 1}차 실패 → 재시도:`, note.slice(0, 140))
+        lastNote = note
+      }
     }
+    if (!bp) throw new Error('unreachable')
     if (bp.heroRationale) console.log(`[Page Planner] 히어로 근거 — ${bp.heroRationale.slice(0, 160)}`)
     console.log(`[Page Planner] 완료 (${elapsed()}ms) — ${bp.sections.length}블록: ${bp.sections.map((s) => s.variantId).join(', ')}`)
     return { success: true, data: bp, durationMs: elapsed() }
