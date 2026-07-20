@@ -99,7 +99,7 @@ const blueprintSchema = z.object({
           ),
         }),
       )
-      .min(8)
+      .min(14)
       .max(20),
   ),
   heroRationale: z.string().optional(),
@@ -145,7 +145,7 @@ system prompt). Your job:
    - [세로] images never go to wide full-bleed/panorama blocks.
    - "차선" images only in small/background slots.
    - product-label/누끼 shots fit hero, detail, feature, ingredient — not story/mood backgrounds.
-   - Each image at most 2 sections. USE EVERY ok image at least once when a fitting section exists —
+   - Each image at most 1 section (동일 사진 재사용 금지). USE EVERY ok image at least once —
      unused good images are wasted production.
    - Blocks with imageSlots>=2 need at least 1 assigned image or must not be chosen.
    [NEEDS MODE] (인벤토리가 '(이미지 없음)' — 이미지를 아직 만들기 전): imageUrls는 반드시 []로 두고,
@@ -169,7 +169,7 @@ system prompt). Your job:
      ⑤ 사용 장면 2 (usage — main 1, support 1) ⑥ 무드/배경 1 (mood, support)
      ⑦ 스펙/비교 보조 1 (support) ⑧ 예비 1 (카테고리 특성 보완, support)
      블록 구성은 이 12컷을 전부 소화해야 한다 — 이미지 슬롯 보유 블록이 전체의 절반 이상
-     (슬롯 합 10 이상)이 되도록 선택하고, 부족하면 이미지 블록을 추가하라.
+     (슬롯 합 12 이상 — 12컷 표준 패키지를 전량 수용해야 한다)이 되도록 선택하고, 부족하면 이미지 블록을 추가하라.
    - prominence: 대형 프레임(히어로·풀블리드·본문 큰 사진)=main / 소형 썸네일·서브컷(원형 아이콘,
      리스트 썸네일, 보조컷)=support — 생성 모델 티어 결정에 쓰인다. 반드시 지정하라.
 4. copyBrief: ONE terse Korean sentence (max 80 chars) stating WHAT the filler must say there,
@@ -425,8 +425,8 @@ function validateBlueprint(
       (acc, sec) => acc + (catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0),
       0,
     )
-    if (slotSum < 10)
-      issues.push(`이미지 슬롯 합 ${slotSum}(<10) — 이미지 보유 블록이 부족하다. 텍스트 전용 블록 일부를 이미지 블록으로 교체하라`)
+    if (slotSum < 12)
+      issues.push(`이미지 슬롯 합 ${slotSum}(<12) — 이미지 보유 블록이 부족하다. 텍스트 전용 블록 일부를 이미지 블록으로 교체하라`)
   }
 
   // 수리 3: 씬 결정적 재그룹핑 — 유효 조건 미충족 시 결정적 폴백(니즈 수리와 같은 철학)

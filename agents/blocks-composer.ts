@@ -1875,6 +1875,8 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
         )
         await applyPairingQA(result.spec).catch(() => 0)
         dropEmptyPhotoBlocks(result.spec)
+        // 재배치 체인에도 가격 가드 — callOnce 체인에만 있어 재배치 후 가격 없는 할인 블록이 살아났다(D-C7)
+        dropPricelessDiscountBlocks(result.spec)
         repairAndSalvageBlocks(result.spec)
         const re3 = renderPage(result.spec)
         result = { spec: result.spec, html: re3.html, usedVariants: re3.usedVariants }
