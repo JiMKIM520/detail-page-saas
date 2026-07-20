@@ -71,5 +71,5 @@ export function estimateHeight(variantId: string, archetype: BlockArchetype): nu
     )
   }
 
-  return 1100
+  return 1300
 }

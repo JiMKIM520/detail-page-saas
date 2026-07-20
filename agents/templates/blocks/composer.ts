@@ -16,6 +16,54 @@ import type { PageSpec } from './types'
 
 const DEFAULT_WIDTH = 872
 
+// ── 폰트 스케일 재매핑 ─────────────────────────────────────────────────────────
+// 클라이언트 룰 v2: 본문 ≥23px · 서브 ≥30px (872px 캔버스 기준).
+// 원본 디자인 파일의 font-size·line-height px 값을 선형 보간 앵커 테이블로 상향.
+// baseCss(토큰)·DECOR_CSS는 불변 — 변형 CSS 문자열에만 적용한다.
+
+/** 앵커 테이블 [원본px, 출력px] — 단조 연속, 10 이하·64 이상은 그대로. */
+const FONT_ANCHORS: [number, number][] = [
+  [10, 10],
+  [14, 23],
+  [17, 26],
+  [24, 32],
+  [34, 40],
+  [48, 52],
+  [64, 64],
+]
+
+/** 단일 px 값을 앵커 테이블로 선형 보간 후 반올림한다. */
+function mapFontPx(n: number): number {
+  if (n <= FONT_ANCHORS[0][0]) return n
+  if (n >= FONT_ANCHORS[FONT_ANCHORS.length - 1][0]) return n
+  for (let i = 0; i < FONT_ANCHORS.length - 1; i++) {
+    const [x0, y0] = FONT_ANCHORS[i]
+    const [x1, y1] = FONT_ANCHORS[i + 1]
+    if (n >= x0 && n <= x1) {
+      const t = (n - x0) / (x1 - x0)
+      return Math.round(y0 + t * (y1 - y0))
+    }
+  }
+  return n
+}
+
+/**
+ * 변형 CSS 문자열의 font-size·line-height px 값을 앵커 테이블로 재매핑한다.
+ * - `font-size:Npx` / `font-size: Npx` 형태만 대상 (clamp/em/rem 불변).
+ * - `line-height:Npx` / `line-height: Npx` px 명시형만 대상 (숫자단리·em 불변).
+ * - 다른 속성(letter-spacing 등)은 불변.
+ * 순수 함수 — 입력 문자열을 변경하지 않는다.
+ */
+export function remapFontScale(css: string): string {
+  return css
+    .replace(/font-size\s*:\s*([\d.]+)px/g, (_, nStr: string) =>
+      `font-size:${mapFontPx(parseFloat(nStr))}px`,
+    )
+    .replace(/line-height\s*:\s*([\d.]+)px/g, (_, nStr: string) =>
+      `line-height:${mapFontPx(parseFloat(nStr))}px`,
+    )
+}
+
 export interface RenderResult {
   html: string
   usedVariants: string[]
@@ -90,7 +138,10 @@ export function renderPage(spec: PageSpec): RenderResult {
       prevSceneId = undefined
     }
 
-    sections.push(decorated)
+    // Figma 임포트(html.to.design) 레이어 식별용 — sN-{variantId} 형태
+    const dataName = sid !== undefined ? `s${sid}-${variant.id}` : variant.id
+    const taggedSection = decorated.replace(/(<section)(\s|>)/, `$1 data-name="${dataName}"$2`)
+    sections.push(taggedSection)
   })
 
   if (sceneOpen) sections.push('</div>')
@@ -98,7 +149,9 @@ export function renderPage(spec: PageSpec): RenderResult {
   // vw 단위를 페이지 고정폭 기준 px로 결정적 치환 — 데스크톱 브라우저는 viewport meta를
   // 무시하므로 vw가 실제 창 폭을 따라 커져 872px 설계가 와이드 화면에서 붕괴한다
   // (로모노소프 선물 타이틀-이미지 겹침 실사례). 모바일은 meta로 이미 872 가상폭 = 동일 결과.
-  const styles = [baseCss(spec.tokens, width), DECOR_CSS, ...cssById.values()]
+  // 변형 CSS에만 폰트 스케일 재매핑 적용 — baseCss·DECOR_CSS는 불변.
+  const remappedVariantCss = [...cssById.values()].map(remapFontScale).join('\n')
+  const styles = [baseCss(spec.tokens, width), DECOR_CSS, remappedVariantCss]
     .join('\n')
     .replace(/([\d.]+)vw/g, (_, n) => `${Math.round(parseFloat(n) * width) / 100}px`)
   const title = `${spec.meta.product}`.trim() || 'Detail'

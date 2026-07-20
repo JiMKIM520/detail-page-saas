@@ -135,6 +135,8 @@ export const ICON_NAMES = [
   'camera', 'phone', 'bolt', 'thermometer', 'target', 'store', 'doc', 'sprout', 'bell',
 ] as const
 
+import { getFontFaceByFile } from './fonts/index'
+
 /** <head>에 로드할 웹폰트 링크. 모든 변형이 이 폰트들을 쓸 수 있다. */
 export const FONT_LINKS: string = [
   '<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">',
@@ -152,10 +154,12 @@ export const FONT_LINKS: string = [
 </style>`,
 ].join('\n')
 
-/** 폰트 화이트리스트 (Sprint 4-D) — 로드 방법을 아는 폰트만 스타일가이드 토큰 오버라이드 허용.
- *  gf 값이 있으면 Google Fonts css2로 추가 로드, 없으면 기본 FONT_LINKS에 이미 포함.
+/** 폰트 화이트리스트 (Sprint 4-D + 클라이언트 폰트 6종).
+ *  gf: Google Fonts css2 파라미터 (동적 로드).
+ *  client / clientFamily / clientWeight: agents/templates/blocks/fonts/ 서브셋 woff2 — 데이터 URI 주입.
+ *  client 폰트가 있으면 buildFontLinks가 @font-face(데이터 URI)를 주입해 외부 CDN 불필요.
  *  비 GF 폰트(GmarketSans·Tenada·KoPub 등)는 CDN 파일명 검증 전이라 미등재 — 프리셋 폴백. */
-export const FONT_WHITELIST: Record<string, { gf?: string }> = {
+export const FONT_WHITELIST: Record<string, { gf?: string; client?: string; clientFamily?: string; clientWeight?: number }> = {
   'pretendard': {}, 'black han sans': {}, 'gaegu': {}, 'gowun batang': {}, 'cormorant garamond': {},
   'paperlogy': {}, 'cafe24 classictype': {}, 'cafe24 dangdanghae': {},
   'ibm plex sans kr': { gf: 'IBM+Plex+Sans+KR:wght@400;500;700' },
@@ -167,7 +171,8 @@ export const FONT_WHITELIST: Record<string, { gf?: string }> = {
   'do hyeon': { gf: 'Do+Hyeon' },
   'jua': { gf: 'Jua' },
   'gowun dodum': { gf: 'Gowun+Dodum' },
-  'nanum myeongjo': { gf: 'Nanum+Myeongjo:wght@400;700;800' },
+  // nanum myeongjo: GF 폴백 유지 + 클라이언트 서브셋 우선 주입 (동일 CSS family 'Nanum Myeongjo')
+  'nanum myeongjo': { gf: 'Nanum+Myeongjo:wght@400;700;800', client: 'NanumMyeongjo-Bold.woff2', clientFamily: 'Nanum Myeongjo', clientWeight: 700 },
   'nanum gothic': { gf: 'Nanum+Gothic:wght@400;700;800' },
   'nanum pen script': { gf: 'Nanum+Pen+Script' },
   'nanum brush script': { gf: 'Nanum+Brush+Script' },
@@ -182,13 +187,26 @@ export const FONT_WHITELIST: Record<string, { gf?: string }> = {
   'single day': { gf: 'Single+Day' },
   'east sea dokdo': { gf: 'East+Sea+Dokdo' },
   'kirang haerang': { gf: 'Kirang+Haerang' },
+  // ── 클라이언트 제공 폰트 6종 (woff2 데이터 URI 주입) ──────────────────────
+  'suit':               { client: 'SUIT-Bold.woff2',         clientFamily: 'SUIT',               clientWeight: 700 },
+  'nanumsquare':        { client: 'NanumSquare-Bold.woff2',  clientFamily: 'NanumSquare',         clientWeight: 700 },
+  'maruburi':           { client: 'MaruBuri-Bold.woff2',     clientFamily: 'MaruBuri',            clientWeight: 700 },
+  '가나초콜릿체':         { client: 'Ghanachocolate.woff2',    clientFamily: '가나초콜릿체',          clientWeight: 400 },
+  'tvn 즐거운이야기':     { client: 'tvN-Bold.woff2',          clientFamily: 'tvN 즐거운이야기',      clientWeight: 700 },
 }
 
-/** 표기 변형 → 정식 패밀리명 별칭 (아트디렉터가 'Pretendard Variable' 등으로 쓰는 실사례) */
+/** 표기 변형 → 정식 패밀리명 별칭 (아트디렉터가 'Pretendard Variable'·한글명 등으로 쓰는 실사례) */
 const FONT_ALIASES: Record<string, string> = {
   'pretendard variable': 'Pretendard',
   'noto sans korean': 'Noto Sans KR',
   'noto serif korean': 'Noto Serif KR',
+  // 클라이언트 폰트 한글명·표기 변형 → CSS family 정식명
+  '나눔스퀘어': 'NanumSquare',
+  'nanum square': 'NanumSquare',
+  '나눔명조': 'Nanum Myeongjo',
+  '마루 부리': 'MaruBuri',
+  'maru buri': 'MaruBuri',
+  'tvn 즐거운이야기': 'tvN 즐거운이야기',  // lowercase → CSS 정식명
 }
 
 /** 화이트리스트 폰트면 정식 패밀리명 반환, 아니면 null */
@@ -202,21 +220,42 @@ export function isWhitelistedFont(family: string): boolean {
   return resolveWhitelistFont(family) !== null
 }
 
-/** 토큰의 폰트 패밀리에서 추가 Google Fonts 링크 생성 — 기본 로드 밖 화이트리스트 폰트를 동적 로드 */
+/**
+ * 토큰의 폰트 패밀리에서 웹폰트 로드 태그 생성.
+ * 1. 클라이언트 제공 폰트(client 속성): woff2 → base64 데이터 URI @font-face 주입 (CDN 불필요)
+ * 2. Google Fonts 폰트(gf 속성): <link> 동적 로드 (기본 FONT_LINKS 미포함 폰트만)
+ */
 export function buildFontLinks(tokens: Tokens): string {
   const fams = new Set<string>()
   for (const v of [tokens.fontDisplay, tokens.fontBody, tokens.fontSerif, tokens.fontHand]) {
     const m = String(v).match(/^'([^']+)'/)
     if (m) fams.add(m[1].trim().toLowerCase())
   }
+
+  // ① 클라이언트 폰트 @font-face 블록 (데이터 URI — 독립 HTML에서 외부 CDN 없이 렌더)
+  const clientFaces = [...fams]
+    .map((f) => {
+      const entry = FONT_WHITELIST[f]
+      if (!entry?.client || !entry.clientFamily) return null
+      return getFontFaceByFile(entry.clientFamily, entry.client, entry.clientWeight ?? 700)
+    })
+    .filter((x): x is string => x !== null)
+
+  // ② Google Fonts — client 폰트가 있어도 GF 폴백 링크는 유지 (로드 경합은 CSS specificity로 처리)
   const gfParams = [...fams]
     .map((f) => FONT_WHITELIST[f]?.gf)
     .filter((x): x is string => Boolean(x))
     .map((p) => `family=${p}`)
-  const extra = gfParams.length
+  const gfLink = gfParams.length
     ? `\n<link href="https://fonts.googleapis.com/css2?${gfParams.join('&')}&display=swap" rel="stylesheet">`
     : ''
-  return FONT_LINKS + extra
+
+  const clientStyle = clientFaces.length
+    ? `\n<style>\n${clientFaces.join('\n')}\n</style>`
+    : ''
+
+  // 클라이언트 @font-face를 마지막에 배치 → GF 동명 선언보다 나중에 파싱돼 우선 적용
+  return FONT_LINKS + gfLink + clientStyle
 }
 
 /** 토큰 → :root CSS 변수 + 리셋 + 페이지 + 공유 유틸리티(워터마크/라벨/디스플레이). composer가 1회 주입. */

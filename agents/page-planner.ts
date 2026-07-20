@@ -130,6 +130,11 @@ system prompt). Your job:
    should contrast. Height budget: target ~2,000 px per scene (1,600–2,400 acceptable). Sum the
    (~NNNpx) values from the catalog when planning each scene; >2,600 px fatigues, <1,400 px feels
    abrupt. Adjust block count per scene to hit the target.
+   Floor is MANDATORY (CRITICAL): 1,600 px is a hard minimum — never plan a scene thinner than
+   1,600 px. Fill every scene with 2–3 blocks; a single-block scene is always wrong. If a scene
+   falls short, add a block to it rather than collapsing it — keep exactly 7 scenes. Note: font
+   sizes are scaled up ~1.2× at render time, so catalog (~NNNpx) estimates will be slightly taller
+   in the final output — plan accordingly and err on the side of more blocks per scene.
 2. BLOCK CHOICE: pick variantIds ONLY from the catalog below. Match each script section's intent
    to the block archetype (story→story/point, 성분→ingredient, 사용법→usage, FAQ→faq, 배송→cs/shipping).
    Do not use the same variant twice. Avoid three consecutive blocks of the same archetype.

@@ -34,6 +34,13 @@ CRITICAL RULES:
 - Styling shots: mix clean product shots with natural lifestyle/usage scenes (emotional imagery required); keep the product identical to the reference
 - USAGE GROUNDING (CRITICAL): every usage/lifestyle scene MUST reflect how the product is ACTUALLY consumed/used per the brief (섭취법·사용법·용도). NEVER invent consumption methods — e.g. do not show powder dissolved in water, brewing, or cooking steps unless the brief explicitly says so.
 
+PALETTE CONTRAST RULE (CRITICAL — prevents monochrome drift):
+The colors.accent MUST differ meaningfully in hue from colors.primary.
+- FORBIDDEN: accent created by simply lightening or darkening the brand primary (e.g. primary #1A3A6C → accent #2B5BA8 is just a lighter blue — this is NOT a true accent).
+- REQUIRED: choose a secondary accent whose hue is perceptually distinct — complementary (opposite on the color wheel), metallic (gold, copper, silver), or warm/cool contrast (e.g. deep navy + warm gold, forest green + burnt orange, charcoal + champagne).
+- Dark section ratio: 25–40% of sections should use dark backgrounds (bgType "layer-image" with dark gradient, or solid dark) to create visual rhythm — avoid all-light or all-dark layouts.
+- Test: if colors.primary and colors.accent look like two shades of the same color, pick a different accent.
+
 Icon library selection guide:
 - Food/handmade/emotional → Phosphor duotone
 - Premium/minimal → Lucide
@@ -78,7 +85,15 @@ Selection rules:
                        beauty → NanumSquareNeo/Sunflower/GmarketSans 우선;
                        electronics → Gothic A1/IBM Plex Sans KR/NanumSquareNeo 우선
 
-DO NOT use any font not listed above.
+  [클라이언트 제공 — 서브셋 woff2 내장 (CDN 불필요, 한글+라틴 완전 지원)] ★ 우선 추천
+    SUIT                  → headlineFont·bodyFont 겸용 | 고딕 모던, 가독성 최상, 범용
+    NanumSquare           → headlineFont 전용 | 각진 고딕, 임팩트 강함
+    Nanum Myeongjo        → storyFont 전용 | 명조 고급, 브랜드 스토리·감성 본문
+    MaruBuri              → storyFont·headlineFont | 세리프 둥근 맛, 전통/프리미엄
+    가나초콜릿체            → headlineFont·accentFont | 팝 디스플레이, 개성 (본문 사용 금지)
+    tvN 즐거운이야기        → headlineFont·accentFont | 방송/엔터 무드, 친근 디스플레이 (본문 사용 금지)
+
+DO NOT use any font not listed above (including the client fonts section).
 
 LAYOUT PATTERN DISTRIBUTION (CRITICAL):
 - For 12+ sections, assign layoutPatterns to at least 10 sections explicitly.
