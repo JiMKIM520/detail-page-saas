@@ -94,6 +94,32 @@ export function remapFontScale(css: string): string {
   })
 }
 
+/**
+ * 다크 씬 accent 텍스트 대비 보정 — `color:var(--accent)`를 `--accent-fg` 참조로 바꾼다.
+ *
+ * 왜: cobaltPremium처럼 accent와 ink(다크 배경)가 둘 다 어두운 프리셋에서, accent를 텍스트로
+ * 쓰는 곳(제목·강조·영양 배지)이 다크 배경 위에서 대비 1.1로 안 읽혔다(2026-07-21 실측, 씬5).
+ * 80개 변형이 같은 패턴이라 개별 수정은 불가능하다.
+ *
+ * 핵심: accent는 텍스트일 땐 다크 배경에서 밝아야 하고, 배경일 땐 그대로여야 한다(그 위 흰 텍스트
+ * 대비 때문). 그래서 `color:` 선언만 --accent-fg로 돌리고 `background:var(--accent)`는 손대지 않는다.
+ * --accent-fg는 라이트 씬에서 원본 accent, 다크 씬에서 밝은 버전(ACCENT_CONTRAST가 정의).
+ *
+ * `background-color:`는 'color' 앞 문자가 '-'라 `[{;]color` 패턴에 걸리지 않는다.
+ */
+export function liftAccentText(css: string): string {
+  return css.replace(
+    /([{;]\s*)color(\s*):(\s*)var\(--accent\)/g,
+    '$1color$2:$3var(--accent-fg,var(--accent))',
+  )
+}
+
+/** --accent-fg 정의 — 라이트=원본, 다크 씬=흰색과 섞어 밝게(대비 확보). 배경 accent는 불변. */
+const ACCENT_CONTRAST = [
+  '.dpg{--accent-fg:var(--accent)}',
+  '.dpg [data-tone="dark"]{--accent-fg:color-mix(in srgb,var(--accent) 45%,#fff)}',
+].join('\n')
+
 export interface RenderResult {
   html: string
   usedVariants: string[]
@@ -203,8 +229,10 @@ export function renderPage(spec: PageSpec): RenderResult {
   const styles = [
     remapFontScale(vwToPx(baseCss(spec.tokens, width))),
     vwToPx(DECOR_CSS), // 장식은 크기 불변 — 워터마크·세로 라벨은 읽는 텍스트가 아니다
-    remapFontScale(vwToPx([...cssById.values()].join('\n'))),
+    // liftAccentText: 변형 CSS의 accent 텍스트를 --accent-fg 참조로 — 다크 씬 대비 확보
+    remapFontScale(liftAccentText(vwToPx([...cssById.values()].join('\n')))),
     FONT_ROLE_LOCK,
+    ACCENT_CONTRAST,
   ].join('\n')
   const title = `${spec.meta.product}`.trim() || 'Detail'
 
