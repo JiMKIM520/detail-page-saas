@@ -5,9 +5,10 @@
  *   1. design_review 도달 시 → sendDraftReadyEmail (초안 확인 요청)
  *   2. delivered 도달 시     → sendDeliveredEmail  (최종 결과물)
  *
- * RESEND_API_KEY 환경변수:
- *   - 있으면  → Resend REST API(fetch)로 실제 발송
- *   - 없으면  → console.log stub + TODO 주석 (개발/테스트 환경)
+ * 프로바이더 우선순위(먼저 설정된 것을 쓴다):
+ *   1. Gmail SMTP  — GMAIL_USER + GMAIL_APP_PASSWORD (nodemailer)
+ *   2. Resend      — RESEND_API_KEY (REST fetch)
+ *   3. stub        — 둘 다 없으면 console.log (개발/미준비). prod에서는 명시적 실패.
  *
  * 주의: 발송 실패가 호출측 파이프라인을 막지 않도록
  *       함수는 throw하지 않고 { sent: boolean; error?: string } 반환.
@@ -97,8 +98,32 @@ async function sendViaResend(
 }
 
 /**
+ * Gmail SMTP로 실제 발송 (nodemailer). 발신 주소는 Gmail 계정으로 고정한다 —
+ * Gmail은 인증 계정과 다른 from을 거부하므로 EMAIL_FROM_ADDRESS를 무시하고 GMAIL_USER를 쓴다.
+ * @throws 발송 실패 시 Error (호출측 dispatch가 catch)
+ */
+async function sendViaGmail(
+  user: string,
+  pass: string,
+  payload: ResendEmailPayload,
+): Promise<void> {
+  const nodemailer = await import('nodemailer')
+  const transport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: { user, pass },
+  })
+  await transport.sendMail({
+    from: `DetailAI <${user}>`,
+    to: payload.to.join(', '),
+    subject: payload.subject,
+    text: payload.text,
+  })
+}
+
+/**
  * 개발 환경 stub — 실제 발송 없이 콘솔에 메일 내용 출력
- * TODO: RESEND_API_KEY 환경변수를 설정하면 실제 발송으로 전환됩니다.
  */
 function logStub(payload: ResendEmailPayload): void {
   // TODO: 운영 환경에서는 RESEND_API_KEY 환경변수를 반드시 설정할 것
@@ -114,29 +139,42 @@ function logStub(payload: ResendEmailPayload): void {
  * 공통 발송 처리 — API 키 유무에 따라 실제/stub 분기
  */
 async function dispatch(payload: ResendEmailPayload): Promise<EmailResult> {
+  const gmailUser = process.env.GMAIL_USER
+  const gmailPass = process.env.GMAIL_APP_PASSWORD
   const apiKey = process.env.RESEND_API_KEY
 
-  if (!apiKey) {
-    // 프로덕션에서 키 누락은 silent failure(메일 누락=납품 지연)이므로 명시적 실패 반환
-    if (process.env.NODE_ENV === 'production') {
-      const msg = 'RESEND_API_KEY가 프로덕션 환경에 설정되지 않음 — 메일 미발송'
-      console.error(`[Email] ${msg}`)
-      return { sent: false, error: msg }
+  // 1순위: Gmail SMTP
+  if (gmailUser && gmailPass) {
+    try {
+      await sendViaGmail(gmailUser, gmailPass, payload)
+      return { sent: true }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[Email] Gmail 발송 실패 — ${payload.subject}: ${message}`)
+      return { sent: false, error: message }
     }
-    // 개발/테스트 환경: stub 출력 후 sent: true 반환
-    logStub(payload)
-    return { sent: true }
   }
 
-  try {
-    await sendViaResend(apiKey, payload)
-    return { sent: true }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err)
-    // 파이프라인을 막지 않도록 throw하지 않고 에러 정보만 반환
-    console.error(`[Email] 발송 실패 — ${payload.subject}: ${message}`)
-    return { sent: false, error: message }
+  // 2순위: Resend
+  if (apiKey) {
+    try {
+      await sendViaResend(apiKey, payload)
+      return { sent: true }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[Email] Resend 발송 실패 — ${payload.subject}: ${message}`)
+      return { sent: false, error: message }
+    }
   }
+
+  // 3순위: 프로바이더 없음 — prod는 명시적 실패(메일 누락=납품 지연), dev는 stub
+  if (process.env.NODE_ENV === 'production') {
+    const msg = '메일 프로바이더(GMAIL_* 또는 RESEND_API_KEY) 미설정 — 메일 미발송'
+    console.error(`[Email] ${msg}`)
+    return { sent: false, error: msg }
+  }
+  logStub(payload)
+  return { sent: true }
 }
 
 // ── 공개 API ──────────────────────────────────────────────────────────────
