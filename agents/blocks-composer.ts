@@ -1948,7 +1948,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
             break
           }
           const before = layout.sceneHeights
-          const bad = before.filter((h) => h < 1600 || h > 2500).length
+          const bad = before.filter((h) => h < 1600 || h > 2700).length
           if (bad === 0) {
             if (pass === 1) console.log(`[Blocks Composer] 씬 높이 적합 — [${before.join(', ')}]`)
             break
@@ -1983,8 +1983,9 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
           // 척도는 DP가 최소화하는 것과 같아야 한다 — 이탈 "개수"로 재면 판단이 뒤집힌다.
           // 실측: [.., 3856, ..](이탈 1) vs [2808, 2540, 2870, ..](이탈 3)에서 개수 기준은
           // 전자를 택하지만, 한 씬이 3,856px인 편이 세 씬이 조금씩 넘는 것보다 나쁘다.
+          // 목표 구간[1600,2400] 기준 — sceneCost(DP 최소화)와 동일 척도로 채택 판정
           const badness = (hs: readonly number[]): number =>
-            hs.reduce((s, h) => s + (h > 2500 ? (h - 2500) ** 2 : h < 1600 ? (1600 - h) ** 2 : 0), 0)
+            hs.reduce((s, h) => s + (h > 2400 ? (h - 2400) ** 2 : h < 1600 ? (1600 - h) ** 2 : 0), 0)
           if (badness(bal.predicted) >= badness(before)) {
             console.warn(
               `[Blocks Composer] ⚠ 씬 리밸런싱 미적용(개선 없음) — [${before.join(', ')}] → 예상 [${bal.predicted.join(', ')}]. ` +

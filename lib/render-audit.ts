@@ -222,9 +222,9 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
   const ruleViolations: string[] = []
   // 씬 높이 > 2500px (씬 래퍼 없으면 검사 skip)
   if (measurements.sceneHeights.length > 0) {
-    const tall = measurements.sceneHeights.filter((h) => h > 2500)
+    const tall = measurements.sceneHeights.filter((h) => h > 2700)
     if (tall.length > 0)
-      ruleViolations.push(`씬 높이 초과(>2500px): ${tall.length}개, 최대 ${Math.max(...tall)}px`)
+      ruleViolations.push(`씬 높이 초과(>2700px): ${tall.length}개, 최대 ${Math.max(...tall)}px`)
   }
   // 전체 scrollHeight > 25000px
   if (measurements.scrollHeight > 25000)

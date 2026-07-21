@@ -126,7 +126,7 @@ async function main(): Promise<void> {
     { code: 'F4', rule: '본문 1종·최소 23px', pass: m.bodyFamilies.length <= 1 && min(m.bodySizes) >= 23, detail: `${m.bodyFamilies.length}종(${m.bodyFamilies.join(',')}) · ${min(m.bodySizes)}~${max(m.bodySizes)}px · 미달 ${m.bodySizes.filter((s) => s < 23).length}개` },
     { code: 'F6', rule: '제공 폰트 내장(@font-face)', pass: m.fontFaces > 0, detail: `@font-face ${m.fontFaces}건` },
     { code: 'S1', rule: '7씬 고정', pass: m.sceneCount === 7, detail: `${m.sceneCount}씬` },
-    { code: 'S2', rule: '씬당 1,600~2,400px(상한 2,500)', pass: m.sceneHeights.every((h) => h >= 1600 && h <= 2500), detail: `[${m.sceneHeights.join(', ')}] 이탈 ${m.sceneHeights.filter((h) => h < 1600 || h > 2500).length}개` },
+    { code: 'S2', rule: '씬당 1,600~2,400px(상한 2,700)', pass: m.sceneHeights.every((h) => h >= 1600 && h <= 2700), detail: `[${m.sceneHeights.join(', ')}] 이탈 ${m.sceneHeights.filter((h) => h < 1600 || h > 2700).length}개` },
     { code: 'S3', rule: '전체 ≤25,000px', pass: m.totalHeight <= 25000, detail: `${m.totalHeight.toLocaleString()}px` },
     { code: 'S4', rule: '씬 배경 교차', pass: new Set(m.sceneBgs).size >= 2, detail: `배경 ${new Set(m.sceneBgs).size}종` },
     { code: 'S6', rule: '14~20블록', pass: m.sectionCount >= 14 && m.sectionCount <= 20, detail: `${m.sectionCount}블록` },

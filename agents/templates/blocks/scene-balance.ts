@@ -19,7 +19,7 @@ export interface SceneBalanceOptions {
   min?: number
   /** 씬 높이 목표 상한(px) — S2 기본 2400 */
   max?: number
-  /** 절대 상한(px) — 초과 시 사실상 금지 비용. 기본 2500 */
+  /** 절대 상한(px) — 초과 시 사실상 금지 비용. 기본 2700(목표 2400, 상한은 현실화) */
   hardMax?: number
   /** 씬 래퍼 자체의 여백 등 섹션 높이 합에 더해지는 오버헤드(px) */
   overhead?: number
