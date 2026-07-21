@@ -102,6 +102,20 @@ async function main(): Promise<void> {
         })
         return Math.round((a / (h.offsetWidth * h.offsetHeight)) * 1000) / 10
       })(),
+      heroImageCrop: (() => {
+        const h = sections[0]
+        if (!h) return 0
+        let big = null, ba = 0
+        Array.from(h.querySelectorAll('img')).forEach((img) => {
+          if (img.naturalWidth === 0) return
+          const a = img.offsetWidth * img.offsetHeight
+          if (a > ba) { ba = a; big = img }
+        })
+        if (!big) return 0
+        const fa = big.offsetWidth / big.offsetHeight, na = big.naturalWidth / big.naturalHeight
+        if (getComputedStyle(big).objectFit === 'cover' && fa > na) return Math.round((1 - na / fa) * 100)
+        return 0
+      })(),
       phVisible: Array.from(document.querySelectorAll('.dpg .ph')).filter(vis).length,
       textLedWithImg: textLed.filter((s) => s.querySelectorAll('img').length > 0).length,
       fontFaces: faces,
@@ -112,7 +126,7 @@ async function main(): Promise<void> {
     sectionCount: number; namedSections: number; allFamilies: string[]
     titleFamilies: string[]; subFamilies: string[]; bodyFamilies: string[]
     titleSizes: number[]; subSizes: number[]; bodySizes: number[]
-    imgCount: number; imgDup: number; imgBroken: number; heroHasImg: boolean; heroImageRatio: number
+    imgCount: number; imgDup: number; imgBroken: number; heroHasImg: boolean; heroImageRatio: number; heroImageCrop: number
     phVisible: number; textLedWithImg: number; fontFaces: number; canvasWidth: number
   }
   await browser.close()
@@ -130,7 +144,7 @@ async function main(): Promise<void> {
     { code: 'S3', rule: '전체 ≤25,000px', pass: m.totalHeight <= 25000, detail: `${m.totalHeight.toLocaleString()}px` },
     { code: 'S4', rule: '씬 배경 교차', pass: new Set(m.sceneBgs).size >= 2, detail: `배경 ${new Set(m.sceneBgs).size}종` },
     { code: 'S6', rule: '14~20블록', pass: m.sectionCount >= 14 && m.sectionCount <= 20, detail: `${m.sectionCount}블록` },
-    { code: 'I1', rule: '히어로 이미지 존재', pass: m.heroHasImg, detail: m.heroHasImg ? '있음' : '없음' },
+    { code: 'I1', rule: '히어로 제품 완전 노출', pass: m.heroHasImg && m.heroImageCrop < 35, detail: `${m.heroHasImg ? '있음' : '없음'} · 세로잘림 ${m.heroImageCrop}%` },
     { code: 'I10', rule: '히어로 이미지 면적 25%+', pass: m.heroImageRatio >= 25, detail: `씬1 면적의 ${m.heroImageRatio}%` },
     { code: 'I5', rule: '동일 사진 1회', pass: m.imgDup === 0, detail: `중복 ${m.imgDup}건 / 총 ${m.imgCount}장` },
     { code: 'I7', rule: '표계열 이미지 금지', pass: m.textLedWithImg === 0, detail: `위반 ${m.textLedWithImg}개 섹션` },

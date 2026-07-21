@@ -29,7 +29,7 @@ export const heroCentered = defineBlock<HeroCenteredData>({
 .hc-title{margin-top:22px;font-size:62px}
 .hc-sub{margin-top:14px;font-size:21px;font-weight:700;color:var(--ink)}
 .hc-fig{position:relative;margin:38px auto 0;width:600px}
-.hc-media{width:100%;height:430px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*26px));box-shadow:0 26px 50px -18px rgba(42,33,24,.45)}
+.hc-media{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*26px));box-shadow:0 26px 50px -18px rgba(42,33,24,.45)}
 .hc-bubble{position:absolute;top:30px;right:-12px;background:#fff;border:2.5px solid var(--brand);border-radius:calc(var(--r-scale,1)*22px);padding:11px 19px;font-size:25px;color:var(--accent);box-shadow:0 10px 20px rgba(42,33,24,.22);white-space:nowrap;font-weight:700;transform:rotate(-4deg)}
 .hc-bubble::after{content:"";position:absolute;left:28px;bottom:-14px;width:24px;height:17px;background:#fff;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:rotate(40deg)}
 .hc-cap{margin-top:14px;font-size:13px;color:var(--muted)}
@@ -80,7 +80,7 @@ export const heroEditorial = defineBlock<HeroEditorialData>({
 .he-title .em{color:var(--accent)}
 .he-lead{margin:22px auto 0;max-width:520px;font-size:17px;line-height:1.85;color:var(--ink-2)}
 .he-fig{margin:46px 0 0;position:relative}
-.he-media{width:100%;height:460px;object-fit:cover}
+.he-media{width:100%;aspect-ratio:3/4;object-fit:cover}
 .he-no{position:absolute;top:18px;left:18px;font-family:var(--font-lat);font-size:18px;letter-spacing:.2em;color:#fff;mix-blend-mode:difference}
 `,
   render: (d, { esc, richSafe }) => `
@@ -124,7 +124,10 @@ export const heroPoints = defineBlock<HeroPointsData>({
 .hp-title{margin-top:6px;font-size:58px}
 .hp-title .em{color:var(--accent)}
 .hp-fig{margin:34px auto 0;width:100%}
-.hp-media{width:100%;height:420px;object-fit:cover;border-radius:var(--shape-photo, calc(var(--r-scale,1)*24px));box-shadow:0 22px 44px -20px rgba(0,0,0,.32)}
+/* 히어로 샷은 3:4 세로로 생성된다(aspectRatio 고정). 프레임도 3/4로 맞춰 crop을 없앤다 —
+   height 고정 가로 프레임이 세로 사진을 잘라 제품(하단)이 날아가던 실측(2026-07-21) 수정.
+   I1(제품 완전 노출)은 면적이 아니라 잘림 여부의 문제다. */
+.hp-media{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center;border-radius:var(--shape-photo, calc(var(--r-scale,1)*24px));box-shadow:0 22px 44px -20px rgba(0,0,0,.32)}
 .hp-points{margin-top:46px;display:flex;justify-content:center;gap:16px}
 .hp-pt{flex:1 1 0;max-width:200px;text-align:center}
 .hp-ic{width:84px;height:84px;margin:0 auto;border-radius:50%;background:var(--paper);box-shadow:0 10px 24px rgba(0,0,0,.09);display:grid;place-items:center;color:var(--accent)}

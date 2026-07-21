@@ -28,6 +28,8 @@ export interface PageMeasurements {
   labelOverlaps?: string[]
   /** I10 — 히어로 섹션 면적 대비 이미지 면적 비율(%). 히어로가 없거나 측정 불가면 -1 */
   heroImageRatio?: number
+  /** I1 — 히어로 주 이미지의 세로 잘림 비율(%). 가로 프레임에 세로샷이 cover되면 제품 소멸 위험 */
+  heroImageCrop?: number
   /** 최종 렌더에 실제로 보이는 빈 플레이스홀더(.ph) — 소속 섹션 data-name */
   phVisible?: string[]
   /** 로드 실패 이미지(naturalWidth===0)의 src 말미 */
@@ -139,6 +141,31 @@ export async function captureSegments(
             imgArea += e.offsetWidth * e.offsetHeight
           })
           heroImageRatio = Math.round((imgArea / secArea) * 1000) / 10
+        }
+      }
+      // I1 히어로 제품 잘림 — 면적(I10)만 봐서는 제품 노출을 보장하지 못한다.
+      // 세로 샷(3:4)이 가로 고정 프레임에 object-fit:cover로 들어가면 상하가 잘려 제품(주로 하단)이
+      // 사라진다(2026-07-21 실측: 고양이발+제품 세로컷이 420px 가로 프레임에 58% 세로 잘림 → 제품 소멸).
+      // 히어로의 가장 큰 이미지에서 세로 잘림 비율을 계산한다.
+      let heroImageCrop = 0
+      if (heroSection) {
+        let biggest: HTMLImageElement | null = null
+        let biggestArea = 0
+        Array.from(heroSection.querySelectorAll('img')).forEach((img) => {
+          const e = img as HTMLImageElement
+          if (e.naturalWidth === 0) return
+          const a = e.offsetWidth * e.offsetHeight
+          if (a > biggestArea) { biggestArea = a; biggest = e }
+        })
+        if (biggest) {
+          const e: HTMLImageElement = biggest
+          const frameAspect = e.offsetWidth / e.offsetHeight
+          const natAspect = e.naturalWidth / e.naturalHeight
+          const fit = getComputedStyle(e).objectFit
+          // cover + 프레임이 원본보다 가로(frameAspect > natAspect) → 세로 잘림
+          if (fit === 'cover' && frameAspect > natAspect) {
+            heroImageCrop = Math.round((1 - natAspect / frameAspect) * 100)
+          }
         }
       }
       // 좌표 고정 라벨끼리의 겹침 — 폰트 확대가 절대 배치 오버레이를 무너뜨리는 경로를 상시 감시한다.
@@ -296,6 +323,12 @@ export async function auditRenderedHtml(html: string): Promise<RenderAuditResult
       measurements.heroImageRatio < 25) {
     ruleViolations.push(
       `히어로 이미지 면적 부족: 씬1 면적의 ${measurements.heroImageRatio}% (목표 25% 이상) — 사진을 크게 쓰는 히어로 변형으로 교체 필요`,
+    )
+  }
+  // I1 히어로 제품 잘림 — 세로 샷이 가로 프레임에 35% 이상 잘리면 제품(하단)이 사라진다
+  if (typeof measurements.heroImageCrop === 'number' && measurements.heroImageCrop >= 35) {
+    ruleViolations.push(
+      `히어로 이미지 세로 ${measurements.heroImageCrop}% 잘림 — 세로 샷이 가로 프레임에 눌려 제품이 잘린다(I1 제품 완전 노출 위반)`,
     )
   }
   // 좌표 고정 라벨끼리의 겹침 — 폰트 확대가 절대 배치 오버레이를 무너뜨리면 여기서 잡힌다

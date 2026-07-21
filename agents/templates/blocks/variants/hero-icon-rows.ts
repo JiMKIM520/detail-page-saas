@@ -65,7 +65,7 @@ export const heroIconRows = defineBlock<Data>({
 
 /* ─ 풀이미지 존 ─ */
 .hir-media-wrap{width:100%;overflow:hidden;background:color-mix(in srgb,var(--accent) 10%,transparent)}
-.hir-img{width:100%;height:480px;object-fit:cover;display:block}
+.hir-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
 
 /* ─ 아이콘 행 존 ─ */
 .hir-rows{padding:8px 44px 48px;background:var(--bg)}
