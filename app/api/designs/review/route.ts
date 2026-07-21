@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { transitionStatus } from '@/lib/status-machine'
-import { sendDeliveredEmail } from '@/lib/email/send'
+import { notifyDelivered } from '@/lib/notify/dispatch'
 import { NextResponse } from 'next/server'
 
 export const maxDuration = 60
@@ -80,8 +80,9 @@ export async function POST(request: Request) {
   await transitionStatus(supabase, project_id, 'design_approved', { note: '관리자 최종 검수' })
   await transitionStatus(supabase, project_id, 'delivered', { note: '최종 발송' })
 
-  // 사업자에게 최종 납품 메일
+  // 사업자에게 최종 납품 알림 — 메일 + 문자, notifications 로그
   let emailed = false
+  let texted = false
   try {
     const { data: proj } = await supabase
       .from('projects')
@@ -91,12 +92,20 @@ export async function POST(request: Request) {
     if (proj?.client_id && finalUrl) {
       const { data: u } = await supabase.auth.admin.getUserById(proj.client_id)
       const to = u?.user?.email
-      if (to) {
-        const r = await sendDeliveredEmail(to, proj.company_name ?? '상세페이지', finalUrl)
-        emailed = r.sent
+      const phone = u?.user?.phone
+      if (to || phone) {
+        const r = await notifyDelivered(supabase, {
+          projectId: project_id,
+          projectName: proj.company_name ?? '상세페이지',
+          email: to,
+          phone,
+          link: finalUrl,
+        })
+        emailed = r.emailed
+        texted = r.texted
       }
     }
-  } catch { /* 메일 실패는 납품을 막지 않음 */ }
+  } catch { /* 알림 실패는 납품을 막지 않음 */ }
 
-  return NextResponse.json({ success: true, emailed })
+  return NextResponse.json({ success: true, emailed, texted })
 }

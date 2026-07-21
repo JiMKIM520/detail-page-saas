@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { transitionStatus } from '@/lib/status-machine'
-import { sendDraftReadyEmail } from '@/lib/email/send'
+import { notifyDraftReady } from '@/lib/notify/dispatch'
 import { NextResponse } from 'next/server'
 
 export const maxDuration = 60
@@ -71,20 +71,30 @@ export async function POST(request: Request) {
     try { await transitionStatus(svc, project_id, 'design_review', { note: '초안 사업자 전달' }) } catch { /* 비치명 */ }
   }
 
-  // 사업자 메일
+  // 사업자 알림 — 메일 + 문자 동시 발송, notifications에 로그 기록
   let emailed = false
+  let texted = false
   let emailError: string | undefined
   if (proj?.client_id) {
     const { data: u } = await svc.auth.admin.getUserById(proj.client_id)
     const to = u?.user?.email
-    if (to) {
-      const r = await sendDraftReadyEmail(to, proj.company_name ?? '상세페이지', `${SITE_URL}/projects/${project_id}`)
-      emailed = r.sent
-      emailError = r.error
+    // 전화번호는 auth의 phone(관리자 등록 시 입력)에서 — 없으면 문자는 스킵된다
+    const phone = u?.user?.phone
+    if (to || phone) {
+      const r = await notifyDraftReady(svc, {
+        projectId: project_id,
+        projectName: proj.company_name ?? '상세페이지',
+        email: to,
+        phone,
+        link: `${SITE_URL}/projects/${project_id}`,
+      })
+      emailed = r.emailed
+      texted = r.texted
+      emailError = r.emailError ?? r.smsError
     } else {
-      emailError = '사업자 이메일을 찾을 수 없음'
+      emailError = '사업자 연락처(이메일·전화)를 찾을 수 없음'
     }
   }
 
-  return NextResponse.json({ success: true, version: newVersion, isResend, emailed, emailError })
+  return NextResponse.json({ success: true, version: newVersion, isResend, emailed, texted, emailError })
 }

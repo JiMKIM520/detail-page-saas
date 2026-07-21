@@ -175,6 +175,52 @@ export async function sendDraftReadyEmail(
 }
 
 /**
+ * 의뢰서 미작성 재촉 메일 — 크론에서 호출. 전화번호가 없는 사업자에게도 재촉이 닿게 한다.
+ */
+export async function sendIntakeReminderEmail(
+  to: string,
+  projectName: string,
+  intakeLink: string,
+): Promise<EmailResult> {
+  const subject = `[DetailAI] "${projectName}" 상세페이지 의뢰서 작성을 기다리고 있습니다`
+  const text = [
+    `안녕하세요,`,
+    ``,
+    `"${projectName}" 상세페이지 제작을 위한 의뢰서가 아직 작성되지 않았습니다.`,
+    `아래 링크에서 의뢰서를 작성해 주시면 제작을 시작하겠습니다.`,
+    ``,
+    `▶ 의뢰서 작성하기: ${intakeLink}`,
+    ``,
+    `감사합니다.`,
+    `DetailAI 팀 드림`,
+  ].join('\n')
+  return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
+}
+
+/**
+ * 초안 무회신 재촉 메일 — 크론에서 호출.
+ */
+export async function sendReviewReminderEmail(
+  to: string,
+  projectName: string,
+  reviewLink: string,
+): Promise<EmailResult> {
+  const subject = `[DetailAI] "${projectName}" 상세페이지 초안 확인을 기다리고 있습니다`
+  const text = [
+    `안녕하세요,`,
+    ``,
+    `"${projectName}" 상세페이지 초안 확인이 지연되고 있습니다.`,
+    `아래 링크에서 초안을 확인하고 검수 의견을 남겨 주세요.`,
+    ``,
+    `▶ 초안 확인하기: ${reviewLink}`,
+    ``,
+    `감사합니다.`,
+    `DetailAI 팀 드림`,
+  ].join('\n')
+  return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
+}
+
+/**
  * 최종 결과물 납품 메일 — delivered 상태 도달 시 호출
  *
  * @param to          수신자 이메일 주소
