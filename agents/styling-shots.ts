@@ -73,12 +73,17 @@ const CATEGORY_ROLE: Record<string, string> = {
  *  제품이 작게 보였다("억지로 집어넣은 느낌"의 직접 원인).
  *  전제를 없애고 화면을 채우는 연출로 바꾼다 — 잘림 방지(I1)는 유지한다. */
 export function heroFramingRules(): string {
-  return `HERO FRAMING RULES (MANDATORY):
-Entire product must be FULLY VISIBLE within the frame — full body, no cropping, no partial framing allowed.
-The product package is the PRIMARY subject and must DOMINATE the frame: it must occupy at least 55% of the frame area. People, pets, and props are secondary and must never occlude or overshadow the product.
-Fill the frame — this is a hero banner, not a catalog cutout. Avoid large empty margins; the composition should feel close-up and immersive.
-Safe margin: keep product edges within 4% of any frame boundary (tight but not bleeding).
-Place the main subject within the CENTER 80% of the frame height.`
+  return `HERO FRAMING RULES (MANDATORY — PRODUCT INTEGRITY IS THE TOP PRIORITY):
+The ENTIRE product package must be fully visible with GENEROUS clear space on ALL FOUR sides.
+ABSOLUTE RULE: no part of the package (top cap, bottom seal, side seams, printed text) may touch,
+overlap, or cross any frame edge. Keep at least 12% empty margin between every product edge and the
+frame boundary. Any cropping, clipping, or bleeding of the package is STRICTLY FORBIDDEN and is a failure.
+The package is the primary subject and should read clearly and be reasonably large and centered —
+but being FULLY CONTAINED always wins over being big. If enlarging the product would clip any edge,
+make the product SMALLER so the whole package stays inside the safe margin.
+People, pets, hands, and props are secondary: they may point to or sit beside the product but must
+NEVER cover, hold over the edge, or push the package out of frame.
+Place the whole package within the CENTER 70% of the frame in BOTH width and height, upright and unobstructed.`
 }
 
 /** name·filename에 hero가 있으면 히어로 샷 */

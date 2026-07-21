@@ -50,9 +50,9 @@ type Data = z.infer<typeof schema>
 
 export const specNutritionMacroTable = defineBlock<Data>({
   id: 'spec-nutrition-macro-table',
-  archetype: 'detail',
+  archetype: 'spec',
   styleTags: ['dark', 'nutrition', 'spec', 'table', 'macro', 'food', 'health'],
-  imageSlots: 1,
+  imageSlots: 0,
   describe:
     '영양성분 스펙(다크). 다크 배경 + 대형 헤드라인 + 원형 매크로 배지 3종(중앙 accent 강조) + 계층형 영양성분 테이블(주영양소/하위영양소 인덴트) + 제품이미지 우측 플로팅. 식품·헬스케어 상세페이지 하단 스펙 섹션.',
   schema,
@@ -293,12 +293,8 @@ export const specNutritionMacroTable = defineBlock<Data>({
       })
       .join('')
 
-    const productHtml = media(
-      d.productImage,
-      'snmt-product-img',
-      esc(d.productImageAlt ?? '제품 이미지'),
-    )
-
+    // 영양정보는 '표'다 — 제품 썸네일을 곁들이면 데이터 표에 이미지가 붙어 어색하다(2026-07-21 지적).
+    // 이미지 슬롯을 제거하고 표만 전폭으로 둔다. archetype도 'spec'으로 바꿔 표계열(I7)로 인식되게 한다.
     return `
 <section class="snmt">
   <h2 class="snmt-title">${richSafe(d.title)}</h2>
@@ -318,7 +314,6 @@ export const specNutritionMacroTable = defineBlock<Data>({
         ${rowsHtml}
       </tbody>
     </table>
-    ${productHtml}
   </div>
   ${d.footnote ? `<p class="snmt-footnote">${esc(d.footnote)}</p>` : ''}
 </section>`

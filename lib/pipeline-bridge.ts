@@ -512,13 +512,30 @@ export async function runPipelineForProject(projectId: string): Promise<{
 
       // 연출 풀: 스타일링샷 우선, 없으면 누끼컷 폴백
       const heroPool = effectiveStyling.length > 0 ? effectiveStyling : cutoutUrls
+      // 히어로 이미지는 배열 순서(heroPool[0])가 아니라 히어로 블록의 니즈 id로 매칭한다.
+      // 순서로 고르면 need_hero_main(제품이 완전히 서 있는 대표컷) 대신 엉뚱한 컷(잘린 발컷)이
+      // 히어로에 들어가던 실측(2026-07-21 동원: 히어로에 need_cat_paw_reach, need_hero_main은 씬3).
+      // 이미지 파일명 = 니즈 id(.png)라 URL에 니즈 id가 포함된다.
+      const heroBpSection =
+        (storedBlueprint?.sections ?? []).find((s) => s.order === 0) ?? storedBlueprint?.sections?.[0]
+      const heroNeedId =
+        heroBpSection?.imageNeeds?.find((n) => n.prominence === 'main')?.id ??
+        heroBpSection?.imageNeeds?.[0]?.id
+      const heroByNeed = heroNeedId ? heroPool.find((u) => u.includes(heroNeedId)) : undefined
+      if (heroNeedId && !heroByNeed)
+        console.warn(`[pipeline-bridge] 히어로 니즈 이미지(${heroNeedId}) 미발견 — heroPool[0] 폴백`)
+      // heroPool을 재정렬해 히어로 니즈컷을 [0]으로 보낸다 — heroImageUrl=[0], lifestyle=slice(1)이므로
+      // 재정렬만 하면 히어로컷이 히어로에만 가고 lifestyle 중복이 사라진다(수동 스왑 시 겪은 중복 봉쇄).
+      const heroPoolOrdered = heroByNeed
+        ? [heroByNeed, ...heroPool.filter((u) => u !== heroByNeed)]
+        : heroPool
       console.log(
-        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${effectiveStyling.length}(제외 ${stylingUrls.length - effectiveStyling.length}) · 섹션이미지 ${okSection.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
+        `[pipeline-bridge] USE_BLOCKS_COMPOSER → 스타일링샷 ${effectiveStyling.length}(제외 ${stylingUrls.length - effectiveStyling.length}) · 히어로 니즈 ${heroNeedId ?? '(없음)'} → ${(heroPoolOrdered[0] ?? '').split('/').pop()} · 섹션이미지 ${okSection.length} · 누끼 ${cutoutUrls.length} · 브랜드색 ${brandColors.join(',') || '없음'} · 프리셋 ${presetForCategory(input.category)}`,
       )
       const { runBlocksPipeline } = await import('@/agents/blocks-pipeline')
       const composerOpts = {
-        heroImageUrl: heroPool[0],
-        imageUrls: heroPool,
+        heroImageUrl: heroPoolOrdered[0],
+        imageUrls: heroPoolOrdered,
         cutoutUrls: cutoutUrls.filter((u) => !usedOriginalUrls.has(u)),
         // 직배치 원본은 누끼 가드 대상에서 빼되, 새니타이즈 허용 집합(섹션 풀)에는 반드시 포함
         // — cutoutUrls에서만 빼면 "지어낸 URL"로 오인 제거되는 실사례(럽앤 직배치 0장) 봉쇄
