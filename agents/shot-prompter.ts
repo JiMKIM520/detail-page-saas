@@ -30,9 +30,21 @@ Rules per prompt:
   so no two shots look alike.
 - withProduct=true: the product appears EXACTLY as in the reference photos (form, colors, label text
   preserved character-by-character — reference images will be attached at generation time).
-- withProduct=false: NO product, NO packaging, NO text anywhere in frame — pure subject shot
-  (raw ingredients / texture / scene). Only subjects explicitly given in the need.
-- NEVER invent ingredients, props, or usage scenes beyond the need's subject line.
+- withProduct=false: NO product packaging/logo/text in frame. BUT the shot MUST still unmistakably
+  belong to the product's CATEGORY world (given as "제품 (카테고리)"). This is CRITICAL — a
+  decontextualized object with no category cue (e.g. a bare hand holding an unlabeled generic pouch,
+  a plain kitchen with nothing recognizable) is WRONG and will be rejected.
+  · style=mood / usage / scene: the category's subject MUST be present or the setting must read as an
+    obvious category context. For pet-food (반려동물) categories the ACTUAL pet — the target animal
+    (cat/dog, inferred from the product name, copy, and the OTHER needs in this list) — MUST appear
+    in the frame, or an unmistakable pet-care scene (a cat near a feeding bowl, a hand feeding a cat).
+    Never a lone human hand or empty setting with no animal and no pet-food cue.
+  · style=raw-material / texture: pure ingredient/texture close-up (e.g. tuna flesh, fish) — the
+    ingredient itself IS the category cue, no animal needed.
+- Infer the target animal ONCE from the whole needs list + product name (e.g. 냥이/고양이 → a cat)
+  and keep it consistent across all mood/usage shots.
+- Do NOT invent ingredients or product claims beyond the need's subject — but adding the category's
+  animal/context to a mood/usage scene is REQUIRED, not "inventing".
 - End every prompt with: "[OUTPUT SPECS] 1000x1333px vertical 3:4, editorial Korean e-commerce
   detail page photography, no text overlays, no watermarks."
 
