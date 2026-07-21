@@ -46,8 +46,10 @@ export const csGreenLabelTable = defineBlock<Data>({
 
 /* 정보 테이블 */
 .cyzx-table{width:100%;border-top:1.5px solid var(--line,#e0e0e0)}
-.cyzx-row{display:grid;grid-template-columns:110px 1fr;gap:0;border-bottom:1px solid var(--line,#e0e0e0);padding:14px 0;align-items:baseline}
-.cyzx-label{font-size:18px;font-weight:700;color:var(--accent,#0d7b45);line-height:1.55;padding-right:16px;flex-shrink:0}
+/* 라벨 열은 콘텐츠 폭(max-content)에 맞춘다 — 110px 고정에 30px 라벨(remapFontScale로 18→30 확대)이
+   들어가 "보관방/법"처럼 한 글자가 줄바꿈되던 실측(2026-07-21) 수정. gap으로 값 열과 간격 확보. */
+.cyzx-row{display:grid;grid-template-columns:max-content 1fr;column-gap:20px;border-bottom:1px solid var(--line,#e0e0e0);padding:14px 0;align-items:baseline}
+.cyzx-label{font-size:18px;font-weight:700;color:var(--accent,#0d7b45);line-height:1.55;white-space:nowrap;flex-shrink:0}
 .cyzx-value{font-size:18px;font-weight:400;color:var(--ink,#1f1f1f);line-height:1.6}
 
 /* 주의사항 박스 */
