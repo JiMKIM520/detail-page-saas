@@ -120,6 +120,29 @@ const ACCENT_CONTRAST = [
   '.dpg [data-tone="dark"]{--accent-fg:color-mix(in srgb,var(--accent) 45%,#fff)}',
 ].join('\n')
 
+/**
+ * 히어로 이미지 프레임 세로화 — 히어로 변형 CSS에만 적용한다(I1 제품 완전 노출).
+ *
+ * 왜: 히어로 샷은 3:4 세로로 생성되는데 히어로 변형의 이미지 프레임은 대부분 가로 고정
+ * (height:420~620px + object-fit:cover)이라, cover가 세로 사진의 상하를 잘라 제품(주로 하단)이
+ * 사라진다(2026-07-21 실측 59% 잘림 → 제품 소멸). 변형이 60개가 넘어 개별 수정으로는 놓친다.
+ *
+ * 방법: object-fit:cover를 쓰는 선언에서 고정 height(3자리 px)를 aspect-ratio:3/4로 바꿔
+ * 3:4 샷과 정합시킨다 → crop 0. 이미 aspect-ratio가 있거나(수정 완료), height:100%(풀블리드
+ * inset:0 배경)이거나, 2자리 이하 px(썸네일 아이콘)는 대상이 아니다.
+ * 순수 함수 — 히어로 변형(첫 블록)의 CSS에만 호출한다. 다른 아키타입 이미지는 건드리지 않는다.
+ */
+export function liftHeroImageFrame(css: string): string {
+  return css.replace(/\{([^{}]*)\}/g, (whole, body: string) => {
+    if (!/object-fit\s*:\s*cover/.test(body)) return whole
+    if (/aspect-ratio/.test(body)) return whole
+    if (!/height\s*:\s*\d{3,}px/.test(body)) return whole
+    // 첫 고정 height만 교체(대개 이미지 프레임 하나) — 나머지 선언은 불변
+    const fixed = body.replace(/height\s*:\s*\d{3,}px/, 'aspect-ratio:3/4')
+    return `{${fixed}}`
+  })
+}
+
 export interface RenderResult {
   html: string
   usedVariants: string[]
@@ -226,11 +249,15 @@ export function renderPage(spec: PageSpec): RenderResult {
     // 서브타이틀 하한 30px(F3) — 부제 성격 클래스만. eyebrow·kicker는 라벨이라 본문 하한(23px) 적용.
     '.dpg [class*="sub"],.dpg [class*="lead"]{font-size:max(30px,1rem)!important}',
   ].join('\n')
+  // 히어로 아키타입 변형의 CSS만 이미지 프레임 세로화(I1) — 다른 아키타입 이미지는 불변.
+  const variantCssJoined = [...cssById.entries()]
+    .map(([id, css]) => (getVariant(id)?.archetype === 'hero' ? liftHeroImageFrame(css) : css))
+    .join('\n')
   const styles = [
     remapFontScale(vwToPx(baseCss(spec.tokens, width))),
     vwToPx(DECOR_CSS), // 장식은 크기 불변 — 워터마크·세로 라벨은 읽는 텍스트가 아니다
     // liftAccentText: 변형 CSS의 accent 텍스트를 --accent-fg 참조로 — 다크 씬 대비 확보
-    remapFontScale(liftAccentText(vwToPx([...cssById.values()].join('\n')))),
+    remapFontScale(liftAccentText(vwToPx(variantCssJoined))),
     FONT_ROLE_LOCK,
     ACCENT_CONTRAST,
   ].join('\n')
