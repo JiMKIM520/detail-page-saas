@@ -244,7 +244,12 @@ export function renderPage(spec: PageSpec): RenderResult {
   // 한 페이지에 타이틀 3계열·본문 2계열이 섞였다(2026-07-20 실측). 룰은 각 1종이므로
   // 렌더 계층에서 못박는다. 마지막에 붙이고 !important로 변형 선택자를 이긴다.
   const FONT_ROLE_LOCK = [
+    // 타이틀 폰트 씬 톤별 2종 배분(F2 완화, 2026-07-21 클라이언트 승인) —
+    // 라이트 씬=display(임팩트), 다크 씬=serif(명조·프리미엄). 씬 톤이 교차 설계(S4)라
+    // 타이틀 폰트도 톤 따라 교차하며 리듬을 만든다. "제각각"이 아니라 "규칙 있는 변화".
+    // 폰트 총 3종(display+serif+body)이라 5종 이내(F1) 유지.
     '.dpg h1,.dpg h2,.dpg .disp{font-family:var(--font-display)!important}',
+    '.dpg [data-tone="dark"] h1,.dpg [data-tone="dark"] h2,.dpg [data-tone="dark"] .disp{font-family:var(--font-serif)!important}',
     '.dpg p,.dpg li,.dpg dd,.dpg dt,.dpg th,.dpg td{font-family:var(--font-body)!important}',
     // 서브타이틀 하한 30px(F3) — 부제 성격 클래스만. eyebrow·kicker는 라벨이라 본문 하한(23px) 적용.
     '.dpg [class*="sub"],.dpg [class*="lead"]{font-size:max(30px,1rem)!important}',

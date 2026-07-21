@@ -135,7 +135,7 @@ async function main(): Promise<void> {
   const max = (a: number[]) => (a.length ? Math.max(...a) : 0)
   const checks: Check[] = [
     { code: 'F1', rule: '폰트 5종 이하', pass: m.allFamilies.length <= 5, detail: `${m.allFamilies.length}종: ${m.allFamilies.join(', ')}` },
-    { code: 'F2', rule: '타이틀 1종', pass: m.titleFamilies.length <= 1, detail: `${m.titleFamilies.length}종: ${m.titleFamilies.join(', ')}` },
+    { code: 'F2', rule: '타이틀 2종 이하(톤별)', pass: m.titleFamilies.length <= 2, detail: `${m.titleFamilies.length}종: ${m.titleFamilies.join(', ')}` },
     { code: 'F3', rule: '서브 1종·최소 30px', pass: m.subFamilies.length <= 1 && (m.subSizes.length === 0 || min(m.subSizes) >= 30), detail: `${m.subFamilies.length}종 · ${min(m.subSizes)}~${max(m.subSizes)}px` },
     { code: 'F4', rule: '본문 1종·최소 23px', pass: m.bodyFamilies.length <= 1 && min(m.bodySizes) >= 23, detail: `${m.bodyFamilies.length}종(${m.bodyFamilies.join(',')}) · ${min(m.bodySizes)}~${max(m.bodySizes)}px · 미달 ${m.bodySizes.filter((s) => s < 23).length}개` },
     { code: 'F6', rule: '제공 폰트 내장(@font-face)', pass: m.fontFaces > 0, detail: `@font-face ${m.fontFaces}건` },

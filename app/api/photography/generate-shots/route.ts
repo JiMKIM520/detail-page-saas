@@ -64,7 +64,7 @@ export async function POST(request: Request) {
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', aspectRatio: '3:4' }
   const out: { name: string; url: string }[] = []
   const errors: string[] = []
-  const targetShots = shots.slice(0, 18).slice(batchFrom, batchCount ? batchFrom + batchCount : undefined)
+  const targetShots = shots.slice(0, 28).slice(batchFrom, batchCount ? batchFrom + batchCount : undefined)
   for (const shot of targetShots) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt)
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
 
   // 재생성 성공 시 이전 기획의 컷 정리 — 파일명이 기획마다 달라 방치하면 구 컷이 새 컷과 섞여 초안에 들어간다
   try {
-    const valid = new Set(shots.slice(0, 18).map((s) => s.filename || (s.name + '.png')))
+    const valid = new Set(shots.slice(0, 28).map((s) => s.filename || (s.name + '.png')))
     const { data: existing } = await svc.storage.from('designs').list(`projects/${project_id}/styling_real`)
     const stale = (existing ?? []).filter((f) => f.name && !valid.has(f.name)).map((f) => `projects/${project_id}/styling_real/${f.name}`)
     if (stale.length) {
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
     catch (e) { console.warn('[generate-shots] photo_uploaded 전이 경고:', (e as Error).message) }
   }
 
-  return NextResponse.json({ success: true, shots: out, errors, total: Math.min(shots.length, 18), from: batchFrom, advanced: cur?.status === 'prompt_ready' })
+  return NextResponse.json({ success: true, shots: out, errors, total: Math.min(shots.length, 28), from: batchFrom, advanced: cur?.status === 'prompt_ready' })
 }
 
 /** 샷 목록 조회 (관리자 콘솔 배치 오케스트레이션용) — 기획 산출 프롬프트의 이름·수량만 반환 */
@@ -125,7 +125,7 @@ export async function GET(request: Request) {
     const { data } = await svc.storage.from('designs').download(`projects/${project_id}/planning/styling-final-prompts.json`)
     if (!data) throw new Error('없음')
     const json = JSON.parse(await data.text())
-    const shots = (json.shots ?? []).slice(0, 18)
+    const shots = (json.shots ?? []).slice(0, 28)
     return NextResponse.json({
       success: true,
       total: shots.length,

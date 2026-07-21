@@ -42,7 +42,7 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
   const { data: project } = await svc.from('projects').select('category, platforms(slug)').eq('id', pid).single()
   const meta = { category: (project as any)?.category ?? 'food', platform: (project as any)?.platforms?.slug ?? 'smartstore', aspectRatio: '3:4' }
   let ok = 0
-  for (const shot of shots.slice(0, 18)) {
+  for (const shot of shots.slice(0, 28)) {
     try {
       const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt) ? shot.finalPrompt : buildShotPrompt(shot, rules, meta as any)
       console.log(`[e2e] 스타일링샷 생성: ${shot.name ?? shot.filename}…`)
@@ -60,7 +60,7 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
   }
   // 재생성 성공 시 이전 기획의 컷 정리 (서비스 generate-shots 라우트와 동일 동작)
   if (ok > 0) {
-    const valid = new Set(shots.slice(0, 18).map((s: any) => s.filename || (s.name + '.png')))
+    const valid = new Set(shots.slice(0, 28).map((s: any) => s.filename || (s.name + '.png')))
     const { data: existing } = await svc.storage.from('designs').list(`projects/${pid}/styling_real`)
     const stale = (existing ?? []).filter((f) => f.name && !valid.has(f.name)).map((f) => `projects/${pid}/styling_real/${f.name}`)
     if (stale.length) {
