@@ -21,9 +21,13 @@ export async function uploadToStorage(
   bucket = DESIGNS_BUCKET
 ): Promise<string> {
   const supabase = createServiceClient()
+  // HTML(초안)은 재생성·수정마다 같은 경로를 덮어쓰므로 CDN 캐시가 이전 버전을 반환하면 안 된다
+  // (cacheControl 미지정 시 기본 3600s 캐시 → 재생성 후에도 구버전이 /draft에 나오는 실사례).
+  // 이미지는 URL이 고유(파일명 기반)라 캐시해도 안전.
+  const cacheControl = contentType.includes('html') ? '0' : '3600'
   const { error } = await supabase.storage
     .from(bucket)
-    .upload(storagePath, buffer, { contentType, upsert: true })
+    .upload(storagePath, buffer, { contentType, upsert: true, cacheControl })
 
   if (error) throw new Error(`Storage upload failed: ${storagePath} — ${error.message}`)
 

@@ -28,7 +28,7 @@ async function main(): Promise<void> {
     const key = `projects/${projectId}/4_final/index.html`
     const { error } = await svc.storage
       .from('designs')
-      .upload(key, new Blob([html], { type: 'text/html' }), { upsert: true })
+      .upload(key, new Blob([html], { type: 'text/html' }), { upsert: true, cacheControl: '0' })
     if (error) {
       console.error('Supabase 실패:', error.message)
       process.exit(1)
