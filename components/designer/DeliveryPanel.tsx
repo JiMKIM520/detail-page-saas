@@ -64,9 +64,11 @@ export function DeliveryPanel({
         </div>
 
         {finalSubmitted && finalUrl ? (
-          <a href={finalUrl} target="_blank" rel="noreferrer"
+          // /draft 라우트로 봐야 정상 렌더 — output_url(스토리지 직접)은 Supabase가 text/plain으로
+          // 강제 서빙해 HTML 소스가 날것으로 노출된다(관리자가 '이상하다'고 본 원인)
+          <a href={`/draft/${projectId}`} target="_blank" rel="noreferrer"
             className="block text-center text-sm border border-emerald-300 text-emerald-700 bg-emerald-50 rounded-lg py-2 hover:bg-emerald-100 transition-all">
-            ⬇ 디자이너 최종본 확인
+            🔍 디자이너 최종본 확인
           </a>
         ) : (
           <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
