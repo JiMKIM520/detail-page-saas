@@ -44,6 +44,10 @@ KIND-SPECIFIC RULES:
 - kind "asset": the shot is INTENDED to contain no product/packaging (raw ingredients, texture,
   scene). Skip reference comparison. Reject ONLY for gross artifacts/distortion, any rendered text,
   or if a product package appears when it should not. Judge whether the subject matches the intent.
+  ADDITIONALLY reject if a HUMAN is the main subject with NO product and NO category-relevant
+  subject (e.g. the pet for pet products, the food/ingredient for food) anywhere in frame —
+  a person-only lifestyle stock shot carries zero product context on a detail page (실사례: 사람만
+  나온 거실 컷이 고양이 간식 페이지 다크 씬에 배치됨).
 - kind "cutout": client original — describe only, do not reject.
 
 Judging rules:
