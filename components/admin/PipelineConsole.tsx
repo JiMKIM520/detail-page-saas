@@ -46,17 +46,29 @@ export function PipelineConsole({ projectId, status }: PipelineConsoleProps) {
     setSteps((prev) => ({ ...prev, [key]: state }))
   }
 
-  async function post(url: string, body: Record<string, unknown>): Promise<Record<string, unknown>> {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-    const json = (await res.json().catch(() => ({}))) as Record<string, unknown>
-    if (!res.ok && res.status !== 409) {
-      throw new Error(typeof json.error === 'string' ? json.error : `HTTP ${res.status}`)
+  async function post(url: string, body: Record<string, unknown>, timeoutMs = 850_000): Promise<Record<string, unknown>> {
+    // 클라이언트 타임아웃 — 서버(Vercel maxDuration 800s)가 조용히 끊겨도 fetch가 무한
+    // 대기(hang)하며 파이프라인 전체가 침묵 정지하던 실사례(럽앤 ④ 배치 5). 명시 에러로 전환.
+    const ctl = new AbortController()
+    const timer = setTimeout(() => ctl.abort(), timeoutMs)
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: ctl.signal,
+      })
+      const json = (await res.json().catch(() => ({}))) as Record<string, unknown>
+      if (!res.ok && res.status !== 409) {
+        throw new Error(typeof json.error === 'string' ? json.error : `HTTP ${res.status}`)
+      }
+      return json
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') throw new Error(`요청 시간 초과(${Math.round(timeoutMs / 1000)}s) — 서버 처리 지연`)
+      throw e
+    } finally {
+      clearTimeout(timer)
     }
-    return json
   }
 
   async function advance(to: string): Promise<void> {
@@ -100,12 +112,22 @@ export function PipelineConsole({ projectId, status }: PipelineConsoleProps) {
     const BATCH = 2
     for (let from = 0; from < total; from += BATCH) {
       setShotProgress(`${Math.min(from + BATCH, total)} / ${total}`)
-      const r = (await post('/api/photography/generate-shots', {
-        project_id: projectId, from, count: BATCH,
-      })) as { shots?: unknown[]; errors?: string[] }
-      const okCount = r.shots?.length ?? 0
-      log(`  컷 ${from + 1}~${Math.min(from + BATCH, total)}: 성공 ${okCount}${r.errors?.length ? ` / 실패 ${r.errors.length}` : ''}`)
-      for (const e of r.errors ?? []) log(`    ✗ ${String(e).slice(0, 90)}`)
+      // 배치 실패(타임아웃 포함)는 1회 재시도 후에도 안 되면 로그만 남기고 다음 배치로 —
+      // 한 배치가 전체 파이프라인을 중단시키지 않는다(생성은 upsert라 재실행 안전).
+      let done = false
+      for (let attempt = 0; attempt < 2 && !done; attempt++) {
+        try {
+          const r = (await post('/api/photography/generate-shots', {
+            project_id: projectId, from, count: BATCH,
+          }, 320_000)) as { shots?: unknown[]; errors?: string[] }
+          const okCount = r.shots?.length ?? 0
+          log(`  컷 ${from + 1}~${Math.min(from + BATCH, total)}: 성공 ${okCount}${r.errors?.length ? ` / 실패 ${r.errors.length}` : ''}`)
+          for (const e of r.errors ?? []) log(`    ✗ ${String(e).slice(0, 90)}`)
+          done = true
+        } catch (e) {
+          log(`  컷 ${from + 1}~${Math.min(from + BATCH, total)}: ${attempt === 0 ? '실패 — 재시도' : '재시도 실패(건너뜀)'} — ${String((e as Error).message).slice(0, 80)}`)
+        }
+      }
     }
     setShotProgress(null)
     await advance('prompt_ready')
