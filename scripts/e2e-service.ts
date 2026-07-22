@@ -51,7 +51,7 @@ async function genStylingShots(svc: Svc, pid: string): Promise<number> {
       const refIdx = pickShotReferences(String((shot as any).name ?? '') + ' ' + String((shot as any).filename ?? ''), photoNames)
       const refs = (shot as any).withProduct === false ? [] : refIdx.map((i) => nukki[i]).filter(Boolean)
       // 히어로는 shot-prompter 프롬프트가 buildShotPrompt를 우회하므로 생성 직전 규칙 보장 (룰 7-11)
-      const buf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
+      const buf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: (shot as any).frameRatio ?? '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
       const p = `projects/${pid}/styling_real/${shot.filename || shot.name + '.png'}`
       const { error } = await svc.storage.from('designs').upload(p, buf, { contentType: 'image/png', upsert: true })
       if (error) throw new Error(error.message)

@@ -28,6 +28,24 @@ export interface ImageNeed {
   useOriginal?: boolean
   /** 노출 크기 — main(대형 프레임: pro 모델) / support(소형 썸네일·서브컷: 경량 모델) (Sprint 9-D) */
   prominence?: 'main' | 'support'
+  /** 목적지 블록 이미지 프레임의 기대 비율 — 생성 aspectRatio로 전달돼 crop을 원천 방지.
+   *  variant CSS의 첫 aspect-ratio에서 결정적으로 추론(스탬프는 시스템이, LLM 아님). 기본 3:4. */
+  frameRatio?: '3:4' | '4:3' | '16:9' | '1:1'
+}
+
+/** variant CSS에서 대표 이미지 프레임 비율을 추론 — 첫 aspect-ratio:W/H 매치 기준.
+ *  스타일링컷이 전부 3:4 세로로 생성돼 가로 프레임(배너·와이드)에서 잘리던 구조적 crop의
+ *  근본 해소: 니즈가 태어날 때 목적지 프레임 비율을 갖는다. 매치 없거나 이상값이면 3:4(기존 동작). */
+export function inferFrameRatio(css: string | undefined): '3:4' | '4:3' | '16:9' | '1:1' {
+  const m = String(css ?? '').match(/aspect-ratio:\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/)
+  if (!m) return '3:4'
+  const w = parseFloat(m[1]); const h = parseFloat(m[2])
+  if (!(w > 0) || !(h > 0)) return '3:4'
+  const r = w / h
+  if (r >= 1.5) return '16:9'
+  if (r >= 1.08) return '4:3'
+  if (r >= 0.92) return '1:1'
+  return '3:4'
 }
 
 export interface BlueprintSection {
@@ -443,6 +461,14 @@ function validateBlueprint(
     )
     if (slotSum < 12)
       issues.push(`이미지 슬롯 합 ${slotSum}(<12) — 이미지 보유 블록이 부족하다. 텍스트 전용 블록 일부를 이미지 블록으로 교체하라`)
+
+    // 니즈에 목적지 프레임 비율 스탬프(결정적) — variant CSS의 첫 aspect-ratio에서 추론.
+    // 생성 단계(shot-prompter→generate-shots)가 이 비율로 컷을 만들어 crop을 원천 차단한다.
+    for (const s of bp.sections) {
+      if (!s.imageNeeds?.length) continue
+      const ratio = inferFrameRatio(getVariant(s.variantId)?.css)
+      for (const n of s.imageNeeds) if (!n.frameRatio) n.frameRatio = ratio
+    }
   }
 
   // 수리 3: 씬 결정적 재그룹핑 — 유효 조건 미충족 시 결정적 폴백(니즈 수리와 같은 철학)

@@ -17,6 +17,8 @@ export interface PromptedShot {
   withProduct: boolean
   /** 생성 모델 티어 결정용 — main(pro) / support(경량 nb2) (Sprint 9-D) */
   prominence?: 'main' | 'support'
+  /** 목적지 프레임 비율(니즈 스탬프 승계) — generate-shots가 이 비율로 생성해 crop 방지 */
+  frameRatio?: '3:4' | '4:3' | '16:9' | '1:1'
 }
 
 const SYSTEM_PROMPT = `You are a commercial photography prompt director for Korean e-commerce detail pages.
@@ -97,12 +99,23 @@ ${needLines}
       const id = String(r.filename ?? '').replace(/\.png$/i, '')
       const need = byId.get(id)
       if (!need || !r.finalPrompt) continue
+      // 목적지 프레임 비율(니즈 스탬프)로 OUTPUT SPECS를 결정적 치환 — LLM은 3:4 고정으로
+      // 쓰지만(프롬프트 지시), 실제 프레임이 가로/정사각이면 여기서 교체돼 crop을 원천 방지.
+      const ratio = need.frameRatio ?? '3:4'
+      const SPEC_BY_RATIO: Record<string, string> = {
+        '3:4': '1000x1333px vertical 3:4',
+        '4:3': '1333x1000px horizontal 4:3',
+        '16:9': '1600x900px wide horizontal 16:9',
+        '1:1': '1200x1200px square 1:1',
+      }
+      const finalPrompt = String(r.finalPrompt).replace(/1000x1333px vertical 3:4/g, SPEC_BY_RATIO[ratio])
       shots.push({
         name: String(r.name ?? need.subject).slice(0, 80),
         filename: `${id}.png`,
-        finalPrompt: String(r.finalPrompt),
+        finalPrompt,
         withProduct: need.withProduct,
-      prominence: need.prominence, // 프롬프터 출력이 아니라 니즈가 결정 (결정적)
+        prominence: need.prominence, // 프롬프터 출력이 아니라 니즈가 결정 (결정적)
+        frameRatio: ratio,
       })
     }
     // 누락 니즈 관측 — 프롬프터가 빠뜨린 니즈는 로그로 (생성 단계에서 그 컷만 없음)

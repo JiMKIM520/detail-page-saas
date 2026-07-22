@@ -935,6 +935,7 @@ export async function runPlanningForProject(projectId: string): Promise<{
                 finalPrompt: `${n.subject}. ${n.style} style, Korean e-commerce. [OUTPUT SPECS] 1000x1333px vertical 3:4, editorial Korean e-commerce detail page photography, no text overlays, no watermarks.`,
                 withProduct: n.withProduct,
                 prominence: n.prominence,
+                frameRatio: n.frameRatio, // 목적지 프레임 비율 승계 — 생성 crop 방지
               }))
               let existingFb: Record<string, unknown> = {}
               try {
@@ -968,7 +969,7 @@ export async function runPlanningForProject(projectId: string): Promise<{
               .download(`projects/${projectId}/planning/blueprint.json`)
             if (bpRaw) {
               const storedBp = JSON.parse(await bpRaw.text()) as {
-                sections?: Array<{ imageNeeds?: Array<{ id: string; subject: string; style: string; withProduct: boolean; useOriginal?: boolean; prominence?: string }> }>
+                sections?: Array<{ imageNeeds?: Array<{ id: string; subject: string; style: string; withProduct: boolean; useOriginal?: boolean; prominence?: string; frameRatio?: string }> }>
               }
               const storedNeeds = (storedBp.sections ?? [])
                 .flatMap((s) => s.imageNeeds ?? [])
@@ -980,6 +981,7 @@ export async function runPlanningForProject(projectId: string): Promise<{
                   finalPrompt: `${n.subject}. ${n.style} style, Korean e-commerce. [OUTPUT SPECS] 1000x1333px vertical 3:4, editorial Korean e-commerce detail page photography, no text overlays, no watermarks.`,
                   withProduct: n.withProduct,
                   prominence: n.prominence,
+                  frameRatio: n.frameRatio, // 목적지 프레임 비율 승계 — 생성 crop 방지
                 }))
                 await uploadToStorage(
                   `projects/${projectId}/planning/styling-final-prompts.json`,
