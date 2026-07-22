@@ -32,7 +32,10 @@ export const usageSteps = defineBlock<Data>({
 .us-hd{text-align:center;padding:0 var(--pad-x,56px)}
 .us-title{font-family:var(--font-display);font-weight:800;font-size:64px;color:var(--accent-d);letter-spacing:-.01em;line-height:1.04}
 .us-sub{margin-top:12px;font-size:16px;font-weight:600;color:var(--ink-2)}
-.us-hero{width:100%;height:280px;object-fit:cover;margin:26px 0 8px}
+/* 프레임을 이미지(3:4 세로 스타일링컷)에 맞춰 crop 최소화 — 가로 배너(height 고정)에 세로 컷이
+   상하로 심하게 잘리던 것을, 세로 이미지 비율에 근접한 프레임(4:5, 상단 정렬)으로 담는다.
+   max-height로 과도한 세로 확장은 억제. */
+.us-hero{width:100%;aspect-ratio:4/5;max-height:560px;object-fit:cover;object-position:center 30%;margin:26px 0 8px}
 .us-steps{padding:0 var(--pad-x,56px);margin-top:22px}
 .us-step{display:flex;align-items:center;gap:22px;padding:24px 0}
 .us-step + .us-step{border-top:1px solid var(--line)}

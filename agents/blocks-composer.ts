@@ -1200,7 +1200,14 @@ export function applyPlacementGuards(
       // 로고·누끼는 §4가 명시 허용하므로 예외 — 위 logoSet/cutoutSet 가드가 별도로 통제한다.
       const heroOriginalBanned =
         arch === 'hero' && !logoSet.has(value) && !cutoutSet.has(value)
-      if (isUrl && (arch === 'closing' || heroOriginalBanned) && (value.includes('/intake-files/') || value.includes('/cutouts/'))) {
+      // 업로드 원본 실사(배경·앵글·라벨 방향 미통제 → 검은배경·기울어진 팩 그대로 노출)는
+      // 연출·라이프스타일 슬롯에 부적합하다. 제품/성분 클로즈업 성격 아키타입(ingredient·detail·
+      // spec)과 hero 누끼 슬롯만 원본을 허용하고, 그 외 전 아키타입(story·feature·usage·mood·
+      // gallery·banner·point·review·callout·compare·closing…)에는 원본 배치를 차단한다.
+      // (이전엔 hero/closing만 막아 원본 실사가 story 등 연출 블록에 그대로 들어갔다.)
+      const originalAllowedArch = arch === 'ingredient' || arch === 'detail' || arch === 'spec'
+      const bannedForOriginal = heroOriginalBanned || (arch !== 'hero' && !originalAllowedArch)
+      if (isUrl && bannedForOriginal && (value.includes('/intake-files/') || value.includes('/cutouts/'))) {
         delete parent[key]
         stats.closingOriginal = (stats.closingOriginal ?? 0) + 1
         return
@@ -1543,9 +1550,14 @@ function redistributeUnusedImages(
     if (remaining.length === 0) break
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     if (arch === 'closing' || arch === 'hero') continue
+    // 연출 아키타입엔 생성컷만 순차 배치 — 원본 실사(intake/cutouts)는 제품/성분 클로즈업에만.
+    // (이전엔 take(0)로 남은 첫 URL을 무조건 주입해 원본이 story 등 연출 슬롯에 들어갔다.)
+    const origOk = arch === 'ingredient' || arch === 'detail' || arch === 'spec'
     for (const slot of openSlots(b)) {
       if (remaining.length === 0) break
-      ;((b.data ??= {}) as Record<string, unknown>)[slot] = take(0)
+      const idx = origOk ? 0 : remaining.findIndex(([u]) => !u.includes('/intake-files/') && !u.includes('/cutouts/'))
+      if (idx < 0) break // 남은 게 원본뿐이고 이 블록은 원본 불가 → 다음 블록으로
+      ;((b.data ??= {}) as Record<string, unknown>)[slot] = take(idx)
       reassigned++
     }
   }

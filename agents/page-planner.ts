@@ -395,37 +395,47 @@ function validateBlueprint(
   // 니즈 모드(인벤토리 없음) 검증·수리 — id 중복 제거, 총량 20 상한 절단, 최소량 미달은 재시도
   if (allowedUrls.size === 0) {
     const seenIds = new Set<string>()
+    // 니즈 상한 = 실제 슬롯 수요(이미지 슬롯 보유 블록의 슬롯 합) — 빈 슬롯 0이 목표.
+    // (이전엔 12로 하드캡해 14~40건 수요를 12건만 공급 → 하단 블록 빈 슬롯·빈 섹션이 구조적 발생.)
+    // 하한 12(최소 밀도)·상한 28(generate-shots 생성 상한·Vercel 타임아웃 여유).
+    const slotDemand = bp.sections.reduce(
+      (acc, sec) => acc + (catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0),
+      0,
+    )
+    const cap = Math.max(12, Math.min(slotDemand, 28))
     let total = 0
     for (const s of bp.sections) {
       s.imageUrls = []
       if (!s.imageNeeds?.length) continue
       s.imageNeeds = s.imageNeeds.filter((n) => {
-        if (seenIds.has(n.id) || total >= 12) return false
+        if (seenIds.has(n.id) || total >= cap) return false
         seenIds.add(n.id)
         total++
         return true
       })
     }
-    // 표준 12컷 패키지 — 공급을 고정해 제품별 컷 수 편차·활용 저조를 구조적으로 제거.
-    // 미달은 실패가 아니라 수리 가능한 위반: 부족분을 제품 연출 예비 니즈로 자동 보충한다
-    // (재시도 강요는 "니즈=슬롯 수" 규칙과 충돌해 2연속 실패→무청사진 폴백 실사례).
-    if (total < 12) {
-      const deficit = 12 - total
-      const withSlots = bp.sections.filter((sec) => {
-        const slots = catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0
-        return slots > 0 && arch(sec.variantId) !== 'hero'
-      })
-      for (let i = 0; i < deficit && withSlots.length > 0; i++) {
-        const target = withSlots[i % withSlots.length]
-        ;(target.imageNeeds ??= []).push({
-          id: `need_reserve_${i + 1}`,
+    // 슬롯 수요 미달분은 슬롯이 비어있는 블록(슬롯수 > 현재 니즈수)에 직접 귀속해 보충한다
+    // (generic 라운드로빈이 아니라 빈 슬롯을 직접 겨냥 — 빈 프레임 방지).
+    if (total < cap) {
+      const gaps = bp.sections
+        .map((sec) => ({ sec, slots: catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0, have: sec.imageNeeds?.length ?? 0 }))
+        .filter((x) => x.slots > 0 && arch(x.sec.variantId) !== 'hero' && x.have < x.slots)
+      let guard = 0
+      while (total < cap && gaps.length > 0 && guard < 100) {
+        guard++
+        const g = gaps[0]
+        ;(g.sec.imageNeeds ??= []).push({
+          id: `need_reserve_${total + 1}`,
           subject: '제품 연출 보조컷 — 브리프의 핵심 소구를 뒷받침하는 연출',
           style: 'styled',
           withProduct: true,
           prominence: 'support',
         })
+        g.have++
+        total++
+        if (g.have >= g.slots) gaps.shift()
       }
-      console.warn(`[Page Planner] 12컷 미달(${total}) — 예비 니즈 ${deficit}개 자동 보충`)
+      console.warn(`[Page Planner] 슬롯수요 ${cap} 대비 미달 — 예비 니즈 보충(빈 슬롯 블록 직접 귀속)`)
     }
     const slotSum = bp.sections.reduce(
       (acc, sec) => acc + (catalog().find((c) => c.id === sec.variantId)?.imageSlots ?? 0),
