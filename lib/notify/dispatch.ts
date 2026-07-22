@@ -14,6 +14,7 @@ import {
   sendDeliveredEmail,
   sendIntakeReminderEmail,
   sendReviewReminderEmail,
+  sendIntakeRevisionEmail,
 } from '@/lib/email/send'
 import {
   sendSms,
@@ -21,6 +22,7 @@ import {
   deliveredSms,
   intakeReminderSms,
   reviewReminderSms,
+  intakeRevisionSms,
 } from '@/lib/sms/send'
 import { logNotification, type NotifyTemplate } from './log'
 
@@ -120,5 +122,13 @@ export function notifyReviewReminder(svc: Svc, target: NotifyTarget): Promise<No
   return dispatch(svc, target, 'review_reminder', {
     emailSubjectFn: (t) => sendReviewReminderEmail(t.email!, t.projectName, t.link),
     smsText: reviewReminderSms(target.projectName, target.link),
+  })
+}
+
+/** 의뢰서 보완 요청 — 관리자 수동(입력정보확인 단계). note는 보완 요청 상세 내용 */
+export function notifyIntakeRevision(svc: Svc, target: NotifyTarget, note?: string): Promise<NotifyOutcome> {
+  return dispatch(svc, target, 'intake_revision', {
+    emailSubjectFn: (t) => sendIntakeRevisionEmail(t.email!, t.projectName, t.link, note),
+    smsText: intakeRevisionSms(target.projectName, target.link),
   })
 }

@@ -119,3 +119,8 @@ export function intakeReminderSms(projectName: string, link: string): string {
 export function reviewReminderSms(projectName: string, link: string): string {
   return `[DetailAI] "${projectName}" 상세페이지 초안 확인이 지연되고 있습니다. 확인 후 의견을 남겨 주세요.\n▶ ${link}`
 }
+
+/** 의뢰서 보완 요청 문자 — 관리자 수동(입력정보확인 단계) */
+export function intakeRevisionSms(projectName: string, link: string): string {
+  return `[DetailAI] "${projectName}" 의뢰서에 보완이 필요합니다. 아래에서 수정해 주세요.\n▶ ${link}`
+}

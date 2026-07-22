@@ -4,6 +4,8 @@ import { SubmittedIntake, type IntakeFileView } from '@/components/client/Submit
 import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ReviewPanel } from '@/components/planner/ReviewPanel'
 import { GenerateScriptButton } from '@/components/planner/GenerateScriptButton'
+import { ReceiveProductButton } from '@/components/planner/ReceiveProductButton'
+import { RequestIntakeRevisionButton } from '@/components/planner/RequestIntakeRevisionButton'
 import { DesignPlanView } from '@/components/planner/DesignPlanView'
 import { StartPlanningButton } from '@/components/planner/StartPlanningButton'
 import { ApprovePlanButton } from '@/components/planner/ApprovePlanButton'
@@ -176,6 +178,11 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
         </div>
         <div className="space-y-4">
           <AssignPanel projectId={id} designerId={project.designer_id} />
+          {/* 기획 프로세스 2단계(입력정보확인) — 제품 수령 체크(D-14 기준점) + 의뢰서 보완 요청 */}
+          <ReceiveProductButton projectId={id} receivedAt={(project as { product_received_at?: string | null }).product_received_at ?? null} />
+          {(project.status as ProjectStatus) === 'intake_submitted' && (
+            <RequestIntakeRevisionButton projectId={id} />
+          )}
           {/* 검수/승인은 script_review 상태에서만 유효 — 그 전(intake_submitted/생성중)엔 승인 버튼을 숨겨
               '승인 불가' 오류를 원천 차단(럽앤다이브 사례) */}
           {(project.status as ProjectStatus) === 'script_review' && (

@@ -21,6 +21,7 @@ export type NotifyTemplate =
   | 'delivered' // 최종 납품 (delivered 도달)
   | 'intake_reminder' // 의뢰서 미작성 재촉 (크론)
   | 'review_reminder' // 초안 무회신 재촉 (크론)
+  | 'intake_revision' // 의뢰서 보완 요청 (관리자 수동)
 
 export interface NotifyLogInput {
   projectId: string | null

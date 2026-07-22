@@ -259,6 +259,37 @@ export async function sendReviewReminderEmail(
 }
 
 /**
+ * 의뢰서 보완 요청 메일 — 관리자가 보완 요청 버튼 클릭 시 호출
+ *
+ * @param to          수신자 이메일 주소
+ * @param projectName 프로젝트(상품) 이름
+ * @param intakeLink  의뢰서 수정 링크
+ * @param note        보완 요청 내용 (선택)
+ * @returns           { sent: boolean; error?: string }
+ */
+export async function sendIntakeRevisionEmail(
+  to: string,
+  projectName: string,
+  intakeLink: string,
+  note?: string,
+): Promise<EmailResult> {
+  const subject = `[DetailAI] "${projectName}" 의뢰서 보완 요청`
+  const noteSection = note ? `\n보완 요청 내용:\n${note}\n` : ''
+  const text = [
+    `안녕하세요,`,
+    ``,
+    `"${projectName}" 상세페이지 의뢰서에 대한 보완이 필요합니다.`,
+    `아래 링크에서 의뢰서를 수정·보완해 주시면 제작을 진행하겠습니다.`,
+    noteSection,
+    `▶ 의뢰서 수정하기: ${intakeLink}`,
+    ``,
+    `감사합니다.`,
+    `DetailAI 팀 드림`,
+  ].join('\n')
+  return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
+}
+
+/**
  * 최종 결과물 납품 메일 — delivered 상태 도달 시 호출
  *
  * @param to          수신자 이메일 주소
