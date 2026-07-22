@@ -187,6 +187,7 @@ export async function runVisualAudit(
 export async function runImageTagger(
   inputs: TaggerInput[],
   referenceUrl?: string,
+  _retried = false,
 ): Promise<AgentResult<Record<string, ImageTag>>> {
   const elapsed = timer()
   if (inputs.length === 0) return { success: true, data: {}, durationMs: 0 }
@@ -259,6 +260,14 @@ export async function runImageTagger(
     return { success: true, data: out, durationMs: elapsed() }
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
+    // 이미지 URL 다운로드 타임아웃 등 일시 오류는 5초 백오프 후 전체 1회 재시도 —
+    // 태거가 폴백(파일명)으로 빠지면 무관 컷(맥락 불일치 이미지)을 거를 방벽이 사라진다
+    // (사람 단독 라이프스타일 컷이 다크 씬에 통과된 실사례).
+    if (!_retried && /timed out|timeout|overloaded|529|503|Connection/i.test(msg)) {
+      console.warn('[Image Tagger] 일시 오류 — 5초 후 1회 재시도:', msg.slice(0, 100))
+      await new Promise((r) => setTimeout(r, 5000))
+      return runImageTagger(inputs, referenceUrl, true)
+    }
     console.warn('[Image Tagger] 실패(파일명 폴백):', msg.slice(0, 160))
     return { success: false, error: msg, durationMs: elapsed() }
   }

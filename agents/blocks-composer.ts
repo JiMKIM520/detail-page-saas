@@ -1112,6 +1112,30 @@ const LOGO_OK_ARCHETYPES = new Set(['hero', 'closing', 'cs'])
 const TEXT_ONLY_KEY_RE =
   /^(title|subtitle|headline|big|small|text|desc|description|label|name|brand|brandLogo|brandName|quote|by|caption|line|closer|closerSub|sub|copy|body|note|question|answer|head|kicker|tagline|cta)$/i
 
+/** 다행 리스트 이미지 균일성(블록 단위) — 일부 행에만 이미지가 있으면 전부 제거(절름발이 레이아웃 방지).
+ *  usage·ingredient 한정이던 것을 전 아키타입으로 확대(feature-checkpoint-rail 빈 링 실사례) +
+ *  검사 키를 'image' 하드코딩에서 변형 render의 배열 아이템 media 키 자동 식별로 일반화.
+ *  배치 가드와 페어링 QA(개별 제거로 배열을 부분 채움으로 만드는 유일한 후행 패스) 양쪽에서 호출. */
+function uniformizeBlockItemImages(b: PageSpec['blocks'][number]): number {
+  let removed = 0
+  const data = (b.data ?? {}) as Record<string, unknown>
+  const vshape = ((getVariant(b.variantId)?.schema as { shape?: Record<string, unknown> } | undefined)?.shape) ?? {}
+  const itemImgKeys = new Set(['image', ...[...mediaSlotKeys(b.variantId)].filter((k) => !(k in vshape))])
+  for (const v of Object.values(data)) {
+    if (!Array.isArray(v) || v.length < 2) continue
+    const items = v.filter((it): it is Record<string, unknown> => Boolean(it) && typeof it === 'object')
+    if (items.length < 2) continue
+    for (const key of itemImgKeys) {
+      const withImg = items.filter((it) => typeof it[key] === 'string' && /^https?:\/\//.test(String(it[key])))
+      if (withImg.length > 0 && withImg.length < items.length) {
+        for (const it of items) delete it[key]
+        removed += withImg.length
+      }
+    }
+  }
+  return removed
+}
+
 export function applyPlacementGuards(
   spec: PageSpec,
   cutoutSet: ReadonlySet<string>,
@@ -1141,25 +1165,9 @@ export function applyPlacementGuards(
     // 누끼 전용 필드(contain 프레임) — 레지스트리가 CSS×render 대조로 자동 산출 (Sprint 12)
     const containKeys = containSlotKeys(b.variantId)
     const data = (b.data ?? {}) as Record<string, unknown>
-    // 다행 리스트 이미지 균일성 — 일부 행에만 이미지가 있으면 전부 제거(절름발이 레이아웃 방지).
-    // usage·ingredient 한정이던 것을 전 아키타입으로 확대(feature-checkpoint-rail 빈 링 실사례) +
-    // 검사 키를 'image' 하드코딩에서 변형 render의 배열 아이템 media 키 자동 식별로 일반화.
-    {
-      const vshape = ((getVariant(b.variantId)?.schema as { shape?: Record<string, unknown> } | undefined)?.shape) ?? {}
-      const itemImgKeys = new Set(['image', ...[...mediaSlotKeys(b.variantId)].filter((k) => !(k in vshape))])
-      for (const v of Object.values(data)) {
-        if (!Array.isArray(v) || v.length < 2) continue
-        const items = v.filter((it): it is Record<string, unknown> => Boolean(it) && typeof it === 'object')
-        if (items.length < 2) continue
-        for (const key of itemImgKeys) {
-          const withImg = items.filter((it) => typeof it[key] === 'string' && /^https?:\/\//.test(String(it[key])))
-          if (withImg.length > 0 && withImg.length < items.length) {
-            for (const it of items) delete it[key]
-            stats.usageUniform += withImg.length
-          }
-        }
-      }
-    }
+    // 다행 리스트 이미지 균일성 — 함수로 추출(uniformizeBlockItemImages): 페어링 QA가 개별
+    // 제거로 배열을 부분 채움으로 만든 뒤 재적용할 수 있어야 해서(성분 2/4 노출 실사례).
+    stats.usageUniform += uniformizeBlockItemImages(b)
     walkStringFields(data, (parent, key, value) => {
       const isUrl = /^https?:\/\//.test(value)
       // URL이 명백한 텍스트 필드에 들어가면 경로 문자열이 화면에 노출 — 필드 수술
@@ -1687,7 +1695,14 @@ async function applyPairingQA(spec: PageSpec): Promise<number> {
     })
     reasons.push(`${b.variantId}(${verdict.reason ?? '부적합'})`)
   }
-  if (removed) console.warn(`[Blocks Composer] 페어링 QA — 부적합 이미지 ${removed}건 제거: ${reasons.join(' · ')}`)
+  if (removed) {
+    console.warn(`[Blocks Composer] 페어링 QA — 부적합 이미지 ${removed}건 제거: ${reasons.join(' · ')}`)
+    // QA의 개별 제거가 다행 리스트를 부분 채움(2/4 등)으로 무너뜨린 채 최종 렌더까지 가던
+    // 실사례(성분 리스트) — 제거 발생 시 균일화를 재적용해 "전부 있거나 전부 없거나"를 복원.
+    let uni = 0
+    for (const b of spec.blocks) uni += uniformizeBlockItemImages(b)
+    if (uni) console.warn(`[Blocks Composer] 페어링 QA 후 균일화 — 부분 채움 ${uni}건 정리`)
+  }
   reportAdd('pairing-qa', { removed, reasons: reasons.slice(0, 6) })
   return removed
 }

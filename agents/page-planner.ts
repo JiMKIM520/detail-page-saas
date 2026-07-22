@@ -194,6 +194,9 @@ system prompt). Your job:
      ⑤ 사용 장면 2 (usage — main 1, support 1) ⑥ 무드/배경 1 (mood, support)
      ⑦ 스펙/비교·기타 보조 (support) — 이미지 슬롯 보유 블록이 더 많으면 위 분포를 늘려 전 슬롯을 채운다.
      블록 구성은 이미지 슬롯 보유 블록이 전체의 절반 이상이 되도록 선택하고, 부족하면 이미지 블록을 추가하라.
+     ⛔ 이미지 나열형 블록(갤러리 그리드·썸네일 밴드·사진 콜라주 계열)은 페이지당 1개만, 그리고
+     서로 인접 배치 금지 — 유사한 연출컷이 8장씩 연속되면 정보 없는 "사진 무더기"가 된다(실사례).
+     나열형 블록 앞뒤에는 반드시 텍스트/수치/표 중심 블록을 끼워 서사 리듬을 만들라.
    - prominence: 대형 프레임(히어로·풀블리드·본문 큰 사진)=main / 소형 썸네일·서브컷(원형 아이콘,
      리스트 썸네일, 보조컷)=support — 생성 모델 티어 결정에 쓰인다. 반드시 지정하라.
 4. copyBrief: ONE terse Korean sentence (max 80 chars) stating WHAT the filler must say there,
