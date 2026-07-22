@@ -88,6 +88,10 @@ export const storyRotatingHighlight = defineBlock<Data>({
   box-decoration-break:clone;
   -webkit-box-decoration-break:clone;
 }
+/* 하이라이트 밴드 글자색 — accent 명도 기반 자동 대비(--on-accent). 동원처럼 accent가
+   다크 네이비면 ink(네이비) 글자가 뭉개지던 실사례('국내 참치 1위' 아래 판독 불가).
+   미지원 환경은 ink 폴백(현행 유지). .em 포함 전부 강제. */
+.srh-hl,.srh-hl .em,.dpg [data-tone="dark"] .srh-hl,.dpg [data-tone="dark"] .srh-hl .em{color:var(--on-accent,var(--ink))!important}
 
 /* 소형 본문 */
 .srh-body{

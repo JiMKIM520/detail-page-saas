@@ -114,10 +114,15 @@ export function liftAccentText(css: string): string {
   )
 }
 
-/** --accent-fg 정의 — 라이트=원본, 다크 씬=흰색과 섞어 밝게(대비 확보). 배경 accent는 불변. */
+/** --accent-fg 정의 — 라이트=원본, 다크 씬=흰색과 섞어 밝게(대비 확보). 배경 accent는 불변.
+ *  --on-accent — accent를 '배경'으로 쓰는 요소(하이라이트 밴드·배지)의 글자색을 accent 명도로
+ *  자동 선택(어두우면 흰색, 밝으면 검정). 동원처럼 브랜드 accent가 다크 네이비(#00295B)면
+ *  기존 'accent 배경+ink 글자' 패턴이 네이비 위 네이비로 뭉개지던 실사례의 근본 해소.
+ *  CSS relative color(lch from) — 렌더 chromium 실증 완료, 미지원 환경은 var() 폴백으로 현행 유지. */
 const ACCENT_CONTRAST = [
   '.dpg{--accent-fg:var(--accent)}',
   '.dpg [data-tone="dark"]{--accent-fg:color-mix(in srgb,var(--accent) 45%,#fff)}',
+  '.dpg{--on-accent:lch(from var(--accent) calc((49.44 - l) * 999) 0 0)}',
 ].join('\n')
 
 /**
