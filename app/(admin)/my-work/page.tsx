@@ -45,7 +45,7 @@ const MY_WORK_COLUMNS: MyWorkColumn[] = [
     accent: 'border-t-violet-400',
     statuses: ['draft_submitted'],
     showStartWork: false,
-    showDraftLink: false,
+    showDraftLink: true, // 제출된 시안 확인 경로 — 액션 0개로 진행이 막히던 갭 해소
   },
   {
     key: 'done',

@@ -68,7 +68,21 @@ export async function POST(request: Request) {
     .eq('id', project_id)
     .single()
   if (proj && proj.status !== 'design_review') {
-    try { await transitionStatus(svc, project_id, 'design_review', { note: '초안 사업자 전달' }) } catch { /* 비치명 */ }
+    // design_review까지 상태머신 경로대로 멀티홉 전이 — 단일 전이만 시도하면
+    // designer_working(→draft_submitted→design_review)·revision_1/2(→designer_working→…)에서
+    // 조용히 실패해 preview_url만 설정되고 상태가 안 바뀌던 실사례(사업자에게 미노출).
+    const HOPS: Record<string, string[]> = {
+      revision_1: ['designer_working', 'draft_submitted', 'design_review'],
+      revision_2: ['designer_working', 'draft_submitted', 'design_review'],
+      designer_working: ['draft_submitted', 'design_review'],
+      draft_submitted: ['design_review'],
+    }
+    const path = HOPS[String(proj.status)] ?? ['design_review']
+    try {
+      for (const to of path) await transitionStatus(svc, project_id, to as never, { note: '초안 사업자 전달' })
+    } catch (e) {
+      console.warn('[send-draft] 상태 전이 경고:', (e as Error).message?.slice(0, 120))
+    }
   }
 
   // 사업자 알림 — 메일 + 문자 동시 발송, notifications에 로그 기록

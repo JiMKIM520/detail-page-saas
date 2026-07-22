@@ -23,7 +23,9 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
   let query = supabase
     .from('projects')
     .select('id, company_name, status, category, designer_id, created_at, platforms(name)')
-    .in('status', ['design_review', 'design_generating'])
+    // design_failed(생성 실패 — 재시도 대상)·designer_working(수작업 인계)·revision_1/2(수정요청)도
+    // 디자이너 작업 대상 — 누락 시 해당 프로젝트가 목록에서 사라져 방치되던 실사례
+    .in('status', ['design_review', 'design_generating', 'design_failed', 'designer_working', 'revision_1', 'revision_2'])
     .order('created_at', { ascending: true })
 
   if (!isAdmin) {

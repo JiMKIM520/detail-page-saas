@@ -26,11 +26,14 @@ const STAGE_DESCRIPTIONS: Record<ClientStage, string> = {
 }
 
 function statusIndex(status: ProjectStatus): number {
+  // S1 5종(invited·designer_working·draft_submitted·revision_1·revision_2) 누락 시 indexOf=-1로
+  // 모든 >= 비교가 false → revision_1/2에서 사업자가 검토하던 초안이 사라지던 실사례. 전 상태 포함.
   const ORDER: ProjectStatus[] = [
-    'intake_submitted', 'script_generating', 'script_review', 'script_approved',
+    'invited', 'intake_submitted', 'script_generating', 'script_review', 'script_approved',
     'design_planning', 'design_plan_review', 'prompt_ready',
     'photo_scheduled', 'photo_uploaded', 'design_generating',
-    'design_review', 'design_approved', 'delivered',
+    'designer_working', 'draft_submitted',
+    'design_review', 'revision_1', 'revision_2', 'design_approved', 'delivered',
   ]
   return ORDER.indexOf(status)
 }

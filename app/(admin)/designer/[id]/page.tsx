@@ -118,8 +118,8 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
               finalUrl={(design as { output_url?: string | null } | null)?.output_url ?? null}
               finalSubmitted={finalSubmitted}
             />
-          ) : !hasDraft ? (
-            /* 디자이너: 초안 미생성 → AI 초안 생성 먼저 */
+          ) : !hasDraft || status === 'design_failed' ? (
+            /* 디자이너: 초안 미생성 → AI 초안 생성 / design_failed → 재시도(이전 초안이 있어도 복구 경로 노출) */
             <GenerateDraftButton projectId={id} status={status} />
           ) : (
             /* 디자이너: 사업자 초안 전달 + 최종본 제출(관리자 검수요청) */
