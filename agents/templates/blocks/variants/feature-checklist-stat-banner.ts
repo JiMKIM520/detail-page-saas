@@ -41,6 +41,12 @@ export const featureChecklistStatBanner = defineBlock<Data>({
 
 /* ── 상단 이미지 존 ── */
 .fcan-top{position:relative;width:100%;aspect-ratio:860/1100;overflow:hidden}
+/* noimg 강등을 진짜 안전하게: aspect-ratio(860/1100≈1115px)가 이미지 없이 거대한 빈 그라디언트
+   패널을 만들던 것을, 오버레이(타이틀+체크리스트) 콘텐츠 높이의 brand 밴드로 축소(gallery와 동일 패턴) */
+.fcan-top.no-img{aspect-ratio:auto;min-height:0;background:linear-gradient(160deg,var(--accent),var(--brand))}
+.fcan-top.no-img .ph{display:none!important}
+.fcan-top.no-img::after{display:none}
+.fcan-top.no-img .fcan-overlay{position:static;inset:auto;padding-top:clamp(40px,6vw,64px)}
 .fcan-top .fcan-img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
 /* noimg-safe: 이미지 없을 때 브랜드 그라데이션 강등 */
 .fcan-top .ph{
@@ -123,13 +129,14 @@ export const featureChecklistStatBanner = defineBlock<Data>({
 `,
   render: (d, { esc, richSafe, icon }) => {
     const cols = d.stats.length
+    const hasImg = typeof d.image === 'string' && /^(https?:\/\/|data:|\/)/.test(d.image.trim())
     return `
 <section class="fcan">
   <style>.fcan{--fcan-cols:${cols}${d.bannerColor ? `;--fcan-banner-bg:${esc(d.bannerColor)}` : ''}}</style>
 
   <!-- 상단: 풀블리드 이미지 + 오버레이 -->
-  <div class="fcan-top">
-    ${media(d.image, 'fcan-img', '제품 이미지')}
+  <div class="fcan-top${hasImg ? '' : ' no-img'}">
+    ${hasImg ? media(d.image, 'fcan-img', '제품 이미지') : ''}
     <div class="fcan-overlay">
       <h2 class="fcan-title">${richSafe(d.title)}</h2>
       <ul class="fcan-checks" role="list">
