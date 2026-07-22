@@ -1,11 +1,11 @@
 /**
  * 실서비스 파이프라인 E2E (범용) — 인앱 버튼이 호출하는 바로 그 함수들로 전 과정 구동.
  *   사용: tsx --env-file=.env.local scripts/e2e-service.ts <회사명 부분일치> [--from-pipeline]
- *   흐름: script_approved → runPlanningForProject → 스타일링샷 8컷(styling_real/)
+ *   흐름: script_approved → runPlanningForProject → 스타일링샷 슬롯 수요 기반 컷(styling_real/)
  *         → runPipelineForProject(USE_BLOCKS_COMPOSER) → 산출물 회수
  *   --from-pipeline: 기획·스타일링샷 산출물이 이미 있을 때 초안 단계부터 재개(서비스 재시도와 동일 동작)
  *   주의: art-director sectionImageBriefs(장식 텍스처, 제품 없음)는 블록 콘텐츠 풀에 넣지 않는다.
- *         성분/사용 이미지는 스타일링샷 8컷 커버리지 규칙(INGREDIENT·USAGE 필수)이 담당.
+ *         성분/사용 이미지는 스타일링샷 커버리지 규칙(INGREDIENT·USAGE 필수)이 담당.
  */
 import fs from 'node:fs'
 import { pickShotReferences } from '@/lib/photography/pick-refs'
@@ -111,7 +111,7 @@ async function main() {
     const plan = await runPlanningForProject(pid)
     if (!plan.success) { console.error('기획 실패 — 중단:', JSON.stringify(plan)); process.exit(1) }
 
-    console.log('\n=== STEP 2: 스타일링샷 생성(최대 8컷 → styling_real/) ===')
+    console.log('\n=== STEP 2: 스타일링샷 생성(슬롯 수요 기반, 상한 28컷 → styling_real/) ===')
     const n1 = await genStylingShots(svc, pid)
     console.log(`[e2e] 스타일링샷 ${n1}컷`)
   }

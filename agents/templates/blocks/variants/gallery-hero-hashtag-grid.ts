@@ -43,6 +43,10 @@ export const galleryHeroHashtagGrid = defineBlock<Data>({
 /* ── 히어로 영역 ── */
 .gheg-hero{position:relative;width:100%;aspect-ratio:860/1300;overflow:hidden;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--bg)) 0%,var(--bg) 100%)}
 .gheg-hero img,.gheg-hero .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* 히어로 이미지 부재: aspect-ratio(860/1300≈1318px)가 이미지 없이 거대한 빈 그라디언트를 만들던 것을
+   콘텐츠 높이의 brand 밴드로 강등한다 — noimg-safe 선언과 실제 렌더의 불일치를 해소(씬 빈 공백 근절) */
+.gheg-hero.no-img{aspect-ratio:auto;min-height:0;background:linear-gradient(160deg,var(--brand),color-mix(in srgb,var(--brand) 66%,#000))}
+.gheg-hero.no-img .gheg-hero-overlay{position:static;inset:auto;background:none;padding-top:clamp(44px,6vw,68px)}
 .gheg-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.52) 0%,rgba(0,0,0,.12) 55%,rgba(0,0,0,0) 100%);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 var(--pad-x,56px) 48px}
 
 /* 서브카피 */
@@ -69,11 +73,14 @@ export const galleryHeroHashtagGrid = defineBlock<Data>({
     const tags = d.tags.map(normalizeTag)
     const [row1, row2] = splitRows(tags)
 
-    // 히어로 이미지 부재 시: overlay는 유지(배지+카피), hero 배경은 그라디언트 강등
+    // 히어로 이미지 부재 시: overlay는 유지(배지+카피), hero 영역은 no-img로 콘텐츠 밴드 강등
+    const isUrl = (u?: string): boolean => typeof u === 'string' && /^(https?:\/\/|data:|\/)/.test(u.trim())
+    const hasHero = isUrl(d.hero)
     const heroImg = media(d.hero, 'gheg-heroimg', esc(d.brand))
 
-    // 그리드: 있는 이미지만 렌더 (최대 6셀). 이미지 없는 슬롯은 .ph → display:none
-    const cells = d.images.map((img) =>
+    // 그리드: url 있는 이미지만 렌더 — 빈 셀 박스(accent 8% 배경)가 줄줄이 남는 것을 방지
+    const withUrl = d.images.filter((img) => isUrl(img.url))
+    const cells = withUrl.map((img) =>
       `<div class="gheg-cell">${media(img.url, 'gheg-cellimg', esc(img.alt))}</div>`
     ).join('')
 
@@ -82,8 +89,8 @@ export const galleryHeroHashtagGrid = defineBlock<Data>({
 
     return `
 <section class="gheg">
-  <div class="gheg-hero">
-    ${heroImg}
+  <div class="gheg-hero${hasHero ? '' : ' no-img'}">
+    ${hasHero ? heroImg : ''}
     <div class="gheg-hero-overlay">
       <p class="gheg-sub">${richSafe(d.subcopy)}</p>
       <h2 class="gheg-brand">${esc(d.brand)}</h2>
@@ -94,7 +101,7 @@ export const galleryHeroHashtagGrid = defineBlock<Data>({
       </div>
     </div>
   </div>
-  <div class="gheg-grid">${cells}</div>
+  ${cells ? `<div class="gheg-grid">${cells}</div>` : ''}
 </section>`
   },
 })
