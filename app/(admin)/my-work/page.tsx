@@ -27,9 +27,11 @@ const MY_WORK_COLUMNS: MyWorkColumn[] = [
     key: 'assigned',
     label: '작업배정',
     accent: 'border-t-amber-400',
-    statuses: ['design_generating', 'revision_1', 'revision_2'],
+    // design_review(AI초안 검수 대기)가 어느 컬럼에도 없어 배정 건이 my-work에서
+    // 실종되던 갭(럽앤 E2E 검출) — 배정 컬럼에 포함
+    statuses: ['design_review', 'design_generating', 'design_failed', 'revision_1', 'revision_2'],
     showStartWork: true,
-    showDraftLink: false,
+    showDraftLink: true,
   },
   {
     key: 'working',
