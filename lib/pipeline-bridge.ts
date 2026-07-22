@@ -241,6 +241,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
       for (const u of cutoutUrls) imageNotes[u] = '제품 누끼/단독 컷 (업로드 원본)'
       let rejectedUrls = new Set<string>()
       const defectsByUrl = new Map<string, string>()
+      let taggerFailed = false // 보수 배치 모드 — 재생성 루프는 재검수 불가라 스킵
       try {
         const { runImageTagger } = await import('@/agents/image-tagger')
         const kindOf = (u: string): 'styling' | 'asset' => {
@@ -269,6 +270,17 @@ export async function runPipelineForProject(projectId: string): Promise<{
             console.warn(
               `[pipeline-bridge] 태거 reject ${rejectedUrls.size}장 제외 — ${[...rejectedUrls].map((u) => u.split('/').pop()).join(', ')}`,
             )
+        } else {
+          // 보수 배치 모드 — 태거가 실패하면 무관컷(사람 단독 등)을 거를 방벽이 없다.
+          // 가장 위험한 부류인 제품 미포함(asset) 컷만 제외한다: 제품컷(styling)은 누끼
+          // 레퍼런스 기반이라 무관 리스크가 낮고, asset 제외분은 no-img 강등·균일화가
+          // 안전하게 흡수한다(빈 프레임 없음). 실사례: 태거 타임아웃 폴백 런에서 사람 단독
+          // 거실 컷이 다크 씬에 통과됨.
+          taggerFailed = true
+          const assetUrls = stylingUrls.filter((u) => kindOf(u) === 'asset')
+          for (const u of assetUrls) rejectedUrls.add(u)
+          if (assetUrls.length)
+            console.warn(`[pipeline-bridge] 태거 실패 → 보수 배치 모드: 미검수 asset 컷 ${assetUrls.length}장 제외`)
         }
       } catch (e) {
         console.warn('[pipeline-bridge] 이미지 태거 실패(파일명 노트 유지):', (e as Error).message?.slice(0, 120))
@@ -276,7 +288,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
 
       // 컷 재생성 루프 (Sprint 5) — reject 사유를 역주입해 1회 재생성, 재검수 통과분만 풀 복귀.
       // 버리는 컷을 회수해 페이지 야윔(이미지 감쇠 체인)을 막는다. 상한 4건.
-      if (rejectedUrls.size > 0 && shotByFile.size > 0) {
+      if (rejectedUrls.size > 0 && shotByFile.size > 0 && !taggerFailed) {
         try {
           const { generateDesignImage } = await import('@/lib/ai/gemini-image')
           const { runImageTagger } = await import('@/agents/image-tagger')
