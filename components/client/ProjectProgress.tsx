@@ -13,8 +13,22 @@ const ALL_STATUSES: ProjectStatus[] = [
   'delivered',
 ]
 
+// 표시 단계에 없는 상태를 가장 가까운 마일스톤으로 매핑 — 누락 시 indexOf -1로
+// 진행률이 0%(0/10)로 표시되던 버그(Codex 리뷰 지적). 표시 정책은 마일스톤 10개 유지.
+const STATUS_ALIAS: Partial<Record<ProjectStatus, ProjectStatus>> = {
+  invited: 'intake_submitted',
+  design_planning: 'script_approved',
+  design_plan_review: 'script_approved',
+  prompt_ready: 'photo_scheduled',
+  design_failed: 'design_generating',
+  designer_working: 'design_generating',
+  draft_submitted: 'design_generating',
+  revision_1: 'design_review',
+  revision_2: 'design_review',
+}
+
 export function ProjectProgress({ status }: { status: ProjectStatus }) {
-  const currentIndex = ALL_STATUSES.indexOf(status)
+  const currentIndex = ALL_STATUSES.indexOf(STATUS_ALIAS[status] ?? status)
 
   return (
     <div className="w-full">

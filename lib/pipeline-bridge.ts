@@ -181,7 +181,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
 
       // 스타일링샷 의도 매핑 — 기획 산출물(styling-final-prompts.json)의 shot 메타를 승격 보관
       // (name→imageNotes, finalPrompt/withProduct→재생성 루프·태거 kind 판정에 사용)
-      type ShotMeta = { name?: string; filename?: string; finalPrompt?: string; withProduct?: boolean }
+      type ShotMeta = { name?: string; filename?: string; finalPrompt?: string; withProduct?: boolean; frameRatio?: string }
       const shotByFile = new Map<string, ShotMeta>()
       try {
         const { data: promptsBlob } = await supabase.storage
@@ -300,7 +300,9 @@ export async function runPipelineForProject(projectId: string): Promise<{
               { filename: t.base },
             )
             try {
-              const buf = await generateDesignImage({ prompt, referenceImages: noProduct ? [] : nukkiB64, aspectRatio: '3:4', model: 'pro' })
+              // frameRatio 승계 — 재생성 루프가 3:4 고정이면 앞단의 목적지 비율 스탬프를 우회해
+              // 가로 프레임 컷이 재생성에서 다시 세로로 잘리는 구멍이 생긴다(Codex 리뷰 지적)
+              const buf = await generateDesignImage({ prompt, referenceImages: noProduct ? [] : nukkiB64, aspectRatio: t.meta!.frameRatio ?? '3:4', model: 'pro' })
               const newName = `regen_${t.base}`
               const { error: upErr } = await supabase.storage
                 .from('designs')

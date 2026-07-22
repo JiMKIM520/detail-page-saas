@@ -29,6 +29,27 @@ export async function POST(request: Request) {
   if (!proj) return NextResponse.json({ error: '프로젝트 없음' }, { status: 404 })
   if (proj.status === to) return NextResponse.json({ success: true, skipped: true, status: to })
 
+  // 아티팩트 사전조건 — 강제 정렬이 산출물 존재와 무관하게 상태만 앞세우던 구멍 차단(Codex 리뷰).
+  // prompt_ready: 컷 프롬프트 산출물 필수 / photo_uploaded: 생성 컷이 프롬프트 수의 절반 이상
+  // (부분 성공 배치가 조용히 전진해 빈 이미지 페이지로 이어지는 것 방지).
+  if (to === 'prompt_ready' || to === 'photo_uploaded') {
+    let shotCount = 0
+    try {
+      const { data: pj } = await svc.storage.from('designs').download(`projects/${project_id}/planning/styling-final-prompts.json`)
+      if (pj) shotCount = (JSON.parse(await pj.text()).shots ?? []).length
+    } catch { /* 없음 → 0 */ }
+    if (shotCount === 0) {
+      return NextResponse.json({ error: '전이 불가: 컷 프롬프트(styling-final-prompts.json)가 없습니다. 디자인 기획(③)을 먼저 완료하세요.' }, { status: 409 })
+    }
+    if (to === 'photo_uploaded') {
+      const { data: files } = await svc.storage.from('designs').list(`projects/${project_id}/styling_real`)
+      const generated = (files ?? []).filter((f) => f.name?.endsWith('.png')).length
+      if (generated < Math.ceil(Math.min(shotCount, 28) / 2)) {
+        return NextResponse.json({ error: `전이 불가: 생성 컷 ${generated}/${Math.min(shotCount, 28)}장 — 스타일링샷(④)을 마저 실행하세요.` }, { status: 409 })
+      }
+    }
+  }
+
   try {
     await transitionStatus(svc, project_id, to, { note: `관리자 콘솔 상태 정렬 → ${to}` })
     return NextResponse.json({ success: true, status: to })
