@@ -257,7 +257,9 @@ export function renderPage(spec: PageSpec): RenderResult {
     '.dpg [data-tone="dark"] h1,.dpg [data-tone="dark"] h2,.dpg [data-tone="dark"] .disp{font-family:var(--font-serif)!important}',
     '.dpg p,.dpg li,.dpg dd,.dpg dt,.dpg th,.dpg td{font-family:var(--font-body)!important}',
     // 서브타이틀 하한 30px(F3) — 부제 성격 클래스만. eyebrow·kicker는 라벨이라 본문 하한(23px) 적용.
-    '.dpg [class*="sub"],.dpg [class*="lead"]{font-size:max(30px,1rem)!important}',
+    // SVG 내부 텍스트는 제외 — 로제트 배지의 .rsub(7px 설계)가 "sub" 매칭에 걸려 30px로 강제돼
+    // 배지 밖으로 넘쳐 겹치던 실사례(럽앤 'SKIN TESTED' 세그6 시각감사 검출).
+    '.dpg [class*="sub"]:not(svg *),.dpg [class*="lead"]:not(svg *){font-size:max(30px,1rem)!important}',
   ].join('\n')
   // 히어로 아키타입 변형의 CSS만 이미지 프레임 세로화(I1) — 다른 아키타입 이미지는 불변.
   const variantCssJoined = [...cssById.entries()]
