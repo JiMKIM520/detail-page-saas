@@ -3,6 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { SubmittedIntake, type IntakeFileView } from '@/components/client/SubmittedIntake'
 import { ScriptViewer } from '@/components/planner/ScriptViewer'
 import { ReviewPanel } from '@/components/planner/ReviewPanel'
+import { GenerateScriptButton } from '@/components/planner/GenerateScriptButton'
 import { DesignPlanView } from '@/components/planner/DesignPlanView'
 import { StartPlanningButton } from '@/components/planner/StartPlanningButton'
 import { ApprovePlanButton } from '@/components/planner/ApprovePlanButton'
@@ -131,6 +132,9 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
           )}
           {script ? (
             <ScriptViewer content={script.content as any} projectId={id} scriptId={script.id} />
+          ) : (project.status as ProjectStatus) === 'intake_submitted' ? (
+            // 스크립트 미생성 — 생성 버튼 노출(이전엔 '생성 중'만 떠 진행 불가했던 UX 버그)
+            <GenerateScriptButton projectId={id} />
           ) : (
             <div className="flex flex-col items-center justify-center py-20 bg-surface rounded-xl border border-border border-dashed">
               <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-3">
@@ -172,7 +176,11 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
         </div>
         <div className="space-y-4">
           <AssignPanel projectId={id} designerId={project.designer_id} />
-          <ReviewPanel projectId={id} scriptId={script?.id} />
+          {/* 검수/승인은 script_review 상태에서만 유효 — 그 전(intake_submitted/생성중)엔 승인 버튼을 숨겨
+              '승인 불가' 오류를 원천 차단(럽앤다이브 사례) */}
+          {(project.status as ProjectStatus) === 'script_review' && (
+            <ReviewPanel projectId={id} scriptId={script?.id} />
+          )}
 
           {clientComments && clientComments.length > 0 && (
             <div className="bg-surface rounded-xl border border-border p-5">
