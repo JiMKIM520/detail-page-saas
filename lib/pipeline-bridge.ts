@@ -865,14 +865,19 @@ export async function runPlanningForProject(projectId: string): Promise<{
             const photoTokens = (uploadedPhotos ?? []).map((n) => tokensOf(n))
             const flippedIds: string[] = []
             for (const s of planned.data.sections) {
-              const isHero = getVariant(s.variantId)?.archetype === 'hero'
+              // ③ 원본 직배치는 제품/성분 클로즈업 아키타입(ingredient·detail·spec)만 —
+              //    연출 블록(story·feature·gallery·usage·mood…)에 원본 실사가 가면 배경·앵글
+              //    미통제로 이질감(검은배경 기울어진 팩 실사례). composer 하류 가드와 동일 기준.
+              //    상류(여기)에서 생성 전환하면 그 슬롯용 생성컷이 만들어져 빈 슬롯 없이 채워진다.
+              const archType = getVariant(s.variantId)?.archetype ?? ''
+              const originalOkArch = archType === 'ingredient' || archType === 'detail' || archType === 'spec'
               for (const n of s.imageNeeds ?? []) {
                 if (!n.useOriginal) continue
                 const needTok = new Set(tokensOf(`${n.id} ${n.subject ?? ''}`))
                 const matched = photoTokens.some((toks) => toks.some((w) => needTok.has(w)))
-                if (isHero || !matched) {
+                if (!originalOkArch || !matched) {
                   n.useOriginal = false
-                  flippedIds.push(`${n.id}${isHero ? '(hero)' : '(무근거)'}`)
+                  flippedIds.push(`${n.id}${!originalOkArch ? `(${archType || '?'}=연출)` : '(무근거)'}`)
                 }
               }
             }
