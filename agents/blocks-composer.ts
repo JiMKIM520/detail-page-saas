@@ -1200,7 +1200,7 @@ export function applyPlacementGuards(
       // 로고·누끼는 §4가 명시 허용하므로 예외 — 위 logoSet/cutoutSet 가드가 별도로 통제한다.
       const heroOriginalBanned =
         arch === 'hero' && !logoSet.has(value) && !cutoutSet.has(value)
-      if (isUrl && (arch === 'closing' || heroOriginalBanned) && value.includes('/intake-files/')) {
+      if (isUrl && (arch === 'closing' || heroOriginalBanned) && (value.includes('/intake-files/') || value.includes('/cutouts/'))) {
         delete parent[key]
         stats.closingOriginal = (stats.closingOriginal ?? 0) + 1
         return
@@ -1462,7 +1462,7 @@ function redistributeUnusedImages(
     const [url, note] = remaining[i]
     const needId = ((url.split('/').pop() ?? '').split('?')[0]).replace(/^regen_/, '').replace(/\.[a-z]+$/i, '')
     // 원본(intake)은 클로징 금지 가드와 동일 원칙 — 무드 배경 재배치 불가, 본문만
-    const isOriginal = url.includes('/intake-files/')
+    const isOriginal = url.includes('/intake-files/') || url.includes('/cutouts/')
     let placed = false
     // 1순위: 원래 니즈의 소속 블록
     const home = needHome.get(needId)
@@ -1521,7 +1521,7 @@ function redistributeUnusedImages(
       // 배열 일괄 주입은 생성컷만 — 원본이 섞이면 스텝 레일에서 앵글이 튄다
       const ranked = remaining
         .map(([u, n], idx) => ({ idx, score: kw?.test(n) ? 1 : 0, u }))
-        .filter((r) => !r.u.includes('/intake-files/'))
+        .filter((r) => !r.u.includes('/intake-files/') && !r.u.includes('/cutouts/'))
         .sort((a, b2) => b2.score - a.score)
         .slice(0, items.length)
       if (ranked.length < items.length) continue

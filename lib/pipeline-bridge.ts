@@ -163,12 +163,18 @@ export async function runPipelineForProject(projectId: string): Promise<{
       const intakePhotoName = new Map<string, string>() // url → 파일명 (원본 직배치 매칭용, Sprint 9-C)
       if (files) {
         for (const file of files) {
-          const { data: signed } = await supabase.storage
-            .from('intake-files')
-            .createSignedUrl(file.storage_path, 60 * 60 * 24 * 7)
-          if (signed?.signedUrl) {
-            cutoutUrls.push(signed.signedUrl)
-            intakePhotoName.set(signed.signedUrl, String((file as { file_name?: string }).file_name ?? ''))
+          // 원본 누끼를 designs(public) 버킷에 복사해 영구 public URL로 배치한다.
+          // (이전엔 intake-files의 7일 만료 signed URL을 그대로 상세페이지에 박아, 7일 후
+          //  이미지가 깨졌다 — 상세페이지는 영구 공개물이라 만료성 URL을 쓰면 안 된다.)
+          const { data: blob } = await supabase.storage.from('intake-files').download(file.storage_path)
+          if (!blob) continue
+          const fname = String((file as { file_name?: string }).file_name ?? 'cutout.png')
+          const pubPath = `projects/${projectId}/cutouts/${fname}`
+          await supabase.storage.from('designs').upload(pubPath, blob, { upsert: true, contentType: blob.type || 'image/png', cacheControl: '3600' })
+          const { data: pub } = supabase.storage.from('designs').getPublicUrl(pubPath)
+          if (pub?.publicUrl) {
+            cutoutUrls.push(pub.publicUrl)
+            intakePhotoName.set(pub.publicUrl, fname)
           }
         }
       }
