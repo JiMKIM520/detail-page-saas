@@ -120,10 +120,16 @@ async function runJob(job: Job): Promise<string> {
   if (job.kind === 'planning') {
     // 기획은 script_approved에서 출발해야 함 — 재실행/정렬 케이스 보정.
     // 허용 목록 방식은 design_review 등 후속 상태 재기획을 놓쳐 "Invalid transition" 실패
-    // (2026-07-23 동원 실측). 콘솔 ③은 ①②가 끝난 뒤에만 호출되므로 무조건 정렬이 견고.
+    // (2026-07-23 동원 실측). 단 납품 완료(터미널) 프로젝트는 강제 리셋 금지 —
+    // 무조건 정렬이 delivered를 되돌리고 styling_real까지 지우는 사고 경로(리뷰 HIGH-2).
     const { data: p } = await svc.from('projects').select('status').eq('id', job.project_id).single()
+    if (p && String(p.status) === 'delivered') {
+      console.warn(`[worker] planning 잡 스킵 — 납품 완료 상태: ${job.project_id.slice(0, 8)}`)
+      return '납품 완료 프로젝트 — 기획 스킵'
+    }
     if (p && String(p.status) !== 'script_approved') {
-      await svc.from('projects').update({ status: 'script_approved' }).eq('id', job.project_id)
+      const { error: alignErr } = await svc.from('projects').update({ status: 'script_approved' }).eq('id', job.project_id)
+      if (alignErr) throw new Error(`상태 정렬 실패: ${alignErr.message}`)
     }
     const r = await runPlanningForProject(job.project_id)
     if (!(r as { success?: boolean }).success) throw new Error(String((r as { error?: string }).error ?? '기획 실패'))

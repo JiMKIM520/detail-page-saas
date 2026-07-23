@@ -31,8 +31,11 @@ export function StudioPhotoUpload({ projectId, existingCount }: StudioPhotoUploa
     }
     setBusy(true)
     setMessage(null)
+    // 중간 실패 시 이미 올라간 스토리지 파일 롤백용 — 메타 레코드 없는 고아 파일이
+    // 재시도마다 누적되는 것을 막는다(리뷰 HIGH-1).
+    const uploadedPaths: string[] = []
+    const supabase = createClient()
     try {
-      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('로그인이 필요합니다')
 
@@ -46,6 +49,7 @@ export function StudioPhotoUpload({ projectId, existingCount }: StudioPhotoUploa
         const path = `${user.id}/${uploadId}/studio_photo/${Date.now()}_${i}.${ext}`
         const { error } = await supabase.storage.from('intake-files').upload(path, file)
         if (error) throw new Error(`${file.name}: ${error.message}`)
+        uploadedPaths.push(path)
         rows.push({ file_type: 'studio_photo', storage_path: path, file_name: file.name, mime_type: file.type, file_size: file.size })
       }
 
@@ -61,6 +65,9 @@ export function StudioPhotoUpload({ projectId, existingCount }: StudioPhotoUploa
       setMessage(`✓ ${rows.length}장 등록 완료`)
       router.refresh()
     } catch (err) {
+      if (uploadedPaths.length) {
+        await supabase.storage.from('intake-files').remove(uploadedPaths).catch(() => { /* 롤백은 best-effort */ })
+      }
       setMessage(`✗ ${err instanceof Error ? err.message : String(err)}`)
     } finally {
       setBusy(false)
