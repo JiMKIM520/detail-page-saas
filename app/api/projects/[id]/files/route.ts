@@ -18,6 +18,12 @@ export async function POST(
     return NextResponse.json({ error: 'No files provided' }, { status: 400 })
   }
 
+  const ALLOWED_TYPES = new Set(['product_photo', 'brand_logo', 'reference_design', 'brochure', 'detail_capture', 'studio_photo'])
+  const badType = files.find((f: { file_type?: string }) => !ALLOWED_TYPES.has(String(f.file_type)))
+  if (badType) {
+    return NextResponse.json({ error: `Invalid file_type: ${String((badType as { file_type?: string }).file_type)}` }, { status: 400 })
+  }
+
   const service = createServiceClient()
 
   // 프로젝트 소유자 확인

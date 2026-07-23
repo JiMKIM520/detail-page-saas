@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { StatusBadge } from '@/components/shared/StatusBadge'
+import { StudioPhotoUpload } from '@/components/photography/StudioPhotoUpload'
 import type { ProjectStatus } from '@/lib/status-machine'
 import Link from 'next/link'
 
@@ -33,6 +35,23 @@ export default async function StylingListPage({ searchParams }: PageProps) {
 
   const readyCount    = projects?.filter(p => p.status === 'prompt_ready').length ?? 0
   const uploadedCount = projects?.filter(p => p.status === 'photo_uploaded').length ?? 0
+
+  // 촬영·누끼 등록 대기 — 제품을 수령한 프로젝트(구글시트/드라이브 수기 연동 대체).
+  // 완료·취소 계열 제외, studio_photo 등록 수를 함께 표시. RLS로 디자이너에게 안 보이는
+  // 타인 프로젝트도 촬영 대상일 수 있어 service로 읽되 화면은 admin/designer 공용.
+  const service = createServiceClient()
+  const { data: shootRows } = await service
+    .from('projects')
+    .select('id, company_name, product_name, category, status, product_received_at')
+    .not('product_received_at', 'is', null)
+    .not('status', 'in', '(delivered)')
+    .order('product_received_at', { ascending: true })
+  const shootIds = (shootRows ?? []).map((p) => p.id)
+  const { data: studioFiles } = shootIds.length
+    ? await service.from('intake_files').select('project_id').eq('file_type', 'studio_photo').in('project_id', shootIds)
+    : { data: [] as { project_id: string }[] }
+  const studioCounts = new Map<string, number>()
+  for (const f of studioFiles ?? []) studioCounts.set(f.project_id, (studioCounts.get(f.project_id) ?? 0) + 1)
 
   return (
     <div>
@@ -85,6 +104,48 @@ export default async function StylingListPage({ searchParams }: PageProps) {
         </div>
       </div>
 
+      {/* 촬영·누끼 등록 — 제품 수령분의 실물 촬영 누끼를 플랫폼에 직접 등록 */}
+      <div className="mb-8">
+        <div className="mb-3">
+          <h2 className="text-lg font-semibold text-text-primary">촬영·누끼 등록</h2>
+          <p className="text-xs text-text-tertiary mt-0.5">
+            수령한 제품의 촬영 누끼를 등록하면 AI 파이프라인이 사업자 업로드 원본 대신 이 컷을 레퍼런스로 사용합니다
+          </p>
+        </div>
+        <div className="space-y-2">
+          {(shootRows ?? []).map((p) => {
+            const count = studioCounts.get(p.id) ?? 0
+            return (
+              <div key={p.id} className="bg-surface rounded-xl border border-border p-4 flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-sm text-text-primary truncate">
+                    {p.company_name}
+                    {p.product_name ? <span className="font-normal text-text-tertiary"> · {p.product_name}</span> : null}
+                  </p>
+                  <p className="text-xs text-text-tertiary mt-0.5">
+                    수령 {p.product_received_at ? new Date(p.product_received_at).toLocaleDateString('ko-KR') : '-'} · {p.category ?? '-'}
+                    {count > 0 ? ` · 누끼 ${count}장 등록됨` : ' · 촬영 대기'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {count > 0 && (
+                    <span className="text-[11px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">등록 완료</span>
+                  )}
+                  <StudioPhotoUpload projectId={p.id} existingCount={count} />
+                </div>
+              </div>
+            )
+          })}
+          {!shootRows?.length && (
+            <div className="text-center py-8 bg-surface rounded-xl border border-border border-dashed">
+              <p className="text-sm text-text-tertiary">제품 수령이 확인된 프로젝트가 없습니다</p>
+              <p className="text-xs text-text-tertiary mt-1">기획자가 제품 수령을 체크하면 여기에 표시됩니다</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <h2 className="text-lg font-semibold text-text-primary mb-3">스타일링샷 작업</h2>
       <div className="space-y-3">
         {projects?.map((project) => (
           <Link key={project.id} href={`/photography/${project.id}`}>

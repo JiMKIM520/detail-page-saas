@@ -11,7 +11,7 @@
 process.env.USE_BLOCKS_COMPOSER = process.env.USE_BLOCKS_COMPOSER ?? 'true'
 
 import { createServiceClient } from '@/lib/supabase/service'
-import { runPlanningForProject, runPipelineForProject } from '@/lib/pipeline-bridge'
+import { runPlanningForProject, runPipelineForProject, fetchProductRefFiles } from '@/lib/pipeline-bridge'
 
 const POLL_MS = 10_000
 const STALE_RUNNING_MIN = 45 // 워커 크래시로 남은 running 잡 복구 기준
@@ -77,7 +77,7 @@ async function runShots(projectId: string): Promise<string> {
   const todo = shots.filter((s: { filename?: string; name?: string }) => !have.has(s.filename || `${s.name}.png`))
 
   const { data: proj } = await svc.from('projects').select('category, status, platforms(slug)').eq('id', projectId).single()
-  const { data: files } = await svc.from('intake_files').select('storage_path, file_name').eq('project_id', projectId).eq('file_type', 'product_photo').order('created_at')
+  const files = await fetchProductRefFiles(svc, projectId) // 촬영 누끼 studio_photo 우선
   const nukki: string[] = []
   const names: string[] = []
   for (const f of files ?? []) {

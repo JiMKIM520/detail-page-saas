@@ -20,7 +20,30 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 /**
- * 브랜드 대표색 추출 — brand_logo 우선, 없으면 첫 제품사진(누끼).
+ * 제품 레퍼런스 파일 조회 — 전문 촬영 누끼(studio_photo, 포토그래퍼가 /photography에서
+ * 업로드)가 있으면 그것만, 없으면 사업자 업로드 원본(product_photo). 촬영본과 원본이
+ * 섞이면 화질·배경 편차가 레퍼런스 일관성을 깨므로 병합이 아니라 대체 관계로 처리한다.
+ */
+export async function fetchProductRefFiles(
+  supabase: SupabaseClient,
+  projectId: string,
+): Promise<{ storage_path: string; file_name: string }[]> {
+  const { data } = await supabase
+    .from('intake_files')
+    .select('storage_path, file_name, file_type')
+    .eq('project_id', projectId)
+    .in('file_type', ['studio_photo', 'product_photo'])
+    .order('created_at', { ascending: true })
+  const rows = data ?? []
+  const studio = rows.filter((r) => r.file_type === 'studio_photo')
+  return (studio.length ? studio : rows).map((r) => ({
+    storage_path: String(r.storage_path),
+    file_name: String(r.file_name ?? ''),
+  }))
+}
+
+/**
+ * 브랜드 대표색 추출 — brand_logo 우선, 그다음 촬영 누끼(studio_photo), 마지막 제품사진.
  * 실패 시 빈 배열 → deriveTokens가 프리셋 기본색 사용.
  */
 async function deriveBrandColors(supabase: SupabaseClient, projectId: string): Promise<string[]> {
@@ -28,13 +51,11 @@ async function deriveBrandColors(supabase: SupabaseClient, projectId: string): P
     .from('intake_files')
     .select('storage_path, file_type, file_name')
     .eq('project_id', projectId)
-    .in('file_type', ['brand_logo', 'product_photo'])
+    .in('file_type', ['brand_logo', 'studio_photo', 'product_photo'])
     .order('created_at', { ascending: true })
 
-  // brand_logo 먼저, 그다음 product_photo
-  const ordered = [...(logos ?? [])].sort((a, b) =>
-    (a.file_type === 'brand_logo' ? 0 : 1) - (b.file_type === 'brand_logo' ? 0 : 1),
-  )
+  const rank = (t: string): number => (t === 'brand_logo' ? 0 : t === 'studio_photo' ? 1 : 2)
+  const ordered = [...(logos ?? [])].sort((a, b) => rank(a.file_type) - rank(b.file_type))
   for (const f of ordered) {
     try {
       const { data: blob } = await supabase.storage.from('intake-files').download(f.storage_path)
@@ -116,13 +137,8 @@ export async function runPipelineForProject(projectId: string): Promise<{
     // 상태 전이: → design_generating
     await transitionStatus(supabase, projectId, 'design_generating')
 
-    // 2. 누끼컷 다운로드 → /tmp에 저장
-    const { data: files } = await supabase
-      .from('intake_files')
-      .select('storage_path, file_name')
-      .eq('project_id', projectId)
-      .eq('file_type', 'product_photo')
-      .order('created_at', { ascending: true })
+    // 2. 누끼컷 다운로드 → /tmp에 저장 (촬영 누끼 studio_photo 우선)
+    const files = await fetchProductRefFiles(supabase, projectId)
 
     const tmpNukkiDir = path.join(
       process.env.VERCEL ? '/tmp' : process.cwd(),
@@ -745,13 +761,8 @@ export async function runPlanningForProject(projectId: string): Promise<{
     // 상태 전이: → design_planning
     await transitionStatus(supabase, projectId, 'design_planning')
 
-    // 2. 누끼컷 다운로드 → /tmp에 저장 (기존 runPipelineForProject 패턴 동일)
-    const { data: files } = await supabase
-      .from('intake_files')
-      .select('storage_path, file_name')
-      .eq('project_id', projectId)
-      .eq('file_type', 'product_photo')
-      .order('created_at', { ascending: true })
+    // 2. 누끼컷 다운로드 → /tmp에 저장 (촬영 누끼 studio_photo 우선 — runPipelineForProject 동일)
+    const files = await fetchProductRefFiles(supabase, projectId)
 
     const tmpNukkiDir = path.join(
       process.env.VERCEL ? '/tmp' : process.cwd(),
@@ -867,13 +878,9 @@ export async function runPlanningForProject(projectId: string): Promise<{
         // 업로드 원본 사진 파일명 — useOriginal 판단 근거 (Sprint 9-C)
         let uploadedPhotos: string[] | undefined
         try {
-          const { data: photoRows } = await supabase
-            .from('intake_files')
-            .select('file_name')
-            .eq('project_id', projectId)
-            .eq('file_type', 'product_photo')
-            .order('created_at', { ascending: true })
-          uploadedPhotos = (photoRows ?? []).map((r) => String(r.file_name ?? '')).filter(Boolean)
+          uploadedPhotos = (await fetchProductRefFiles(supabase, projectId))
+            .map((r) => r.file_name)
+            .filter(Boolean)
         } catch { /* 파일명 없이 진행 */ }
         const planned = await runPagePlanner({ brief, script: approvedScript, imageNotes: {}, moodKeywords, uploadedPhotos, seed: projectId })
         if (planned.success && planned.data) {
