@@ -1023,6 +1023,18 @@ export async function runPlanningForProject(projectId: string): Promise<{
       console.warn('[pipeline-bridge/planning] 수요 기반 계획 스킵:', (e as Error).message?.slice(0, 140))
     }
 
+    // 5.5. 이전 기획의 스타일링샷 제거 — 컷 filename이 니즈 id 기반이라 재기획 후에도
+    // 동일할 수 있고, 그러면 shots 단계의 멱등 skip이 낡은 컷(다른 기획 의도)을 재사용한다.
+    // 재기획 = 컷 프롬프트 전면 갱신이므로 기존 생성분은 전부 무효.
+    try {
+      const { data: oldShots } = await supabase.storage.from('designs').list(`projects/${projectId}/styling_real`, { limit: 100 })
+      const oldPaths = (oldShots ?? []).map((f) => `projects/${projectId}/styling_real/${f.name}`)
+      if (oldPaths.length) {
+        await supabase.storage.from('designs').remove(oldPaths)
+        console.log(`[pipeline-bridge/planning] 이전 기획 스타일링샷 ${oldPaths.length}장 제거(재기획 무효화)`)
+      }
+    } catch { /* 청소 실패 비치명 — shots가 재사용해도 태거·페어링 QA가 걸러냄 */ }
+
     // 6. 상태 전이: → design_plan_review
     await transitionStatus(supabase, projectId, 'design_plan_review')
 
