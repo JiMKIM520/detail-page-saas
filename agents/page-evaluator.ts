@@ -83,7 +83,8 @@ ${summarizeSpec(input.spec)}
 위 페이지를 채점해 JSON만 출력하세요.`
 
     const message = await anthropicClient.messages.create({
-      model: MODELS.CLAUDE_SONNET,
+      // EVALUATOR_MODEL=opus — 반려 판단 품질 A/B용 선별 업그레이드 스위치(기본 Sonnet 5)
+      model: process.env.EVALUATOR_MODEL === 'opus' ? MODELS.CLAUDE_OPUS : MODELS.CLAUDE_SONNET,
       max_tokens: 4000,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],

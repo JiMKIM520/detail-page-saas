@@ -270,6 +270,12 @@ export async function runPipelineForProject(projectId: string): Promise<{
             console.warn(
               `[pipeline-bridge] 태거 reject ${rejectedUrls.size}장 제외 — ${[...rejectedUrls].map((u) => u.split('/').pop()).join(', ')}`,
             )
+          // 배치 분할 부분 실패 대비 — 미검수 asset 컷은 보수 배치와 동일 기준으로 제외.
+          // defectsByUrl에 넣지 않아 재생성 루프(QA 사유 역주입)는 타지 않는다.
+          const untaggedAssets = stylingUrls.filter((u) => !(u in tagged.data!) && kindOf(u) === 'asset')
+          for (const u of untaggedAssets) rejectedUrls.add(u)
+          if (untaggedAssets.length)
+            console.warn(`[pipeline-bridge] 미검수 asset 컷 ${untaggedAssets.length}장 제외(배치 부분 실패)`)
         } else {
           // 보수 배치 모드 — 태거가 실패하면 무관컷(사람 단독 등)을 거를 방벽이 없다.
           // 가장 위험한 부류인 제품 미포함(asset) 컷만 제외한다: 제품컷(styling)은 누끼
@@ -298,6 +304,7 @@ export async function runPipelineForProject(projectId: string): Promise<{
             if (blob) nukkiB64.push(Buffer.from(await blob.arrayBuffer()).toString('base64'))
           }
           const targets = [...rejectedUrls]
+            .filter((u) => defectsByUrl.has(u)) // 미검수(사유 없음) 컷은 재생성 대상 아님 — 제외만
             .map((u) => ({ url: u, base: (u.split('/').pop() ?? '').split('?')[0] }))
             .filter((t) => !t.base.startsWith('regen_'))
             .map((t) => ({ ...t, meta: shotByFile.get(t.base) }))

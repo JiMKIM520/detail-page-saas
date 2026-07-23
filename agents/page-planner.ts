@@ -686,7 +686,8 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
     // 출력도 늘어난다 — 규칙 추가 시 이 상한과 잘림 치명 처리를 함께 점검할 것.
     const message = await anthropicClient.messages
       .stream({
-      model: MODELS.CLAUDE_SONNET,
+      // PLANNER_MODEL=opus — 구성 판단 품질 A/B용 선별 업그레이드 스위치(기본 Sonnet 5)
+      model: process.env.PLANNER_MODEL === 'opus' ? MODELS.CLAUDE_OPUS : MODELS.CLAUDE_SONNET,
       max_tokens: 64000,
       system: [
         { type: 'text', text: SYSTEM_PROMPT },

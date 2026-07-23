@@ -118,9 +118,11 @@ async function runShots(projectId: string): Promise<string> {
 
 async function runJob(job: Job): Promise<string> {
   if (job.kind === 'planning') {
-    // 기획은 script_approved에서 출발해야 함 — 재실행/정렬 케이스 보정
+    // 기획은 script_approved에서 출발해야 함 — 재실행/정렬 케이스 보정.
+    // 허용 목록 방식은 design_review 등 후속 상태 재기획을 놓쳐 "Invalid transition" 실패
+    // (2026-07-23 동원 실측). 콘솔 ③은 ①②가 끝난 뒤에만 호출되므로 무조건 정렬이 견고.
     const { data: p } = await svc.from('projects').select('status').eq('id', job.project_id).single()
-    if (p && ['design_planning', 'design_plan_review', 'intake_submitted', 'script_review'].includes(String(p.status))) {
+    if (p && String(p.status) !== 'script_approved') {
       await svc.from('projects').update({ status: 'script_approved' }).eq('id', job.project_id)
     }
     const r = await runPlanningForProject(job.project_id)

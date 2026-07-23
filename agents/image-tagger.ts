@@ -188,6 +188,10 @@ export async function runVisualAudit(
 
 /** 이미지 URL들을 한 번의 비전 호출로 검수한다. referenceUrl은 라벨 대조용 원본 누끼.
  *  실패 시 success:false — 호출부는 파일명 폴백. (Haiku는 라벨 변조를 놓쳐 Sonnet 사용) */
+/** 한 호출당 최대 검수 장수 — 33장 일괄 검수가 max_tokens(10000)로 잘려 전체 실패한
+ *  실사례(2026-07-23 동원, JSON 잘림 → 파일명 폴백 → asset 5장 제외). 배치별 독립 성공. */
+const TAGGER_BATCH = 12
+
 export async function runImageTagger(
   inputs: TaggerInput[],
   referenceUrl?: string,
@@ -195,6 +199,23 @@ export async function runImageTagger(
 ): Promise<AgentResult<Record<string, ImageTag>>> {
   const elapsed = timer()
   if (inputs.length === 0) return { success: true, data: {}, durationMs: 0 }
+
+  // 대량 검수는 배치 분할 — 실패 배치만 결과에서 빠지고(소비부가 미검수분 보수 처리),
+  // 성공 배치의 검수는 살린다. 재귀 호출은 항상 slice ≤ TAGGER_BATCH라 무한 재귀 없음.
+  if (inputs.length > TAGGER_BATCH) {
+    const merged: Record<string, ImageTag> = {}
+    let okBatches = 0
+    const totalBatches = Math.ceil(inputs.length / TAGGER_BATCH)
+    for (let i = 0; i < inputs.length; i += TAGGER_BATCH) {
+      const r = await runImageTagger(inputs.slice(i, i + TAGGER_BATCH), referenceUrl)
+      if (r.success && r.data) { Object.assign(merged, r.data); okBatches++ }
+    }
+    if (okBatches < totalBatches)
+      console.warn(`[Image Tagger] 배치 ${totalBatches - okBatches}/${totalBatches}개 실패 — 해당 컷은 미검수로 반환`)
+    if (okBatches === 0) return { success: false, error: '모든 검수 배치 실패', durationMs: elapsed() }
+    return { success: true, data: merged, durationMs: elapsed() }
+  }
+
   console.log(`[Image Tagger] 시작 — ${inputs.length}장 검수${referenceUrl ? ' (원본 라벨 대조)' : ''}`)
 
   try {
