@@ -54,6 +54,12 @@ export interface Database {
         Update: { id?: string; project_id?: string; role?: string; staff_id?: string; assigned_by?: string | null; created_at?: string }
         Relationships: []
       }
+      jobs: {
+        Row: { id: string; project_id: string; kind: string; status: string; note: string | null; error: string | null; created_at: string; started_at: string | null; finished_at: string | null }
+        Insert: { id?: string; project_id: string; kind: string; status?: string; note?: string | null; error?: string | null; created_at?: string; started_at?: string | null; finished_at?: string | null }
+        Update: { id?: string; project_id?: string; kind?: string; status?: string; note?: string | null; error?: string | null; created_at?: string; started_at?: string | null; finished_at?: string | null }
+        Relationships: []
+      }
       notifications: {
         Row: { id: string; project_id: string | null; channel: string; template: string; recipient: string; status: string; sent_at: string | null; meta: Json; created_at: string }
         Insert: { id?: string; project_id?: string | null; channel: string; template: string; recipient: string; status?: string; sent_at?: string | null; meta?: Json; created_at?: string }

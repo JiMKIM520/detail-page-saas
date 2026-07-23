@@ -94,55 +94,47 @@ export function PipelineConsole({ projectId, status }: PipelineConsoleProps) {
     setStep('approve', 'done')
   }
 
+  /** 잡 큐 실행(진동벨 구조) — 등록만 하고 워커(Railway) 완료를 폴링한다.
+   *  기획 5~7분·조립 10~20분이 Vercel 800초 한도를 초과해 침묵 실패하던 실측 문제의
+   *  구조적 해법: 실행은 시간 제한 없는 외부 워커가 담당(scripts/worker.ts). */
+  async function runViaJob(kind: 'planning' | 'shots' | 'draft', stepKey: StepKey, label: string, etaMin: string): Promise<void> {
+    setStep(stepKey, 'running')
+    log(`${label} 잡 등록…`)
+    const reg = (await post('/api/jobs', { project_id: projectId, kind })) as { job?: { id: string }; deduped?: boolean }
+    if (!reg.job) throw new Error('잡 등록 실패')
+    log(reg.deduped ? `이미 진행 중인 ${label} 잡에 연결` : `${label} 잡 등록 완료 — 워커 실행 대기 (예상 ${etaMin})`)
+    const jobId = reg.job.id
+    const startedAt = Date.now()
+    let lastStatus = ''
+    for (;;) {
+      await new Promise((r) => setTimeout(r, 5000))
+      if (Date.now() - startedAt > 45 * 60_000) throw new Error(`${label} 잡 45분 초과 — 워커 상태를 확인하세요`)
+      const res = await fetch(`/api/jobs?project_id=${projectId}`)
+      const { jobs } = (await res.json()) as { jobs?: { id: string; status: string; note?: string; error?: string }[] }
+      const job = jobs?.find((j) => j.id === jobId)
+      if (!job) continue
+      if (job.status !== lastStatus) {
+        lastStatus = job.status
+        if (job.status === 'running') log(`${label} 실행 중…`)
+      }
+      if (job.status === 'done') { log(`${label} 완료${job.note ? ` — ${job.note}` : ''}`); break }
+      if (job.status === 'failed') throw new Error(`${label} 실패: ${(job.error ?? '원인 미상').slice(0, 140)}`)
+    }
+    setStep(stepKey, 'done')
+  }
+
   async function runPlanning(): Promise<void> {
-    setStep('planning', 'running')
-    log('디자인 기획 시작 (아트디렉터 → 청사진 → 컷 프롬프트)…')
-    await post('/api/designs/planning', { project_id: projectId })
-    log('디자인 기획 완료')
-    setStep('planning', 'done')
+    await runViaJob('planning', 'planning', '디자인 기획', '5~8분')
   }
 
   async function runShots(): Promise<void> {
-    setStep('shots', 'running')
-    const listRes = await fetch(`/api/photography/generate-shots?project_id=${projectId}`)
-    const list = (await listRes.json()) as { total?: number; names?: { name: string; prominence: string }[] }
-    const total = list.total ?? 0
-    if (total === 0) throw new Error('컷 프롬프트가 없습니다 — 디자인 기획을 먼저 실행하세요')
-    log(`스타일링샷 ${total}컷 — 2컷씩 배치 생성`)
-    const BATCH = 2
-    for (let from = 0; from < total; from += BATCH) {
-      setShotProgress(`${Math.min(from + BATCH, total)} / ${total}`)
-      // 배치 실패(타임아웃 포함)는 1회 재시도 후에도 안 되면 로그만 남기고 다음 배치로 —
-      // 한 배치가 전체 파이프라인을 중단시키지 않는다(생성은 upsert라 재실행 안전).
-      let done = false
-      for (let attempt = 0; attempt < 2 && !done; attempt++) {
-        try {
-          const r = (await post('/api/photography/generate-shots', {
-            project_id: projectId, from, count: BATCH,
-          }, 320_000)) as { shots?: unknown[]; errors?: string[] }
-          const okCount = r.shots?.length ?? 0
-          log(`  컷 ${from + 1}~${Math.min(from + BATCH, total)}: 성공 ${okCount}${r.errors?.length ? ` / 실패 ${r.errors.length}` : ''}`)
-          for (const e of r.errors ?? []) log(`    ✗ ${String(e).slice(0, 90)}`)
-          done = true
-        } catch (e) {
-          log(`  컷 ${from + 1}~${Math.min(from + BATCH, total)}: ${attempt === 0 ? '실패 — 재시도' : '재시도 실패(건너뜀)'} — ${String((e as Error).message).slice(0, 80)}`)
-        }
-      }
-    }
     setShotProgress(null)
-    await advance('prompt_ready')
-    await advance('photo_uploaded')
-    log('스타일링샷 완료 → photo_uploaded')
-    setStep('shots', 'done')
+    await runViaJob('shots', 'shots', '스타일링샷 생성', '10~25분')
   }
 
   async function runDraft(): Promise<void> {
-    setStep('draft', 'running')
-    await advance('photo_uploaded')
-    log('초안 생성 시작 (블록 조립 + 품질 게이트, 4~7분)…')
-    await post('/api/designs/generate', { project_id: projectId })
-    log('초안 생성 완료 — 디자이너 페이지에서 확인하세요')
-    setStep('draft', 'done')
+    await runViaJob('draft', 'draft', '초안 조립', '8~20분')
+    log('디자이너 페이지에서 초안을 확인하세요')
   }
 
   const RUNNERS: Record<StepKey, () => Promise<void>> = {
