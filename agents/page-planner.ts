@@ -445,11 +445,22 @@ function validateBlueprint(
       while (total < cap && gaps.length > 0 && guard < 100) {
         guard++
         const g = gaps[0]
+        // 예비 니즈도 귀속 블록의 맥락(아키타입 + 카피 요지)을 피사체로 명세한다 —
+        // generic "제품 연출 보조컷"이 원료 행·사용법 스텝에 들어가 내용 무관 이미지가
+        // 되던 실사례(동원 INGREDIENTS에 스틱 연출컷, 럽앤 HOW TO USE에 장미 연출컷).
+        const gArch = arch(g.sec.variantId)
+        const gBrief = String((g.sec as { copyBrief?: string }).copyBrief ?? '').slice(0, 70)
+        const spec =
+          gArch === 'ingredient'
+            ? { subject: `원료 실물 클로즈업 — ${gBrief || '이 블록이 소개하는 핵심 원료'} (제품 패키지 없이 원료 자체)`, style: 'raw-material' as const, withProduct: false }
+            : gArch === 'usage'
+              ? { subject: `사용 장면 — ${gBrief || '이 스텝의 실제 동작(손·제품 사용)'}`, style: 'usage' as const, withProduct: true }
+              : gArch === 'story' || gArch === 'closing'
+                ? { subject: `무드/라이프스타일 연출 — ${gBrief || '브랜드 무드'}`, style: 'mood' as const, withProduct: true }
+                : { subject: `제품 연출 보조컷 — ${gBrief || '이 블록의 핵심 소구를 뒷받침하는 연출'}`, style: 'styled' as const, withProduct: true }
         ;(g.sec.imageNeeds ??= []).push({
           id: `need_reserve_${total + 1}`,
-          subject: '제품 연출 보조컷 — 브리프의 핵심 소구를 뒷받침하는 연출',
-          style: 'styled',
-          withProduct: true,
+          ...spec,
           prominence: 'support',
         })
         g.have++

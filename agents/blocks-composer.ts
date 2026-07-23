@@ -1214,7 +1214,11 @@ export function applyPlacementGuards(
       // gallery·banner·point·review·callout·compare·closing…)에는 원본 배치를 차단한다.
       // (이전엔 hero/closing만 막아 원본 실사가 story 등 연출 블록에 그대로 들어갔다.)
       const originalAllowedArch = arch === 'ingredient' || arch === 'detail' || arch === 'spec'
-      const bannedForOriginal = heroOriginalBanned || (arch !== 'hero' && !originalAllowedArch)
+      // 허용 아키타입이라도 최상위(대형 hero/대표) 슬롯엔 원본 금지 — 행별 소형 슬롯만.
+      // 기울어진 업로드 원본이 ingredient 대표 이미지로 크게 걸리던 실사례(동원 INGREDIENTS 상단).
+      const isTopLevelSlot = parent === data
+      const bannedForOriginal =
+        heroOriginalBanned || (arch !== 'hero' && !originalAllowedArch) || (originalAllowedArch && isTopLevelSlot)
       if (isUrl && bannedForOriginal && (value.includes('/intake-files/') || value.includes('/cutouts/'))) {
         delete parent[key]
         stats.closingOriginal = (stats.closingOriginal ?? 0) + 1
@@ -1558,13 +1562,13 @@ function redistributeUnusedImages(
     if (remaining.length === 0) break
     const arch = String(getVariant(b.variantId)?.archetype ?? '')
     if (arch === 'closing' || arch === 'hero') continue
-    // 연출 아키타입엔 생성컷만 순차 배치 — 원본 실사(intake/cutouts)는 제품/성분 클로즈업에만.
-    // (이전엔 take(0)로 남은 첫 URL을 무조건 주입해 원본이 story 등 연출 슬롯에 들어갔다.)
-    const origOk = arch === 'ingredient' || arch === 'detail' || arch === 'spec'
+    // 순차 폴백은 생성컷만 — 원본 실사(intake/cutouts)는 배치 금지.
+    // openSlots는 최상위(대형) 슬롯이라 원본이 대표 이미지로 크게 걸린다(기울어진 팩 실사례).
+    // 원본의 정당 경로는 planner의 useOriginal 니즈(1순위 needHome, 행별 소형)뿐.
     for (const slot of openSlots(b)) {
       if (remaining.length === 0) break
-      const idx = origOk ? 0 : remaining.findIndex(([u]) => !u.includes('/intake-files/') && !u.includes('/cutouts/'))
-      if (idx < 0) break // 남은 게 원본뿐이고 이 블록은 원본 불가 → 다음 블록으로
+      const idx = remaining.findIndex(([u]) => !u.includes('/intake-files/') && !u.includes('/cutouts/'))
+      if (idx < 0) break // 남은 게 원본뿐 → 순차 배치 종료
       ;((b.data ??= {}) as Record<string, unknown>)[slot] = take(idx)
       reassigned++
     }
