@@ -272,6 +272,7 @@ export function renderPage(spec: PageSpec): RenderResult {
     remapFontScale(liftAccentText(vwToPx(variantCssJoined))),
     FONT_ROLE_LOCK,
     ACCENT_CONTRAST,
+    deriveGridBalanceCss(variantCssJoined),
   ].join('\n')
   const title = `${spec.meta.product}`.trim() || 'Detail'
 
@@ -294,6 +295,37 @@ ${sections.join('\n')}
 </html>`
 
   return { html, usedVariants, blockCount: spec.blocks.length }
+}
+
+/**
+ * 홀수 아이템 그리드의 빈 셀 방지 — 사용 변형 CSS에서 대칭 그리드 컨테이너를 찾아
+ * "마지막 남는 셀 풀스팬" 파생 규칙을 자동 생성한다(럽앤 checkpoint-grid 3아이템
+ * 우하단 빈 칸 실사례, 2026-07-24). 개별 변형 수정이 아닌 조립 계층 가드 —
+ * 2열 대칭 변형 80여 개 전체 커버. 조건부 셀렉터라 아이템이 배수로 맞으면 발동하지 않는다.
+ * 비대칭 2열(56px 1fr 등)은 아이콘+본문 레이아웃형이라 제외. 3열은 1개 남는 케이스(3n+1)만 —
+ * 2개 남는 케이스는 풀스팬하면 비대칭이 더 어색해 손대지 않는다(시각감사 영역).
+ */
+export function deriveGridBalanceCss(css: string): string {
+  const rules: string[] = []
+  const seen = new Set<string>()
+  const re = /([^{}]+)\{[^{}]*?grid-template-columns\s*:\s*([^;{}]+)[;}]/g
+  for (const m of css.matchAll(re)) {
+    const cols = m[2].trim()
+    // repeat(N, …)는 minmax 등 중첩 괄호가 흔해 닫힘 괄호로 끝을 판정하지 않는다(시작 매치).
+    // 1fr 나열형은 $ 앵커 필수 — "1fr 1fr 340px" 같은 비대칭 3열의 오분류 방지.
+    // 한계: "repeat(2,1fr) 300px"처럼 repeat 뒤 추가 트랙은 오탐이나 변형 CSS에 실사례 없음.
+    const three = /^(1fr\s+1fr\s+1fr$|repeat\(\s*3\s*,)/.test(cols)
+    const two = !three && /^(1fr\s+1fr$|repeat\(\s*2\s*,)/.test(cols)
+    if (!two && !three) continue
+    for (const rawSel of m[1].split(',')) {
+      const sel = rawSel.trim()
+      if (!sel || sel.startsWith('@') || seen.has(sel)) continue
+      seen.add(sel)
+      const nth = two ? 'odd' : '3n+1'
+      rules.push(`${sel}>:last-child:nth-child(${nth}){grid-column:1/-1}`)
+    }
+  }
+  return rules.join('\n')
 }
 
 /** CSS 토큰 값 — <style> 탈출 문자(<>{}) 금지. 색(hex)·폰트('A', sans-serif) 값은 통과. */

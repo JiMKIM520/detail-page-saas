@@ -745,6 +745,7 @@ RULES
 - REPETITION CAP: state each numeric claim (e.g. "단백질 20g") at most TWICE per page. From the 3rd mention, replace it with NEW information: a comparison basis, a daily-intake %, or a usage scenario. Repeating identical claims collapses scroll value.
 - HERO HOOK: the hero headline must NOT be a spec list ("20g / 105kcal" style). Write ONE sentence about the customer's change, sensation, or desire; move numbers into sub-copy or point rows.
 - GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
+- GRID PARITY: blocks described as 2열/2×2/그리드 lay items in 2 columns — an ODD item count leaves an empty bottom-right cell. Prefer an EVEN item count (2·4·6) by finding one more grounded point (원료·인증·공정·사용감 등) or trimming to the strongest even set. If only an odd set is honestly groundable, keep it — the system will stretch the last item to full width, so put the strongest CLOSING point last.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
 
 /** 카탈로그 로테이션 — 호출마다 다른 부분집합을 FEATURED로 지목해 LLM의 익숙한 변형 편향을 깬다.

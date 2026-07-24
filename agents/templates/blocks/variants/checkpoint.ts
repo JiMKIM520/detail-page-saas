@@ -79,6 +79,8 @@ export const checkpointGrid = defineBlock<GridData>({
 .cpg-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid var(--ink)}
 .cpg-cell{padding:34px 30px;border-bottom:1.5px solid var(--line)}
 .cpg-cell:nth-child(odd){border-right:1.5px solid var(--line)}
+/* 홀수 아이템 시 마지막 셀 풀스팬(조립 계층 파생 규칙과 짝) — 중앙 분할선 잔재 제거 */
+.cpg-cell:last-child:nth-child(odd){border-right:none;text-align:center}
 .cpg-no{font-family:var(--font-lat);font-size:30px;font-weight:600;color:var(--accent);line-height:1}
 .cpg-t{margin-top:16px;font-size:21px;font-weight:700}
 .cpg-d{margin-top:10px;font-size:15px;line-height:1.7;color:var(--ink-2)}
