@@ -11,8 +11,10 @@ function getClient(): GoogleGenAI {
 }
 
 const MODELS = {
-  pro: 'gemini-3-pro-image-preview',       // Nano Banana Pro — 최고 예술적 품질, 참조 4장
-  nb2: 'gemini-3.1-flash-image-preview',   // Nano Banana 2 — 한글 90%+, 참조 14장, 빠름
+  // GA 전환(2026-07-24): preview 별칭은 종료 예고 보도 + 503 폭주(2026-07-23 실측)의
+  // 진원지 — GA(gemini-3-pro-image)로 이전. 양쪽 모두 동작 확인 후 전환.
+  pro: 'gemini-3-pro-image',               // Nano Banana Pro GA — 최고 예술적 품질, 참조 4장
+  nb2: 'gemini-3.1-flash-image',           // Nano Banana 2 GA — 한글 90%+, 참조 14장, 빠름
   standard: 'gemini-2.5-flash-image',      // Nano Banana Standard — fallback
 } as const
 
