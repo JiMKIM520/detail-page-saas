@@ -1,0 +1,21 @@
+# Railway 업로드 제외 — 워커 실행에 필요한 소스만 올린다.
+# 전체 디렉토리 11GB(assets 3.6G·docs 1.1G·output 1G·.next 1G…)가 413 Payload Too Large를
+# 유발한 실사례(2026-07-24). Nixpacks가 npm ci로 의존성을 설치하므로 node_modules 불필요.
+.git
+node_modules
+.next
+assets
+docs
+output
+outputs
+.figma-refs
+.figma-refs-v2
+.compare-demo
+tmp_nukki
+tmp_nukki_planning
+public
+test-results
+playwright-report
+.vercel
+.omc
+*.log
