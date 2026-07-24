@@ -1490,7 +1490,20 @@ function redistributeUnusedImages(
     walkStringFields((first?.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
       if (/^https?:\/\//.test(v)) hasUrl = true
     })
-    const slot = first ? openSlots(first)[0] : undefined
+    // openSlots의 "오버레이형(absolute) 주입 금지"는 히어로에 부적용 — hero-photo-quote처럼
+    // absolute가 배경 이미지(z:0) 자체인 변형까지 막아 승격이 통째로 스킵되던 실측 원인
+    // (로모노소프 3차 재발). 히어로 배경은 가림이 아니라 채움이다.
+    const heroSlot = (b: (typeof spec.blocks)[number]): string | undefined => {
+      const v = getVariant(b.variantId)
+      if (!v) return undefined
+      const data = (b.data ?? {}) as Record<string, unknown>
+      const contains = containSlotKeys(b.variantId)
+      const shape = (v.schema as { shape?: Record<string, unknown> } | undefined)?.shape ?? {}
+      return [...mediaSlotKeys(b.variantId)].find(
+        (k) => k in shape && !contains.has(k) && (data[k] === undefined || data[k] === null || data[k] === ''),
+      )
+    }
+    const slot = first ? heroSlot(first) : undefined
     if (first && !hasUrl && slot) {
       const isOriginalUrl = (url: string): boolean =>
         url.includes('/intake-files/') || url.includes('/cutouts/')
