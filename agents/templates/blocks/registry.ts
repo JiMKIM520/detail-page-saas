@@ -81,6 +81,13 @@ export function mediaSlotKeys(id: string): ReadonlySet<string> {
     for (const m of String(v.render).matchAll(/(?:\bmedia|\.media\))\s*\(\s*([a-zA-Z_$][\w$]*)\.([a-zA-Z_$][\w$]*)\s*,/g)) {
       keys.add(m[2])
     }
+    // 지역변수 래핑 렌더(const img = d.heroImage …; media(img, …))는 위 패턴이 놓친다 —
+    // hero-photo-quote 슬롯 산출 ∅로 히어로 승격이 통째 스킵된 실사례(2026-07-24 로모노소프
+    // 4차). 스키마 최상위 키의 이미지 성격 이름을 보수적으로 합산한다(alt 텍스트 필드 제외).
+    const shape = (v.schema as { shape?: Record<string, unknown> } | undefined)?.shape ?? {}
+    for (const k of Object.keys(shape)) {
+      if (/(image|photo)/i.test(k) && !/alt$/i.test(k)) keys.add(k)
+    }
   }
   mediaKeysCache.set(id, keys)
   return keys
