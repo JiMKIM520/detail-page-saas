@@ -744,6 +744,7 @@ RULES
 - ICON VOCABULARY (CRITICAL): every "icon" slot accepts ONLY these names — ${ICON_NAMES.join(' | ')}. NEVER invent icon names (no "protein", "coffee" etc.). If no icon fits the meaning, use the closest generic one (check/star/target).
 - REPETITION CAP: state each numeric claim (e.g. "단백질 20g") at most TWICE per page. From the 3rd mention, replace it with NEW information: a comparison basis, a daily-intake %, or a usage scenario. Repeating identical claims collapses scroll value.
 - HERO HOOK: the hero headline must NOT be a spec list ("20g / 105kcal" style). Write ONE sentence about the customer's change, sensation, or desire; move numbers into sub-copy or point rows.
+- HERO IMAGE (CRITICAL): the FIRST block is the first screen a customer sees — fill its image slot with the main styled product shot (prefer a need_hero_* image when provided). NEVER leave the hero image slot empty while any styled shot exists; a text-only first screen reads as broken.
 - GROUNDING-FIT: if the brief lacks the grounded data a block's REQUIRED fields/counts demand (e.g., package/price variants need 2+ real 구성·가격, review variants need real 후기), DO NOT select that block — pick a different archetype you CAN fill honestly. Never pad required arrays with invented or near-empty entries.
 - GRID PARITY: blocks described as 2열/2×2/그리드 lay items in 2 columns — an ODD item count leaves an empty bottom-right cell. Prefer an EVEN item count (2·4·6) by finding one more grounded point (원료·인증·공정·사용감 등) or trimming to the strongest even set. If only an odd set is honestly groundable, keep it — the system will stretch the last item to full width, so put the strongest CLOSING point last.
 - Do not output tokens/colors — only presetKey. The system derives the palette.`
@@ -1478,6 +1479,28 @@ function redistributeUnusedImages(
   const remaining = [...pool]
   const take = (idx: number): string => remaining.splice(idx, 1)[0][0]
 
+  // 0순위: 히어로 이미지 보장 — 첫 블록이 이미지 0장이면 첫 화면이 텍스트+배경색만
+  // 남는다(로모노소프 실사례). 2순위가 "히어로 제외(계획 유지)"라 빈 히어로의 회수
+  // 경로가 없던 구멍. need_hero* 생성컷 우선, 원본(intake)은 §4(hero=연출 생성컷만) 제외.
+  {
+    const first = spec.blocks[0]
+    let hasUrl = false
+    walkStringFields((first?.data ?? {}) as Record<string, unknown>, (_p, _k, v) => {
+      if (/^https?:\/\//.test(v)) hasUrl = true
+    })
+    const slot = first ? openSlots(first)[0] : undefined
+    if (first && !hasUrl && slot) {
+      const notOriginal = ([url]: [string, string]): boolean =>
+        !url.includes('/intake-files/') && !url.includes('/cutouts/')
+      let idx = remaining.findIndex((e) => notOriginal(e) && /hero/i.test(e[0].split('/').pop() ?? ''))
+      if (idx < 0) idx = remaining.findIndex((e) => notOriginal(e) && /무드|연출|라이프|공간|대표|제품/.test(e[1]))
+      if (idx >= 0) {
+        ;((first.data ??= {}) as Record<string, unknown>)[slot] = take(idx)
+        reassigned++
+      }
+    }
+  }
+
   for (let i = 0; i < remaining.length; ) {
     const [url, note] = remaining[i]
     const needId = ((url.split('/').pop() ?? '').split('?')[0]).replace(/^regen_/, '').replace(/\.[a-z]+$/i, '')
@@ -1616,6 +1639,18 @@ export function lintImageDeficit(spec: PageSpec): string[] {
     if (assigned > 0 && assigned < v.imageSlots)
       hints.push(`블록 ${i}(${b.variantId}): 이미지 슬롯 ${v.imageSlots}개 중 ${assigned}개만 채워짐 — 빈 프레임 노출 가능`)
   })
+  // 첫 블록(히어로) 이미지 0장 — imageSlots<2 제외·assigned>0 조건 둘 다의 사각이라
+  // 첫 화면이 텍스트+배경색만으로 남아도 감지되지 않았다(로모노소프 0~1075px 암흑 실사례).
+  const first = spec.blocks[0]
+  const fv = first ? getVariant(first.variantId) : undefined
+  if (first && fv && fv.imageSlots >= 1) {
+    let n = 0
+    walkStringFields((first.data ?? {}) as Record<string, unknown>, (_p, _k, val) => {
+      if (/^https?:\/\//.test(val)) n++
+    })
+    if (n === 0)
+      hints.push(`블록 0(${first.variantId}): 히어로 이미지 슬롯이 전부 비어 첫 화면이 텍스트만 노출 — 대표 연출컷을 반드시 배치해야 함`)
+  }
   return hints
 }
 
