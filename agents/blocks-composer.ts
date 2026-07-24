@@ -1447,7 +1447,6 @@ function redistributeUnusedImages(
   // 원본의 앵글·배경 미통제 리스크(매일 usage 풀블리드 기울어진 팩 실사례)는 배치 대상을
   // 제한해 통제한다: hero·closing 금지(가드와 동일), 배열 일괄 주입 금지(단일 슬롯만).
   const pool = Object.entries(candidates).filter(([url]) => !usedUrls.has(url))
-  if (!pool.length) return { reassigned: 0, unused: 0, used: usedUrls.size }
 
   // 니즈 id(파일명) → 청사진 소속 variantId 매핑 — 1순위 복귀 근거
   const needHome = new Map<string, string>()
@@ -1482,6 +1481,9 @@ function redistributeUnusedImages(
   // 0순위: 히어로 이미지 보장 — 첫 블록이 이미지 0장이면 첫 화면이 텍스트+배경색만
   // 남는다(로모노소프 실사례). 2순위가 "히어로 제외(계획 유지)"라 빈 히어로의 회수
   // 경로가 없던 구멍. need_hero* 생성컷 우선, 원본(intake)은 §4(hero=연출 생성컷만) 제외.
+  // 미사용이 없으면 사용 중인 hero성 생성컷을 원 슬롯에서 회수해 승격한다 — 로모노소프
+  // 재발 원인이 "pool 0장 조기 return으로 0순위 자체가 스킵"이었다(2026-07-24 2회 실측).
+  // 승격으로 비는 원 블록은 no-img 강등·빈 블록 제거 체계가 흡수한다.
   {
     const first = spec.blocks[0]
     let hasUrl = false
@@ -1490,16 +1492,33 @@ function redistributeUnusedImages(
     })
     const slot = first ? openSlots(first)[0] : undefined
     if (first && !hasUrl && slot) {
-      const notOriginal = ([url]: [string, string]): boolean =>
-        !url.includes('/intake-files/') && !url.includes('/cutouts/')
-      let idx = remaining.findIndex((e) => notOriginal(e) && /hero/i.test(e[0].split('/').pop() ?? ''))
-      if (idx < 0) idx = remaining.findIndex((e) => notOriginal(e) && /무드|연출|라이프|공간|대표|제품/.test(e[1]))
+      const isOriginalUrl = (url: string): boolean =>
+        url.includes('/intake-files/') || url.includes('/cutouts/')
+      const heroLike = (url: string): boolean => /hero/i.test(url.split('/').pop() ?? '')
+      // 1) 미사용 풀에서 — hero성 파일명 우선, 다음 무드/연출 노트
+      let idx = remaining.findIndex(([url]) => !isOriginalUrl(url) && heroLike(url))
+      if (idx < 0) idx = remaining.findIndex(([url, note]) => !isOriginalUrl(url) && /무드|연출|라이프|공간|대표|제품/.test(note))
       if (idx >= 0) {
         ;((first.data ??= {}) as Record<string, unknown>)[slot] = take(idx)
         reassigned++
+      } else {
+        // 2) 사용 중 컷 승격 — hero성 파일명 생성컷을 원 슬롯에서 회수
+        outer: for (const b of spec.blocks.slice(1)) {
+          const found: { parent: Record<string, unknown>; key: string; url: string }[] = []
+          walkStringFields((b.data ?? {}) as Record<string, unknown>, (p, k, v) => {
+            if (/^https?:\/\//.test(v) && !isOriginalUrl(v) && heroLike(v)) found.push({ parent: p, key: k, url: v })
+          })
+          for (const f of found) {
+            delete f.parent[f.key]
+            ;((first.data ??= {}) as Record<string, unknown>)[slot] = f.url
+            reassigned++
+            break outer
+          }
+        }
       }
     }
   }
+  if (!remaining.length) return { reassigned, unused: 0, used: usedUrls.size }
 
   for (let i = 0; i < remaining.length; ) {
     const [url, note] = remaining[i]
