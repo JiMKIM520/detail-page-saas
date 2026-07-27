@@ -1,0 +1,145 @@
+/* 하나파워온스토어 공통 로그인 디자인 — ai-package-design의 .hlogin-*와 동일 (패키지/상세 통일) */
+.hlogin-page {
+  min-height: 100dvh;
+  background: linear-gradient(158deg, #4fb6a2 0%, #a9ddd0 46%, #eaf7f2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 90px;
+}
+.hlogin-shell {
+  position: relative;
+  width: min(500px, 100%);
+}
+.hlogin-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0, 90, 70, 0.2);
+  padding: 44px 48px 40px;
+}
+.hlogin-logo {
+  font-weight: 800;
+  line-height: 1.02;
+  margin-bottom: 22px;
+}
+.hlogin-logo span {
+  display: block;
+}
+.hlogin-logo .l-hana {
+  color: #009d7d;
+  font-size: 16px;
+}
+.hlogin-logo .l-power {
+  color: #e2483a;
+  font-size: 22px;
+}
+.hlogin-logo .l-store {
+  color: #009d7d;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+.hlogin-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.45;
+  color: #0d7a61;
+  margin-bottom: 26px;
+}
+.hlogin-title .red {
+  color: #e2483a;
+}
+.hlogin-subhead {
+  font-weight: 800;
+  font-size: 15px;
+  color: #137a62;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+.hlogin-field {
+  margin-bottom: 11px;
+}
+.hlogin-input {
+  width: 100%;
+  font: inherit;
+  font-size: 15px;
+  color: #20242c;
+  background: #eef1f0;
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  padding: 15px 16px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.hlogin-input:focus {
+  outline: none;
+  border-color: #009d7d;
+  background: #fff;
+}
+.hlogin-help {
+  text-align: right;
+  font-size: 12.5px;
+  color: #8a8f8c;
+  margin: 7px 2px 0;
+}
+.hlogin-submit {
+  width: 100%;
+  margin-top: 18px;
+  background: #008d70;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.hlogin-submit:hover {
+  background: #00745c;
+}
+.hlogin-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.hlogin-error {
+  font-size: 13.5px;
+  color: #c0392b;
+  background: #fdecea;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+.hlogin-mascot {
+  position: absolute;
+  bottom: -10px;
+  z-index: 1;
+  width: 160px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+.hlogin-mascot.left {
+  left: -142px;
+}
+.hlogin-mascot.right {
+  right: -150px;
+  width: 168px;
+}
+@media (max-width: 720px) {
+  .hlogin-card {
+    padding: 32px 24px 30px;
+  }
+  .hlogin-mascot {
+    width: 108px;
+  }
+  .hlogin-mascot.left {
+    left: -78px;
+  }
+  .hlogin-mascot.right {
+    right: -82px;
+    width: 112px;
+  }
+}

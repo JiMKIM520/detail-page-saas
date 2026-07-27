@@ -2,27 +2,33 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import './login.css'
 
+/* 하나파워온스토어 공통 로그인 디자인 — AI 패키지 디자인(package.hanapoweron.kr)과 동일 */
 export default function LoginPage() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+    <div className="hlogin-page">
+      <div className="hlogin-shell">
+        <img className="hlogin-mascot left" src="/hana-mascot-left.png" alt="" />
+        <img className="hlogin-mascot right" src="/hana-mascot-right.png" alt="" />
+        <div className="hlogin-card">
+          <div className="hlogin-logo">
+            <span className="l-hana">Hana</span>
+            <span className="l-power">Power On</span>
+            <span className="l-store">Store</span>
           </div>
-          <h1 className="text-2xl font-bold text-text-primary">DetailAI</h1>
-          <p className="text-sm text-text-tertiary mt-1">전문 팀의 상세페이지 제작 서비스</p>
-        </div>
-
-        <div className="bg-surface rounded-2xl border border-border p-8 shadow-card space-y-6">
-          <div>
-            <h2 className="text-lg font-semibold text-text-primary">로그인</h2>
-          </div>
+          <h1 className="hlogin-title">
+            소상공인 온라인 판로 지원
+            <br />
+            하나 <span className="red">파워 온</span> 스토어
+          </h1>
+          <p className="hlogin-subhead">
+            레벨업 컨설팅
+            <br />
+            상세페이지 디자인 작업의뢰서
+          </p>
 
           <BusinessLoginForm router={router} />
         </div>
@@ -74,51 +80,37 @@ function BusinessLoginForm({ router }: { router: ReturnType<typeof useRouter> })
   }
 
   return (
-    <>
-      <p className="text-sm text-text-tertiary -mt-2">
-        사전 안내받은 사업자명과 사업자번호 뒷 5자리로 로그인하세요
-      </p>
+    <form onSubmit={handleLogin}>
+      {error && <div className="hlogin-error">{error}</div>}
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-          <p className="text-red-600 text-sm">{error}</p>
-        </div>
-      )}
+      <div className="hlogin-field">
+        <input
+          className="hlogin-input"
+          type="text"
+          value={companyName}
+          onChange={e => setCompanyName(e.target.value)}
+          placeholder="사업자명"
+          autoComplete="organization"
+          required
+        />
+      </div>
+      <div className="hlogin-field">
+        <input
+          className="hlogin-input"
+          type="text"
+          inputMode="numeric"
+          maxLength={5}
+          value={bizLast5}
+          onChange={e => setBizLast5(e.target.value.replace(/\D/g, '').slice(0, 5))}
+          placeholder="사업자번호 뒷 5자리"
+          required
+        />
+        <p className="hlogin-help">사업자등록번호 10자리 중 마지막 5자리</p>
+      </div>
 
-      <form onSubmit={handleLogin} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1.5">사업자명</label>
-          <input
-            type="text"
-            value={companyName}
-            onChange={e => setCompanyName(e.target.value)}
-            placeholder="홍길동 식품"
-            required
-            className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1.5">사업자번호 뒷 5자리</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={5}
-            value={bizLast5}
-            onChange={e => setBizLast5(e.target.value.replace(/\D/g, '').slice(0, 5))}
-            placeholder="00000"
-            required
-            className="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder:text-text-tertiary tracking-widest"
-          />
-          <p className="text-xs text-text-tertiary mt-1.5">사업자등록번호 10자리 중 마지막 5자리</p>
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-primary-600 text-white rounded-xl py-2.5 font-semibold hover:bg-primary-700 disabled:opacity-50 shadow-sm transition-all"
-        >
-          {loading ? '로그인 중...' : '로그인'}
-        </button>
-      </form>
-    </>
+      <button type="submit" className="hlogin-submit" disabled={loading}>
+        {loading ? '로그인 중...' : '로그인'}
+      </button>
+    </form>
   )
 }
