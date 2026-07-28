@@ -17,8 +17,12 @@
 
 ## 1. 디자인 토큰
 
-### 1.1 시맨틱 토큰 16종 `[가드]`
-`bg` `paper` `ink` `ink-2` `line` `brand` `accent` `accent-fg` `on-accent` `font-display` `font-body` `font-serif` `font-hand` `r-scale` `shape-photo` `pad-x` — 모든 변형 CSS는 하드코딩 대신 이 토큰(var(--…))을 참조해야 한다. (tokens.ts, composer.ts baseCss)
+### 1.1 시맨틱 토큰 `[가드]` (2026-07-26 실코드 재동기화)
+모든 변형 CSS는 하드코딩 대신 이 토큰(var(--…))을 참조해야 한다.
+- **색** (shared.ts baseCss): `bg` `paper` `ink` `ink-2` `line` `brand` `accent` `accent-d` `muted` `em-dark` `scene-bg-1/2/3`
+- **색·대비 보정** (composer.ts ACCENT_CONTRAST): `accent-fg`(다크 씬용 밝은 accent) `on-accent`(accent 배경 위 흑/백 자동)
+- **폰트** (baseCss): `font-display` `font-body` `font-serif` `font-hand` `font-lat`(라틴·숫자 전용)
+- **형태** (baseCss ← SHAPE_PRESETS): `r-scale` `shape-photo` `pad-x`
 
 ### 1.2 프리셋 4종 `[가드]`
 `warm-playful`(친근 식품/생활) · `modern-editorial`(프리미엄 미니멀 명조) · `cobalt-premium`(모던 커머스/전자·뷰티) · `sand-luxury`(웜 뉴트럴 럭셔리). 브랜드색(로고→누끼 순 추출)이 있으면 brand 토큰을 오버라이드한다. (tokens.ts)
@@ -56,10 +60,11 @@ bg·paper ↔ ink **7:1** · brand 텍스트 **4.5:1** · accent(장식) **3:1**
 
 ## 3. 레이아웃·컴포지션 규칙
 
-### 3.1 씬(스크롤 단위) 높이 — **정렬 결정** `[가드+지시 불일치 해소]`
+### 3.1 씬(스크롤 단위) 높이 — **정렬 결정** `[가드+지시 불일치 해소]` (2026-07-26 재결정)
 - **목표 범위**: 1,600~2,400px (플래너 설계 기준)
-- **하드 한도**: 2,700px (초과 시 컴포저 리밸런싱 개입)
-- 2,400~2,700px는 "허용되나 개선 대상" — rule-check가 경고로 보고한다. (page-planner.ts ↔ blocks-composer.ts 수치 불일치를 2계층으로 통합)
+- **하드 한도**: **2,600px** — 설계 주체인 플래너의 검증 코드(validateBlueprint) 기준으로 통일. 초과 시 리밸런싱 개입.
+- 2,400~2,600px는 "허용되나 개선 대상" — rule-check가 경고로 보고한다.
+- 컴포저 리밸런싱 트리거(현행 2,700)는 2,600으로 정렬한다. `[Phase 1 반영 대상]`
 
 ### 3.2 톤 리듬 — **정렬 결정** `[지시 불일치 해소]`
 - 카운팅 단위는 **씬**으로 통일한다(설계 주체가 플래너이므로). 페이지당 다크 씬 1~3개, 라이트 씬 3연속 금지, 인접 씬 톤 혼재 금지.

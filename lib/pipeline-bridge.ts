@@ -482,12 +482,18 @@ export async function runPipelineForProject(projectId: string): Promise<{
         .eq('file_type', 'brand_logo')
         .limit(1)
       if (logoFiles?.[0]) {
-        const { data: signedLogo } = await supabase.storage
-          .from('intake-files')
-          .createSignedUrl(logoFiles[0].storage_path, 60 * 60 * 24 * 7)
-        if (signedLogo?.signedUrl) {
-          logoUrls = [signedLogo.signedUrl]
-          imageNotes[signedLogo.signedUrl] = '브랜드 로고 원본 — 히어로/클로징 브랜드 라벨 소형 슬롯 전용'
+        // 누끼(183-191)와 동일한 영구 public URL 패턴 — 7일 만료 signed URL을 상세페이지에
+        // 박으면 만료 후 로고가 깨진다(정합성 검토 2026-07-26 발견). 상세페이지는 영구 공개물.
+        const { data: logoBlob } = await supabase.storage.from('intake-files').download(logoFiles[0].storage_path)
+        if (logoBlob) {
+          const logoName = logoFiles[0].storage_path.split('/').pop() ?? 'brand-logo.png'
+          const logoPath = `projects/${projectId}/cutouts/logo_${logoName}`
+          await supabase.storage.from('designs').upload(logoPath, logoBlob, { upsert: true, contentType: logoBlob.type || 'image/png', cacheControl: '3600' })
+          const { data: pubLogo } = supabase.storage.from('designs').getPublicUrl(logoPath)
+          if (pubLogo?.publicUrl) {
+            logoUrls = [pubLogo.publicUrl]
+            imageNotes[pubLogo.publicUrl] = '브랜드 로고 원본 — 히어로/클로징 브랜드 라벨 소형 슬롯 전용'
+          }
         }
       }
       // 니즈 기반 생성 로고컷도 로고 취급 — 배치 가드가 hero/closing/cs 밖 배치를 수술한다
