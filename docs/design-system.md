@@ -58,6 +58,11 @@ bg·paper ↔ ink **7:1** · brand 텍스트 **4.5:1** · accent(장식) **3:1**
 ### 2.3 다양성 규칙 `[부재→신설]`
 같은 카테고리의 직전 프로젝트와 primary 색상군(12색상환 기준 인접 2칸 이내)·headline 폰트가 모두 겹치면, 둘 중 하나는 반드시 바꾼다. (런간 이력 참조는 Phase 2 구현 대상)
 
+### 2.4 스타일 언어 풀 `[가드]` (2026-07-28 신설 — style-languages.ts)
+씬 자유 설계(Phase 3)의 스타일 축. 9종: `editorial-split`(검증) · `type-as-graphic`(검증) · `soft-organic` · `natural-analog` · `dark-luxury` · `swiss-minimal` · `magazine-lifestyle` · `pop-retro` · `clean-clinical`.
+- **선정 흐름**: 기업 인테이크 디자인 키워드(design_preference, 26종 중 3택) → rankStyleLanguages 결정적 스코어링 → 후보 상위 1~3 → 아트디렉터가 무드·레퍼런스로 최종 확정(styleGuide.styleLanguage) → 씬 디자이너가 해당 바이블로 전 씬 일관 설계.
+- 언어 정의는 상호 배타 어휘 원칙(수렴 방지). 키워드 26종 전 커버 검증됨. 신규 언어 추가 시 이 원칙 + 기존 언어와 매칭 키워드 중복 최소화.
+
 ## 3. 레이아웃·컴포지션 규칙
 
 ### 3.1 씬(스크롤 단위) 높이 — **정렬 결정** `[가드+지시 불일치 해소]` (2026-07-26 재결정)
