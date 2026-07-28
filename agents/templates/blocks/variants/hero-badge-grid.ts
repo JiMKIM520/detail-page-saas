@@ -4,7 +4,7 @@
  *  noimg-safe: 이미지 없으면 그라디언트 패널로 강등, 그리드 배너는 항상 노출. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media , ICON_NAMES} from '../shared'
 
 const schema = z.object({
   /** 뱃지(라운드 필) 안 브랜드 부제 — 순수 텍스트 */
@@ -22,7 +22,7 @@ const schema = z.object({
     .array(
       z.object({
         /** icon() 이름 (35종 중 하나) */
-        icon: z.string().min(1),
+        icon: z.enum(ICON_NAMES).catch('check'),
         /** 아이콘 아래 키워드 레이블 (em/br 허용, 2줄 권장) */
         label: z.string().min(1),
       }),

@@ -6,10 +6,10 @@
  *  이미지 없을 때: 원형 아이콘 군이 중앙 빈 원(noimg-safe)으로 강등, 레이아웃 유지. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const itemSchema = z.object({
-  icon: z.string().min(1),      // ICON_NAMES 35종 중 하나
+  icon: z.enum(ICON_NAMES).catch('check'),      // ICON_NAMES 35종 중 하나
   label: z.string().min(1),     // 짧은 레이블 (4~8자)
   text: z.string().min(1),      // (em,br) 상세 설명
 })

@@ -5,7 +5,7 @@
  *  오버플로우 구도. 이미지 없을 때는 틴트 패널로 강등(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const schema = z.object({
   /** 상단 리본 배너에 표시할 상품 풀네임 (예: "더마퓨어 약산성 마일드 폼클렌저") */
@@ -22,7 +22,7 @@ const schema = z.object({
   badges: z
     .array(
       z.object({
-        icon: z.string().min(1), // ICON_NAMES 35종
+        icon: z.enum(ICON_NAMES).catch('check'), // ICON_NAMES 35종
         label: z.string().min(1), // 2행 가능 (br 허용)
       }),
     )

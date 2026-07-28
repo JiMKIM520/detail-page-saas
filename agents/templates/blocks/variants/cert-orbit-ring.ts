@@ -3,7 +3,7 @@
  *  5개 인증 체크 레이블 방사형 분산(오비트 구성). 이미지 부재 시 링만 남는 강등 렌더(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const certSchema = z.object({
   /** 제품 카테고리/소재 키워드 (예: "고함량 퓨어 비타민C") — 그라디언트 박스 위 타이틀 */
@@ -19,7 +19,7 @@ const certSchema = z.object({
     .array(
       z.object({
         label: z.string().min(1),
-        icon: z.string().optional(), // ICON_NAMES 중 하나, 기본 'check'
+        icon: z.enum(ICON_NAMES).optional().catch(undefined), // ICON_NAMES 중 하나, 기본 'check'
       }),
     )
     .min(3)

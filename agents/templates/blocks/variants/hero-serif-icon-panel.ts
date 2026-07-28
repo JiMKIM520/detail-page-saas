@@ -4,10 +4,10 @@
  *  이미지 부재 시 brand 색조 그라디언트 배경으로 강등(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media , ICON_NAMES} from '../shared'
 
 const featureSchema = z.object({
-  icon: z.string().min(1),         // 원형 아이콘 영역 인라인 SVG 또는 단일 문자 (emoji 금지 — 텍스트 슬롯)
+  icon: z.enum(ICON_NAMES).catch('check'),         // 원형 아이콘 영역 인라인 SVG 또는 단일 문자 (emoji 금지 — 텍스트 슬롯)
   label: z.string().min(1),        // 기능 키워드 (예: "아치지지")
   text: z.string().min(1),         // 짧은 부연 설명 (em 허용)
 })

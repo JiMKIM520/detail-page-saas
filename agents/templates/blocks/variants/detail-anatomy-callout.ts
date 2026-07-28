@@ -3,7 +3,7 @@
  *  해부도식 콜아웃 구성. 상단 2행 대형 헤드라인 + 설명, 하단 4행 원형아이콘+제목+설명 리스트. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const calloutSchema = z.object({
   /** 콜아웃 라벨 (em 허용) */
@@ -19,7 +19,7 @@ const calloutSchema = z.object({
 
 const featureSchema = z.object({
   /** 기능 아이콘 이름 (ICON_NAMES 35종) */
-  icon: z.string().min(1).optional(),
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),
   /** 기능 제목 (em 허용) */
   title: z.string().min(1),
   /** 기능 설명 (em 허용) */

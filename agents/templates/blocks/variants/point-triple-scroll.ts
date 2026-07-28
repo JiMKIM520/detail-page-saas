@@ -14,7 +14,7 @@
  */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 /* ── 섹션별 서브 스키마 ─────────────────────────────────────────── */
 
@@ -23,7 +23,7 @@ const checkItem = z.object({
 })
 
 const iconCard = z.object({
-  icon: z.string().min(1),   // ICON_NAMES 중 하나 (렌더에서 icon() 호출)
+  icon: z.enum(ICON_NAMES).catch('check'),   // ICON_NAMES 중 하나 (렌더에서 icon() 호출)
   label: z.string().min(1),  // 카드 하단 라벨
 })
 

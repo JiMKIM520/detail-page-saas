@@ -7,10 +7,10 @@
  */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media , ICON_NAMES} from '../shared'
 
 const featureSchema = z.object({
-  icon: z.string().min(1),      // SVG inline string 또는 ctx.icon() 이름 — 렌더에서 직접 사용
+  icon: z.enum(ICON_NAMES).catch('check'),      // SVG inline string 또는 ctx.icon() 이름 — 렌더에서 직접 사용
   label: z.string().min(1),    // 2줄 이내 한국어 라벨 (순수 텍스트)
 })
 

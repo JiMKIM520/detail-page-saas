@@ -5,11 +5,11 @@
  *  이미지 없을 때 오버랩 프레임 생략(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media , ICON_NAMES} from '../shared'
 
 const benefitSchema = z.object({
   num: z.string().min(1),          // 번호 표시 (예: "01")
-  icon: z.string().optional(),     // 아이콘 이미지 url (optional)
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),     // 아이콘 이미지 url (optional)
   label: z.string().min(1),        // 혜택 라벨 (em 허용)
 })
 

@@ -2047,7 +2047,7 @@ export async function runBlocksComposer(input: BlocksComposerInput): Promise<Age
             break
           }
           const before = layout.sceneHeights
-          const bad = before.filter((h) => h < 1600 || h > 2700).length
+          const bad = before.filter((h) => h < 1600 || h > 2600).length // 하드 한도 2,600 — design-system.md §3.1(플래너 기준 통일)
           if (bad === 0) {
             if (pass === 1) console.log(`[Blocks Composer] 씬 높이 적합 — [${before.join(', ')}]`)
             break

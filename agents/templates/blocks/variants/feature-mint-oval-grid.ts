@@ -4,10 +4,10 @@
  *  이미지 없을 때 이미지+배지 영역 은닉(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const cardSchema = z.object({
-  icon: z.string().optional(),   // ICON_NAMES 35종 (생략 시 check)
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),   // ICON_NAMES 35종 (생략 시 check)
   label: z.string().min(1),      // 카드 제목
   text: z.string().min(1),       // 카드 설명
 })

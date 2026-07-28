@@ -4,7 +4,7 @@
  *  이미지 미제공 시 배지 행 단독 렌더로 강등(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const schema = z.object({
   brand: z.string().optional(),           // 브랜드 라벨 (순수 텍스트)
@@ -14,7 +14,7 @@ const schema = z.object({
   items: z
     .array(
       z.object({
-        icon: z.string().min(1),         // 아이콘 이름 (shared ICON_NAMES)
+        icon: z.enum(ICON_NAMES).catch('check'),         // 아이콘 이름 (shared ICON_NAMES)
         label: z.string().min(1),        // 배지 하단 텍스트
       }),
     )

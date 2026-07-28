@@ -5,7 +5,7 @@
  *  이미지 없을 때: 타원 프레임+배너 영역을 숨기고 질문 타이틀+리스트만 표시(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const schema = z.object({
   /** 대형 질문 타이틀 (em, br 허용). 예: "왜 피부는\n계속 건조할까요?" */
@@ -22,7 +22,7 @@ const schema = z.object({
   items: z
     .array(
       z.object({
-        icon: z.string().min(1), // ICON_NAMES 35종 중 하나
+        icon: z.enum(ICON_NAMES).catch('check'), // ICON_NAMES 35종 중 하나
         text: z.string().min(1), // 추천 대상 설명
       }),
     )

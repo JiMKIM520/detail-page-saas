@@ -5,10 +5,47 @@
  */
 
 import type { ImageBlockParam, TextBlockParam } from '@anthropic-ai/sdk/resources'
+import { z } from 'zod'
 import { anthropicClient, loadImageAsBase64, parseJsonResponse, saveJson, timer, MODELS, extractText } from './utils'
 import type { ProjectBrief, StyleGuide, StylingPromptsJson, AgentResult } from './types'
 import { buildTemplateCatalog } from './templates/index'
+import { isWhitelistedFont } from './templates/blocks/shared'
 import * as fs from 'fs'
+
+/** 스타일가이드 출력 게이트 (design-system.md §8-1) — 유일하게 Zod 없이 raw 파싱되던
+ *  에이전트라 HEX 오형식·shapeLanguage 오타가 침묵 통과해 토큰 파생을 오염시켰다.
+ *  구조·형식 위반 = 하드 실패(상위 재시도 유도). 폰트 화이트리스트 위반 = 소프트
+ *  경고(렌더 계층에 프리셋 폴백이 있어 치명적이지 않음 — 로그로 감시). */
+const HEX6 = /^#[0-9A-Fa-f]{6}$/
+const styleGuideGate = z
+  .object({
+    brand: z.object({ name: z.string().min(1), moodKeywords: z.array(z.string()).min(1) }).passthrough(),
+    shapeLanguage: z.enum(['sharp-editorial', 'soft-round', 'organic', 'arch-serif', 'neutral']).optional(),
+    colors: z
+      .object({
+        primary: z.string().regex(HEX6), secondary: z.string().regex(HEX6),
+        surface1: z.string().regex(HEX6), surface2: z.string().regex(HEX6), surface3: z.string().regex(HEX6),
+        textDark: z.string().regex(HEX6), textLight: z.string().regex(HEX6), accent: z.string().regex(HEX6),
+      })
+      .passthrough(),
+    typography: z
+      .object({ headlineFont: z.string().min(1), storyFont: z.string().min(1), bodyFont: z.string().min(1), accentFont: z.string().min(1) })
+      .passthrough(),
+  })
+  .passthrough()
+
+function gateStyleGuide(sg: StyleGuide): void {
+  const parsed = styleGuideGate.safeParse(sg)
+  if (!parsed.success) {
+    const issues = parsed.error.issues.slice(0, 5).map((i) => `${i.path.join('.')}: ${i.message}`).join(' | ')
+    throw new Error(`스타일가이드 게이트 위반 — ${issues}`)
+  }
+  const t = sg.typography
+  for (const [role, font] of [['headline', t.headlineFont], ['story', t.storyFont], ['body', t.bodyFont], ['accent', t.accentFont]] as const) {
+    if (font && !isWhitelistedFont(font))
+      console.warn(`[Art Director] ⚠ 화이트리스트 외 폰트(${role}): "${font}" — 렌더에서 프리셋 폴백됨`)
+  }
+}
 
 const SYSTEM_PROMPT = `You are a world-class Art Director specializing in Korean e-commerce product detail pages.
 Your task: analyze the brand brief and reference images, then produce two JSON documents that will serve as a binding contract for all downstream agents.
@@ -238,7 +275,7 @@ export async function runArtDirector(
         if (!sectionMap[s]) sectionMap[s] = []
         sectionMap[s].push(startIdx + i + 1)
       })
-      sectionRefsText = `\n## Section-tagged References (image order continues from category refs)\nThe following reference images are pre-grouped by section. Use these to inform sectionImageBriefs[] for each section's design tone:\n` +
+      sectionRefsText = `\n## Section-tagged References (image order continues from category refs)\nThe following reference images are pre-grouped by section. Use them to inform the overall design tone (palette strategy, mood, texture direction):\n` +
         Object.entries(sectionMap).map(([s, idxs]) => `- ${s}: images #${idxs.join(', #')}`).join('\n')
       console.log(`  섹션별 레퍼런스: ${sectionLabels.length}장 (${Object.keys(sectionMap).length}개 섹션)`)
     }
@@ -264,16 +301,18 @@ export async function runArtDirector(
 
     const styleGuide = parseJsonResponse<StyleGuide>(parts[0])
     const stylingPrompts = parseJsonResponse<StylingPromptsJson>(parts[1])
+    gateStyleGuide(styleGuide) // 위반 시 throw → 상위(PM) 재시도
 
     // 저장
     saveJson(styleGuide, `${outputDir}/style-guide.json`)
     saveJson(stylingPrompts, `${outputDir}/styling-shots-prompts.json`)
 
     console.log(`[Art Director] 완료 (${elapsed()}ms)`)
-    console.log(`  - 아이콘 라이브러리: ${styleGuide.icons.library}`)
-    console.log(`  - 레이아웃 패턴: ${styleGuide.layoutPatterns.length}개`)
+    // icons·layoutPatterns·conceptShots 로깅 제거 — 스키마 슬림화(2026-07-26)로 미출력 필드.
+    // 대신 수렴 감시에 유용한 팔레트·형태 언어를 기록한다(design-system.md §2.2·§2.3 검증용).
+    console.log(`  - 형태 언어: ${styleGuide.shapeLanguage ?? '(미지정)'} · primary ${styleGuide.colors?.primary} · accent ${styleGuide.colors?.accent}`)
+    console.log(`  - 폰트: headline=${styleGuide.typography?.headlineFont} / story=${styleGuide.typography?.storyFont}`)
     console.log(`  - 스타일링샷 프롬프트: ${stylingPrompts.shots.length}개`)
-    console.log(`  - 컨셉샷 프롬프트: ${stylingPrompts.conceptShots?.length ?? 0}개`)
 
     return { success: true, data: { styleGuide, stylingPrompts }, durationMs: elapsed() }
   } catch (err: unknown) {

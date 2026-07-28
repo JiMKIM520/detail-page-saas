@@ -76,6 +76,9 @@ export interface StyleGuide {
     moodKeywords: string[]
     targetEmotion: string
   }
+  /** 형태 언어 — tokens.ts SHAPE_PRESETS가 rScale/photoShape/padX로 변환.
+   *  런타임에서만 읽히던 유령 필드를 정식 계약으로 승격 (design-system.md §8-5, 2026-07-26). */
+  shapeLanguage?: 'sharp-editorial' | 'soft-round' | 'organic' | 'arch-serif' | 'neutral'
   colors: {
     primary: string
     secondary: string

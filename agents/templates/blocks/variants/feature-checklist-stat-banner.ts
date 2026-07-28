@@ -4,10 +4,10 @@
  *  이미지 부재 시 브랜드색 그라데이션 배경으로 안전 강등(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media , ICON_NAMES} from '../shared'
 
 const statSchema = z.object({
-  icon: z.string().min(1),          // icon() 이름 (bolt / clock / drop 등)
+  icon: z.enum(ICON_NAMES).catch('check'),          // icon() 이름 (bolt / clock / drop 등)
   value: z.string().min(1),         // 굵은 수치 라인 (예: "최대 60분")
   label: z.string().min(1),         // 보조 설명 라인 (예: "연속 사용")
 })

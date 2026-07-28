@@ -5,11 +5,11 @@
  *  noimg-safe: 이미지 전무 시 원형 프레임을 숨기고 텍스트 전용 행으로 강등. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const schema = z.object({
   /** 섹션 아이콘 — 허용 이름은 shared ICON_NAMES 35종. 기본 'person' */
-  icon: z.string().optional(),
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),
   /** 대형 주제목 (em,br) — 원본 fs:75 파란색 */
   headline: z.string().min(1),
   /** 보조 한 줄 설명 (em,br) — 원본 fs:65 검정 */

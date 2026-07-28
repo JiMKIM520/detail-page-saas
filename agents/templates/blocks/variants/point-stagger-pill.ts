@@ -5,7 +5,7 @@
  *  이미지 없이도 붕괴하지 않는 noimg-safe 강등 구현. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const schema = z.object({
   /** 상단 배경이미지 위 헤드라인 (em/br 허용). 예: "선풍기 하나 쓰는데<br>왜 이렇게 번거로울까요?" */
@@ -20,7 +20,7 @@ const schema = z.object({
   problems: z
     .array(
       z.object({
-        icon: z.string().min(1),  // ICON_NAMES 35종
+        icon: z.enum(ICON_NAMES).catch('check'),  // ICON_NAMES 35종
         text: z.string().min(1),  // 문제 한 줄 (em 허용)
       }),
     )

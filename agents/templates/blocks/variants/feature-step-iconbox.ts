@@ -4,14 +4,14 @@
  *  이미지 없을 때 하단 블록 은닉(noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const stepSchema = z.object({
   title: z.string().min(1),       // 스텝 제목 (헤더바)
   body: z.string().min(1),        // 본문 단락 (em 허용)
   boxLabel: z.string().min(1),    // 박스텍스트 강조 라벨 (em 허용)
   boxDesc: z.string().min(1),     // 박스텍스트 부연 (em 허용)
-  icon: z.string().optional(),    // 아이콘 이름 (ICON_NAMES 35종)
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),    // 아이콘 이름 (ICON_NAMES 35종)
 })
 
 const schema = z.object({

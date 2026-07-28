@@ -5,11 +5,11 @@
  *  이미지 없어도 붕괴하지 않는 noimg-safe 강등 구현. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const itemSchema = z.object({
   image: z.string().optional(),          // 풀폭 제품 사진 (url)
-  icon: z.string().optional(),           // 원형 아이콘 배너 내 아이콘 이름 (ICON_NAMES 35종)
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),           // 원형 아이콘 배너 내 아이콘 이름 (ICON_NAMES 35종)
   label: z.string().min(1),             // 아이콘 배너 아래 항목 제목 (순수 텍스트)
   desc: z.string().min(1),              // 항목 설명 (em,br 허용)
 })

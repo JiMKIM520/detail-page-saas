@@ -4,7 +4,7 @@
  *           → 하단 2열 라운드 흰 카드 그리드(체크 아이콘 + 소제목 + 본문, 2~6쌍). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import { media , ICON_NAMES} from '../shared'
 
 const schema = z.object({
   /** 눈썹 레이블 (선택, 예: "상품 설명을 입력하세요.") */
@@ -24,7 +24,7 @@ const schema = z.object({
     .array(
       z.object({
         /** 카드 아이콘 (ICONS 키; 생략 시 check) */
-        icon: z.string().optional(),
+        icon: z.enum(ICON_NAMES).optional().catch(undefined),
         /** 카드 소제목 (em 허용) */
         heading: z.string().min(1),
         /** 카드 본문 (선택, em/br 허용) */

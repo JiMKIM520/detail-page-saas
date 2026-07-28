@@ -27,8 +27,11 @@ You receive the client brief facts, an optional binding blueprint, and a summary
 3. REPETITION: the same phrase/claim recycled across 3+ blocks; 3+ consecutive blocks with identical
    structure making the page monotonous.
 4. BLUEPRINT VIOLATION (when blueprint given): a block's copy contradicting its assigned copyBrief.
-
-Judging discipline:
+5. VISUAL STRUCTURE (design-system.md §6 — 생성자-평가자 분리를 시각 품질에도 적용):
+   - block 0 (hero = the first screen) has 0 images while later blocks have several → defect.
+   - copy promising N visual items while the block carries fewer images (e.g. "4가지 원료" with 2 images).
+   - lint/rule-check hints passed to you flag structural violations (empty frames, scene-height/tone
+     breaches): promote the SEVERE ones to blocking issues — do not silently drop them.
 - pass=false ONLY when at least one defect MUST be fixed before client delivery.
 - Stylistic taste, tone nuances, minor wording → NOT issues. When unsure, pass.
 - Each issue: one Korean sentence, prefixed with the block number, concrete and fixable.

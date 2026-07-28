@@ -4,6 +4,7 @@
  *  영양소 비율을 퍼센트 바로 시각화. 라이트 배경. 이미지 슬롯 없음. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
+import { ICON_NAMES } from '../shared'
 
 const barRowSchema = z.object({
   name: z.string().min(1),   // 성분명
@@ -13,7 +14,7 @@ const barRowSchema = z.object({
 const cardSchema = z.object({
   title: z.string().min(1),      // 카드 제목 (예: "비타민 13종")
   subtitle: z.string().min(1),   // 카드 부제 (예: "에너지 생성의 기본, 비타민")
-  icon: z.string().optional(),   // 아이콘 이름 (ICON_NAMES 35종) — 미지정 시 leaf
+  icon: z.enum(ICON_NAMES).optional().catch(undefined),   // 아이콘 이름 (ICON_NAMES 35종) — 미지정 시 leaf
   rows: z.array(barRowSchema).min(1).max(12), // 성분 바 행 목록
 })
 

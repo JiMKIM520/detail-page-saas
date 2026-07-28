@@ -4,6 +4,7 @@
  *  뷰티·스킨케어·식품 등 성분/특징 4가지 강조에 적합한 light 톤 섹션. */
 import { z } from 'zod'
 import { defineBlock } from '../types'
+import { ICON_NAMES } from '../shared'
 
 const schema = z.object({
   /** 대형 라틴 헤드워드 (예: "check point" / "key point"). 기본 "check point" */
@@ -17,7 +18,7 @@ const schema = z.object({
     .array(
       z.object({
         /** ICON_NAMES 35종 중 하나 (생략 시 check) */
-        icon: z.string().optional(),
+        icon: z.enum(ICON_NAMES).optional().catch(undefined),
         /** 카드 제목 (em 허용) */
         heading: z.string().min(1),
         /** 카드 설명 (em/br 허용) */

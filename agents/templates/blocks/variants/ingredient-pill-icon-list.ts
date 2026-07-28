@@ -5,7 +5,7 @@
  *  이미지 부재 시 다크 그레이디언트 패널로 강등 (noimg-safe). */
 import { z } from 'zod'
 import { defineBlock } from '../types'
-import { media } from '../shared'
+import {media, ICON_NAMES } from '../shared'
 
 const pillSchema = z.object({
   label: z.string().min(1),   // pill 태그 텍스트 (em 비허용 — pill 내부 순수 텍스트)
@@ -13,7 +13,7 @@ const pillSchema = z.object({
 })
 
 const itemSchema = z.object({
-  icon: z.string().min(1).optional(), // ICON_NAMES 중 하나 (기본 leaf)
+  icon: z.enum(ICON_NAMES).optional().catch(undefined), // ICON_NAMES 중 하나 (기본 leaf)
   label: z.string().min(1),           // 강조 색상 라벨 (em 비허용)
   text: z.string().min(1),            // 설명 본문 (em,br 허용)
 })
