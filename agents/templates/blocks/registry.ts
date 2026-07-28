@@ -71,6 +71,17 @@ export function containSlotKeys(id: string): ReadonlySet<string> {
 /** 변형의 최상위 media 슬롯 키 전체 — render 소스의 media(d.X, …) 호출에서 자동 산출한다.
  *  미사용 컷 재배치 패스가 "이 블록의 어느 필드에 이미지를 넣을 수 있는가"를 알기 위한 근거.
  *  d.X 형태(최상위 필드)만 수집 — 배열 아이템 필드는 구조를 알 수 없어 재배치 대상에서 제외. */
+/** 도메인 제한 변형의 카테고리 허용 여부 — 소재 종속 그래픽(의류 실루엣 등) 오배치 차단.
+ *  domains 미지정 변형은 전 카테고리 허용. 매칭은 카테고리 문자열 ↔ 도메인 키워드 상호 포함. */
+export function isDomainAllowed(id: string, category: string | undefined): boolean {
+  const v = REGISTRY.get(id)
+  const domains = (v as { domains?: readonly string[] } | undefined)?.domains
+  if (!domains?.length) return true
+  if (!category) return false // 도메인 제한 변형은 카테고리 불명 시 보수적으로 제외
+  const cat = category.toLowerCase()
+  return domains.some((d) => cat.includes(d.toLowerCase()) || d.toLowerCase().includes(cat))
+}
+
 const mediaKeysCache = new Map<string, ReadonlySet<string>>()
 export function mediaSlotKeys(id: string): ReadonlySet<string> {
   const hit = mediaKeysCache.get(id)

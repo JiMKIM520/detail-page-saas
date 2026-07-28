@@ -8,7 +8,7 @@
 import { z } from 'zod'
 import { anthropicClient, parseJsonResponse, timer, MODELS, extractText } from './utils'
 import { catalog } from './templates/blocks'
-import { containSlotKeys, getVariant } from './templates/blocks/registry'
+import { containSlotKeys, getVariant, isDomainAllowed } from './templates/blocks/registry'
 import { SCRIPT_TYPE_TO_ARCHETYPES, HERO_STYLE_TO_VARIANTS } from './templates/blocks/canvas'
 import { CONTRACTED_IDS } from './blocks-composer'
 import { variantTone, estimateHeight, isOffPalette } from './templates/blocks/variant-meta'
@@ -265,14 +265,16 @@ function seededShuffle<T>(arr: readonly T[], rand: () => number): T[] {
  *  어긋나면 안 되므로 상한 없이 전부 싣는다. */
 const PER_ARCHETYPE_CAP = 12
 const catalogBlockCache = new Map<string, string>()
-export function getCatalogBlock(seed: string): string {
-  const hit = catalogBlockCache.get(seed)
+export function getCatalogBlock(seed: string, category?: string): string {
+  const cacheKey = `${seed}|${category ?? ''}`
+  const hit = catalogBlockCache.get(cacheKey)
   if (hit) return hit
   const rand = seededRandom(`catalog:${seed}`)
   const byArch = new Map<string, ReturnType<typeof catalog>>()
   for (const c of catalog()) {
     if (!CONTRACTED_IDS.has(c.id)) continue
     if (isOffPalette(c.id)) continue // 오프팔레트 변형은 LLM 카탈로그에서 제외
+    if (!isDomainAllowed(c.id, category)) continue // 소재 종속 변형(의류 실루엣 등) 도메인 필터
     const list = byArch.get(c.archetype) ?? []
     list.push(c)
     byArch.set(c.archetype, list)
@@ -293,7 +295,7 @@ export function getCatalogBlock(seed: string): string {
   }
   const block = `블록 카탈로그(variantId · archetype · imageSlots · 톤 · 예상높이 · 설명) — 아키타입별 대표 표본:\n${lines.join('\n')}\n\n⛔누끼전용슬롯 = 이미지 프레임이 장식형(원형·좌대·플롯)이라 배경 없는 단독컷(누끼)만 어울린다.\n이 변형을 고르면 그 블록의 imageNeeds는 반드시 배경 없는 제품/원료 단독컷으로 명세하라 — 배경 있는 실사·원본 사진은 시스템이 제거한다.`
   if (catalogBlockCache.size > 32) catalogBlockCache.clear()
-  catalogBlockCache.set(seed, block)
+  catalogBlockCache.set(cacheKey, block)
   return block
 }
 
@@ -700,7 +702,7 @@ export async function runPagePlanner(input: PagePlannerInput): Promise<AgentResu
       system: [
         { type: 'text', text: SYSTEM_PROMPT },
         // 시드 표본 카탈로그 — 프로젝트별 상이하지만 같은 프로젝트 재시도는 동일 텍스트 → 캐시 유효
-        { type: 'text', text: getCatalogBlock(input.seed ?? input.brief.productName), cache_control: { type: 'ephemeral' } },
+        { type: 'text', text: getCatalogBlock(input.seed ?? input.brief.productName, input.brief.category), cache_control: { type: 'ephemeral' } },
       ],
       messages: [{ role: 'user', content: buildUserPrompt(input, repairNote) }],
       })

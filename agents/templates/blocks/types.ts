@@ -87,6 +87,11 @@ export interface BlockVariant<T = unknown> {
   styleTags: string[] // 'warm' | 'editorial' | 'playful' | 'minimal' ... (컴포저 선택용)
   imageSlots: number // 필요한 이미지 수 (이미지 예산/AI 선택용)
   describe: string // AI 컴포저가 이 변형을 고를 때 참고할 설명
+  /** 소재 종속 그래픽의 적용 도메인 제한 (design-system.md §5.4 확장, 2026-07-28).
+   *  변형에 특정 제품군 전제의 하드코딩 그래픽(의류 실루엣 등)이 있을 때만 지정 —
+   *  카테고리 문자열에 이 키워드가 포함될 때만 카탈로그 노출. 미지정 = 전 카테고리.
+   *  실사례: spec-silhouette-table의 티셔츠 실루엣이 펫푸드 등록성분에 배치됨. */
+  domains?: readonly string[]
   schema: z.ZodType<T>
   css: string
   render: (data: T, ctx: RenderCtx) => string

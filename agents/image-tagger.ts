@@ -39,6 +39,11 @@ For every test image where the product label is visible, compare the brand name 
 CHARACTER BY CHARACTER against the reference. AI-generated shots frequently alter letters
 (e.g. MOMOS→NONOS, 500g→800g, garbled Korean). Any mismatch in brand name, product name,
 or quantity = quality "reject". Do not assume text is correct because it looks plausible — READ it.
+PACKAGE IDENTITY (equally CRITICAL): whenever the product's package/stick/pouch/container appears
+in frame — even PARTIALLY (e.g. a texture close-up squeezed from the stick) — its DESIGN
+(colors, printed artwork, shape) must match the reference package. A plain/unbranded tube or a
+differently-designed package = "reject" (실사례: 민트색 일러스트 스틱 제품이 무지 은박 튜브로
+생성되어 제형 클로즈업에 배치됨 — 제품 동일성 훼손).
 
 KIND-SPECIFIC RULES:
 - kind "asset": the shot is INTENDED to contain no product/packaging (raw ingredients, texture,
@@ -84,7 +89,11 @@ For EACH pair, judge: does this image MEANINGFULLY support this copy for a shopp
   next to a close-up of the package label; a step "물과 함께 섭취" next to a shelf mood shot).
 - A product/package shot fits copy about the product itself, packaging, or brand — but NOT copy
   about efficacy, texture, ingredients, or usage steps it does not depict.
-- When unsure, fit=true (do not over-remove).
+- INGREDIENT ROWS (strict): copy naming ONE specific ingredient (e.g. "해바라기유", "정제수") must
+  pair with an image showing THAT ingredient ALONE as the clear subject. A multi-ingredient
+  ensemble shot, a product-package shot, or a generic styled scene = fit=false (실사례: 해바라기유
+  행에 참치살+물잔+오일 조합컷 배치 — 단일 원료 소개의 신뢰를 깨뜨린다).
+- When unsure, fit=true (do not over-remove) — EXCEPT ingredient rows above, where unsure=false.
 Output raw JSON array only: [{"id":"...","fit":true,"reason":"..."}] — reason in Korean, max 40 chars.`
 
 /** 조립 후 페어링 QA — 배치된 (카피, 이미지) 쌍을 실제로 보고 부적합 쌍을 알려준다.

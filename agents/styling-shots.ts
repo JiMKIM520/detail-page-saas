@@ -42,6 +42,9 @@ const BASE_PRESERVATION_RULES = [
   // 세팅은 컷의 composition에 따름: 제품 단독(클린 표면) 또는 자연스러운 라이프스타일 장면(아늑한 가정/테이블/연출).
   // 어떤 경우든 PRODUCT 자체는 레퍼런스 그대로(형태·색·로고·텍스트 보존), 주변 장면만 달라진다.
   'Setting follows the composition: either the product alone on a clean surface, OR a natural real-feeling lifestyle scene that fits the product (cozy home, table, soft daylight). The PRODUCT must stay EXACTLY as in the reference image; only the surrounding scene/props vary.',
+  // 부분 노출(제형 압출·개봉 클로즈업)에서 무지 튜브가 생성된 실사례(동원 2026-07-28) 차단 —
+  // 패키지가 프레임에 일부라도 보이면 레퍼런스와 동일한 인쇄 디자인이어야 한다.
+  'PACKAGE IDENTITY (CRITICAL): if the product package/stick/pouch appears in frame even PARTIALLY (e.g. texture being squeezed out of the stick, a torn corner, an opened lid), that visible package part MUST carry the SAME printed design, colors, and artwork as the reference image. NEVER render a plain, unbranded, or differently-designed container.',
 ]
 
 // 제품 보존 규칙 빌더

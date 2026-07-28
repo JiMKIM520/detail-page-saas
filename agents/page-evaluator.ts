@@ -21,7 +21,9 @@ You receive the client brief facts, an optional binding blueprint, and a summary
 (block sequence with copy excerpts and image assignments). Find OBVIOUS defects ONLY:
 
 1. UNGROUNDED: copy asserting facts absent from the brief/blueprint — invented numbers, certifications,
-   awards, superlative claims ("최초/최고/1위") without basis.
+   awards, superlative claims ("최초/최고/1위") without basis. INTERNAL CONSISTENCY is part of this:
+   if two blocks state DIFFERENT ingredient counts/lists or spec values for the same fact
+   (e.g. "4가지 원료가 전부" vs a spec table listing 5), that is a blocking defect.
 2. NARRATIVE: broken flow — e.g., purchase push before the product is introduced, two blocks saying
    the same thing back-to-back, closing in the middle.
 3. REPETITION: the same phrase/claim recycled across 3+ blocks; 3+ consecutive blocks with identical

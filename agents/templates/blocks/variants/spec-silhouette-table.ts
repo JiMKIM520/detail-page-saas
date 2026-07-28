@@ -43,8 +43,11 @@ export const specSilhouetteTable = defineBlock<Data>({
   archetype: 'spec',
   styleTags: ['light', 'editorial', 'fashion', 'noimg-safe'],
   imageSlots: 1,
+  // 티셔츠 실루엣 SVG 하드코딩 — 의류 외 카테고리(펫푸드 등록성분 실사례)에서 무의미
+  // 그래픽이 노출되어 도메인 제한 (design-system.md §5.4 확장, 2026-07-28)
+  domains: ['패션', '의류', '어패럴', 'fashion', 'apparel', 'clothing'],
   describe:
-    '사이즈 가이드 블록. 상품 이미지(누끼) 또는 SVG 의류 실루엣 + 치수 라벨선 좌측, 5열 사이즈 표 우측 2단 배치. 하단 size tip + 오차 안내. 패션/의류 상세페이지 spec 섹션. 이미지 없을 때 SVG 실루엣으로 자동 강등.',
+    '사이즈 가이드 블록(의류 전용). 상품 이미지(누끼) 또는 SVG 의류(티셔츠) 실루엣 + 치수 라벨선 좌측, 5열 사이즈 표 우측 2단 배치. 하단 size tip + 오차 안내. 패션/의류 상세페이지 spec 섹션 전용 — 비의류 제품에 사용 금지.',
   schema,
   css: `
 .sstb{background:var(--bg);color:var(--ink);padding:64px var(--pad-x,56px) 72px}

@@ -735,6 +735,7 @@ RULES
 - FORBIDDEN WORDS: 완벽한, 최고의, 혁신적인, 압도적인, 특별한 경험, 특별한 이유, 자연의 선택, 깊고 진한 — AI-cliché adjectives; replace with concrete facts (온도·질감·시간·수치의 맥락 등 물리적 구체어).
 - HONESTY (CRITICAL): never fabricate certifications, reviews, ratings, or numbers not present in the brief. Omit cert/spec rows you cannot ground.
 - SPEC QUANTITIES (CRITICAL): 제품 스펙 수치(중량·용량·수량·개입 등)는 반드시 입력 자료(스크립트·청사진·브리프)에 기재된 값을 그대로 사용할 것. 유사 제품·일반 상식·LLM 사전지식으로 채우지 말 것.
+- INGREDIENT CANON (CRITICAL): 원료/성분의 유일한 진실은 입력 자료의 원료 목록(스펙·성분 섹션)이다. 어느 블록에서든 원료를 나열하거나 개수를 말할 때("N가지 원료") 반드시 이 목록과 정확히 일치시켜라. 일부만 소개할 때는 "전체 M가지 중 대표 N가지" 형태로 표기 — 같은 페이지의 스펙 표와 원료 소개가 다른 개수를 말하면 신뢰가 무너진다(실사례: 카피 "4가지가 전부" vs 스펙 표 5가지).
 - IDENTITY DATA (CRITICAL): phone numbers, business/item registration numbers, addresses, courier/partner brand names, account numbers — use ONLY strings that appear verbatim in the brief. If the brief has none, OMIT the row/line entirely (e.g., write "고객센터로 문의해 주세요" without a number). A fabricated phone number sends real customers to a stranger.
 - IMAGE REALITY (CRITICAL): each image's 컷 내용 note starting with "실물 확인" describes what is ACTUALLY in the image — trust it over the filename or your assumption. A note marked "차선 — 소형 슬롯에만" may only fill small thumbnail slots, never hero/full-bleed.
 - ORIENTATION-FIT: notes mark each image [세로]/[가로]/[정방]. NEVER place a [세로] image into a wide panorama/full-width banner slot — it becomes a grotesque over-zoomed crop. Wide full-bleed slots take [가로] images only.
