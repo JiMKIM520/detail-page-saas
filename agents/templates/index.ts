@@ -26,6 +26,20 @@ export function getTemplateById(id: string): DetailTemplate | undefined {
  * Art Director 프롬프트용 템플릿 카탈로그 텍스트 생성
  * category에 해당하는 템플릿 목록을 선택 가이드 형태로 반환
  */
+/** 힌트의 구체 색 각인 제거 — design-system.md §2.2. 팔레트 나열·HEX·금속 액센트 문구가
+ *  아트디렉터에 각인되어 프로젝트 간 수렴을 유발한 실측(7사 중 5사 네이비+골드) 대응.
+ *  템플릿 원본은 참고 자산으로 보존하고 프롬프트 주입 시점에만 걸러낸다. */
+function stripPaletteImprint(hint: string): string {
+  return hint
+    .replace(/[^.]*팔레트[^.]*\.\s*/g, '') // "…팔레트…" 문장 전체 제거
+    .replace(/\s*\(#[0-9A-Fa-f]{3,8}[^)]*\)/g, '') // HEX 괄호 제거
+    .replace(/#[0-9A-Fa-f]{3,8}(\s*계열)?/g, '') // 잔여 HEX
+    .replace(/[^.]*(금빛|골드|네이비|실버|퍼플|버건디) [액엑]센트[^.]*\.\s*/g, '') // 금속·색 액센트 문장 제거
+    .replace(/[^.]*\/[^.]*배경[^.]*\.\s*/g, '') // "색A/색B 배경" 색 나열 배경 문장 제거
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
 export function buildTemplateCatalog(category: string): string {
   const templates = getTemplatesByCategory(category)
   if (templates.length === 0) return ''
@@ -33,22 +47,16 @@ export function buildTemplateCatalog(category: string): string {
   const lines = [
     `## 카테고리 템플릿 카탈로그 (${category})`,
     `아래 템플릿 중 제품 특성에 가장 적합한 하나를 선택하여 "selectedTemplateId" 필드로 반환하세요.`,
-    `중요: 선택한 템플릿의 폰트 조합·섹션 순서·섹션별 레이아웃은 렌더링 시 자동으로 강제 적용됩니다.`,
-    `따라서 아래 "폰트 조합 / 섹션 순서 / 섹션별 레이아웃"이 제품에 맞는지 확인하고 선택하세요.`,
+    `템플릿은 무드·구성의 참고 방향이다 — 색 팔레트는 템플릿이 아니라 §2.2 전략(브리프·레퍼런스·제품 실측색 기반)으로 직접 결정하라.`,
     ``,
   ]
 
   for (const t of templates) {
     lines.push(`### ${t.id}  —  ${t.name}`)
     lines.push(`설명: ${t.description}`)
-    lines.push(`비주얼 톤: ${t.visualTone} | 색상 계열: ${t.colorFamily} | 폰트 무드: ${t.fontMood}`)
+    lines.push(`비주얼 톤: ${t.visualTone} | 폰트 무드: ${t.fontMood}`)
     lines.push(`폰트 조합: 헤드라인=${t.fontPairing.headlineFont} / 스토리=${t.fontPairing.storyFont} / 본문=${t.fontPairing.bodyFont} / 액센트=${t.fontPairing.accentFont}`)
-    lines.push(`섹션 순서: ${t.sectionSequence.join(' → ')}`)
-    const overrides = Object.entries(t.patternOverrides)
-    if (overrides.length > 0) {
-      lines.push(`섹션별 레이아웃: ${overrides.map(([s, p]) => `${s}→${p}`).join(', ')}`)
-    }
-    lines.push(`디자인 방향: ${t.artDirectorHints}`)
+    lines.push(`디자인 방향: ${stripPaletteImprint(t.artDirectorHints)}`)
     lines.push(``)
   }
 

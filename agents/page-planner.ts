@@ -158,6 +158,11 @@ system prompt). Your job:
 2. BLOCK CHOICE: pick variantIds ONLY from the catalog below. Match each script section's intent
    to the block archetype (story→story/point, 성분→ingredient, 사용법→usage, FAQ→faq, 배송→cs/shipping).
    Do not use the same variant twice. Avoid three consecutive blocks of the same archetype.
+   ROTATION (CRITICAL — anti-convergence): the catalog below is a per-project rotating sample.
+   Within an archetype, when TWO OR MORE listed variants fit the content, PREFER the one listed
+   EARLIER — never default to a "familiar/safe" variant when an earlier-listed one fits. Cross-page
+   diversity is a hard quality requirement: pages that reuse the same hero/cs/closing variants as
+   other projects read as templates.
    discount 계열은 브리프/스크립트에 실제 가격·할인 정보가 있을 때만 선택하라(없으면 시스템이 제거한다).
 3. IMAGES — two modes:
    [INVENTORY MODE] (이미지 인벤토리가 주어짐): assign from inventory ONLY where the image's actual
@@ -275,7 +280,10 @@ export function getCatalogBlock(seed: string): string {
   const lines: string[] = []
   for (const arch of [...byArch.keys()].sort()) {
     const pool = seededShuffle(byArch.get(arch)!, rand)
-    const picked = arch === 'hero' ? pool : pool.slice(0, PER_ARCHETYPE_CAP)
+    // 히어로도 캡 적용 — 63종 전체 노출 시 LLM이 익숙한 변형(hero-stripe-points)으로
+    // 수렴하던 실측(7사 중 3사 동일 히어로, 2026-07-26 정합성 검토). 표본 자체가
+    // 시드 셔플이라 캡이 곧 프로젝트 간 로테이션이 된다.
+    const picked = pool.slice(0, PER_ARCHETYPE_CAP)
     for (const c of picked) {
       const cutoutMark = c.imageSlots > 0 && containSlotKeys(c.id).size > 0 ? ' ⛔누끼전용슬롯' : ''
       const tone = variantTone(c.id)

@@ -27,7 +27,7 @@ USE ALL REFERENCES. Do not ignore the first batches. The design references carry
 SEARCH QUERY PRINCIPLE: Design direction is based on PRODUCT TYPE + CUSTOMER CONTEXT, never on brand names.
 
 CRITICAL RULES:
-- NO emoji icons — only professional SVG library icons (Phosphor, Lucide, Tabler, Iconoir)
+- NO emoji icons — the render layer provides its own curated SVG icon set; do not specify icon libraries
 - NO templates — every design must be custom-crafted for this specific product
 - NO placeholder text or wireframe aesthetics
 - Typography must be GRAPHIC DESIGN quality, not just text overlay
@@ -37,15 +37,15 @@ CRITICAL RULES:
 PALETTE CONTRAST RULE (CRITICAL — prevents monochrome drift):
 The colors.accent MUST differ meaningfully in hue from colors.primary.
 - FORBIDDEN: accent created by simply lightening or darkening the brand primary (e.g. primary #1A3A6C → accent #2B5BA8 is just a lighter blue — this is NOT a true accent).
-- REQUIRED: choose a secondary accent whose hue is perceptually distinct — complementary (opposite on the color wheel), metallic (gold, copper, silver), or warm/cool contrast (e.g. deep navy + warm gold, forest green + burnt orange, charcoal + champagne).
-- Dark section ratio: 25–40% of sections should use dark backgrounds (bgType "layer-image" with dark gradient, or solid dark) to create visual rhythm — avoid all-light or all-dark layouts.
+- REQUIRED: pick ONE palette STRATEGY and name it in designNotes. Strategies are defined by RELATIONSHIP, not by example colors (concrete color-pair examples are BANNED here — they imprint and cause cross-project convergence):
+  · complementary-pop — accent from the opposite side of the color wheel vs primary
+  · warm-cool-tension — temperature contrast between primary and accent
+  · metallic-accent — muted/neutral primary + metallic accent. Do NOT choose this if the recent-projects context marks it as used.
+  · tonal-depth — lightness ladder of one hue + ONE high-chroma point color
+  · category-native — promote a color measured from the actual product/package to primary
+- DIVERSITY: never converge on the same primary hue family + headline font as a typical "safe premium" answer. If the product itself does not demand it, avoid defaulting to dark-navy primaries and gold accents.
+- Dark scene budget: plan for 1~3 dark scenes per page, never 3 consecutive same-tone scenes (the page planner owns final scene tones — your palette must support both light and dark scenes).
 - Test: if colors.primary and colors.accent look like two shades of the same color, pick a different accent.
-
-Icon library selection guide:
-- Food/handmade/emotional → Phosphor duotone
-- Premium/minimal → Lucide
-- Tech/professional → Tabler
-- Friendly/cute → Iconoir
 
 4-ROLE FONT SYSTEM (CRITICAL — assign all 4 roles):
 Available Korean fonts — grouped by character:
@@ -80,9 +80,9 @@ Selection rules:
   - storyFont should match emotional register — [세리프 · 고급/전통] for warmth/premium, [손글씨] for handmade
   - headlineFont — choose from [개성/임팩트] or [범용/모던] group; AVOID repeating same font across runs
   - [손글씨] and [디스플레이 · 특수] fonts — use only for headlineFont or accentFont, NEVER for bodyFont
-  - Category guidance: food → Black Han Sans/Paperlogy/Gowun Batang 우선;
-                       beauty → SUIT/Sunflower/Black Han Sans 우선;
-                       electronics → Gothic A1/IBM Plex Sans KR/SUIT 우선
+  - DIVERSITY over habit: there is NO default font per category — derive the pairing from THIS product's
+    mood and references. Treat frequently-chosen combos (e.g. the same headline font appearing across
+    many projects) as a failure signal, not a safe choice.
 
   [클라이언트 제공 — 서브셋 woff2 내장 (CDN 불필요, 한글+라틴 완전 지원)] ★ 우선 추천
     SUIT                  → headlineFont·bodyFont 겸용 | 고딕 모던, 가독성 최상, 범용
@@ -93,192 +93,6 @@ Selection rules:
     tvN 즐거운이야기        → headlineFont·accentFont | 방송/엔터 무드, 친근 디스플레이 (본문 사용 금지)
 
 DO NOT use any font not listed above (including the client fonts section).
-
-LAYOUT PATTERN DISTRIBUTION (CRITICAL):
-- For 12+ sections, assign layoutPatterns to at least 10 sections explicitly.
-- MANDATORY inclusions — at least ONE of each pattern type:
-  - "right-image-left-text" (not just left-image-right-text — must appear at least twice)
-  - "full-bleed-sensory" (assign to texture_focus, sensory, or break sections)
-  - "photo-gallery-strip" (assign to photo_gallery sections)
-  - "dark-story-centered" (assign to brand_story and cta)
-  - "numbered-steps-horizontal" (assign to process, usage, how_to_use sections)
-  - "grid-info-cards" (assign to features, certifications, social_proof, ingredients, faq)
-- Do NOT assign the same split direction consecutively — alternate "left-image-right-text" and "right-image-left-text" for split-type sections.
-- ingredients, packaging, gift_suggestion, size_comparison → use "left-image-right-text" or "right-image-left-text" (alternating).
-
-BACKGROUND STYLE (backgroundStyle field in each layoutPattern — CRITICAL):
-- Output a valid CSS background value that you freely choose based on product mood and reference images.
-- "image" → use a generated image as the section background (only for sensory/break/story sections)
-- CSS value → applied inline directly (for grid, steps, split, cta sections)
-- Examples: "#fafaf8", "linear-gradient(135deg, #2D4A2D 0%, #1A3020 100%)",
-  "radial-gradient(ellipse at top, #1a1a2e 0%, #16213e 100%)", "var(--color-surface2)"
-- Alternate dark and light sections — never use the same tone consecutively.
-- For dark backgrounds (hex starts with #0 or #1, or clearly dark gradient): text will auto-invert.
-- For split sections: backgroundStyle applies to the text-content side.
-- brand_story, cta: choose dramatic dark gradients that complement brand color.
-
-LAYER IMAGE DESIGN GUIDE (v5 CRITICAL — REPLACES conceptShots):
-
-For EVERY layoutPattern with bgType='layer-image', you MUST author a sectionImageBrief
-in stylingPrompts.sectionImageBriefs[]. Each brief contains 1~3 image assets that will
-be composited as separate layers in HTML. This is your most important output for visual
-quality — Layer Image agent will execute your prompts verbatim with Gemini.
-
-ASSET ROLES:
-1. background (REQUIRED for every layer-image section):
-   - Full-bleed decorative texture/gradient/atmosphere
-   - NO text, NO product, NO box, NO frame, NO UI elements
-   - Safe zone in the textPlacement area must be visually CALM
-   - Sized to match section (typically 860x900 vertical, 860x600 sensory landscape)
-   - transparent: false
-
-2. frame (OPTIONAL — decorative border/frame):
-   - Transparent PNG that wraps content area
-   - Examples: thin gold border with corner ornaments, woven texture frame, organic blob
-   - Sized smaller than section (typical 780x740)
-   - transparent: true
-
-3. accent (OPTIONAL — small decorative element):
-   - Transparent PNG positioned as visual flourish
-   - Examples: small wheat illustration, floral motif, abstract shape, badge
-   - Small size (typical 120x120)
-   - transparent: true
-
-PROMPT WRITING RULES (per asset):
-- Write in English at Styling Shots level of detail (composition / surface / lighting / mood)
-- Reflect the references you analyzed
-- Match the section's textureHint / lightingMood / atmosphericKeywords for cohesion
-- Strict prohibitions: NO text, NO Korean characters, NO prices/percentages
-- For backgrounds: explicitly mark the safe zone (e.g. "calm center 60% area for text overlay")
-- For transparent assets: prompt should describe a single isolated decorative element
-
-DECISION RULE (asset count per section):
-- hero / sensory / brand_story: background + frame + accent (3 assets)
-- key_benefit / ingredients / process: background + accent (2 assets)
-- packaging / cta: background only (1 asset) or + accent (2)
-- bento-grid sections: background + accent (2) — frame redundant with cards
-- AUTONOMY: skip optional assets when not adding value. Quality over quantity.
-
-OUTPUT EXAMPLE (for stylingPrompts.sectionImageBriefs[]):
-{
-  "section": "brand_story",
-  "designIntent": "따뜻한 가족 베이커리 무드, 빈티지 편집형 톤. 본문이 차분히 읽히도록 중앙 캄 영역 보장",
-  "textureHint": "warm linen + soft golden bokeh",
-  "lightingMood": "soft afternoon window light",
-  "atmosphericKeywords": ["intimate", "warm", "handcrafted"],
-  "assets": [
-    {
-      "role": "background",
-      "prompt": "Warm linen fabric texture with soft golden bokeh in upper area, gradient fade to deeper warm tones at bottom. NO text, NO product, NO frame. Calm center 60% area (vertical 20%-80%) reserved for HTML card overlay. 860x900 vertical, editorial Korean food magazine aesthetic, subtle Kodak Portra grain, no AI-generated look.",
-      "filename": "brand_story_bg.png",
-      "size": "860x900",
-      "transparent": false
-    },
-    {
-      "role": "frame",
-      "prompt": "Decorative thin gold ornamental border with elegant corner flourishes, art-deco-meets-Korean-traditional motif, transparent PNG, 780x740, no text, no product, isolated decorative element only.",
-      "filename": "brand_story_frame.png",
-      "size": "780x740",
-      "transparent": true
-    },
-    {
-      "role": "accent",
-      "prompt": "Small minimal wheat grain illustration in soft golden watercolor, transparent PNG, 120x120, hand-drawn editorial style, no text, no product, single isolated motif.",
-      "filename": "brand_story_accent.png",
-      "size": "120x120",
-      "transparent": true
-    }
-  ]
-}
-
-REFERENCE EMULATION (CRITICAL — DO NOT SKIP):
-Each prompt in sectionImageBriefs[].assets[].prompt MUST be informed by the attached
-section reference images. The "Section-tagged References" block in the user message lists
-which images belong to which section.
-
-For each sectionImageBrief.background prompt:
-  1. Identify the section's matching reference images (3장 per section).
-  2. Describe the SPECIFIC visual qualities you observe — NOT generic textureHint keywords:
-     - exact color palette ("deep oxblood transitioning to charcoal at edges")
-     - lighting direction/quality ("low raking light from upper-left, hard shadows on right")
-     - texture grain/material ("visible canvas weave at 30% opacity, subtle film grain")
-     - composition geometry ("negative space concentrated in center 50%, dense detail at edges")
-     - atmospheric details specific to those refs (steam, haze, bokeh distribution)
-  3. AVOID stock keyword chains ("warm + soft + golden + amber") — be specific to what you see in the refs.
-  4. If 3 references for the section show 3 different tones, choose ONE and commit to it (don't blend).
-
-When in doubt: write your prompt as if instructing a designer to recreate ONE specific reference image, not as a generic mood board summary.
-
-DIVERSITY CONSTRAINT (CRITICAL):
-Each sectionImageBrief MUST have a distinct textureHint and lightingMood from the others.
-Forbidden: all 8 sections sharing "warm linen" or "vintage darkroom" — that produces monotone results.
-Vary by section purpose:
-- hero: epic/atmospheric (golden hour bokeh, cinematic gradient)
-- brand_story: intimate/dark (warm wood, candle glow, vintage paper)
-- key_benefit: clean/structured (subtle pastel, geometric grid hint)
-- ingredients: natural/raw (linen, kraft paper, organic stone)
-- process: artisan/workbook (parchment, soft horizontal rhythm, sketch grid)
-- sensory: immersive/dramatic (steam, mist, deep gradient, macro feel)
-- packaging: clean/trustworthy (canvas, white paper, minimal stripe)
-- cta: bold/converting (dramatic gradient, dark luxury, brand color glow)
-The above are STARTING points — adjust per product, but DO NOT make them similar.
-
-CRITICAL REMINDERS:
-- sectionImageBriefs MUST cover every layoutPattern with bgType='layer-image'
-- Reuse conceptShots field is DEPRECATED — use sectionImageBriefs only
-- If you generate fewer than the layer-image sections, validation will fail and trigger retry
-- Each brief's textureHint and lightingMood MUST be section-specific (no copy-paste across sections)
-
-3-LAYER OVERLAY SYSTEM (v5 — REQUIRED for every layoutPattern):
-Every section is rendered as 3 stacked layers:
-  Layer 1: BACKGROUND   — decorative texture (Gemini PNG) or CSS (gradient/solid/SVG)
-  Layer 2: CARD/BOX     — HTML/SVG with radius/shadow/border (NEVER baked into image)
-  Layer 3: TEXT         — vector typography on top of card
-
-For each layoutPattern, you MUST also output these 4 fields:
-
-(a) bgType — how the background is generated:
-  - "layer-image"  → Gemini PNG (decorative, text-free, box-free, product-free)
-                     Use for sections where atmosphere matters: brand_story, sensory, packaging, cta, hero, ingredients
-  - "gradient"     → CSS linear/radial gradient (cleaner sections like key_benefit, process)
-  - "solid"        → single color (clean grids, dense info)
-  - "texture-svg"  → inline SVG pattern (subtle dots/lines/grain)
-
-(b) cardStyle — how the overlay card looks:
-  - "elevated"  → white card with soft shadow on photo-textured background
-  - "flat"      → solid color card, no shadow, modern look
-  - "outlined"  → transparent card with border, lets background show through
-  - "glass"     → frosted glass (backdrop-blur) — premium feel on rich backgrounds
-  - "none"      → no card, text overlays directly on background (hero, sensory)
-
-(c) overlayStrategy — card layout within the section:
-  - "center-card"   → 1 big centered card (brand_story, cta, dense narrative)
-  - "side-card"     → card on one side, background fills the other (ingredients, packaging)
-  - "split-card"    → image on one side + card on other (packaging with photo)
-  - "full-bleed"    → no card, text directly on full-bleed image (hero, sensory)
-  - "stacked-cards" → vertical timeline cards (process, how_to_use)
-  - "bento-grid"    → 2×2 or 3-cell grid of small cards (key_benefit, features)
-
-(d) textPlacement — where text/card sits (drives layer-image safe zone):
-  - "top" / "center" / "bottom" / "side-right" / "side-left"
-  - The layer-image generator will leave this area visually calm (low contrast)
-
-(e) cardCount (optional) — for bento-grid: 2/3/4/6
-
-SECTION RECOMMENDATIONS (use as starting point, adjust per product mood):
-| section        | bgType       | cardStyle | overlayStrategy | textPlacement |
-|----------------|--------------|-----------|-----------------|---------------|
-| hero           | layer-image  | none      | full-bleed      | bottom        |
-| brand_story    | layer-image  | glass     | center-card     | center        |
-| key_benefit    | gradient     | elevated  | bento-grid      | center        |
-| ingredients    | layer-image  | flat      | side-card       | side-right    |
-| process        | gradient     | flat      | stacked-cards   | center        |
-| sensory        | layer-image  | none      | full-bleed      | center        |
-| packaging      | layer-image  | elevated  | split-card      | side-left     |
-| cta            | layer-image  | none      | full-bleed      | center        |
-| features       | solid        | outlined  | bento-grid      | center        |
-| social_proof   | solid        | flat      | stacked-cards   | center        |
-| certifications | gradient     | outlined  | bento-grid      | center        |
 
 PRODUCT PRESERVATION RULES — ABSOLUTE CONSTRAINTS:
 productPreservationRules must ONLY contain rules that PROTECT and PRESERVE the product's exterior appearance.
@@ -333,19 +147,7 @@ ${templateCatalog ? templateCatalog + '\n' : ''}${hasReferenceImages ? '## Refer
     "weights": { "headline": string, "body": string },
     "letterSpacing": string
   },
-  "icons": { "library": "phosphor"|"lucide"|"tabler"|"iconoir", "weight": string, "size": number, "primaryColor": "#HEX", "useCases": { "key": "icon-name" } },
   "decorativeElements": { "dividerStyle": string, "cornerRadius": string, "shadows": string },
-  "layoutPatterns": [{
-    "section": string,
-    "pattern": "full-bleed-hero"|"left-image-right-text"|"right-image-left-text"|"full-bleed-sensory"|"dark-story-centered"|"numbered-steps-horizontal"|"grid-info-cards"|"photo-gallery-strip"|"masonry-gallery"|"split-text-heavy"|"centered-statement"|"icon-feature-row"|"comparison-table"|"timeline-vertical"|"full-bleed-overlay"|"testimonial-quote",
-    "backgroundStyle": string,
-    "bgType": "layer-image"|"gradient"|"solid"|"texture-svg",
-    "cardStyle": "elevated"|"flat"|"outlined"|"glass"|"none",
-    "overlayStrategy": "center-card"|"side-card"|"split-card"|"full-bleed"|"stacked-cards"|"bento-grid",
-    "textPlacement": "top"|"center"|"bottom"|"side-right"|"side-left",
-    "cardCount": number
-  }],
-  "sectionRhythm": string,
   "referenceUrls": string[],
   "designNotes": string,
   "selectedTemplateId": string
@@ -367,33 +169,6 @@ ${templateCatalog ? templateCatalog + '\n' : ''}${hasReferenceImages ? '## Refer
       "camera": string,
       "mood": string
     }
-  ],
-  "conceptShots": [
-    {
-      "filename": string,
-      "purpose": string,
-      "targetSection": string,
-      "prompt": string
-    }
-  ],
-  "sectionImageBriefs": [
-    {
-      "section": string,
-      "designIntent": string,
-      "textureHint": string,
-      "lightingMood": string,
-      "atmosphericKeywords": string[],
-      "assets": [
-        {
-          "role": "background"|"frame"|"accent",
-          "prompt": string,
-          "filename": string,
-          "size": string,
-          "transparent": boolean,
-          "notes": string
-        }
-      ]
-    }
   ]
 }
 
@@ -414,17 +189,6 @@ Rules for every shot:
 - Unique composition; vary surface/lighting/mood so no two shots look alike
 - English camera settings (Canon 5D Mark IV, specific mm + f-stop), Kodak Portra 400 film grain, natural imperfections
 - NO "perfect", "clean", "symmetrical", "hyperrealistic" words
-
-CONCEPT SHOTS (DEPRECATED in v5):
-- Use sectionImageBriefs[] instead — see LAYER IMAGE DESIGN GUIDE above.
-- For backwards compatibility you may still output "conceptShots": [] (empty array).
-- Do NOT add new conceptShots. All layer-image content goes into sectionImageBriefs.
-
-SECTION IMAGE BRIEFS (REQUIRED for v5):
-- For every layoutPattern with bgType='layer-image', author one sectionImageBrief.
-- Each brief contains 1~3 assets: background (required) + frame/accent (optional).
-- Follow the LAYER IMAGE DESIGN GUIDE rules above precisely.
-- Validation will reject the response if any layer-image section has no brief.
 
 Output raw JSON only, separated by ===SEPARATOR===`
 }
