@@ -43,11 +43,24 @@ HARD CONSTRAINTS:
   var(--font-display) var(--font-body) var(--font-serif). Tints via color-mix() allowed.
 - Use the provided images meaningfully (object-fit ok, creative crop/mask ok, no distortion,
   never repeat one image twice). If an image does not fit the copy, omit it rather than force it.
+- IMAGE SRC = TOKEN ONLY (CRITICAL): write src="__IMG_0__" (the exact token given per image) —
+  NEVER type a real URL. Tokens are substituted with real URLs after generation.
 - Copy: refine the provided copyBrief into final Korean copy — NEVER invent facts, numbers,
   certifications not present in the briefs. Emphasis via color/weight, not emoji. No banned
   cliché adjectives (완벽한·최고의·혁신적인·압도적인).
 - OVERLAP SAFETY (CRITICAL): text must NEVER collide with other text. Any text over an image
   needs a guaranteed-contrast zone (scrim/panel/solid area). Check your layout mentally at 872px.
+  Oversized decorative type (watermark numerals, ghost headlines) must live in its own vertical
+  band or sit at ≤0.08 opacity behind a solid panel — it must never intersect readable copy.
+- TYPE SCALE FLOOR (CRITICAL — mobile-viewed page, rule-gated): any <p> or <li> holding 10+
+  characters is measured as BODY TEXT and must be ≥ 23px. Captions/labels/eyebrows smaller than
+  23px must use <span> or <div> (never <p>/<li>) and stay ≥ 17px. NOTHING below 17px.
+- Class naming: every class starts with "{NS}" (e.g. {NS}-hero). NEVER use bare reserved
+  classes "ph" or "dpg" — they trigger system placeholder detection.
+- HERO PRESENCE (scene 1 only, rule-gated): total <img> area must exceed 30% of the scene's
+  width×height. Concretely: make the main product photo edge-to-edge (872px wide) with height
+  ≥ 45% of the scene height (e.g. scene 2000px tall → image ≥ 900px tall). Never shrink the
+  hero photo into a small card/widget box — the first screen leads with the product.
 - TONE: this scene must be {TONE} (page rhythm alternates; previous scene was {PREV_TONE}).
 - Flow: the scene must read top→bottom naturally; no dead empty bands over 200px.
 - No external assets beyond the given image URLs, no webfont imports, no JS.`
@@ -62,8 +75,32 @@ export function validateSceneHtml(html: string, ns: string): string[] {
   if (!html.includes(`class="${ns}`)) issues.push(`네임스페이스 .${ns} 미사용`)
   if (/<script/i.test(html)) issues.push('script 태그 금지')
   if (/@import|fonts\.googleapis/i.test(html)) issues.push('외부 폰트 임포트 금지')
+  // LLM의 긴 서명URL 전사 오타 원천 차단(2026-07-29 실측: 767→707 오타로 로드 실패 2건) — src는 토큰만
+  if (/<img[^>]+src="https?:/i.test(html)) issues.push('img src에 실URL 기입 금지 — __IMG_N__ 토큰만')
+  // 블록 시스템 예약 클래스 — 룰체크의 플레이스홀더(.ph)·루트(.dpg) 검사를 오염시킨다
+  if (/class="(?:[^"]*\s)?(?:ph|dpg)(?:\s[^"]*)?"/.test(html)) issues.push('예약 클래스 ph/dpg 사용 금지')
   // 네임스페이스 밖 전역 셀렉터 검출(body·:root·* 직접 스타일링)
   if (new RegExp(`<style[^>]*>[^<]*?(^|\\})\\s*(body|:root|\\*)\\s*\\{`, 's').test(html)) issues.push('전역 셀렉터 금지')
+  // 본문(p/li) 폰트 하한 23px — 렌더 룰체크(render-audit: p/li 10자 이상)와 동일 기준을 생성
+  // 시점에 정적으로 강제. 프롬프트 지시만으로는 잔존(실측 3차: 3개/18px) → 기계 게이트로 재시도.
+  const css = html.match(/<style[^>]*>([\s\S]*?)<\/style>/i)?.[1] ?? ''
+  const smallClasses = new Set<string>()
+  for (const m of css.matchAll(/([^{}]+)\{[^{}]*?font-size:\s*(\d+(?:\.\d+)?)px/g)) {
+    if (parseFloat(m[2]) >= 23) continue
+    for (const selRaw of m[1].split(',')) {
+      const sel = selRaw.trim()
+      // 의사요소(::before 불릿 마커 등)는 render-audit이 요소 자체만 재므로 측정 대상 아님
+      if (/::?(before|after|marker|placeholder|first-letter|first-line)/.test(sel)) continue
+      if (/(^|[\s>+~])(p|li)\b/.test(sel)) { issues.push(`본문 셀렉터(${sel.slice(0, 40)}) 폰트 <23px`); continue }
+      const cls = sel.match(/\.([A-Za-z0-9_-]+)$/)?.[1]
+      if (cls) smallClasses.add(cls)
+    }
+  }
+  for (const m of html.matchAll(/<(p|li)\b[^>]*class="([^"]+)"/g)) {
+    const hit = m[2].split(/\s+/).find((c) => smallClasses.has(c))
+    if (hit) { issues.push(`<${m[1]} class="${hit}"> 본문 폰트 <23px — 캡션은 span/div로`); break }
+  }
+  if (/<(p|li)\b[^>]*style="[^"]*font-size:\s*(1?\d|2[0-2])(?:\.\d+)?px/.test(html)) issues.push('p/li 인라인 폰트 <23px')
   return issues
 }
 
@@ -150,6 +187,7 @@ ${parts.join('\n')}
 export async function runSceneDesigner(
   input: SceneDesignInput,
   _retried = false,
+  _feedback?: string[],
 ): Promise<AgentResult<{ html: string }>> {
   const elapsed = timer()
   const lang = getStyleLanguage(input.styleLanguageId)
@@ -167,10 +205,14 @@ export async function runSceneDesigner(
 SCENE ${input.sceneNo}/${input.totalScenes} 콘텐츠(각 항목은 이 씬이 다뤄야 할 승인된 내용 요지):
 ${input.briefs.map((b, i) => `${i + 1}. ${b}`).join('\n')}
 
-사용 가능 이미지(이 씬 전용, 반복 금지):
-${input.images.slice(0, 5).map((u, i) => `[img${i}] ${u}`).join('\n') || '(없음 — 타이포·그래픽 중심으로 설계)'}
+사용 가능 이미지(이 씬 전용, 반복 금지 — src에는 아래 토큰을 그대로 기입):
+${input.images.slice(0, 5).map((u, i) => `__IMG_${i}__ (${u.split('?')[0].split('/').pop() ?? 'image'})`).join('\n') || '(없음 — 타이포·그래픽 중심으로 설계)'}
 
-Output the final <style> + <section class="${input.ns}"> now.`
+Output the final <style> + <section class="${input.ns}"> now.${
+    _feedback?.length
+      ? `\n\nPREVIOUS ATTEMPT WAS REJECTED for these violations — you MUST fix every one:\n${_feedback.map((f) => `- ${f}`).join('\n')}`
+      : ''
+  }`
 
   try {
     const msg = await anthropicClient.messages.create({
@@ -180,12 +222,15 @@ Output the final <style> + <section class="${input.ns}"> now.`
       messages: [{ role: 'user', content: user }],
     })
     if (msg.stop_reason === 'max_tokens') throw new Error('출력 잘림(max_tokens)')
-    const html = extractText(msg.content).replace(/^```html?\n?|```$/g, '').trim()
-    const issues = validateSceneHtml(html, input.ns)
+    const raw = extractText(msg.content).replace(/^```html?\n?|```$/g, '').trim()
+    const issues = validateSceneHtml(raw, input.ns)
+    // 토큰 → 실URL 결정적 치환(전사 오타 원천 차단) — 잔여 토큰은 존재하지 않는 인덱스 참조
+    const html = raw.replace(/__IMG_(\d+)__/g, (m, d) => input.images[Number(d)] ?? m)
+    if (/__IMG_\d+__/.test(html)) issues.push('존재하지 않는 이미지 토큰 참조')
     if (issues.length) {
       if (!_retried) {
         console.warn(`[Scene Designer] 씬 ${input.sceneNo} 형식 위반 재시도 — ${issues.join(' | ')}`)
-        return runSceneDesigner(input, true)
+        return runSceneDesigner(input, true, issues)
       }
       return { success: false, error: `형식 위반: ${issues.join(' | ')}`, durationMs: elapsed() }
     }
