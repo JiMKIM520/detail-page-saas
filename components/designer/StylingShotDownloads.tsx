@@ -1,4 +1,5 @@
 'use client'
+import { thumbUrl } from '@/lib/image'
 
 import { useState } from 'react'
 
@@ -46,7 +47,7 @@ export function StylingShotDownloads({ shots }: { shots: Shot[] }) {
     <div className="grid grid-cols-3 gap-3">
       {shots.map((s) => (
         <figure key={s.name} className="rounded-lg overflow-hidden border border-border bg-white group relative">
-          <img src={s.url} alt={s.name} className="w-full aspect-[3/4] object-cover" />
+          <img src={thumbUrl(s.url, 500)} alt={s.name} className="w-full aspect-[3/4] object-cover" loading="lazy" />
           <figcaption className="text-[11px] text-text-tertiary px-2 py-1.5 truncate">{s.name}</figcaption>
           <button
             onClick={() => download(s)}

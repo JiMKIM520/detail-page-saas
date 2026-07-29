@@ -1,4 +1,5 @@
 'use client'
+import { thumbUrl } from '@/lib/image'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -66,7 +67,7 @@ export function StylingShotGenerator({
         <div className="grid grid-cols-3 gap-3">
           {shots.map((s, i) => (
             <figure key={i} className="rounded-lg overflow-hidden border border-border bg-white">
-              <img src={s.url} alt={s.name} className="w-full aspect-[3/4] object-cover" />
+              <img src={thumbUrl(s.url, 500)} alt={s.name} className="w-full aspect-[3/4] object-cover" loading="lazy" />
               <figcaption className="text-xs text-text-tertiary px-2.5 py-2 truncate">{s.name}</figcaption>
             </figure>
           ))}

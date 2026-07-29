@@ -1,3 +1,4 @@
+import { previewUrl } from '@/lib/image'
 interface Design {
   id: string
   preview_url: string | null
@@ -77,7 +78,7 @@ export function DesignPreview({ design, projectId }: { design: Design | null; pr
       {/* 레거시: PNG 미리보기 / PDF / 다운로드 (있을 때만) */}
       {design.preview_url && (
         <div className="rounded-xl border border-border overflow-hidden shadow-card">
-          <img src={design.preview_url} alt="디자인 미리보기" className="w-full" />
+          <img src={previewUrl(design.preview_url, 1400)} alt="디자인 미리보기" className="w-full" loading="lazy" />
         </div>
       )}
       {design.output_url && (

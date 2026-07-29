@@ -1,12 +1,15 @@
 'use client'
+import { previewUrl } from '@/lib/image'
 
 interface ProtectedImageProps {
   src: string
   alt: string
   className?: string
+  /** 표시 폭(px) — 원본 대신 변환본을 내려받아 트래픽을 줄인다 */
+  width?: number
 }
 
-export function ProtectedImage({ src, alt, className }: ProtectedImageProps) {
+export function ProtectedImage({ src, alt, className, width = 1400 }: ProtectedImageProps) {
   return (
     <div
       className="relative select-none"
@@ -15,7 +18,8 @@ export function ProtectedImage({ src, alt, className }: ProtectedImageProps) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={src}
+        src={previewUrl(src, width)}
+        loading="lazy"
         alt={alt}
         className={className}
         draggable={false}
