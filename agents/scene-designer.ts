@@ -91,7 +91,9 @@ export function validateSceneHtml(html: string, ns: string): string[] {
       const sel = selRaw.trim()
       // 의사요소(::before 불릿 마커 등)는 render-audit이 요소 자체만 재므로 측정 대상 아님
       if (/::?(before|after|marker|placeholder|first-letter|first-line)/.test(sel)) continue
-      if (/(^|[\s>+~])(p|li)\b/.test(sel)) { issues.push(`본문 셀렉터(${sel.slice(0, 40)}) 폰트 <23px`); continue }
+      // 셀렉터 '마지막' 컴파운드가 p/li 자체인 경우만 본문 — 'li i'·'p span' 등 내부 인라인
+      // 요소는 render-audit 측정 대상이 아니다(선풍기 .sc2-specs li i 오탐 실측)
+      if (/(^|[\s>+~])(p|li)(\.[A-Za-z0-9_-]+|:[a-z-]+(\([^)]*\))?)*\s*$/.test(sel)) { issues.push(`본문 셀렉터(${sel.slice(0, 40)}) 폰트 <23px`); continue }
       const cls = sel.match(/\.([A-Za-z0-9_-]+)$/)?.[1]
       if (cls) smallClasses.add(cls)
     }
@@ -124,13 +126,37 @@ export async function runSceneDesignPage(
   const elapsed = timer()
   const width = input.width ?? 872
 
-  // 씬 그룹핑 — 청사진의 scene 번호 기준, 톤은 씬 첫 블록의 variantTone(플래너 톤 설계 반영)
+  // 죽은 이미지 URL 사전 제거 — DB 레코드만 남고 스토리지에 없는 파일(임페리얼 커피잔0X.png 실측)이
+  // 씬에 들어가면 로드 실패 결함으로 페이지 전체가 반려된다. 입구에서 HEAD로 전수 검증.
+  const allUrls = [...new Set(input.blueprint.sections.flatMap((s) => s.imageUrls ?? []).filter(Boolean))]
+  const deadUrls = new Set<string>()
+  await Promise.all(
+    allUrls.map(async (u) => {
+      try {
+        const res = await fetch(u, { method: 'HEAD', signal: AbortSignal.timeout(8000) })
+        if (!res.ok) deadUrls.add(u)
+      } catch {
+        deadUrls.add(u)
+      }
+    }),
+  )
+  if (deadUrls.size) {
+    console.warn(`[Scene Designer] 접근 불가 이미지 ${deadUrls.size}건 제외 — ${[...deadUrls].map((u) => u.split('/').pop()).join(', ')}`)
+  }
+
+  // 씬 그룹핑 — 청사진의 scene 번호 기준, 톤은 씬 첫 블록의 variantTone(플래너 톤 설계 반영).
+  // 이미지는 첫 등장 씬에만 배정 — 씬 간 중복이 룰체크(동일 이미지 중복)에 걸린 실측(선풍기) 차단.
   const groups = new Map<number, { briefs: string[]; images: string[]; tone: 'light' | 'dark' }>()
+  const seenImages = new Set<string>()
   for (const s of input.blueprint.sections) {
     const n = s.scene ?? 1
     const g = groups.get(n) ?? { briefs: [], images: [], tone: variantTone(s.variantId) }
     g.briefs.push(s.copyBrief)
-    for (const u of s.imageUrls ?? []) if (u && !g.images.includes(u)) g.images.push(u)
+    for (const u of s.imageUrls ?? []) {
+      if (!u || seenImages.has(u) || deadUrls.has(u)) continue
+      seenImages.add(u)
+      g.images.push(u)
+    }
     groups.set(n, g)
   }
   const sceneNos = [...groups.keys()].sort((a, b) => a - b)
