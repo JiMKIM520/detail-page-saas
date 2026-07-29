@@ -52,6 +52,8 @@ HARD CONSTRAINTS:
   needs a guaranteed-contrast zone (scrim/panel/solid area). Check your layout mentally at 872px.
   Oversized decorative type (watermark numerals, ghost headlines) must live in its own vertical
   band or sit at ≤0.08 opacity behind a solid panel — it must never intersect readable copy.
+  Labels INSIDE gauges/bars/badges: give the track enough width for the full label at its font
+  size, or place the label OUTSIDE the bar — text inside a bar must never wrap or collide.
 - TYPE SCALE FLOOR (CRITICAL — mobile-viewed page, rule-gated): any <p> or <li> holding 10+
   characters is measured as BODY TEXT and must be ≥ 23px. Captions/labels/eyebrows smaller than
   23px must use <span> or <div> (never <p>/<li>) and stay ≥ 17px. NOTHING below 17px.
@@ -77,6 +79,11 @@ export function validateSceneHtml(html: string, ns: string): string[] {
   if (/@import|fonts\.googleapis/i.test(html)) issues.push('외부 폰트 임포트 금지')
   // LLM의 긴 서명URL 전사 오타 원천 차단(2026-07-29 실측: 767→707 오타로 로드 실패 2건) — src는 토큰만
   if (/<img[^>]+src="https?:/i.test(html)) issues.push('img src에 실URL 기입 금지 — __IMG_N__ 토큰만')
+  // 같은 씬 안 동일 토큰 재사용 — 룰체크(동일 이미지 중복)에 걸린다(선풍기 need_reserve_28 실측)
+  const tokenUse = new Map<string, number>()
+  for (const m of html.matchAll(/__IMG_(\d+)__/g)) tokenUse.set(m[1], (tokenUse.get(m[1]) ?? 0) + 1)
+  const dup = [...tokenUse.entries()].filter(([, n]) => n > 1)
+  if (dup.length) issues.push(`동일 이미지 토큰 반복 사용 금지: ${dup.map(([k, n]) => `__IMG_${k}__×${n}`).join(', ')}`)
   // 블록 시스템 예약 클래스 — 룰체크의 플레이스홀더(.ph)·루트(.dpg) 검사를 오염시킨다
   if (/class="(?:[^"]*\s)?(?:ph|dpg)(?:\s[^"]*)?"/.test(html)) issues.push('예약 클래스 ph/dpg 사용 금지')
   // 네임스페이스 밖 전역 셀렉터 검출(body·:root·* 직접 스타일링)
