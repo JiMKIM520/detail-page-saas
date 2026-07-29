@@ -10,6 +10,7 @@ import { anthropicClient, loadImageAsBase64, parseJsonResponse, saveJson, timer,
 import type { ProjectBrief, StyleGuide, StylingPromptsJson, AgentResult } from './types'
 import { buildTemplateCatalog } from './templates/index'
 import { isWhitelistedFont } from './templates/blocks/shared'
+import { rankStyleLanguages, STYLE_LANGUAGES } from './templates/blocks/style-languages'
 import * as fs from 'fs'
 
 /** 스타일가이드 출력 게이트 (design-system.md §8-1) — 유일하게 Zod 없이 raw 파싱되던
@@ -21,6 +22,7 @@ const styleGuideGate = z
   .object({
     brand: z.object({ name: z.string().min(1), moodKeywords: z.array(z.string()).min(1) }).passthrough(),
     shapeLanguage: z.enum(['sharp-editorial', 'soft-round', 'organic', 'arch-serif', 'neutral']).optional(),
+    styleLanguage: z.enum(STYLE_LANGUAGES.map((l) => l.id) as [string, ...string[]]).optional(),
     colors: z
       .object({
         primary: z.string().regex(HEX6), secondary: z.string().regex(HEX6),
@@ -153,7 +155,23 @@ Output raw JSON only, no markdown code blocks.`
 function buildUserPrompt(brief: ProjectBrief, hasReferenceImages: boolean): string {
   const templateCatalog = buildTemplateCatalog(brief.category)
 
+  // 기업 인테이크 디자인 키워드 → 스타일 언어 후보(§2.4) — 기업 의사가 1차 결정자
+  const picks = (brief.styleDirection ?? '').split(',').map((s) => s.trim()).filter(Boolean)
+  const ranked = rankStyleLanguages(picks)
+  const candidates = ranked.length ? ranked : STYLE_LANGUAGES.map((l) => ({ id: l.id, name: l.name, score: 0, matched: [] as string[] }))
+  const styleLangBlock = `## Style Language Candidates (씬 자유 설계용 — §2.4)
+${candidates
+    .slice(0, ranked.length ? 3 : 9)
+    .map((c) => {
+      const lang = STYLE_LANGUAGES.find((l) => l.id === c.id)
+      return `- ${c.id} (${lang?.name}): ${lang?.identity}${c.matched.length ? ` — 기업 선택 키워드 일치: ${c.matched.join(', ')}` : ''}`
+    })
+    .join('\n')}
+${ranked.length ? '기업이 고른 디자인 키워드와 매칭된 후보다 — 이 중 제품 무드에 가장 맞는 하나를 styleLanguage로 확정하라.' : '기업 키워드 매칭이 없다 — 제품 무드에 가장 맞는 하나를 styleLanguage로 확정하라.'}`
+
   return `
+${styleLangBlock}
+
 ## Brand Brief
 Product: ${brief.productName}
 Category: ${brief.category}
@@ -174,6 +192,7 @@ ${templateCatalog ? templateCatalog + '\n' : ''}${hasReferenceImages ? '## Refer
 {
   "brand": { "name": string, "moodKeywords": string[], "targetEmotion": string },
   "shapeLanguage": "sharp-editorial"|"soft-round"|"organic"|"arch-serif"|"neutral",  // 페이지 기하학(곡률·사진 프레임·여백 리듬)을 결정하는 형태 언어 — 브랜드 무드에 근거해 선택. sharp-editorial=미니멀/모던(직각·넓은 여백), soft-round=포근/발랄(큰 곡률), organic=자연/수제(블롭 프레임), arch-serif=클래식/프리미엄(아치 프레임), neutral=균형
+  "styleLanguage": string,  // 씬 자유 설계 스타일 언어 — 유저 프롬프트의 STYLE LANGUAGE CANDIDATES 중 하나를 확정(후보가 없으면 제품 무드에 가장 맞는 것을 후보 목록에서 선택)
   "colors": { "primary": "#HEX", "secondary": "#HEX", "surface1": "#HEX", "surface2": "#HEX", "surface3": "#HEX", "textDark": "#HEX", "textLight": "#HEX", "accent": "#HEX" },
   "typography": {
     "headlineFont": string,

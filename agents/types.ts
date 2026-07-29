@@ -79,6 +79,8 @@ export interface StyleGuide {
   /** 형태 언어 — tokens.ts SHAPE_PRESETS가 rScale/photoShape/padX로 변환.
    *  런타임에서만 읽히던 유령 필드를 정식 계약으로 승격 (design-system.md §8-5, 2026-07-26). */
   shapeLanguage?: 'sharp-editorial' | 'soft-round' | 'organic' | 'arch-serif' | 'neutral'
+  /** 스타일 언어(§2.4) — 씬 자유 설계의 스타일 축. 기업 인테이크 키워드 후보 중 아트디렉터 확정. */
+  styleLanguage?: string
   colors: {
     primary: string
     secondary: string

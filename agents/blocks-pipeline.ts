@@ -84,6 +84,45 @@ export async function runBlocksPipeline(
     // 플래너 실패 시 청사진 없이 기존 단일 컴포저 경로로 진행 (무중단)
   }
 
+  // ── Step 1.7: 씬 자유 설계 경로 (design-system.md Phase 3, USE_SCENE_DESIGNER) ──
+  // 1차 조립은 씬 디자이너(스타일 언어 기반 자유 HTML/CSS), 실패 시 아래 블록 경로로 폴백.
+  // 시각 감사 반려 재조립(auditReworkNote 존재)은 자동으로 블록 경로 — 페이지 레벨 폴백 완성.
+  if (process.env.USE_SCENE_DESIGNER === 'true' && blueprint && !opts.auditReworkNote) {
+    const styleLanguageId = opts.styleGuide?.styleLanguage
+    if (styleLanguageId) {
+      try {
+        const { runSceneDesignPage } = await import('./scene-designer')
+        const { deriveTokens } = await import('./templates/blocks/tokens')
+        const tokens = deriveTokens(
+          opts.preferredPreset ?? presetForCategory(input.category),
+          input.brandColors,
+          { styleGuide: opts.styleGuide },
+        )
+        const page = await runSceneDesignPage({
+          productName: input.productName,
+          moodKeywords: opts.styleGuide?.moodKeywords ?? [],
+          styleLanguageId,
+          blueprint,
+          tokens,
+        })
+        stages.sceneDesigner = { success: page.success, durationMs: page.durationMs, error: page.error }
+        if (page.success && page.data) {
+          const htmlPath = path.join(dirs.final, 'index.html')
+          fs.writeFileSync(htmlPath, page.data.html, 'utf8')
+          const sizeKb = Math.round(fs.statSync(htmlPath).size / 1024)
+          console.log(`[Blocks PM] 씬 자유 설계 완료 — index.html (${sizeKb}KB), 씬 ${page.data.sceneCount}개 · 스타일 ${styleLanguageId}`)
+          stages.exporter = { success: true }
+          return { projectId, success: true, outputDir: dirs.base, htmlPath, stages, retryCount: 0, totalDurationMs: elapsed() }
+        }
+        console.warn(`[Blocks PM] 씬 설계 실패(${page.error?.slice(0, 100)}) → 블록 경로 폴백`)
+      } catch (e) {
+        console.warn('[Blocks PM] 씬 설계 경로 오류 → 블록 경로 폴백:', (e as Error).message?.slice(0, 120))
+      }
+    } else {
+      console.log('[Blocks PM] styleLanguage 미확정 — 블록 경로로 진행')
+    }
+  }
+
   // ── Step 2: 블록 컴포저 (카탈로그 조합 → PageSpec → HTML, 내부 슬롯 zod 검증) ──
   const composer = await runBlocksComposer({
     auditNote: opts.auditReworkNote,

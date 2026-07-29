@@ -168,6 +168,10 @@ export interface StyleGuideTokenInput {
   shapeLanguage?: string
   /** 형태 언어 폴백 결정용 무드 키워드 (brand.moodKeywords) */
   moodKeywords?: string[]
+  /** 스타일 언어(§2.4) — 씬 자유 설계 경로(scene-designer)가 소비. 토큰 파생에는 불참 */
+  styleLanguage?: string
+  /** 브랜드명 — 씬 디자이너 프롬프트용 */
+  brandName?: string
 }
 
 /** ── 형태 언어 프리셋 (Sprint 6) ─────────────────────────────────────────────
