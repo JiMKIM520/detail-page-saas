@@ -45,5 +45,8 @@ export async function GET(request: Request) {
   })
   if (otpError) return fail()
 
-  return NextResponse.redirect(`${origin}/dashboard`, { status: 303 })
+  // next가 오면 그 화면으로 — 내부 경로만 허용. 없거나 형식이 어긋나면 기존대로 /dashboard.
+  const rawNext = searchParams.get('next') ?? ''
+  const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/dashboard'
+  return NextResponse.redirect(`${origin}${next}`, { status: 303 })
 }
