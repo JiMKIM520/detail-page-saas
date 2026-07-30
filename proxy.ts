@@ -2,8 +2,21 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-/** 인증 없이 접근 가능한 경로 (prefix 매칭) */
-const PUBLIC_PREFIXES = ['/login', '/signup', '/api/auth/', '/salt-bread', '/samples', '/draft']
+/**
+ * 인증 없이 접근 가능한 경로 (prefix 매칭)
+ *
+ * /api/integration/은 로그인 세션이 아니라 공유 시크릿 HMAC으로 신원을 확인한다
+ * (통합 관리자 서버가 부르는 경로라 브라우저 세션이 없다). 서명 검증은 각 라우트가 한다.
+ */
+const PUBLIC_PREFIXES = [
+  '/login',
+  '/signup',
+  '/api/auth/',
+  '/api/integration/',
+  '/salt-bread',
+  '/samples',
+  '/draft',
+]
 
 /** 인증 없이 접근 가능한 정확 경로 (하위 경로는 공개 아님) */
 const PUBLIC_EXACT = ['/admin']
