@@ -11,6 +11,13 @@ const schema = z.object({
   company_name: z.string().min(1, '기업명을 입력하세요'),
   product_highlights: z.string().min(10, '회사 소개를 10자 이상 입력하세요'),
   brand_name: z.string().optional(),
+  // 진행 안내(초안 확인·납품 등)를 보낼 곳 — 계정에는 기업 연락처가 없어 여기서 받는다
+  contact_name: z.string().min(1, '담당자 성함을 입력하세요'),
+  contact_phone: z
+    .string()
+    .min(1, '연락처를 입력하세요')
+    .regex(/^[0-9-]{9,13}$/, '연락처를 정확히 입력하세요 (예: 010-1234-5678)'),
+  contact_email: z.string().email('올바른 이메일을 입력하세요'),
   // Step 2 — 상품 정보
   product_name: z.string().min(1, '제품명을 입력하세요'),
   product_description: z.string().min(1, '제품 소개를 입력하세요'),
@@ -343,7 +350,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     platforms.find(p => (p as { slug?: string }).slug === '11st')?.id ?? platforms[0]?.id ?? ''
 
   const STEP_FIELDS: Record<number, (keyof FormData)[]> = {
-    1: ['company_name', 'product_highlights'],
+    1: ['company_name', 'product_highlights', 'contact_name', 'contact_phone', 'contact_email'],
     2: ['product_name', 'product_description', 'category_id'],
     3: ['homepage_url', 'detail_page_url'],
     4: ['consent'],
@@ -401,6 +408,9 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
     const payload = {
       company_name: data.company_name,
       product_highlights: data.product_highlights,
+      contact_name: data.contact_name,
+      contact_phone: data.contact_phone,
+      contact_email: data.contact_email,
       product_name: data.product_name,
       product_description: data.product_description,
       selling_points: sellingPoints.map(p => p.trim()).filter(Boolean),
@@ -498,6 +508,38 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
               <textarea {...register('product_highlights')} rows={4} className={textareaCls}
                 placeholder="어떤 사업을 하시나요? 주력 제품, 핵심 강점, 고객에게 전달하고 싶은 가치를 입력하세요." />
               {errors.product_highlights && <p className="text-red-500 text-sm mt-1.5">{errors.product_highlights.message}</p>}
+            </div>
+
+            {/* 진행 안내를 받을 담당자 — 초안 확인·최종 납품 안내가 이곳으로 간다 */}
+            <div className="bg-surface border border-border rounded-xl p-4 space-y-4">
+              <div>
+                <p className="text-sm font-semibold text-text-primary">진행 안내를 받으실 담당자</p>
+                <p className="text-xs text-text-tertiary mt-0.5">
+                  의뢰서 검토 결과, 초안 확인 요청, 최종 결과물 안내를 이곳으로 보내드립니다.
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1.5">담당자 성함 *</label>
+                  <input {...register('contact_name')} className={inputCls} placeholder="예: 홍길동" />
+                  {errors.contact_name && <p className="text-red-500 text-sm mt-1.5">{errors.contact_name.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1.5">연락처 *</label>
+                  <input {...register('contact_phone')} type="tel" inputMode="tel" className={inputCls}
+                    placeholder="010-1234-5678" />
+                  {errors.contact_phone && <p className="text-red-500 text-sm mt-1.5">{errors.contact_phone.message}</p>}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">이메일 *</label>
+                <input {...register('contact_email')} type="email" inputMode="email" className={inputCls}
+                  placeholder="example@company.com" />
+                {errors.contact_email && <p className="text-red-500 text-sm mt-1.5">{errors.contact_email.message}</p>}
+              </div>
             </div>
 
             <div>
