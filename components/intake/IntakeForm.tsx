@@ -225,7 +225,14 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const [targetAudience, setTargetAudience] = useState<string[]>([])
   const [designStyles, setDesignStyles] = useState<string[]>([])
   // Step 4 안내사항 확인 — 3개 모두 체크해야 최종 제출 가능
-  const [acks, setAcks] = useState({ address: false, shipping: false, duration: false })
+  const [acks, setAcks] = useState({
+    address: false,
+    shipping: false,
+    duration: false,
+    aiImages: false,
+    banner: false,
+  })
+  const allAcked = acks.address && acks.shipping && acks.duration && acks.aiImages && acks.banner
   // Step 2 셀링 포인트 — 5칸, 최소 3개 입력 필수
   const [sellingPoints, setSellingPoints] = useState<string[]>(['', '', '', '', ''])
 
@@ -736,7 +743,27 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
                     className="mt-0.5 w-4 h-4 rounded border-border text-primary-600 focus:ring-primary-500 cursor-pointer flex-shrink-0" />
                   <span className="text-sm text-text-secondary leading-relaxed">디자인 작업 기간은 제품 도착 확인 후 3주 정도 소요됩니다.</span>
                 </label>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" checked={acks.aiImages}
+                    onChange={e => setAcks(a => ({ ...a, aiImages: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-border text-primary-600 focus:ring-primary-500 cursor-pointer flex-shrink-0" />
+                  <span className="text-sm text-text-secondary leading-relaxed">
+                    본 상세페이지에 사용되는 스타일링 이미지 및 연출 컷은 AI 기술을 활용하여 제작됩니다.<br />
+                    상세페이지 제작 시 스타일링 이미지 및 연출 컷에 AI 생성 기술이 활용될 수 있음을 확인하였으며, 이에 동의합니다.
+                  </span>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" checked={acks.banner}
+                    onChange={e => setAcks(a => ({ ...a, banner: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-border text-primary-600 focus:ring-primary-500 cursor-pointer flex-shrink-0" />
+                  <span className="text-sm text-text-secondary leading-relaxed">
+                    상세페이지 하단에 ‘하나파워온스토어 지원사업’을 통해 제작된 상세페이지임을 안내하는 배너가 삽입되는 것에 동의합니다.
+                  </span>
+                </label>
               </div>
+              <p className="text-xs text-text-tertiary leading-relaxed mt-3 pt-3 border-t border-border">
+                상세페이지 디자인은 제품이 사무국에 도착한 후 순차적으로 진행됩니다. 빠른 제작을 원하시는 기업은 제품을 가능한 한 신속하게 발송해 주시기 바랍니다.
+              </p>
             </div>
 
             <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
@@ -792,7 +819,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
                 다음 →
               </button>
             ) : (
-              <button type="submit" disabled={isSubmitting || !!uploadProgress || !(acks.address && acks.shipping && acks.duration)}
+              <button type="submit" disabled={isSubmitting || !!uploadProgress || !allAcked}
                 className="flex-1 bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all text-base min-h-[44px]">
                 {uploadProgress || (isSubmitting ? '제출 중...' : '최종 제출')}
               </button>
