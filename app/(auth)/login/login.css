@@ -143,3 +143,24 @@
     width: 112px;
   }
 }
+
+/* 사업자등록번호 입력 시 자동 확인되는 기업명 */
+.hlogin-found {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 2px 0;
+  font-size: 14px;
+}
+.hlogin-found strong {
+  font-weight: 800;
+  color: #0d7a61;
+}
+.hlogin-found span {
+  font-size: 12.5px;
+  color: #6f8f86;
+}
+.hlogin-found.looking {
+  font-size: 12.5px;
+  color: #8a8f8c;
+}
