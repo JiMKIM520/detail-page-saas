@@ -21,16 +21,13 @@ export default async function ClientLayout({ children }: { children: React.React
   const usageExhausted = usageCount >= usageLimit
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="hana-client min-h-screen bg-background">
       <nav className="sticky top-0 z-30 bg-surface border-b border-border backdrop-blur-sm bg-white/80">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/projects" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <span className="font-bold text-text-primary text-lg tracking-tight">DetailAI</span>
+          <Link href="/projects" className="hana-brand">
+            <span className="b-hana">Hana Power On</span>
+            <span className="b-power">하나파워온스토어</span>
+            <span className="b-sub">레벨업 컨설팅 · 상세페이지 제작</span>
           </Link>
 
           <div className="flex items-center gap-5">
