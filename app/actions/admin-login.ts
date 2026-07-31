@@ -3,13 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { staffPassword } from '@/lib/auth/client-credentials'
 
-/** 운영팀 아이디 → 실제 계정 이메일. 사용자는 이메일을 몰라도 되고 admin·designer1~4만 기억한다. */
+/** 운영팀 아이디 → 실제 계정 이메일. 사용자는 이메일을 몰라도 되고 admin·designer1~3만 기억한다. */
 const ADMIN_ID_MAP: Record<string, string> = {
   admin: process.env.ADMIN_EMAIL ?? 'admin@kompa.kr',
   designer1: 'designer1@detailai.app',
   designer2: 'designer2@detailai.app',
   designer3: 'designer3@detailai.app',
-  designer4: 'designer4@detailai.app',
 }
 
 export async function adminLogin(adminId: string, password: string): Promise<{
@@ -17,7 +16,7 @@ export async function adminLogin(adminId: string, password: string): Promise<{
   error?: string
   redirectTo?: string
 }> {
-  // 등록된 아이디(admin·designer1~4)는 매핑으로, 이메일을 직접 넣어도 허용(운영 전환 대비).
+  // 등록된 아이디(admin·designer1~3)는 매핑으로, 이메일을 직접 넣어도 허용(운영 전환 대비).
   const mapped = ADMIN_ID_MAP[adminId.trim().toLowerCase()]
   const email = mapped ?? (adminId.includes('@') ? adminId.trim().toLowerCase() : undefined)
   if (!email) {

@@ -11,7 +11,7 @@ export function clientPassword(phoneLast4: string): string {
 
 /**
  * 운영팀(관리자·디자이너) 로그인 자격증명 규칙 (테스트 단계 — 2026-07-20).
- * 아이디는 admin·designer1~4, 비밀번호는 1234로 통일한다. Supabase 최소 6자 제약 때문에
+ * 아이디는 admin·designer1~3, 비밀번호는 1234로 통일한다. Supabase 최소 6자 제약 때문에
  * 실제 저장 비밀번호는 같은 접두사 규칙을 쓴 값 — 사용자는 1234만 기억하면 된다.
  * 운영 전환 시 이 함수를 제거하고 실제 비밀번호 정책으로 교체할 것.
  */
