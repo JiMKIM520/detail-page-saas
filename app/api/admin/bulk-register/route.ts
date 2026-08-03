@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   const dataLines = lines.slice(1)
 
   const service = createServiceClient()
-  const results: { email: string; success: boolean; error?: string }[] = []
+  const results: { email: string; success: boolean; error?: string; warning?: string }[] = []
 
   function parseCSVLine(line: string): string[] {
     const result: string[] = []
@@ -87,6 +87,17 @@ export async function POST(request: Request) {
 
     if (profileError) {
       results.push({ email, success: false, error: `Auth 생성 성공, 프로필 생성 실패: ${profileError.message}` })
+      continue
+    }
+
+    // 초대 시점부터 파이프라인에 '작성대기(invited)' 프로젝트로 잡히도록 함께 생성한다.
+    // invited는 AI 트리거가 없어 워커에 영향 없음(전이는 invited→intake_submitted뿐).
+    // 실패해도 계정 생성은 성공으로 둔다 — 프로젝트는 관리자가 나중에 보완 가능.
+    const { error: projectError } = await service
+      .from('projects')
+      .insert({ client_id: authData.user.id, status: 'invited', company_name })
+    if (projectError) {
+      results.push({ email, success: true, warning: `프로젝트 생성 실패(계정은 정상): ${projectError.message}` })
       continue
     }
 
