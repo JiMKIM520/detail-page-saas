@@ -21,7 +21,7 @@ export default async function ClientLayout({ children }: { children: React.React
   const usageExhausted = usageCount >= usageLimit
 
   return (
-    <div className="hana-client min-h-screen bg-background">
+    <div className="hana-theme min-h-screen bg-background">
       <nav className="sticky top-0 z-30 bg-surface border-b border-border backdrop-blur-sm bg-white/80">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/projects" className="hana-brand">

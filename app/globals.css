@@ -80,36 +80,36 @@ a, button, input, select, textarea {
 
 /* ═══════════════════════════════════════════════════════════
    하나파워온 기업 화면 테마 — 패키지(package.hanapoweron.kr)와 색을 맞춘다.
-   @theme inline이라 색이 인라인되므로, 기업 화면(.hana-client) 안에서만
+   @theme inline이라 색이 인라인되므로, 기업 화면(.hana-theme) 안에서만
    실제로 쓰이는 primary 유틸리티를 틸로 덮어쓴다. 관리자·디자이너 화면은 불변.
    ═══════════════════════════════════════════════════════════ */
-.hana-client { --hana-600:#008d70; --hana-700:#00745c; --hana-800:#005a48;
+.hana-theme { --hana-600:#008d70; --hana-700:#00745c; --hana-800:#005a48;
   --hana-500:#009d7d; --hana-400:#4fb6a2; --hana-300:#8fd0c0;
   --hana-200:#b8e0d6; --hana-100:#d5ede7; --hana-50:#eef7f4; }
 
-.hana-client .bg-primary-600 { background-color: var(--hana-600) !important; }
-.hana-client .bg-primary-500 { background-color: var(--hana-500) !important; }
-.hana-client .bg-primary-100 { background-color: var(--hana-100) !important; }
-.hana-client .bg-primary-50  { background-color: var(--hana-50)  !important; }
-.hana-client .text-primary-700 { color: var(--hana-700) !important; }
-.hana-client .text-primary-600 { color: var(--hana-600) !important; }
-.hana-client .text-primary-500 { color: var(--hana-500) !important; }
-.hana-client .text-primary-400 { color: var(--hana-400) !important; }
-.hana-client .border-primary-600 { border-color: var(--hana-600) !important; }
-.hana-client .border-primary-400 { border-color: var(--hana-400) !important; }
-.hana-client .border-primary-300 { border-color: var(--hana-300) !important; }
-.hana-client .border-primary-200 { border-color: var(--hana-200) !important; }
-.hana-client .border-primary-100 { border-color: var(--hana-100) !important; }
-.hana-client .ring-primary-500 { --tw-ring-color: var(--hana-500) !important; }
-.hana-client .hover\:bg-primary-700:hover { background-color: var(--hana-700) !important; }
-.hana-client .hover\:bg-primary-100:hover { background-color: var(--hana-100) !important; }
-.hana-client .hover\:bg-primary-50:hover  { background-color: var(--hana-50)  !important; }
-.hana-client .hover\:bg-primary-50\/50:hover { background-color: color-mix(in srgb, var(--hana-50) 50%, transparent) !important; }
-.hana-client .hover\:text-primary-800:hover { color: var(--hana-800) !important; }
-.hana-client .hover\:text-primary-700:hover { color: var(--hana-700) !important; }
-.hana-client .hover\:text-primary-600:hover { color: var(--hana-600) !important; }
-.hana-client .focus\:ring-primary-500:focus { --tw-ring-color: var(--hana-500) !important; }
-.hana-client .focus\:border-primary-400:focus { border-color: var(--hana-400) !important; }
+.hana-theme .bg-primary-600 { background-color: var(--hana-600) !important; }
+.hana-theme .bg-primary-500 { background-color: var(--hana-500) !important; }
+.hana-theme .bg-primary-100 { background-color: var(--hana-100) !important; }
+.hana-theme .bg-primary-50  { background-color: var(--hana-50)  !important; }
+.hana-theme .text-primary-700 { color: var(--hana-700) !important; }
+.hana-theme .text-primary-600 { color: var(--hana-600) !important; }
+.hana-theme .text-primary-500 { color: var(--hana-500) !important; }
+.hana-theme .text-primary-400 { color: var(--hana-400) !important; }
+.hana-theme .border-primary-600 { border-color: var(--hana-600) !important; }
+.hana-theme .border-primary-400 { border-color: var(--hana-400) !important; }
+.hana-theme .border-primary-300 { border-color: var(--hana-300) !important; }
+.hana-theme .border-primary-200 { border-color: var(--hana-200) !important; }
+.hana-theme .border-primary-100 { border-color: var(--hana-100) !important; }
+.hana-theme .ring-primary-500 { --tw-ring-color: var(--hana-500) !important; }
+.hana-theme .hover\:bg-primary-700:hover { background-color: var(--hana-700) !important; }
+.hana-theme .hover\:bg-primary-100:hover { background-color: var(--hana-100) !important; }
+.hana-theme .hover\:bg-primary-50:hover  { background-color: var(--hana-50)  !important; }
+.hana-theme .hover\:bg-primary-50\/50:hover { background-color: color-mix(in srgb, var(--hana-50) 50%, transparent) !important; }
+.hana-theme .hover\:text-primary-800:hover { color: var(--hana-800) !important; }
+.hana-theme .hover\:text-primary-700:hover { color: var(--hana-700) !important; }
+.hana-theme .hover\:text-primary-600:hover { color: var(--hana-600) !important; }
+.hana-theme .focus\:ring-primary-500:focus { --tw-ring-color: var(--hana-500) !important; }
+.hana-theme .focus\:border-primary-400:focus { border-color: var(--hana-400) !important; }
 
 /* 헤더 로고 — 패키지 로그인과 같은 하나파워온 워드마크 */
 .hana-brand { display: flex; flex-direction: column; line-height: 1.05; }
