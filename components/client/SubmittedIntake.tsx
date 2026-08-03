@@ -11,6 +11,10 @@ interface SubmittedIntakeProps {
   brandName: string | null
   category: string | null
   platformName: string
+  // 진행 안내 수신처 — 기업이 의뢰서에 입력한 담당자 정보 (관리자만 필요)
+  contactName?: string | null
+  contactPhone?: string | null
+  contactEmail?: string | null
   productHighlights: string | null
   productName: string | null
   productDescription: string | null
@@ -74,6 +78,9 @@ export function SubmittedIntake({
   brandName,
   category,
   platformName,
+  contactName,
+  contactPhone,
+  contactEmail,
   productHighlights,
   productName,
   productDescription,
@@ -135,6 +142,30 @@ export function SubmittedIntake({
       </summary>
 
       <div className="px-6 pb-6 pt-1">
+        {/* 담당자 연락처 — 관리자가 안내·연락할 때 쓰는 정보. 눈에 띄게 상단에 둔다 */}
+        {(contactName || contactPhone || contactEmail) && (
+          <div className="mb-4 rounded-xl border border-primary-100 bg-primary-50/60 px-4 py-3">
+            <p className="text-[11px] font-semibold text-primary-700 mb-2">담당자 연락처</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-1.5 text-sm">
+              <div>
+                <span className="text-xs text-text-tertiary block">담당자</span>
+                <span className="font-medium text-text-primary">{contactName || '-'}</span>
+              </div>
+              <div>
+                <span className="text-xs text-text-tertiary block">연락처</span>
+                {contactPhone
+                  ? <a href={`tel:${contactPhone}`} className="font-medium text-primary-700 hover:underline">{contactPhone}</a>
+                  : <span className="text-text-primary">-</span>}
+              </div>
+              <div className="min-w-0">
+                <span className="text-xs text-text-tertiary block">이메일</span>
+                {contactEmail
+                  ? <a href={`mailto:${contactEmail}`} className="font-medium text-primary-700 hover:underline break-all">{contactEmail}</a>
+                  : <span className="text-text-primary">-</span>}
+              </div>
+            </div>
+          </div>
+        )}
         <dl>
           <Row label="기업명">{companyName}</Row>
           {brandName && <Row label="브랜드명">{brandName}</Row>}

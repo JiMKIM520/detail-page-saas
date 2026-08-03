@@ -111,6 +111,9 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
             brandName={project.brand_name ?? null}
             category={project.category ?? null}
             platformName={platformName}
+            contactName={project.contact_name ?? null}
+            contactPhone={project.contact_phone ?? null}
+            contactEmail={project.contact_email ?? null}
             productHighlights={project.product_highlights ?? null}
             productName={project.product_name ?? null}
             productDescription={project.product_description ?? null}
