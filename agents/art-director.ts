@@ -45,7 +45,7 @@ function gateStyleGuide(sg: StyleGuide): void {
   const t = sg.typography
   for (const [role, font] of [['headline', t.headlineFont], ['story', t.storyFont], ['body', t.bodyFont], ['accent', t.accentFont]] as const) {
     if (font && !isWhitelistedFont(font))
-      throw new Error(`화이트리스트 외 폰트(${role}): "${font}" — 드라이브 35종 목록의 정확한 이름만 사용하라`)
+      throw new Error(`화이트리스트 외 폰트(${role}): "${font}" — 드라이브 36종 목록의 정확한 이름만 사용하라`)
   }
 }
 
@@ -87,7 +87,7 @@ The colors.accent MUST differ meaningfully in hue from colors.primary.
 - Test: if colors.primary and colors.accent look like two shades of the same color, pick a different accent.
 
 4-ROLE FONT SYSTEM (CRITICAL — assign all 4 roles):
-아래 35종만 사용 가능하다. Helvetica·Arial·Roboto·San Francisco·Noto Sans KR·Black Han Sans 등
+아래 36종만 사용 가능하다. Helvetica·Arial·Roboto·San Francisco·Noto Sans KR·Black Han Sans 등
 이 목록에 없는 모든 영문 전용·시스템·Google Fonts 폰트는 절대 사용 금지.
 반드시 아래의 정확한 이름(띄어쓰기·대소문자·숫자 포함 그대로)을 사용하라.
 
@@ -96,7 +96,7 @@ The colors.accent MUST differ meaningfully in hue from colors.primary.
 
   [제목+소제목 — headlineFont·storyFont·accentFont 적합, bodyFont 금지]
     평창평화체, 카페24 당당해, 카페24 써라운드, 창원단감아삭체, 카페24 단정해,
-    어그로체, 빛고을광주체,
+    어그로체, 빛고을광주체, 티몬몬소리체,
     Rufina, Apollo, High Summit, Gontserrat, Quentin, Belgiano
 
   [디스플레이 — headlineFont·accentFont 전용, bodyFont·storyFont 금지]
@@ -121,7 +121,7 @@ Selection rules:
   - storyFont — [범용]의 세리프계(나눔명조·마루 부리) 또는 [제목+소제목]의 감성폰트
   - DIVERSITY: 같은 폰트 조합 반복 금지 — 이번 제품의 무드·레퍼런스에서 유도
 
-위 35종 이외의 폰트는 절대 사용 금지. 이름이 정확히 일치해야 한다.
+위 36종 이외의 폰트는 절대 사용 금지. 이름이 정확히 일치해야 한다.
 
 PRODUCT PRESERVATION RULES — ABSOLUTE CONSTRAINTS:
 productPreservationRules must ONLY contain rules that PROTECT and PRESERVE the product's exterior appearance.

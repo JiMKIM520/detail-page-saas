@@ -1,6 +1,6 @@
 /**
  * 클라이언트 제공 폰트 매니페스트 + getFontFace 헬퍼.
- * woff2 파일은 drive/ 서브디렉토리에 f01~f36으로 복사됨 (티몬몬소리체 f04 제외 — 한글 글리프 0).
+ * woff2 파일은 drive/ 서브디렉토리에 f01~f36으로 복사됨.
  * src는 base64 데이터 URI — 산출 HTML이 독립 파일·스토리지 서빙이라 상대경로 불가.
  */
 import * as fs from 'fs'
@@ -19,14 +19,14 @@ export interface ClientFontManifestEntry {
 }
 
 /**
- * 클라이언트 드라이브 제공 폰트 매니페스트 — 35종 (f04 티몬몬소리체 제외).
+ * 클라이언트 드라이브 제공 폰트 매니페스트 — 36종.
  * key = CSS family 정식명 (정규화명), file = drive/fNN.woff2 (FONTS_DIR 기준 상대경로)
  */
 export const CLIENT_FONT_MANIFEST: Record<string, ClientFontManifestEntry> = {
   '프리텐다드':           { cssFamily: '프리텐다드',           file: 'drive/f01.woff2', weight: 700 },
   '평창평화체':           { cssFamily: '평창평화체',           file: 'drive/f02.woff2', weight: 400 },
   '페이퍼로지':           { cssFamily: '페이퍼로지',           file: 'drive/f03.woff2', weight: 700 },
-  // f04 티몬몬소리체 제외 — 한글 글리프 0개
+  '티몬몬소리체':          { cssFamily: '티몬몬소리체',          file: 'drive/f04.woff2', weight: 700 },
   '카페24 클래식타입':     { cssFamily: '카페24 클래식타입',     file: 'drive/f05.woff2', weight: 400 },
   '카페24 빛나는별':       { cssFamily: '카페24 빛나는별',       file: 'drive/f06.woff2', weight: 400 },
   '카페24 아네모네':       { cssFamily: '카페24 아네모네',       file: 'drive/f07.woff2', weight: 400 },

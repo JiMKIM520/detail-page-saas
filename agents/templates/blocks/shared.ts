@@ -142,7 +142,7 @@ import { getFontFaceByFile } from './fonts/index'
  * buildFontLinks가 FONT_WHITELIST의 client 항목을 @font-face 인라인으로 변환한다. */
 export const FONT_LINKS: string = ''
 
-/** 폰트 화이트리스트 — 드라이브 제공 35종 전용.
+/** 폰트 화이트리스트 — 드라이브 제공 36종 전용.
  *  client: woff2 파일경로 (fonts/ 디렉토리 기준), buildFontLinks가 @font-face 데이터 URI로 주입.
  *  이 목록 외 폰트(Helvetica·Arial·Noto Sans KR 등)는 gateStyleGuide가 throw로 차단. */
 export const FONT_WHITELIST: Record<string, { gf?: string; client?: string; clientFamily?: string; clientWeight?: number }> = {
@@ -168,6 +168,7 @@ export const FONT_WHITELIST: Record<string, { gf?: string; client?: string; clie
   'belgiano':             { client: 'drive/f21.woff2', clientFamily: 'Belgiano',             clientWeight: 400 },
   '어그로체':             { client: 'drive/f22.woff2', clientFamily: '어그로체',             clientWeight: 700 },
   '빛고을광주체':         { client: 'drive/f26.woff2', clientFamily: '빛고을광주체',         clientWeight: 400 },
+  '티몬몬소리체':          { client: 'drive/f04.woff2', clientFamily: '티몬몬소리체',          clientWeight: 700 },
   // ── 디스플레이 · 제목 전용 (title only) ────────────────────────────────────
   '카페24 클래식타입':     { client: 'drive/f05.woff2', clientFamily: '카페24 클래식타입',     clientWeight: 400 },
   '카페24 빛나는별':       { client: 'drive/f06.woff2', clientFamily: '카페24 빛나는별',       clientWeight: 400 },
