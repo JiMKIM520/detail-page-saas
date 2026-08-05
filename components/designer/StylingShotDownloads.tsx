@@ -27,6 +27,7 @@ export function StylingShotDownloads({ shots }: { shots: Shot[] }) {
     setBusy(shot.name)
     try {
       const res = await fetch(shot.url, { cache: 'no-store' })
+      if (!res.ok) throw new Error('HTTP ' + res.status)
       const blob = await res.blob()
       const href = URL.createObjectURL(blob)
       const a = document.createElement('a')

@@ -160,6 +160,10 @@ export async function generateScriptForProject(projectId: string, clientFeedback
           brand_name: project.brand_name,
           target_audience: Array.isArray(project.target_audience) ? project.target_audience as string[] : null,
           design_preference: project.design_preference,
+          full_ingredients: project.full_ingredients ?? null,
+          shipping_info: project.shipping_info ?? null,
+          return_policy: project.return_policy ?? null,
+          cs_info: project.cs_info ?? null,
         })
       : buildUserPrompt({
           company_name: project.company_name,

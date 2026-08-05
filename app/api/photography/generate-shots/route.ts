@@ -5,6 +5,7 @@ import { generateDesignImage } from '@/lib/ai/gemini-image'
 import { buildShotPrompt, ensureHeroFraming } from '@/agents/styling-shots'
 import { transitionStatus } from '@/lib/status-machine'
 import { NextResponse } from 'next/server'
+import sharp from 'sharp'
 
 export const maxDuration = 300
 
@@ -76,7 +77,9 @@ export async function POST(request: Request) {
       const refs = (shot as any).withProduct === false ? [] : refIdx.map((i) => nukki[i]).filter(Boolean)
       // 히어로는 shot-prompter 프롬프트가 buildShotPrompt를 우회하므로 생성 직전 규칙 보장 (룰 7-11)
       // 목적지 프레임 비율로 생성(니즈→샷 스탬프 승계) — 3:4 고정이 가로 프레임에서 잘리던 crop 원천 방지
-      const buf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: (shot as any).frameRatio ?? '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
+      const rawBuf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: (shot as any).frameRatio ?? '3:4', model: (shot as any).prominence === 'support' ? 'nb2' : 'pro' })
+      // Gemini는 WebP/JPEG를 반환할 수 있다 — sharp로 PNG 재인코딩해 포맷을 통일한다
+      const buf = await sharp(rawBuf).png().toBuffer()
       const path = `projects/${project_id}/styling_real/${shot.filename || (shot.name + '.png')}`
       const { error } = await svc.storage.from('designs').upload(path, buf, { contentType: 'image/png', upsert: true })
       if (error) throw new Error(error.message)

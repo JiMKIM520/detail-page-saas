@@ -37,6 +37,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 })
   }
 
+  // admin 권한 체크 — approve는 admin 전용. 파일 업로드 이전에 검증하여 orphaned 파일 방지
+  if (action === 'approve' && role !== 'admin') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const supabase = createServiceClient()
 
   // 최종 파일 업로드 (있을 때만)

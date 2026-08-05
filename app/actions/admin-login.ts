@@ -9,6 +9,7 @@ const ADMIN_ID_MAP: Record<string, string> = {
   designer1: 'designer1@detailai.app',
   designer2: 'designer2@detailai.app',
   designer3: 'designer3@detailai.app',
+  designer4: 'designer4@detailai.app',
 }
 
 export async function adminLogin(adminId: string, password: string): Promise<{

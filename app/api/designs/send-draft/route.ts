@@ -9,7 +9,7 @@ export const maxDuration = 60
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://detail-page-saas.vercel.app'
 
 /**
- * POST /api/designs/send-draft (multipart/form-data) — 디자이너가 Figma 리터치본을 사업자에게 전달.
+ * POST /api/designs/send-draft (multipart/form-data) — 관리자가 초안을 사업자에게 전달.
  * 파일은 서버(서비스 클라이언트)로 업로드 → designs 버킷 RLS 우회. 클라이언트 직접 업로드는 정책 충돌로 불가.
  *   - designs/projects/{id}/client_draft/ 업로드 → designs.preview_url = 공개 URL (사업자 화면 노출 트리거)
  *   - 첫 전달이면 version 유지(초안), 재전달이면 version +1(N차 수정본)
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   const { data: { user } } = await authClient.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const role = user.user_metadata?.role as string | undefined
-  if (!role || !['designer', 'admin'].includes(role)) {
+  if (role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

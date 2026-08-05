@@ -154,6 +154,10 @@ export function buildEnhancedUserPrompt(project: {
   brand_name?: string | null
   target_audience?: string[] | null
   design_preference?: string | null
+  full_ingredients?: string | null
+  shipping_info?: string | null
+  return_policy?: string | null
+  cs_info?: string | null
 }): string {
   const audienceLine = project.target_audience && project.target_audience.length > 0
     ? `타겟 고객층: ${project.target_audience.join(', ')}`
@@ -173,6 +177,10 @@ ${project.product_highlights}
 ${project.design_preference ? `디자인 선호도:\n${project.design_preference}` : ''}
 
 ${project.reference_notes ? `추가 요청사항:\n${project.reference_notes}` : ''}
+${project.full_ingredients ? `\n[전성분] (기업 입력 원문 — 하단 고지에 그대로 사용)\n${project.full_ingredients}` : ''}
+${project.shipping_info ? `\n[배송정보] (기업 입력 원문 — 하단 고지에 그대로 사용, 임의 생성 금지)\n${project.shipping_info}` : ''}
+${project.return_policy ? `\n[반품·교환 안내] (기업 입력 원문 — 그대로 사용)\n${project.return_policy}` : ''}
+${project.cs_info ? `\n[고객센터 안내] (기업 입력 원문 — 그대로 사용)\n${project.cs_info}` : ''}
 
 플랫폼 스타일 가이드:
 ${project.platform_style_guide}

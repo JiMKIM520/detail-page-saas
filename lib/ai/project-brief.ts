@@ -12,6 +12,11 @@ export interface ProductBriefSource {
   selling_points?: unknown
   /** 참고사항(섭취법·FAQ·주의점 등 자유 기재) — 미반영이던 필드, 재설계 Sprint 1c에서 편입 */
   reference_notes?: string | null
+  /** 판매 고지 정보 — 기업 입력 원문을 상세페이지 하단 고지에 그대로 사용 */
+  full_ingredients?: string | null
+  shipping_info?: string | null
+  return_policy?: string | null
+  cs_info?: string | null
 }
 
 function normalizeSellingPoints(value: unknown): string[] {
@@ -30,5 +35,9 @@ export function composeProductContext(source: ProductBriefSource): string {
   if (points.length > 0) parts.push(`[셀링 포인트]\n${points.map(p => `- ${p}`).join('\n')}`)
   if (source.product_highlights?.trim()) parts.push(`[회사 소개]\n${source.product_highlights.trim()}`)
   if (source.reference_notes?.trim()) parts.push(`[참고사항 — 고객 기재 원문]\n${source.reference_notes.trim()}`)
+  if (source.full_ingredients?.trim()) parts.push(`[전성분]\n${source.full_ingredients.trim()}`)
+  if (source.shipping_info?.trim()) parts.push(`[배송정보]\n${source.shipping_info.trim()}`)
+  if (source.return_policy?.trim()) parts.push(`[반품·교환 안내]\n${source.return_policy.trim()}`)
+  if (source.cs_info?.trim()) parts.push(`[고객센터 안내]\n${source.cs_info.trim()}`)
   return parts.join('\n\n')
 }

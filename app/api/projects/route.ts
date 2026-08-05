@@ -24,6 +24,10 @@ const bodySchema = z.object({
   detail_page_url: z.string().url().or(z.literal('')).nullish(),
   reference_notes: z.string().nullish(),
   brand_name: z.string().optional().nullable(),
+  full_ingredients: z.string().nullish(),
+  shipping_info: z.string().nullish(),
+  return_policy: z.string().nullish(),
+  cs_info: z.string().nullish(),
   target_audience: z.array(z.string()).optional().nullable(),
   design_preference: z.string().optional().nullable(),
   // 클라이언트가 먼저 스토리지에 업로드한 첨부파일의 메타데이터(있으면 프로젝트에 연결)
@@ -97,6 +101,10 @@ export async function POST(request: Request) {
       brand_name: body.brand_name || null,
       target_audience: body.target_audience || null,
       design_preference: body.design_preference || null,
+      full_ingredients: body.full_ingredients,
+      shipping_info: body.shipping_info,
+      return_policy: body.return_policy,
+      cs_info: body.cs_info,
     })
     .select()
     .single()

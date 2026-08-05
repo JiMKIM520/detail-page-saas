@@ -26,6 +26,10 @@ interface SubmittedIntakeProps {
   homepageUrl: string | null
   detailPageUrl: string | null
   referenceNotes: string | null
+  fullIngredients: string | null
+  shippingInfo: string | null
+  returnPolicy: string | null
+  csInfo: string | null
   files: IntakeFileView[]
   createdAt: string
 }
@@ -90,6 +94,10 @@ export function SubmittedIntake({
   homepageUrl,
   detailPageUrl,
   referenceNotes,
+  fullIngredients,
+  shippingInfo,
+  returnPolicy,
+  csInfo,
   files,
   createdAt,
 }: SubmittedIntakeProps) {
@@ -215,6 +223,26 @@ export function SubmittedIntake({
           {notes && (
             <Row label="참고 사항">
               <p className="whitespace-pre-wrap">{notes}</p>
+            </Row>
+          )}
+          {fullIngredients && (
+            <Row label="전성분">
+              <p className="whitespace-pre-wrap">{fullIngredients}</p>
+            </Row>
+          )}
+          {shippingInfo && (
+            <Row label="배송정보">
+              <p className="whitespace-pre-wrap">{shippingInfo}</p>
+            </Row>
+          )}
+          {returnPolicy && (
+            <Row label="반품·교환 안내">
+              <p className="whitespace-pre-wrap">{returnPolicy}</p>
+            </Row>
+          )}
+          {csInfo && (
+            <Row label="고객센터 안내">
+              <p className="whitespace-pre-wrap">{csInfo}</p>
             </Row>
           )}
         </dl>

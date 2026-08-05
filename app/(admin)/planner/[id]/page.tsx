@@ -123,6 +123,10 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
             homepageUrl={project.homepage_url ?? null}
             detailPageUrl={project.detail_page_url ?? null}
             referenceNotes={project.reference_notes ?? null}
+            fullIngredients={project.full_ingredients ?? null}
+            shippingInfo={project.shipping_info ?? null}
+            returnPolicy={project.return_policy ?? null}
+            csInfo={project.cs_info ?? null}
             files={submittedFiles}
             createdAt={project.created_at}
           />

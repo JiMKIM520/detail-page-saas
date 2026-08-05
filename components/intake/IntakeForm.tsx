@@ -28,6 +28,11 @@ const schema = z.object({
   homepage_url: z.string().url('올바른 URL을 입력하세요').optional().or(z.literal('')),
   detail_page_url: z.string().url('올바른 URL을 입력하세요').optional().or(z.literal('')),
   reference_notes: z.string().optional(),
+  // 판매 고지 정보 (선택 입력 — 있으면 상세페이지 하단 고지에 그대로 사용)
+  full_ingredients: z.string().optional(),
+  shipping_info: z.string().optional(),
+  return_policy: z.string().optional(),
+  cs_info: z.string().optional(),
   // Step 4 — 동의 (리뷰 단계에서 수집)
   consent: z.literal(true, { error: '동의가 필요합니다' }),
 })
@@ -69,6 +74,10 @@ interface DraftData {
   homepage_url?: string
   detail_page_url?: string
   reference_notes?: string
+  full_ingredients?: string
+  shipping_info?: string
+  return_policy?: string
+  cs_info?: string
 }
 
 function StepIndicator({ current }: { current: number }) {
@@ -287,6 +296,10 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       if (draft.homepage_url) setValue('homepage_url', draft.homepage_url)
       if (draft.detail_page_url) setValue('detail_page_url', draft.detail_page_url)
       if (draft.reference_notes) setValue('reference_notes', draft.reference_notes)
+      if (draft.full_ingredients) setValue('full_ingredients', draft.full_ingredients)
+      if (draft.shipping_info) setValue('shipping_info', draft.shipping_info)
+      if (draft.return_policy) setValue('return_policy', draft.return_policy)
+      if (draft.cs_info) setValue('cs_info', draft.cs_info)
       setDraftBanner('dismissed')
     } catch {
       setDraftBanner('dismissed')
@@ -315,6 +328,10 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         homepage_url: vals.homepage_url,
         detail_page_url: vals.detail_page_url,
         reference_notes: vals.reference_notes,
+        full_ingredients: vals.full_ingredients,
+        shipping_info: vals.shipping_info,
+        return_policy: vals.return_policy,
+        cs_info: vals.cs_info,
       }
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
       setSaveMsg('임시저장되었습니다')
@@ -352,7 +369,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const STEP_FIELDS: Record<number, (keyof FormData)[]> = {
     1: ['company_name', 'product_highlights', 'contact_name', 'contact_phone', 'contact_email'],
     2: ['product_name', 'product_description', 'category_id'],
-    3: ['homepage_url', 'detail_page_url'],
+    3: ['homepage_url', 'detail_page_url', 'full_ingredients', 'shipping_info', 'return_policy', 'cs_info'],
     4: ['consent'],
   }
 
@@ -422,6 +439,10 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
       detail_page_url: data.detail_page_url || null,
       reference_notes: finalNotes || null,
       target_audience: targetAudience.length > 0 ? targetAudience : null,
+      full_ingredients: data.full_ingredients,
+      shipping_info: data.shipping_info,
+      return_policy: data.return_policy,
+      cs_info: data.cs_info,
     }
 
     try {
@@ -734,6 +755,34 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
                 <label className="block text-sm font-medium text-text-secondary mb-1.5">경쟁사 또는 참조용 상세페이지 URL</label>
                 <input {...register('detail_page_url')} className={inputCls} placeholder="https://example.com" />
                 {errors.detail_page_url && <p className="text-red-500 text-sm mt-1.5">{errors.detail_page_url.message}</p>}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-sm font-semibold text-text-primary">판매 고지 정보 <span className="text-text-tertiary font-normal text-xs">(상세페이지 하단 고지에 그대로 사용됩니다)</span></p>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">전성분 <span className="text-text-tertiary font-normal text-xs">(선택)</span></label>
+                <textarea {...register('full_ingredients')} rows={3} className={textareaCls}
+                  placeholder="예) 정제수, 글리세린, 부틸렌글라이콜, ... (화장품·식품 등 전성분 표기)" />
+                {errors.full_ingredients && <p className="text-red-500 text-sm mt-1.5">{errors.full_ingredients.message}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">배송정보 <span className="text-text-tertiary font-normal text-xs">(선택)</span></label>
+                <textarea {...register('shipping_info')} rows={3} className={textareaCls}
+                  placeholder="예) 택배 발송 · 평균 2~3일 소요 · 3만원 이상 무료배송 / 도서산간 추가 3,000원" />
+                {errors.shipping_info && <p className="text-red-500 text-sm mt-1.5">{errors.shipping_info.message}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">반품·교환 안내 <span className="text-text-tertiary font-normal text-xs">(선택)</span></label>
+                <textarea {...register('return_policy')} rows={3} className={textareaCls}
+                  placeholder="예) 단순 변심 7일 이내(왕복 배송비 고객 부담) · 상품 하자 시 무료 교환/반품" />
+                {errors.return_policy && <p className="text-red-500 text-sm mt-1.5">{errors.return_policy.message}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">고객센터 안내 <span className="text-text-tertiary font-normal text-xs">(선택)</span></label>
+                <textarea {...register('cs_info')} rows={3} className={textareaCls}
+                  placeholder="예) 1544-0000 · 평일 10:00~17:00(점심 12~13시) · 주말·공휴일 휴무" />
+                {errors.cs_info && <p className="text-red-500 text-sm mt-1.5">{errors.cs_info.message}</p>}
               </div>
             </div>
 

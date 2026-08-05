@@ -110,23 +110,23 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
 
         <div className="space-y-6">
           {isAdmin ? (
-            /* 관리자: 초안 체크 + 최종 발송 */
-            <DeliveryPanel
-              projectId={id}
-              designId={design?.id}
-              mode="admin"
-              finalUrl={(design as { output_url?: string | null } | null)?.output_url ?? null}
-              finalSubmitted={finalSubmitted}
-            />
+            /* 관리자: 초안 전달 + 최종 발송 */
+            <>
+              <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
+              <DeliveryPanel
+                projectId={id}
+                designId={design?.id}
+                mode="admin"
+                finalUrl={(design as { output_url?: string | null } | null)?.output_url ?? null}
+                finalSubmitted={finalSubmitted}
+              />
+            </>
           ) : !hasDraft || status === 'design_failed' ? (
             /* 디자이너: 초안 미생성 → AI 초안 생성 / design_failed → 재시도(이전 초안이 있어도 복구 경로 노출) */
             <GenerateDraftButton projectId={id} status={status} />
           ) : (
-            /* 디자이너: 사업자 초안 전달 + 최종본 제출(관리자 검수요청) */
-            <>
-              <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
-              <DeliveryPanel projectId={id} designId={design?.id} mode="designer" finalSubmitted={finalSubmitted} />
-            </>
+            /* 디자이너: 최종본 제출(관리자 검수요청) */
+            <DeliveryPanel projectId={id} designId={design?.id} mode="designer" finalSubmitted={finalSubmitted} />
           )}
         </div>
       </div>
