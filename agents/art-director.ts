@@ -45,7 +45,7 @@ function gateStyleGuide(sg: StyleGuide): void {
   const t = sg.typography
   for (const [role, font] of [['headline', t.headlineFont], ['story', t.storyFont], ['body', t.bodyFont], ['accent', t.accentFont]] as const) {
     if (font && !isWhitelistedFont(font))
-      console.warn(`[Art Director] ⚠ 화이트리스트 외 폰트(${role}): "${font}" — 렌더에서 프리셋 폴백됨`)
+      throw new Error(`화이트리스트 외 폰트(${role}): "${font}" — 드라이브 35종 목록의 정확한 이름만 사용하라`)
   }
 }
 
@@ -87,51 +87,41 @@ The colors.accent MUST differ meaningfully in hue from colors.primary.
 - Test: if colors.primary and colors.accent look like two shades of the same color, pick a different accent.
 
 4-ROLE FONT SYSTEM (CRITICAL — assign all 4 roles):
-Available Korean fonts — grouped by character:
+아래 35종만 사용 가능하다. Helvetica·Arial·Roboto·San Francisco·Noto Sans KR·Black Han Sans 등
+이 목록에 없는 모든 영문 전용·시스템·Google Fonts 폰트는 절대 사용 금지.
+반드시 아래의 정확한 이름(띄어쓰기·대소문자·숫자 포함 그대로)을 사용하라.
 
-  [산세리프 · 범용/모던] — 가독성 최고, 본문·제목 모두 적합
-    Pretendard Variable, Noto Sans KR, IBM Plex Sans KR, Gothic A1, Sunflower, Stylish
+  [범용 — 제목·소제목·정보 모두 적합] ★ bodyFont는 반드시 이 그룹에서만 선택
+    프리텐다드, 페이퍼로지, 지마켓 산스, 마루 부리, 나눔스퀘어, 나눔명조, SUIT
 
-  [세리프 · 고급/전통] — 고급스러운 본문, 브랜드 스토리, 전통적 무드
-    Noto Serif KR, Gowun Batang, Hahmlet, Nanum Myeongjo, Song Myung
+  [제목+소제목 — headlineFont·storyFont·accentFont 적합, bodyFont 금지]
+    평창평화체, 카페24 당당해, 카페24 써라운드, 창원단감아삭체, 카페24 단정해,
+    어그로체, 빛고을광주체,
+    Rufina, Apollo, High Summit, Gontserrat, Quentin, Belgiano
 
-  [산세리프 · 개성/임팩트] — 제목 전용, 강한 인상
-    Black Han Sans, Do Hyeon, Jua, Gowun Dodum, Paperlogy
+  [디스플레이 — headlineFont·accentFont 전용, bodyFont·storyFont 금지]
+    카페24 클래식타입, 카페24 빛나는별, 카페24 아네모네, 영양군 음식디미방체,
+    영도체, 여기어때 잘난체, 안성탕면체, 수성혜정체, 상주곶감체,
+    문경감홍사과체, 땅스부대찌개체, tvN 즐거운이야기, 가나초콜릿체
 
-  [손글씨 · 감성 포인트] — 단문 헤드라인 강조, 따뜻한 감성
-    Nanum Pen Script, Nanum Brush Script, Gamja Flower, Gaegu, Poor Story
-
-  [디스플레이 · 특수] — 개성 강한 단일 헤드라인 (본문 사용 금지)
-    Yeon Sung, Gugi, East Sea Dokdo, Single Day, Hi Melody, Kirang Haerang, Cute Font, Nanum Gothic
+  [손글씨 — headlineFont·accentFont 전용, bodyFont 절대 금지]
+    나눔 부장님 눈치체, 나눔브러쉬
 
 Roles:
-  headlineFont — hero title, section-title, step numbers (choose bold/impactful)
-  storyFont    — brand_story title/body, sensory sections (choose emotional/literary)
-  bodyFont     — general body text, lists, descriptions (choose readable)
-  accentFont   — CTA title, eyebrow labels, small callouts (choose distinctive)
+  headlineFont — 히어로 제목·섹션 제목·스텝 번호 (임팩트 있는 폰트 선택)
+  storyFont    — 브랜드 스토리 제목/본문·감성 섹션 (감성적/문학적 폰트)
+  bodyFont     — 일반 본문·목록·설명 (가독성 최우선 — [범용] 그룹에서만)
+  accentFont   — CTA 제목·아이브로 레이블·짧은 콜아웃 (개성 있는 폰트)
 
 Selection rules:
-  - Analyze the product mood, reference images, and brand tone to decide freely
-  - Do NOT use the same font for multiple roles
-  - Do NOT use only serif or only sans-serif — create contrast
-  - headlineFont + accentFont should feel bold or distinctive
-  - bodyFont must prioritize readability — choose from [산세리프 · 범용/모던] group only
-  - storyFont should match emotional register — [세리프 · 고급/전통] for warmth/premium, [손글씨] for handmade
-  - headlineFont — choose from [개성/임팩트] or [범용/모던] group; AVOID repeating same font across runs
-  - [손글씨] and [디스플레이 · 특수] fonts — use only for headlineFont or accentFont, NEVER for bodyFont
-  - DIVERSITY over habit: there is NO default font per category — derive the pairing from THIS product's
-    mood and references. Treat frequently-chosen combos (e.g. the same headline font appearing across
-    many projects) as a failure signal, not a safe choice.
+  - 4개 역할에 서로 다른 폰트를 반드시 배정
+  - 산세리프/세리프/개성체를 혼합해 대비 생성 — 전부 같은 계열 금지
+  - headlineFont + accentFont는 굵거나 임팩트 있게
+  - bodyFont는 [범용] 그룹에서만 — 손글씨·디스플레이 절대 금지
+  - storyFont — [범용]의 세리프계(나눔명조·마루 부리) 또는 [제목+소제목]의 감성폰트
+  - DIVERSITY: 같은 폰트 조합 반복 금지 — 이번 제품의 무드·레퍼런스에서 유도
 
-  [클라이언트 제공 — 서브셋 woff2 내장 (CDN 불필요, 한글+라틴 완전 지원)] ★ 우선 추천
-    SUIT                  → headlineFont·bodyFont 겸용 | 고딕 모던, 가독성 최상, 범용
-    NanumSquare           → headlineFont 전용 | 각진 고딕, 임팩트 강함
-    Nanum Myeongjo        → storyFont 전용 | 명조 고급, 브랜드 스토리·감성 본문
-    MaruBuri              → storyFont·headlineFont | 세리프 둥근 맛, 전통/프리미엄
-    가나초콜릿체            → headlineFont·accentFont | 팝 디스플레이, 개성 (본문 사용 금지)
-    tvN 즐거운이야기        → headlineFont·accentFont | 방송/엔터 무드, 친근 디스플레이 (본문 사용 금지)
-
-DO NOT use any font not listed above (including the client fonts section).
+위 35종 이외의 폰트는 절대 사용 금지. 이름이 정확히 일치해야 한다.
 
 PRODUCT PRESERVATION RULES — ABSOLUTE CONSTRAINTS:
 productPreservationRules must ONLY contain rules that PROTECT and PRESERVE the product's exterior appearance.

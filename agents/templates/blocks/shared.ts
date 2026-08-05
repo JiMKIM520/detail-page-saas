@@ -137,76 +137,84 @@ export const ICON_NAMES = [
 
 import { getFontFaceByFile } from './fonts/index'
 
-/** <head>에 로드할 웹폰트 링크. 모든 변형이 이 폰트들을 쓸 수 있다. */
-export const FONT_LINKS: string = [
-  '<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">',
-  '<link rel="preconnect" href="https://fonts.googleapis.com">',
-  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-  '<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gaegu:wght@700&family=Gowun+Batang:wght@400;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">',
-  // 와디즈 200섹션 템플릿 시그니처 폰트 (Paperlogy / Cafe24 ClassicType / Cafe24 Dangdanghae)
-  `<style>
-@font-face{font-family:'Paperlogy';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-4Regular.woff2') format('woff2')}
-@font-face{font-family:'Paperlogy';font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-5Medium.woff2') format('woff2')}
-@font-face{font-family:'Paperlogy';font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-7Bold.woff2') format('woff2')}
-@font-face{font-family:'Paperlogy';font-weight:800;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy-8ExtraBold.woff2') format('woff2')}
-@font-face{font-family:'Cafe24 ClassicType';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24ClassicType/Cafe24ClassicType.woff2') format('woff2')}
-@font-face{font-family:'Cafe24 Dangdanghae';font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24Dangdanghae/Cafe24Dangdanghae.woff2') format('woff2')}
-</style>`,
-].join('\n')
+/** <head>에 로드할 웹폰트 링크 (외부 CDN).
+ * 드라이브 35종은 전부 woff2 데이터 URI로 임베딩되므로 외부 CDN 링크 불필요.
+ * buildFontLinks가 FONT_WHITELIST의 client 항목을 @font-face 인라인으로 변환한다. */
+export const FONT_LINKS: string = ''
 
-/** 폰트 화이트리스트 (Sprint 4-D + 클라이언트 폰트 6종).
- *  gf: Google Fonts css2 파라미터 (동적 로드).
- *  client / clientFamily / clientWeight: agents/templates/blocks/fonts/ 서브셋 woff2 — 데이터 URI 주입.
- *  client 폰트가 있으면 buildFontLinks가 @font-face(데이터 URI)를 주입해 외부 CDN 불필요.
- *  비 GF 폰트(GmarketSans·Tenada·KoPub 등)는 CDN 파일명 검증 전이라 미등재 — 프리셋 폴백. */
+/** 폰트 화이트리스트 — 드라이브 제공 35종 전용.
+ *  client: woff2 파일경로 (fonts/ 디렉토리 기준), buildFontLinks가 @font-face 데이터 URI로 주입.
+ *  이 목록 외 폰트(Helvetica·Arial·Noto Sans KR 등)는 gateStyleGuide가 throw로 차단. */
 export const FONT_WHITELIST: Record<string, { gf?: string; client?: string; clientFamily?: string; clientWeight?: number }> = {
-  'pretendard': {}, 'black han sans': {}, 'gaegu': {}, 'gowun batang': {}, 'cormorant garamond': {},
-  'paperlogy': {}, 'cafe24 classictype': {}, 'cafe24 dangdanghae': {},
-  'ibm plex sans kr': { gf: 'IBM+Plex+Sans+KR:wght@400;500;700' },
-  'noto sans kr': { gf: 'Noto+Sans+KR:wght@400;700;900' },
-  'noto serif kr': { gf: 'Noto+Serif+KR:wght@400;600;900' },
-  'gothic a1': { gf: 'Gothic+A1:wght@400;700;900' },
-  'sunflower': { gf: 'Sunflower:wght@300;500;700' },
-  'stylish': { gf: 'Stylish' },
-  'do hyeon': { gf: 'Do+Hyeon' },
-  'jua': { gf: 'Jua' },
-  'gowun dodum': { gf: 'Gowun+Dodum' },
-  // nanum myeongjo: GF 폴백 유지 + 클라이언트 서브셋 우선 주입 (동일 CSS family 'Nanum Myeongjo')
-  'nanum myeongjo': { gf: 'Nanum+Myeongjo:wght@400;700;800', client: 'NanumMyeongjo-Bold.woff2', clientFamily: 'Nanum Myeongjo', clientWeight: 700 },
-  'nanum gothic': { gf: 'Nanum+Gothic:wght@400;700;800' },
-  'nanum pen script': { gf: 'Nanum+Pen+Script' },
-  'nanum brush script': { gf: 'Nanum+Brush+Script' },
-  'hahmlet': { gf: 'Hahmlet:wght@400;600;800' },
-  'song myung': { gf: 'Song+Myung' },
-  'poor story': { gf: 'Poor+Story' },
-  'gamja flower': { gf: 'Gamja+Flower' },
-  'yeon sung': { gf: 'Yeon+Sung' },
-  'gugi': { gf: 'Gugi' },
-  'hi melody': { gf: 'Hi+Melody' },
-  'cute font': { gf: 'Cute+Font' },
-  'single day': { gf: 'Single+Day' },
-  'east sea dokdo': { gf: 'East+Sea+Dokdo' },
-  'kirang haerang': { gf: 'Kirang+Haerang' },
-  // ── 클라이언트 제공 폰트 6종 (woff2 데이터 URI 주입) ──────────────────────
-  'suit':               { client: 'SUIT-Bold.woff2',         clientFamily: 'SUIT',               clientWeight: 700 },
-  'nanumsquare':        { client: 'NanumSquare-Bold.woff2',  clientFamily: 'NanumSquare',         clientWeight: 700 },
-  'maruburi':           { client: 'MaruBuri-Bold.woff2',     clientFamily: 'MaruBuri',            clientWeight: 700 },
-  '가나초콜릿체':         { client: 'Ghanachocolate.woff2',    clientFamily: '가나초콜릿체',          clientWeight: 400 },
-  'tvn 즐거운이야기':     { client: 'tvN-Bold.woff2',          clientFamily: 'tvN 즐거운이야기',      clientWeight: 700 },
+  // ── 범용 (title+sub+info) ──────────────────────────────────────────────────
+  '프리텐다드':           { client: 'drive/f01.woff2', clientFamily: '프리텐다드',           clientWeight: 700 },
+  '페이퍼로지':           { client: 'drive/f03.woff2', clientFamily: '페이퍼로지',           clientWeight: 700 },
+  '지마켓 산스':           { client: 'drive/f12.woff2', clientFamily: '지마켓 산스',           clientWeight: 700 },
+  '마루 부리':            { client: 'drive/f27.woff2', clientFamily: '마루 부리',            clientWeight: 700 },
+  '나눔스퀘어':           { client: 'drive/f29.woff2', clientFamily: '나눔스퀘어',           clientWeight: 700 },
+  '나눔명조':             { client: 'drive/f33.woff2', clientFamily: '나눔명조',             clientWeight: 700 },
+  'suit':                 { client: 'drive/f35.woff2', clientFamily: 'SUIT',                 clientWeight: 700 },
+  // ── 제목+소제목 (title+sub) ────────────────────────────────────────────────
+  '평창평화체':           { client: 'drive/f02.woff2', clientFamily: '평창평화체',           clientWeight: 400 },
+  '카페24 당당해':         { client: 'drive/f08.woff2', clientFamily: '카페24 당당해',         clientWeight: 400 },
+  '카페24 써라운드':       { client: 'drive/f09.woff2', clientFamily: '카페24 써라운드',       clientWeight: 400 },
+  '창원단감아삭체':        { client: 'drive/f10.woff2', clientFamily: '창원단감아삭체',        clientWeight: 400 },
+  '카페24 단정해':         { client: 'drive/f11.woff2', clientFamily: '카페24 단정해',         clientWeight: 400 },
+  'rufina':               { client: 'drive/f14.woff2', clientFamily: 'Rufina',               clientWeight: 400 },
+  'apollo':               { client: 'drive/f15.woff2', clientFamily: 'Apollo',               clientWeight: 400 },
+  'high summit':          { client: 'drive/f16.woff2', clientFamily: 'High Summit',          clientWeight: 400 },
+  'gontserrat':           { client: 'drive/f17.woff2', clientFamily: 'Gontserrat',           clientWeight: 400 },
+  'quentin':              { client: 'drive/f18.woff2', clientFamily: 'Quentin',              clientWeight: 400 },
+  'belgiano':             { client: 'drive/f21.woff2', clientFamily: 'Belgiano',             clientWeight: 400 },
+  '어그로체':             { client: 'drive/f22.woff2', clientFamily: '어그로체',             clientWeight: 700 },
+  '빛고을광주체':         { client: 'drive/f26.woff2', clientFamily: '빛고을광주체',         clientWeight: 400 },
+  // ── 디스플레이 · 제목 전용 (title only) ────────────────────────────────────
+  '카페24 클래식타입':     { client: 'drive/f05.woff2', clientFamily: '카페24 클래식타입',     clientWeight: 400 },
+  '카페24 빛나는별':       { client: 'drive/f06.woff2', clientFamily: '카페24 빛나는별',       clientWeight: 400 },
+  '카페24 아네모네':       { client: 'drive/f07.woff2', clientFamily: '카페24 아네모네',       clientWeight: 400 },
+  '영양군 음식디미방체':    { client: 'drive/f13.woff2', clientFamily: '영양군 음식디미방체',    clientWeight: 400 },
+  '영도체':               { client: 'drive/f19.woff2', clientFamily: '영도체',               clientWeight: 400 },
+  '여기어때 잘난체':       { client: 'drive/f20.woff2', clientFamily: '여기어때 잘난체',       clientWeight: 700 },
+  '안성탕면체':           { client: 'drive/f23.woff2', clientFamily: '안성탕면체',           clientWeight: 400 },
+  '수성혜정체':           { client: 'drive/f24.woff2', clientFamily: '수성혜정체',           clientWeight: 400 },
+  '상주곶감체':           { client: 'drive/f25.woff2', clientFamily: '상주곶감체',           clientWeight: 400 },
+  '문경감홍사과체':        { client: 'drive/f28.woff2', clientFamily: '문경감홍사과체',        clientWeight: 400 },
+  '땅스부대찌개체':        { client: 'drive/f30.woff2', clientFamily: '땅스부대찌개체',        clientWeight: 400 },
+  'tvn 즐거운이야기':      { client: 'drive/f34.woff2', clientFamily: 'tvN 즐거운이야기',      clientWeight: 700 },
+  '가나초콜릿체':          { client: 'drive/f36.woff2', clientFamily: '가나초콜릿체',          clientWeight: 400 },
+  // ── 손글씨 · 제목 전용 ──────────────────────────────────────────────────────
+  '나눔 부장님 눈치체':    { client: 'drive/f31.woff2', clientFamily: '나눔 부장님 눈치체',    clientWeight: 400 },
+  '나눔브러쉬':           { client: 'drive/f32.woff2', clientFamily: '나눔브러쉬',           clientWeight: 400 },
 }
 
-/** 표기 변형 → 정식 패밀리명 별칭 (아트디렉터가 'Pretendard Variable'·한글명 등으로 쓰는 실사례) */
+/** 표기 변형 → 정식 패밀리명 별칭 (AI가 영문명·구 CSS명·원본 mapping키를 사용할 때 흡수) */
 const FONT_ALIASES: Record<string, string> = {
-  'pretendard variable': 'Pretendard',
-  'noto sans korean': 'Noto Sans KR',
-  'noto serif korean': 'Noto Serif KR',
-  // 클라이언트 폰트 한글명·표기 변형 → CSS family 정식명
-  '나눔스퀘어': 'NanumSquare',
-  'nanum square': 'NanumSquare',
-  '나눔명조': 'Nanum Myeongjo',
-  '마루 부리': 'MaruBuri',
-  'maru buri': 'MaruBuri',
-  'tvn 즐거운이야기': 'tvN 즐거운이야기',  // lowercase → CSS 정식명
+  // 영문/변형명 → 정규화명
+  'pretendard': '프리텐다드',
+  'pretendard variable': '프리텐다드',
+  'gmarket sans': '지마켓 산스',
+  'gmarketsans': '지마켓 산스',
+  // 구 CSS family명 → 새 정규화명
+  'nanumsquare': '나눔스퀘어',
+  'nanum square': '나눔스퀘어',
+  'maruburi': '마루 부리',
+  'maru buri': '마루 부리',
+  'nanum myeongjo': '나눔명조',
+  'nanumbrushscript': '나눔브러쉬',
+  'nanum brush script': '나눔브러쉬',
+  // 원본 mapping.json 키 → 정규화명 (저장된 값 호환)
+  '영문 rufina': 'Rufina',
+  '영문 apollo': 'Apollo',
+  '영문 high_summit': 'High Summit',
+  '영문 gontserrat': 'Gontserrat',
+  '영문 quentin': 'Quentin',
+  '영문 belgiano': 'Belgiano',
+  '수성혜정체_윈도우용': '수성혜정체',
+  '평창평화체(windows)': '평창평화체',
+  '나눔손글씨 부장님 눈치체': '나눔 부장님 눈치체',
+  '문경감홍사과체폰트파일': '문경감홍사과체',
+  // lowercase → 정식 대소문자
+  'tvn 즐거운이야기': 'tvN 즐거운이야기',
 }
 
 /** 화이트리스트 폰트면 정식 패밀리명 반환, 아니면 null */

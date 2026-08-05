@@ -18,7 +18,7 @@ export const warmPlayful: Tokens = {
   line: '#E4D7C5',
   fontDisplay: "'가나초콜릿체', sans-serif",
   fontBody: "'SUIT', sans-serif",
-  fontSerif: "'MaruBuri', serif",
+  fontSerif: "'마루 부리', serif",
   fontHand: "'tvN 즐거운이야기', sans-serif",
 }
 
@@ -33,9 +33,9 @@ export const modernEditorial: Tokens = {
   accentDark: '#8F3F22',
   brand: '#1C1A17',
   line: '#DED7CA',
-  fontDisplay: "'NanumSquare', sans-serif",
+  fontDisplay: "'나눔스퀘어', sans-serif",
   fontBody: "'SUIT', sans-serif",
-  fontSerif: "'Nanum Myeongjo', serif",
+  fontSerif: "'나눔명조', serif",
   fontHand: "'가나초콜릿체', sans-serif",
 }
 
@@ -53,7 +53,7 @@ export const cobaltPremium: Tokens = {
   line: '#DDE4FF',
   fontDisplay: "'SUIT', sans-serif",
   fontBody: "'SUIT', sans-serif",
-  fontSerif: "'Nanum Myeongjo', serif",
+  fontSerif: "'나눔명조', serif",
   fontHand: "'tvN 즐거운이야기', sans-serif",
 }
 
@@ -69,9 +69,9 @@ export const sandLuxury: Tokens = {
   accentDark: '#8C5C28',
   brand: '#2A1E13',
   line: '#E8DECB',
-  fontDisplay: "'MaruBuri', serif",
+  fontDisplay: "'마루 부리', serif",
   fontBody: "'SUIT', sans-serif",
-  fontSerif: "'Nanum Myeongjo', serif",
+  fontSerif: "'나눔명조', serif",
   fontHand: "'가나초콜릿체', sans-serif",
 }
 
