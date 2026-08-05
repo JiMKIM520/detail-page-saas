@@ -12,6 +12,7 @@ import type { Tokens } from './templates/blocks/types'
 import { getStyleLanguage } from './templates/blocks/style-languages'
 import { variantTone } from './templates/blocks/variant-meta'
 import { buildFontLinks } from './templates/blocks/shared'
+import { supportBannerHtml } from './templates/blocks/support-banner'
 
 export interface SceneDesignInput {
   /** 씬 네임스페이스 (예: 'sc3') — 모든 셀렉터 접두사 */
@@ -210,6 +211,7 @@ img{max-width:100%}
 <body>
 <div class="dpg">
 ${parts.join('\n')}
+${supportBannerHtml(width)}
 </div>
 </body>
 </html>`

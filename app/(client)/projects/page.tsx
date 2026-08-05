@@ -9,7 +9,7 @@ export default async function ClientProjectsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const { data: projects } = await supabase
     .from('projects')
-    .select('*, platforms(name)')
+    .select('*')
     .eq('client_id', user!.id)
     .order('created_at', { ascending: false })
 
@@ -78,9 +78,6 @@ export default async function ClientProjectsPage() {
                 <h2 className="text-xl font-bold text-text-primary group-hover:text-primary-700 transition-colors">
                   {singleProject.company_name}
                 </h2>
-                <p className="text-sm text-text-tertiary mt-1">
-                  {(singleProject.platforms as { name?: string } | null)?.name ?? '-'} · {singleProject.category}
-                </p>
               </div>
               <svg className="w-5 h-5 text-primary-400 group-hover:text-primary-600 transition-colors flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -104,8 +101,6 @@ export default async function ClientProjectsPage() {
               key={project.id}
               id={project.id}
               company_name={project.company_name ?? ''}
-              category={project.category ?? ''}
-              platform_name={(project.platforms as { name?: string } | null)?.name ?? '-'}
               status={project.status as ProjectStatus}
               created_at={project.created_at}
               clientFacing

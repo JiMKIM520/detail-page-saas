@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { baseCss, buildFontLinks, esc, makeCtx } from './shared'
 import { getVariant } from './registry'
 import { decorateSection, DECOR_CSS } from './scene-decor'
+import { supportBannerHtml } from './support-banner'
 import { variantTone } from './variant-meta'
 import type { PageSpec } from './types'
 
@@ -290,6 +291,7 @@ ${styles}
 <body>
 <div class="dpg">
 ${sections.join('\n')}
+${supportBannerHtml(width)}
 </div>
 </body>
 </html>`

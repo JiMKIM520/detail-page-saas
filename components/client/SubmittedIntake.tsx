@@ -9,8 +9,9 @@ export interface IntakeFileView {
 interface SubmittedIntakeProps {
   companyName: string
   brandName: string | null
-  category: string | null
-  platformName: string
+  // 분류 정보 — 생성 프롬프트를 결정하므로 관리자만 본다 (기업 화면은 전달하지 않음)
+  category?: string | null
+  platformName?: string | null
   // 진행 안내 수신처 — 기업이 의뢰서에 입력한 담당자 정보 (관리자만 필요)
   contactName?: string | null
   contactPhone?: string | null
@@ -177,9 +178,11 @@ export function SubmittedIntake({
         <dl>
           <Row label="기업명">{companyName}</Row>
           {brandName && <Row label="브랜드명">{brandName}</Row>}
-          <Row label="카테고리 / 플랫폼">
-            {(category ?? '-')} · {platformName}
-          </Row>
+          {(category || platformName) && (
+            <Row label="카테고리 / 플랫폼">
+              {(category ?? '-')} · {platformName ?? '-'}
+            </Row>
+          )}
           {productName && <Row label="제품명">{productName}</Row>}
           {productDescription && (
             <Row label="제품 소개">

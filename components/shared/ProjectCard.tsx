@@ -5,15 +5,13 @@ import Link from 'next/link'
 interface ProjectCardProps {
   id: string
   company_name: string
-  category: string
-  platform_name: string
   status: ProjectStatus
   created_at: string
   href?: string
   clientFacing?: boolean
 }
 
-export function ProjectCard({ id, company_name, category, platform_name, status, created_at, href, clientFacing }: ProjectCardProps) {
+export function ProjectCard({ id, company_name, status, created_at, href, clientFacing }: ProjectCardProps) {
   const card = (
     <div className="group bg-surface rounded-xl border border-border p-5 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer">
       <div className="flex items-start justify-between gap-3">
@@ -21,9 +19,6 @@ export function ProjectCard({ id, company_name, category, platform_name, status,
           <h3 className="font-semibold text-text-primary group-hover:text-primary-700 transition-colors truncate">
             {company_name}
           </h3>
-          <p className="text-sm text-text-tertiary mt-1">
-            {platform_name} · {category}
-          </p>
         </div>
         <StatusBadge status={status} clientFacing={clientFacing} />
       </div>

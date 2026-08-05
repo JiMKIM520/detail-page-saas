@@ -240,7 +240,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const [hasBrand, setHasBrand] = useState<boolean | null>(null)
   const [targetAudience, setTargetAudience] = useState<string[]>([])
   const [designStyles, setDesignStyles] = useState<string[]>([])
-  // Step 4 안내사항 확인 — 3개 모두 체크해야 최종 제출 가능
+  // Step 4 안내사항 확인 — 5개 모두 체크해야 최종 제출 가능
   const [acks, setAcks] = useState({
     address: false,
     shipping: false,
@@ -819,7 +819,8 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
                   <span className="text-sm text-text-secondary leading-relaxed">
                     상세페이지 제작을 위한 제품 촬영을 위해 보낼 주소는 아래와 같습니다.<br />
                     주소 : 서울시 영등포구 영중로10길 6, 델리타운 4층 9호 (하나파워온스토어 소상공인 지원사업단 앞)<br />
-                    전화번호 : (확보예정)
+                    전화번호 : 02-722-1875<br />
+                    ※ 주말 및 공휴일은 택배 수령이 불가하오니, 평일 발송 부탁드립니다. (발송 시 기업명 필수 기재)
                   </span>
                 </label>
                 <label className="flex items-start gap-3 cursor-pointer">

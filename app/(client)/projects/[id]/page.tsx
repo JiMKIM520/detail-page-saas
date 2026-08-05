@@ -53,7 +53,7 @@ export default async function ClientProjectDetailPage({
 
   const { data: project } = await service
     .from('projects')
-    .select('*, platforms(name)')
+    .select('*')
     .eq('id', id)
     .single()
 
@@ -100,9 +100,6 @@ export default async function ClientProjectDetailPage({
   }
   const hasDownloads = statusIndex(status) >= statusIndex('design_approved') && Object.keys(downloadUrls).length > 0
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const platformName = (project.platforms as any)?.name ?? '-'
-
   // 사업자가 제출한 첨부파일 — 이미지엔 1시간 signed URL 부여 (intake-files 버킷 RLS 보호)
   const { data: intakeFiles } = await service
     .from('intake_files')
@@ -141,9 +138,6 @@ export default async function ClientProjectDetailPage({
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
             <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
-            <p className="text-sm text-text-tertiary mt-1">
-              {platformName} · {project.category}
-            </p>
           </div>
           <StatusBadge status={status} clientFacing />
         </div>
@@ -220,8 +214,6 @@ export default async function ClientProjectDetailPage({
       <SubmittedIntake
         companyName={project.company_name}
         brandName={project.brand_name ?? null}
-        category={project.category ?? null}
-        platformName={platformName}
         productHighlights={project.product_highlights ?? null}
         productName={project.product_name ?? null}
         productDescription={project.product_description ?? null}
