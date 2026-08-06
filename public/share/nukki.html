@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>누끼 결과 전수 비교 — 제품사진 45장</title>
+
+<style>
+:root{
+  --paper:#FBFBF9;--raised:#FFF;--ink:#15191B;--ink-2:#4A5356;--ink-3:#7A8487;
+  --line:#E4E7E4;--line-2:#D3D8D4;--accent:#0E7C6B;--accent-soft:#E6F2EF;
+  --ok:#1E7A4F;--ok-soft:#E7F3EC;--warn:#9A5B12;--warn-soft:#F8EFE2;--fail:#B3261E;--fail-soft:#FBE9E7;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#101314;--raised:#171B1C;--ink:#ECEFED;--ink-2:#A8B2B2;--ink-3:#7B8686;
+  --line:#242A2B;--line-2:#333A3A;--accent:#4FC4AC;--accent-soft:#12332D;
+  --ok:#5FBE8B;--ok-soft:#13291F;--warn:#D9A05B;--warn-soft:#33260F;--fail:#F2A099;--fail-soft:#3A1917;}}
+:root[data-theme="dark"]{
+  --paper:#101314;--raised:#171B1C;--ink:#ECEFED;--ink-2:#A8B2B2;--ink-3:#7B8686;
+  --line:#242A2B;--line-2:#333A3A;--accent:#4FC4AC;--accent-soft:#12332D;
+  --ok:#5FBE8B;--ok-soft:#13291F;--warn:#D9A05B;--warn-soft:#33260F;--fail:#F2A099;--fail-soft:#3A1917;}
+:root[data-theme="light"]{
+  --paper:#FBFBF9;--raised:#FFF;--ink:#15191B;--ink-2:#4A5356;--ink-3:#7A8487;
+  --line:#E4E7E4;--line-2:#D3D8D4;--accent:#0E7C6B;--accent-soft:#E6F2EF;
+  --ok:#1E7A4F;--ok-soft:#E7F3EC;--warn:#9A5B12;--warn-soft:#F8EFE2;--fail:#B3261E;--fail-soft:#FBE9E7;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);line-height:1.6;font-size:15px;word-break:keep-all;
+ font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:44px 20px 90px}
+h1{font-size:clamp(23px,4vw,31px);letter-spacing:-.02em;margin:0 0 10px;font-weight:800;text-wrap:balance}
+.lede{color:var(--ink-2);margin:0 0 6px;max-width:62ch}
+.meta{font-size:12.5px;color:var(--ink-3);margin:0}
+.verdict{margin:26px 0 0;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;background:var(--raised);padding:18px 20px}
+.verdict h2{margin:0 0 8px;font-size:16px;font-weight:750}
+.verdict p{margin:0 0 8px;font-size:14px;color:var(--ink-2)}
+.verdict p:last-child{margin-bottom:0}
+.verdict b{color:var(--ink)}
+.tally{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0}
+.pill{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:7px;font-variant-numeric:tabular-nums}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.watch{background:var(--warn-soft);color:var(--warn)}
+.pill.fail{background:var(--fail-soft);color:var(--fail)}
+.list{margin-top:30px;display:flex;flex-direction:column;gap:10px}
+.row{border:1px solid var(--line);border-radius:11px;background:var(--raised);padding:12px 13px}
+.row.fail{border-color:var(--fail);background:var(--fail-soft)}
+.row.watch{border-color:var(--line-2)}
+.rowhead{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap}
+.co{font-size:13.5px;font-weight:700}
+.fn{font-size:11.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.st{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.st-ok{background:var(--ok-soft);color:var(--ok)}
+.st-watch{background:var(--warn-soft);color:var(--warn)}
+.st-fail{background:var(--fail);color:#fff}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+figure{margin:0}
+.frame{border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--paper);display:flex;align-items:center;justify-content:center;min-height:110px}
+.frame img{display:block;width:100%;height:auto}
+.checker{background-color:#fff;background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0;
+ background-image:linear-gradient(45deg,#DFE3E0 25%,transparent 25%),linear-gradient(-45deg,#DFE3E0 25%,transparent 25%),
+ linear-gradient(45deg,transparent 75%,#DFE3E0 75%),linear-gradient(-45deg,transparent 75%,#DFE3E0 75%)}
+figcaption{margin-top:6px;font-size:11px;color:var(--ink-3)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3)}
+</style>
+<style>
+  .wrap{max-width:1180px}
+  .frame{min-height:200px}
+  .pair{gap:14px}
+  a{color:inherit;text-decoration:none;display:block}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:9px}
+  .hint{color:var(--ink-3);font-size:10.5px;margin-left:5px}
+  .frame img{transition:transform .18s ease}
+  a:hover .frame img{transform:scale(1.015)}
+  @media (prefers-reduced-motion:reduce){.frame img{transition:none}a:hover .frame img{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>누끼 결과 전수 비교</h1>
+  <p class="lede">기업이 제출한 제품 사진 <b>45장 전량</b>을 fal.ai BiRefNet v2로 배경 제거한 결과입니다. 보정 없이 API 출력 그대로이며, 오른쪽 체커무늬가 투명 영역입니다. <b>이미지를 클릭하면 원본 해상도</b>로 열립니다.</p>
+  <p class="meta">2026-08-06 · 8개 기업 · 대부분 스튜디오 흰 배경 촬영컷</p>
+
+  <div class="verdict">
+    <h2>흰 배경 촬영에 이 모델을 써도 되는가 — 됩니다. 단 전수 검수는 필요합니다.</h2>
+    <p><b>45장 중 43장이 정상</b>입니다. 흰 제품(선풍기·화장품 튜브·흰 파우치)을 흰 배경에서 찍은 컷도 대부분 경계를 정확히 잡았습니다.</p>
+    <p>실패한 <b>1장은 흰 선풍기를 위에서 내려다본 컷</b>으로, 흰 프레임과 받침대가 흰 배경에 묻혀 팬만 남고 잘려나갔습니다. <b>같은 제품의 다른 각도 4장은 모두 정상</b>이었습니다 — 제품이 아니라 특정 각도·조명의 문제입니다.</p>
+    <p>따라서 <b>자동화하되 결과를 눈으로 훑는 절차</b>가 필요합니다. 실패는 한눈에 보이므로(제품이 잘림) 검수 부담은 작고, 걸린 컷만 재촬영하거나 수작업하면 됩니다.</p>
+    <div class="tally">
+      <span class="pill ok">정상 43</span>
+      <span class="pill watch">경계 일부 손실 1</span>
+      <span class="pill fail">제품 일부 소실 1</span>
+    </div>
+  </div>
+
+  <div class="list">
+
+      <article class="row watch">
+        <div class="rowhead">
+          <span class="co">강릉카페 체크이스트</span>
+          <span class="fn">IMG_0116.JPG</span>
+          <span class="st st-watch">경계 일부 손실</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">강릉카페 체크이스트</span>
+          <span class="fn">티그레메이커스1.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">강릉카페 체크이스트</span>
+          <span class="fn">패키지400축소.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">강릉카페 체크이스트</span>
+          <span class="fn">티그레블루베리절단면.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">강릉카페 체크이스트</span>
+          <span class="fn">m1.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">동원</span>
+          <span class="fn">H11A9763.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">동원</span>
+          <span class="fn">H11A9779.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">동원</span>
+          <span class="fn">H11A9742.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">동원</span>
+          <span class="fn">H11A9750.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">동원</span>
+          <span class="fn">H11A9769.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">로모노소프</span>
+          <span class="fn">커피잔01.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">로모노소프</span>
+          <span class="fn">커피잔03.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">로모노소프</span>
+          <span class="fn">커피잔02.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row fail">
+        <div class="rowhead">
+          <span class="co">루미트론</span>
+          <span class="fn">H11A9689.png</span>
+          <span class="st st-fail">제품 일부 소실</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">루미트론</span>
+          <span class="fn">H11A9696.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">루미트론</span>
+          <span class="fn">H11A9693.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">루미트론</span>
+          <span class="fn">H11A9687.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">루미트론</span>
+          <span class="fn">H11A9685.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">매일</span>
+          <span class="fn">프로핏03.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">매일</span>
+          <span class="fn">프로핏05.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">매일</span>
+          <span class="fn">프로핏01.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">매일</span>
+          <span class="fn">프로핏04.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">매일</span>
+          <span class="fn">프로핏02.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9715.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9702.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/25_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/25_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/25_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/25_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9704.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/26_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/26_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/26_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/26_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9707.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9711.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/28_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/28_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/28_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/28_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9719.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9717.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9702.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9704.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">모모스</span>
+          <span class="fn">H11A9711.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">아로마티카</span>
+          <span class="fn">화장품04.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">아로마티카</span>
+          <span class="fn">화장품05.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">아로마티카</span>
+          <span class="fn">화장품03.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">아로마티카</span>
+          <span class="fn">화장품02.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">아로마티카</span>
+          <span class="fn">화장품01.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">여름(45ml).png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">여름(45ml)패키지.png</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">패키지 4종 눕힘.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">패키지 4종 스탠드.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">패키지 4종 정면.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">박스세트 정면.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="row ok">
+        <div class="rowhead">
+          <span class="co">주식회사 럽앤다이브</span>
+          <span class="fn">박스세트 사선.jpg</span>
+          <span class="st st-ok">정상</span>
+        </div>
+        <div class="pair">
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_orig.jpg" target="_blank" rel="noreferrer">
+              <div class="frame"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_orig.jpg" alt="원본"></div>
+            </a>
+            <figcaption>원본 <span class="hint">클릭 시 원본 크기</span></figcaption>
+          </figure>
+          <figure>
+            <a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_cut.png" target="_blank" rel="noreferrer">
+              <div class="frame checker"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_cut.png" alt="배경 제거"></div>
+            </a>
+            <figcaption>배경 제거 <span class="hint">투명 PNG</span></figcaption>
+          </figure>
+        </div>
+      </article>  </div>
+  <footer>fal.ai BiRefNet v2 · 평균 4.19초/장 · 45장 전량 검수 완료 · 하나파워온스토어 레벨업</footer>
+</div>
+</body>
+</html>

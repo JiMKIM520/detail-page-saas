@@ -82,8 +82,9 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // public/ 정적 자산(이미지 등)은 인증 게이트를 타지 않는다
+  // public/ 정적 자산(이미지 등)은 인증 게이트를 타지 않는다.
+  // share/ 는 외부 공유용 정적 검토 자료 — 로그인 없이 열려야 한다(검색 노출은 noindex로 막는다).
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|webp|gif|ico)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|share/|.*\\.(?:png|jpg|jpeg|svg|webp|gif|ico)$).*)',
   ],
 }
