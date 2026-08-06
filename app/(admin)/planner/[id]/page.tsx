@@ -13,6 +13,7 @@ import { AssignPanel } from '@/components/admin/AssignPanel'
 import { InternalNotes } from '@/components/admin/InternalNotes'
 import { ExpandableIntake } from '@/components/admin/ExpandableIntake'
 import { ReviseDoneButton } from '@/components/planner/ReviseDoneButton'
+import { fetchManageIds } from '@/lib/manage-id'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
@@ -91,6 +92,8 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
   )
   const platformName = (project.platforms as { name?: string } | null)?.name ?? '-'
 
+  const manageId = (await fetchManageIds(service, [project.client_id])).get(project.client_id ?? '')
+
   // 보완 상태 — 기업이 보완 제출을 마치면 revise_done이 서고, 사무국이 확인하면 내려간다
   const plannerTags = (project.tags && typeof project.tags === 'object' && !Array.isArray(project.tags)
     ? (project.tags as Record<string, boolean | number>)
@@ -106,7 +109,10 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
+        <h1 className="text-xl font-bold text-text-primary">
+          {manageId && <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 align-middle font-mono text-xs font-semibold text-slate-600">{manageId}</span>}
+          {project.company_name}
+        </h1>
         <p className="text-sm text-text-tertiary mt-1">
           {(project.platforms as any)?.name} · {project.category}
         </p>

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { fetchManageIds } from '@/lib/manage-id'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import type { ProjectStatus } from '@/lib/status-machine'
 import Link from 'next/link'
@@ -22,11 +23,14 @@ export default async function PlannerDashboard({ searchParams }: PageProps) {
   // intake_submitted 포함 — 제출 후 스크립트를 수동으로 시작하는 흐름이라 접수 건이 이 목록의 출발점이다
   const query = supabase
     .from('projects')
-    .select('id, company_name, status, category, created_at, tags, platforms(name)')
+    .select('id, company_name, status, category, created_at, tags, client_id, platforms(name)')
     .in('status', ['intake_submitted', 'script_review', 'script_generating', 'design_plan_review', 'design_planning'])
     .order('created_at', { ascending: true })
 
   const { data: projects } = await query
+
+  // 사무국은 관리번호(02-001 …)로 기업을 식별한다
+  const manageIds = await fetchManageIds(supabase, (projects ?? []).map(p => p.client_id))
 
   const readTags = (t: unknown): Record<string, boolean | number> =>
     t && typeof t === 'object' && !Array.isArray(t) ? (t as Record<string, boolean | number>) : {}
@@ -98,6 +102,11 @@ export default async function PlannerDashboard({ searchParams }: PageProps) {
             <div className="group bg-surface rounded-xl border border-border p-5 flex items-center justify-between hover:border-primary-300 hover:shadow-md transition-all">
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-text-primary group-hover:text-primary-700 transition-colors">
+                  {manageIds.get(project.client_id ?? '') && (
+                    <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs font-semibold text-slate-600">
+                      {manageIds.get(project.client_id ?? '')}
+                    </span>
+                  )}
                   {project.company_name}
                 </p>
                 <p className="text-sm text-text-tertiary mt-0.5">

@@ -6,6 +6,7 @@ import { SendDraftPanel } from '@/components/designer/SendDraftPanel'
 import { GenerateDraftButton } from '@/components/designer/GenerateDraftButton'
 import { StylingShotDownloads } from '@/components/designer/StylingShotDownloads'
 import { InternalNotes } from '@/components/admin/InternalNotes'
+import { fetchManageIds } from '@/lib/manage-id'
 import { WorkflowSteps } from '@/components/shared/WorkflowSteps'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { notFound } from 'next/navigation'
@@ -46,6 +47,8 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
     .filter((f) => /\.(png|jpe?g|webp)$/i.test(f.name))
     .map((f) => ({ name: f.name.replace(/\.[a-z]+$/i, ''), url: `${PUB}/projects/${id}/styling_real/${f.name}` }))
 
+  const manageId = (await fetchManageIds(svc, [project.client_id])).get(project.client_id ?? '')
+
   return (
     <div>
       <Link href={isAdmin ? '/designer' : '/designer'} className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
@@ -57,7 +60,10 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
 
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-text-primary">{project.company_name}</h1>
+          <h1 className="text-xl font-bold text-text-primary">
+            {manageId && <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 align-middle font-mono text-xs font-semibold text-slate-600">{manageId}</span>}
+            {project.company_name}
+          </h1>
           <p className="text-sm text-text-tertiary mt-1">
             {(project.platforms as { name?: string })?.name} · {project.category}
           </p>

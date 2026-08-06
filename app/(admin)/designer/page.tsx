@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { StatusBadge } from '@/components/shared/StatusBadge'
+import { fetchManageIds } from '@/lib/manage-id'
 import type { ProjectStatus } from '@/lib/status-machine'
 import Link from 'next/link'
 
@@ -22,7 +23,7 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
   // 관리자는 전체 초안을 검수, 디자이너는 본인 배정(designer_id)만
   let query = supabase
     .from('projects')
-    .select('id, company_name, status, category, designer_id, created_at, platforms(name)')
+    .select('id, company_name, status, category, designer_id, created_at, client_id, platforms(name)')
     // design_failed(생성 실패 — 재시도 대상)·designer_working(수작업 인계)·revision_1/2(수정요청)도
     // 디자이너 작업 대상 — 누락 시 해당 프로젝트가 목록에서 사라져 방치되던 실사례
     .in('status', ['design_review', 'design_generating', 'design_failed', 'designer_working', 'revision_1', 'revision_2'])
@@ -33,6 +34,8 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
   }
 
   const { data: projects } = await query
+
+  const manageIds = await fetchManageIds(supabase, (projects ?? []).map(p => p.client_id))
 
   // 최종본 제출(final_submitted) 프로젝트 집합 — 별도 쿼리(중첩 조인 관계 미인식 회피)
   const { data: finalRows } = await supabase
@@ -99,6 +102,11 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
             <div className="group bg-surface rounded-xl border border-border p-5 flex items-center justify-between hover:border-violet-300 hover:shadow-md transition-all">
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-text-primary group-hover:text-violet-700 transition-colors">
+                  {manageIds.get(project.client_id ?? '') && (
+                    <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs font-semibold text-slate-600">
+                      {manageIds.get(project.client_id ?? '')}
+                    </span>
+                  )}
                   {project.company_name}
                 </p>
                 <p className="text-sm text-text-tertiary mt-0.5">
