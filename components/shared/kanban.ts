@@ -9,10 +9,14 @@ import type { ProjectStatus } from '@/lib/status-machine'
 export type ProjectTags = {
   hold?: boolean
   revise?: boolean
+  /** 기업이 보완 제출을 마침 — 사무국이 확인하면 내려간다 */
+  revise_done?: boolean
+  /** 보완 요청 차수 (1차, 2차 …) */
+  revise_round?: number
   revision_n?: boolean
   rewrite?: boolean
   reviewing?: boolean
-  [key: string]: boolean | undefined
+  [key: string]: boolean | number | undefined
 }
 
 /** KanbanCard 에 필요한 최소 프로젝트 형태 */
@@ -33,7 +37,9 @@ export interface KanbanProject {
 /** 태그 우선순위 (높을수록 최상단) */
 function tagPriority(tags: ProjectTags | null | undefined): number {
   if (!tags) return 0
-  if (tags.hold) return 4
+  if (tags.hold) return 5
+  // 보완 완료 = 기업이 공을 넘긴 상태라 사무국이 가장 먼저 봐야 한다
+  if (tags.revise_done) return 4
   if (tags.revise) return 3
   if (tags.revision_n) return 2
   if (tags.rewrite) return 1

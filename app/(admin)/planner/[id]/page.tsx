@@ -11,6 +11,8 @@ import { StartPlanningButton } from '@/components/planner/StartPlanningButton'
 import { ApprovePlanButton } from '@/components/planner/ApprovePlanButton'
 import { AssignPanel } from '@/components/admin/AssignPanel'
 import { InternalNotes } from '@/components/admin/InternalNotes'
+import { ExpandableIntake } from '@/components/admin/ExpandableIntake'
+import { ReviseDoneButton } from '@/components/planner/ReviseDoneButton'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
@@ -89,6 +91,11 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
   )
   const platformName = (project.platforms as { name?: string } | null)?.name ?? '-'
 
+  // 보완 상태 — 기업이 보완 제출을 마치면 revise_done이 서고, 사무국이 확인하면 내려간다
+  const plannerTags = (project.tags && typeof project.tags === 'object' && !Array.isArray(project.tags)
+    ? (project.tags as Record<string, boolean | number>)
+    : {}) as Record<string, boolean | number>
+
   return (
     <div>
       <Link href="/planner" className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
@@ -107,6 +114,13 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
+          {plannerTags.revise_done === true && (
+            <ReviseDoneButton
+              projectId={id}
+              round={typeof plannerTags.revise_round === 'number' ? plannerTags.revise_round : 1}
+            />
+          )}
+          <ExpandableIntake>
           <SubmittedIntake
             companyName={project.company_name}
             brandName={project.brand_name ?? null}
@@ -131,6 +145,7 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
             files={submittedFiles}
             createdAt={project.created_at}
           />
+          </ExpandableIntake>
           {hasUrlFetchFailed && (
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
               <p className="text-sm font-semibold text-amber-800 mb-1">URL 컨텐츠 자동 추출 실패</p>

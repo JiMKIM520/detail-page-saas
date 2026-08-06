@@ -228,18 +228,39 @@ function FileUploadArea({
   )
 }
 
-export function IntakeForm({ platforms, categories }: { platforms: Platform[]; categories: Category[] }) {
+/** 보완 모드 — 사무국이 보완 요청한 의뢰서를 기업이 고쳐 다시 내는 흐름 */
+export interface ReviseContext {
+  projectId: string
+  /** 이미 제출된 제품 사진이 있으면 재업로드를 요구하지 않는다 */
+  hasProductPhoto?: boolean
+  initial: Partial<FormData> & {
+    sellingPoints?: string[]
+    designStyles?: string[]
+    targetAudience?: string[]
+    hasBrand?: boolean | null
+  }
+}
+
+export function IntakeForm({
+  platforms,
+  categories,
+  revise,
+}: {
+  platforms: Platform[]
+  categories: Category[]
+  revise?: ReviseContext
+}) {
   const { register, handleSubmit, formState: { errors, isSubmitting }, trigger, getValues, setValue } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { consent: undefined as unknown as true },
+    defaultValues: { ...(revise?.initial ?? {}), consent: undefined as unknown as true },
   })
   const router = useRouter()
   const supabase = createClient()
 
   const [currentStep, setCurrentStep] = useState(1)
-  const [hasBrand, setHasBrand] = useState<boolean | null>(null)
-  const [targetAudience, setTargetAudience] = useState<string[]>([])
-  const [designStyles, setDesignStyles] = useState<string[]>([])
+  const [hasBrand, setHasBrand] = useState<boolean | null>(revise?.initial.hasBrand ?? null)
+  const [targetAudience, setTargetAudience] = useState<string[]>(revise?.initial.targetAudience ?? [])
+  const [designStyles, setDesignStyles] = useState<string[]>(revise?.initial.designStyles ?? [])
   // Step 4 안내사항 확인 — 5개 모두 체크해야 최종 제출 가능
   const [acks, setAcks] = useState({
     address: false,
@@ -250,7 +271,9 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   })
   const allAcked = acks.address && acks.shipping && acks.duration && acks.aiImages && acks.banner
   // Step 2 셀링 포인트 — 5칸, 최소 3개 입력 필수
-  const [sellingPoints, setSellingPoints] = useState<string[]>(['', '', '', '', ''])
+  const [sellingPoints, setSellingPoints] = useState<string[]>(
+    [...(revise?.initial.sellingPoints ?? []), '', '', '', '', ''].slice(0, 5),
+  )
 
   const [fileGroups, setFileGroups] = useState<Record<string, File[]>>({
     product_photo: [],
@@ -268,15 +291,16 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
   const [draftBanner, setDraftBanner] = useState<'idle' | 'present' | 'dismissed'>('idle')
   const [saveMsg, setSaveMsg] = useState('')
 
-  // 마운트 시 draft 확인
+  // 마운트 시 draft 확인 — 보완 모드는 제출본이 이미 채워져 있어 임시저장을 덮어씌우면 안 된다
   useEffect(() => {
+    if (revise) return
     try {
       const raw = localStorage.getItem(DRAFT_KEY)
       if (raw) setDraftBanner('present')
     } catch {
       // localStorage 접근 불가 환경 무시
     }
-  }, [])
+  }, [revise])
 
   function loadDraft() {
     try {
@@ -384,7 +408,8 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         setFileError('셀링 포인트를 최소 3개 입력해주세요.')
         return
       }
-      if (fileGroups.product_photo.length === 0) {
+      // 보완 모드에서 이미 제출한 제품 사진이 있으면 재업로드를 요구하지 않는다
+      if (fileGroups.product_photo.length === 0 && !revise?.hasProductPhoto) {
         setFileError('제품 사진을 최소 1장 업로드해주세요. (필수)')
         return
       }
@@ -459,16 +484,19 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
         uploadedFiles = await uploadFiles(user.id, crypto.randomUUID())
       }
 
-      // 2) 프로젝트 생성 + 사용량 소모 + 파일 메타 연결을 서버에서 한 번에 처리한다.
+      // 2) 신규는 프로젝트 생성 + 사용량 소모, 보완은 기존 건 갱신(사용량 소모 없음).
       setUploadProgress('제출 중...')
-      const res = await fetch('/api/projects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, files: uploadedFiles }),
-      })
+      const res = await fetch(
+        revise ? `/api/projects/${revise.projectId}/revise` : '/api/projects',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, files: uploadedFiles }),
+        },
+      )
       if (!res.ok) {
         const err = await res.json()
-        throw new Error(err.error || '프로젝트 생성 실패')
+        throw new Error(err.error || (revise ? '보완 제출 실패' : '프로젝트 생성 실패'))
       }
       await res.json()
 
@@ -913,7 +941,7 @@ export function IntakeForm({ platforms, categories }: { platforms: Platform[]; c
             ) : (
               <button type="submit" disabled={isSubmitting || !!uploadProgress || !allAcked}
                 className="flex-1 bg-primary-600 text-white rounded-xl py-3.5 font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all text-base min-h-[44px]">
-                {uploadProgress || (isSubmitting ? '제출 중...' : '최종 제출')}
+                {uploadProgress || (isSubmitting ? '제출 중...' : revise ? '보완 내용 제출' : '최종 제출')}
               </button>
             )}
           </div>

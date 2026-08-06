@@ -36,15 +36,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const roleLabel: Record<string, string> = { designer: '디자이너', admin: '관리자' }
 
-  // 신규 접수 알림 — 기업이 제출했고 사무국이 아직 스크립트 생성을 시작하지 않은 건.
-  // 별도 읽음 표시를 두지 않는다: 처리하면 상태가 넘어가 자동으로 사라진다.
+  // 사무국 조치 대기 알림 = 신규 접수(제출 후 스크립트 미시작) + 기업이 보완을 제출한 건.
+  // 신규 접수는 상태가 넘어가면, 보완 완료는 [확인 완료]를 누르면 사라진다.
   let newIntakeCount = 0
   if (isAdmin) {
-    const { count } = await createServiceClient()
-      .from('projects')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'intake_submitted')
-    newIntakeCount = count ?? 0
+    const svc = createServiceClient()
+    const [{ count: intake }, { data: revised }] = await Promise.all([
+      svc.from('projects').select('id', { count: 'exact', head: true }).eq('status', 'intake_submitted'),
+      svc.from('projects').select('id, status, tags').contains('tags', { revise_done: true }),
+    ])
+    // 신규 접수 상태인 보완 완료 건은 이미 intake에 포함돼 있어 중복 계상하지 않는다
+    const extraRevised = (revised ?? []).filter(p => p.status !== 'intake_submitted').length
+    newIntakeCount = (intake ?? 0) + extraRevised
   }
 
   return (

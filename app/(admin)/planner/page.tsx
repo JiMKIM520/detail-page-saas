@@ -19,16 +19,22 @@ export default async function PlannerDashboard({ searchParams }: PageProps) {
   const isAdmin = role === 'admin'
 
   // /planner는 관리자 전용(접수·스크립트 검수). 관리자는 전체 검수 대기 건을 본다.
+  // intake_submitted 포함 — 제출 후 스크립트를 수동으로 시작하는 흐름이라 접수 건이 이 목록의 출발점이다
   const query = supabase
     .from('projects')
-    .select('id, company_name, status, category, created_at, platforms(name)')
-    .in('status', ['script_review', 'script_generating', 'design_plan_review', 'design_planning'])
+    .select('id, company_name, status, category, created_at, tags, platforms(name)')
+    .in('status', ['intake_submitted', 'script_review', 'script_generating', 'design_plan_review', 'design_planning'])
     .order('created_at', { ascending: true })
 
   const { data: projects } = await query
 
+  const readTags = (t: unknown): Record<string, boolean | number> =>
+    t && typeof t === 'object' && !Array.isArray(t) ? (t as Record<string, boolean | number>) : {}
+
   const reviewCount    = projects?.filter(p => ['script_review', 'design_plan_review'].includes(p.status)).length ?? 0
   const generatingCount = projects?.filter(p => ['script_generating', 'design_planning'].includes(p.status)).length ?? 0
+  const intakeCount = projects?.filter(p => p.status === 'intake_submitted').length ?? 0
+  const reviseDoneCount = projects?.filter(p => readTags(p.tags).revise_done === true).length ?? 0
 
   return (
     <div>
@@ -64,7 +70,14 @@ export default async function PlannerDashboard({ searchParams }: PageProps) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="bg-surface rounded-xl border border-border p-4">
+          <p className="text-sm text-text-tertiary">신규 접수</p>
+          <p className="text-2xl font-bold text-primary-600 mt-1">{intakeCount}</p>
+          {reviseDoneCount > 0 && (
+            <p className="text-xs font-medium text-amber-700 mt-0.5">보완 완료 {reviseDoneCount}건</p>
+          )}
+        </div>
         <div className="bg-surface rounded-xl border border-border p-4">
           <p className="text-sm text-text-tertiary">검수 대기</p>
           <p className="text-2xl font-bold text-orange-600 mt-1">{reviewCount}</p>
@@ -93,6 +106,16 @@ export default async function PlannerDashboard({ searchParams }: PageProps) {
                 </p>
               </div>
               <div className="flex items-center gap-3">
+                {readTags(project.tags).revise_done === true && (
+                  <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                    보완 완료
+                  </span>
+                )}
+                {readTags(project.tags).revise === true && (
+                  <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                    보완 요청 중
+                  </span>
+                )}
                 <StatusBadge status={project.status as ProjectStatus} />
                 <svg className="w-4 h-4 text-text-tertiary group-hover:text-primary-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />

@@ -84,14 +84,27 @@ export async function requestIntakeRevision(
   if (!proj) return { success: false, error: '프로젝트 없음' }
 
   const tags = (proj.tags && typeof proj.tags === 'object' && !Array.isArray(proj.tags)
-    ? (proj.tags as Record<string, boolean>)
-    : {}) as Record<string, boolean>
-  if (!tags.revise) {
+    ? (proj.tags as Record<string, boolean | number>)
+    : {}) as Record<string, boolean | number>
+  // 보완 차수 — 요청할 때마다 올린다(1차 보완 → 2차 보완). 기업 재제출 시 revise만 내려간다.
+  const round = (typeof tags.revise_round === 'number' ? tags.revise_round : 0) + 1
+  {
     const { error } = await svc
       .from('projects')
-      .update({ tags: { ...tags, revise: true } })
+      .update({ tags: { ...tags, revise: true, revise_round: round, revise_done: false } })
       .eq('id', projectId)
     if (error) return { success: false, error: error.message }
+  }
+
+  // 보완 사유를 기업 화면에도 남긴다 — 메일·문자를 놓쳐도 플랫폼에서 확인할 수 있어야 한다.
+  // role='revision_notice'는 /api/comments GET에서 기업에게 열어 준 유일한 비-client 역할이다.
+  if (note?.trim()) {
+    await svc.from('comments').insert({
+      project_id: projectId,
+      user_id: proj.client_id,
+      content: note.trim(),
+      role: 'revision_notice',
+    })
   }
 
   let emailed = false

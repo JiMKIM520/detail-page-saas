@@ -40,7 +40,8 @@ export async function GET(request: NextRequest) {
     .eq('project_id', projectId)
     .order('created_at', { ascending: true })
 
-  if (!isAdmin) query = query.eq('role', 'client')
+  // 기업에게는 본인이 쓴 수정요구 + 사무국이 보낸 보완 요청 사유만 보인다.
+  if (!isAdmin) query = query.in('role', ['client', 'revision_notice'])
 
   const { data: comments, error } = await query
 

@@ -100,6 +100,13 @@ export default async function ClientProjectDetailPage({
   }
   const hasDownloads = statusIndex(status) >= statusIndex('design_approved') && Object.keys(downloadUrls).length > 0
 
+  // 사무국 보완 요청 여부 — tags.revise가 서 있으면 기업이 의뢰서를 고칠 수 있다
+  const projectTags = (project.tags && typeof project.tags === 'object' && !Array.isArray(project.tags)
+    ? (project.tags as Record<string, boolean | number>)
+    : {}) as Record<string, boolean | number>
+  const reviseRequested = projectTags.revise === true
+  const reviseRound = typeof projectTags.revise_round === 'number' ? projectTags.revise_round : 1
+
   // 사업자가 제출한 첨부파일 — 이미지엔 1시간 signed URL 부여 (intake-files 버킷 RLS 보호)
   const { data: intakeFiles } = await service
     .from('intake_files')
@@ -142,6 +149,29 @@ export default async function ClientProjectDetailPage({
           <StatusBadge status={status} clientFacing />
         </div>
       </div>
+
+      {/* 의뢰서 보완 요청 — 사무국 요청이 있으면 수정 경로를 최상단에 노출한다 */}
+      {reviseRequested && (
+        <div className="rounded-xl border border-amber-300 bg-amber-50 p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-amber-900">
+                의뢰서 보완이 필요합니다{reviseRound > 1 ? ` (${reviseRound}차)` : ''}
+              </p>
+              <p className="text-xs text-amber-800 mt-1">
+                사무국이 보완을 요청했습니다. 요청 사항을 확인하고 의뢰서를 수정해 주세요.
+                (추가 제작 횟수는 사용되지 않습니다)
+              </p>
+            </div>
+            <Link
+              href={`/projects/${id}/revise`}
+              className="shrink-0 inline-flex items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 transition-colors"
+            >
+              의뢰서 수정하기
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* 진행 상황 — 기업에게는 3구간 요약만 노출 */}
       <div className="bg-surface rounded-xl border border-border p-5">
