@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
-function NavLink({ href, children, icon }: { href: string; children: React.ReactNode; icon: React.ReactNode }) {
+function NavLink({ href, children, icon, badge }: { href: string; children: React.ReactNode; icon: React.ReactNode; badge?: number }) {
   return (
     <Link
       href={href}
@@ -10,6 +11,14 @@ function NavLink({ href, children, icon }: { href: string; children: React.React
     >
       {icon}
       {children}
+      {badge !== undefined && badge > 0 && (
+        <span
+          className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1.5 rounded-full bg-red-600 text-white text-[11px] font-bold leading-none"
+          aria-label={`검토 대기 ${badge}건`}
+        >
+          {badge}
+        </span>
+      )}
     </Link>
   )
 }
@@ -26,6 +35,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const isAdmin = role === 'admin'
 
   const roleLabel: Record<string, string> = { designer: '디자이너', admin: '관리자' }
+
+  // 신규 접수 알림 — 기업이 제출했고 사무국이 아직 스크립트 생성을 시작하지 않은 건.
+  // 별도 읽음 표시를 두지 않는다: 처리하면 상태가 넘어가 자동으로 사라진다.
+  let newIntakeCount = 0
+  if (isAdmin) {
+    const { count } = await createServiceClient()
+      .from('projects')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'intake_submitted')
+    newIntakeCount = count ?? 0
+  }
 
   return (
     <div className="hana-theme min-h-screen bg-background">
@@ -53,7 +73,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
-                }>접수·스크립트</NavLink>
+                } badge={newIntakeCount}>접수·스크립트</NavLink>
               )}
 
               {/* 스타일링샷 제작(AI) — 디자이너 */}
