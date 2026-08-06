@@ -102,25 +102,25 @@ export async function sendSms(to: string, text: string): Promise<SmsResult> {
 
 /** 초안 확인 요청 문자 — design_review 도달 시 메일과 병행 */
 export function draftReadySms(projectName: string, link: string): string {
-  return `[DetailAI] "${projectName}" 상세페이지 초안이 준비되었습니다. 확인 후 검수 의견을 남겨 주세요.\n▶ ${link}`
+  return `[하나파워온스토어] ${projectName} 상세페이지 시안이 준비되었습니다.\n아래 링크에서 확인하신 후 수정 의견을 남겨 주시기 바랍니다.\n※ 수정 요청은 최대 2회까지 가능합니다.\n▶ ${link}`
 }
 
 /** 최종 납품 문자 — delivered 도달 시 */
 export function deliveredSms(projectName: string, link: string): string {
-  return `[DetailAI] "${projectName}" 최종 결과물이 납품되었습니다. 아래 링크에서 다운로드해 주세요(만료 주의).\n▶ ${link}`
+  return `[하나파워온스토어] ${projectName} 상세페이지 최종 파일이 전달되었습니다.\n아래 링크에서 다운로드해 주시기 바랍니다.\n※ 링크는 일정 기간 후 만료되오니 받으신 후 별도 보관 부탁드립니다.\n▶ ${link}`
 }
 
 /** 의뢰서 미작성 재촉 문자 — 크론 */
 export function intakeReminderSms(projectName: string, link: string): string {
-  return `[DetailAI] "${projectName}" 상세페이지 제작을 위한 의뢰서가 아직 작성되지 않았습니다. 아래에서 작성해 주세요.\n▶ ${link}`
+  return `[하나파워온스토어] ${projectName} 상세페이지 디자인 의뢰서가 아직 제출되지 않았습니다.\n작업은 접수 순서대로 진행되오니 빠른 제출을 권장드립니다.\n※ 의뢰서는 컴퓨터(노트북)로 작성을 권장드립니다.\n▶ ${link}`
 }
 
 /** 초안 무회신 재촉 문자 — 크론 */
 export function reviewReminderSms(projectName: string, link: string): string {
-  return `[DetailAI] "${projectName}" 상세페이지 초안 확인이 지연되고 있습니다. 확인 후 의견을 남겨 주세요.\n▶ ${link}`
+  return `[하나파워온스토어] ${projectName} 상세페이지 시안 확인이 지연되고 있습니다.\n회신이 늦어지면 전체 일정이 함께 지연되오니 확인 부탁드립니다.\n▶ ${link}`
 }
 
 /** 의뢰서 보완 요청 문자 — 관리자 수동(입력정보확인 단계) */
 export function intakeRevisionSms(projectName: string, link: string): string {
-  return `[DetailAI] "${projectName}" 의뢰서에 보완이 필요합니다. 아래에서 수정해 주세요.\n▶ ${link}`
+  return `[하나파워온스토어] ${projectName} 상세페이지 디자인 의뢰서에 보완이 필요하여 안내드립니다.\n메일로 보내드린 보완 요청 사항을 확인하신 후 의뢰서를 수정해 주시기 바랍니다.\n※ 보완 완료 후 디자인 작업이 시작됩니다.\n▶ ${link}`
 }

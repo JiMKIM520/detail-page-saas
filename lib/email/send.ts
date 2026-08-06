@@ -45,6 +45,17 @@ const FROM_ADDRESS =
   process.env.EMAIL_FROM_ADDRESS ?? 'DetailAI <noreply@detailai.kr>'
 
 /** Resend API 엔드포인트 */
+/** 발송 메일 공통 꼬리말 — 사무국 명의·문의처 (2026-08 시트 확정본) */
+const MAIL_FOOTER = [
+  ``,
+  `[문의처]`,
+  `하나파워온스토어 소상공인 지원단`,
+  `02-722-1875`,
+  `운영시간 10시 - 5시`,
+  `점심시간 12시 - 1시`,
+  `hanapoweronteam@gmail.com`,
+].join('\n')
+
 const RESEND_API_URL = 'https://api.resend.com/emails'
 
 // ── 내부 유틸 ─────────────────────────────────────────────────────────────
@@ -192,10 +203,11 @@ export async function sendDraftReadyEmail(
   projectName: string,
   reviewLink: string
 ): Promise<EmailResult> {
-  const subject = `[DetailAI] "${projectName}" 상세페이지 초안이 준비되었습니다`
+  const subject = `[하나파워온스토어/레벨업] "${projectName}" 상세페이지 디자인 시안 전달`
 
   const text = [
-    `안녕하세요,`,
+    `안녕하세요.`,
+    `하나파워온스토어 소상공인 지원단입니다.`,
     ``,
     `"${projectName}" 상세페이지 초안 작업이 완료되었습니다.`,
     `아래 링크에서 초안을 확인하고 검수 의견을 남겨 주세요.`,
@@ -206,7 +218,7 @@ export async function sendDraftReadyEmail(
     `의견을 반영하여 최종 결과물을 납품해 드리겠습니다.`,
     ``,
     `감사합니다.`,
-    `DetailAI 팀 드림`,
+    MAIL_FOOTER,
   ].join('\n')
 
   return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
@@ -220,9 +232,10 @@ export async function sendIntakeReminderEmail(
   projectName: string,
   intakeLink: string,
 ): Promise<EmailResult> {
-  const subject = `[DetailAI] "${projectName}" 상세페이지 의뢰서 작성을 기다리고 있습니다`
+  const subject = `[하나파워온스토어/레벨업] "${projectName}" 상세페이지 디자인 의뢰서 작성 안내`
   const text = [
-    `안녕하세요,`,
+    `안녕하세요.`,
+    `하나파워온스토어 소상공인 지원단입니다.`,
     ``,
     `"${projectName}" 상세페이지 제작을 위한 의뢰서가 아직 작성되지 않았습니다.`,
     `아래 링크에서 의뢰서를 작성해 주시면 제작을 시작하겠습니다.`,
@@ -230,7 +243,7 @@ export async function sendIntakeReminderEmail(
     `▶ 의뢰서 작성하기: ${intakeLink}`,
     ``,
     `감사합니다.`,
-    `DetailAI 팀 드림`,
+    MAIL_FOOTER,
   ].join('\n')
   return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
 }
@@ -243,9 +256,10 @@ export async function sendReviewReminderEmail(
   projectName: string,
   reviewLink: string,
 ): Promise<EmailResult> {
-  const subject = `[DetailAI] "${projectName}" 상세페이지 초안 확인을 기다리고 있습니다`
+  const subject = `[하나파워온스토어/레벨업] "${projectName}" 상세페이지 시안 확인 요청`
   const text = [
-    `안녕하세요,`,
+    `안녕하세요.`,
+    `하나파워온스토어 소상공인 지원단입니다.`,
     ``,
     `"${projectName}" 상세페이지 초안 확인이 지연되고 있습니다.`,
     `아래 링크에서 초안을 확인하고 검수 의견을 남겨 주세요.`,
@@ -253,7 +267,7 @@ export async function sendReviewReminderEmail(
     `▶ 초안 확인하기: ${reviewLink}`,
     ``,
     `감사합니다.`,
-    `DetailAI 팀 드림`,
+    MAIL_FOOTER,
   ].join('\n')
   return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
 }
@@ -273,10 +287,11 @@ export async function sendIntakeRevisionEmail(
   intakeLink: string,
   note?: string,
 ): Promise<EmailResult> {
-  const subject = `[DetailAI] "${projectName}" 의뢰서 보완 요청`
+  const subject = `[하나파워온스토어/레벨업] "${projectName}" 상세페이지 디자인 의뢰서 보완 요청`
   const noteSection = note ? `\n보완 요청 내용:\n${note}\n` : ''
   const text = [
-    `안녕하세요,`,
+    `안녕하세요.`,
+    `하나파워온스토어 소상공인 지원단입니다.`,
     ``,
     `"${projectName}" 상세페이지 의뢰서에 대한 보완이 필요합니다.`,
     `아래 링크에서 의뢰서를 수정·보완해 주시면 제작을 진행하겠습니다.`,
@@ -284,7 +299,7 @@ export async function sendIntakeRevisionEmail(
     `▶ 의뢰서 수정하기: ${intakeLink}`,
     ``,
     `감사합니다.`,
-    `DetailAI 팀 드림`,
+    MAIL_FOOTER,
   ].join('\n')
   return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
 }
@@ -302,10 +317,11 @@ export async function sendDeliveredEmail(
   projectName: string,
   downloadUrl: string
 ): Promise<EmailResult> {
-  const subject = `[DetailAI] "${projectName}" 최종 결과물이 납품되었습니다`
+  const subject = `[하나파워온스토어/레벨업] "${projectName}" 상세페이지 최종 파일 전달`
 
   const text = [
-    `안녕하세요,`,
+    `안녕하세요.`,
+    `하나파워온스토어 소상공인 지원단입니다.`,
     ``,
     `"${projectName}" 상세페이지 최종 결과물이 준비되었습니다.`,
     `아래 링크에서 파일을 다운로드해 주세요.`,
@@ -315,8 +331,8 @@ export async function sendDeliveredEmail(
     `※ 위 링크는 보안을 위해 일정 기간 후 만료됩니다.`,
     `   만료 전에 파일을 저장해 두시기 바랍니다.`,
     ``,
-    `이용해 주셔서 감사합니다.`,
-    `DetailAI 팀 드림`,
+    `그동안 협조해 주셔서 감사합니다.`,
+    MAIL_FOOTER,
   ].join('\n')
 
   return dispatch({ from: FROM_ADDRESS, to: [to], subject, text })
