@@ -10,6 +10,7 @@ import { DesignPlanView } from '@/components/planner/DesignPlanView'
 import { StartPlanningButton } from '@/components/planner/StartPlanningButton'
 import { ApprovePlanButton } from '@/components/planner/ApprovePlanButton'
 import { AssignPanel } from '@/components/admin/AssignPanel'
+import { InternalNotes } from '@/components/admin/InternalNotes'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
@@ -211,6 +212,8 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
               </ul>
             </div>
           )}
+
+          <InternalNotes projectId={id} />
         </div>
       </div>
     </div>

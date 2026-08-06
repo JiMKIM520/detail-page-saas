@@ -32,11 +32,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const { data: comments, error } = await service
+  // 사무국·디자이너가 남긴 코멘트는 내부 소통용이라 기업에게 보이면 안 된다.
+  // 기업 화면에는 기업 자신이 쓴 수정요구만 돌려준다.
+  let query = service
     .from('comments')
-    .select('id, content, created_at, user_id')
+    .select('id, content, created_at, user_id, role')
     .eq('project_id', projectId)
     .order('created_at', { ascending: true })
+
+  if (!isAdmin) query = query.eq('role', 'client')
+
+  const { data: comments, error } = await query
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 

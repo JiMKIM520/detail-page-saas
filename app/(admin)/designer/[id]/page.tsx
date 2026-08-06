@@ -5,6 +5,7 @@ import { DeliveryPanel } from '@/components/designer/DeliveryPanel'
 import { SendDraftPanel } from '@/components/designer/SendDraftPanel'
 import { GenerateDraftButton } from '@/components/designer/GenerateDraftButton'
 import { StylingShotDownloads } from '@/components/designer/StylingShotDownloads'
+import { InternalNotes } from '@/components/admin/InternalNotes'
 import { WorkflowSteps } from '@/components/shared/WorkflowSteps'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { notFound } from 'next/navigation'
@@ -106,6 +107,8 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
               <StylingShotDownloads shots={stylingShots} />
             </div>
           )}
+
+          <InternalNotes projectId={id} />
         </div>
 
         <div className="space-y-6">
