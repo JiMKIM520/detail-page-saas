@@ -18,7 +18,31 @@ export function StylingShotGenerator({
   const [notice, setNotice] = useState('')
   const [polling, setPolling] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
+  const [custom, setCustom] = useState('')
+  const [adding, setAdding] = useState(false)
   const router = useRouter()
+
+  /** 자유 문장으로 컷 한 장 추가 — 기존 톤에 맞춰 서버가 규격으로 옮겨 생성한다 */
+  async function addShot() {
+    const wanted = custom.trim()
+    if (!wanted || adding) return
+    setAdding(true); setErr(''); setNotice('')
+    try {
+      const res = await fetch('/api/photography/custom-shot', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project_id: projectId, request: wanted }),
+      })
+      const json = await res.json()
+      if (!res.ok) { setErr(json.error || '생성에 실패했습니다.'); return }
+      setCustom('')
+      setNotice(`"${wanted}" 컷을 만들었습니다.`)
+      router.refresh()
+    } catch (e) {
+      setErr('네트워크 오류: ' + String(e).slice(0, 120))
+    } finally {
+      setAdding(false)
+    }
+  }
 
   /** 원본(변환 안 거친 공개 URL)을 받아 저장. cross-origin이라 <a download>가 무시돼 blob로 강제한다. */
   async function download(shot: Shot) {
@@ -107,6 +131,39 @@ export function StylingShotGenerator({
         <p className="text-sm text-primary-700 bg-primary-50 border border-primary-200 rounded-lg px-4 py-3 mb-3">
           {notice} 완료되면 아래 목록이 자동으로 채워집니다.
         </p>
+      )}
+
+      {/* 작업 중 필요한 컷을 말로 요청해 한 장만 추가로 만든다 */}
+      {hasPrompts && (
+        <div className="mb-4 rounded-lg border border-border bg-surface-hover p-4">
+          <label htmlFor="custom-shot" className="block text-sm font-semibold text-text-primary mb-1">
+            컷 추가 요청
+          </label>
+          <p className="text-xs text-text-tertiary mb-2.5">
+            필요한 장면을 문장으로 적어주세요. 이 기획의 톤과 제품 사진에 맞춰 한 장 생성합니다.
+          </p>
+          <div className="flex gap-2">
+            <input
+              id="custom-shot"
+              value={custom}
+              onChange={(e) => setCustom(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) addShot() }}
+              placeholder="예: 제품을 손으로 들고 있는 컷"
+              maxLength={500}
+              disabled={adding}
+              className="flex-1 rounded-lg border border-border bg-white px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:opacity-60"
+            />
+            <button
+              onClick={addShot}
+              disabled={adding || !custom.trim()}
+              className="shrink-0 inline-flex items-center gap-2 bg-text-primary text-white text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 transition-opacity"
+            >
+              {adding ? (
+                <><span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />만드는 중…</>
+              ) : '한 장 생성'}
+            </button>
+          </div>
+        </div>
       )}
 
       {shots.length > 0 ? (
