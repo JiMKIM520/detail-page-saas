@@ -386,9 +386,10 @@ export function IntakeForm({
     })
   }
 
-  // 판매 플랫폼은 의뢰 단계에서 받지 않고 11번가로 고정 (2026-06-02 회의 결정). 없으면 첫 플랫폼.
+  // 판매 플랫폼은 의뢰 단계에서 받지 않고 고정한다(2026-06-02 회의 결정).
+  // 하나파워온 상세페이지 사업은 네이버 스마트스토어 기준 — 초기 11번가 고정은 오설정이었다(2026-08-07 정정).
   const defaultPlatformId =
-    platforms.find(p => (p as { slug?: string }).slug === '11st')?.id ?? platforms[0]?.id ?? ''
+    platforms.find(p => (p as { slug?: string }).slug === 'smartstore')?.id ?? platforms[0]?.id ?? ''
 
   const STEP_FIELDS: Record<number, (keyof FormData)[]> = {
     1: ['company_name', 'product_highlights', 'contact_name', 'contact_phone', 'contact_email'],

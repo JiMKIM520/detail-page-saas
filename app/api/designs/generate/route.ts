@@ -1,11 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
-import { runPipelineForProject } from '@/lib/pipeline-bridge'
+import { enqueueJob } from '@/lib/enqueue'
 import { NextResponse } from 'next/server'
 
-export const maxDuration = 800 // Vercel Fluid compute 기준 상한 — 컴포저 실측 273~358초(재시도 포함) 대비 여유
-
+/**
+ * 초안 조립 시작 — 실행은 Railway 워커에 위임한다(lib/enqueue.ts 참고).
+ * 조립은 실측 10~20분으로 Vercel 함수에서 완주할 수 없다.
+ * 상태 전이는 runPipelineForProject가 처리한다(worker.ts kind='draft').
+ */
 export async function POST(request: Request) {
-  // 인증 + 관리자 권한 검증
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -20,11 +22,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: 'project_id is required' }, { status: 400 })
   }
 
-  const result = await runPipelineForProject(project_id)
-
-  if (!result.success) {
-    return NextResponse.json({ success: false, error: result.error }, { status: 500 })
+  const result = await enqueueJob(project_id, 'draft')
+  if (result.error) {
+    return NextResponse.json({ success: false, error: `잡 등록 실패: ${result.error}` }, { status: 500 })
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({
+    success: true,
+    queued: result.queued,
+    message: result.alreadyRunning ? '이미 조립이 진행 중입니다' : undefined,
+  })
 }

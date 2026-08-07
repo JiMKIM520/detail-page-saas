@@ -19,7 +19,7 @@ const STALE_RUNNING_MIN = 45 // 워커 크래시로 남은 running 잡 복구 �
 type Job = {
   id: string
   project_id: string
-  kind: 'planning' | 'shots' | 'draft'
+  kind: 'planning' | 'shots' | 'draft' | 'script'
   status: string
 }
 
@@ -134,6 +134,13 @@ async function runJob(job: Job): Promise<string> {
     const r = await runPlanningForProject(job.project_id)
     if (!(r as { success?: boolean }).success) throw new Error(String((r as { error?: string }).error ?? '기획 실패'))
     return '기획 완료(청사진·컷 프롬프트 생성)'
+  }
+  if (job.kind === 'script') {
+    // generateScriptForProject가 intake_submitted→script_generating→script_review 전이를 스스로 처리한다.
+    // 실패 시에는 intake_submitted로 되돌리므로 여기서 추가 정렬을 하지 않는다.
+    const { generateScriptForProject } = await import('@/lib/ai/generate-script')
+    await generateScriptForProject(job.project_id)
+    return '스크립트 생성 완료(검수 대기)'
   }
   if (job.kind === 'shots') return runShots(job.project_id)
   if (job.kind === 'draft') {

@@ -13,6 +13,7 @@ import { AssignPanel } from '@/components/admin/AssignPanel'
 import { InternalNotes } from '@/components/admin/InternalNotes'
 import { ExpandableIntake } from '@/components/admin/ExpandableIntake'
 import { ReviseDoneButton } from '@/components/planner/ReviseDoneButton'
+import { AutoRefresh } from '@/components/shared/AutoRefresh'
 import { fetchManageIds } from '@/lib/manage-id'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { downloadFromStorage } from '@/lib/storage'
@@ -99,8 +100,13 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
     ? (project.tags as Record<string, boolean | number>)
     : {}) as Record<string, boolean | number>
 
+  // 워커가 처리 중인 단계 — 완료되면 화면이 저절로 다음 단계로 넘어간다
+  const isWorking = (['script_generating', 'design_planning', 'design_generating'] as ProjectStatus[])
+    .includes(project.status as ProjectStatus)
+
   return (
     <div>
+      {isWorking && <AutoRefresh />}
       <Link href="/planner" className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary mb-6">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
