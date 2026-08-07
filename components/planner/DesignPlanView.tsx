@@ -122,7 +122,9 @@ function LoadingPlaceholder() {
 export function DesignPlanView({ styleGuide }: DesignPlanViewProps) {
   if (!styleGuide) return <LoadingPlaceholder />
 
-  const { brand, colors, typography, layoutPatterns, selectedTemplateId, designNotes } = styleGuide
+  // layoutPatterns는 아트디렉터 스키마 슬림화(2026-07-26) 이후 생성되지 않는다.
+  // 기본값 없이 구조분해하면 '디자인 기획 생성 중' 상태에서 페이지 전체가 죽는다(2026-08-07 실측).
+  const { brand, colors, typography, layoutPatterns = [], selectedTemplateId, designNotes } = styleGuide
 
   return (
     <div className="space-y-5">

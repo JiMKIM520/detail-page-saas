@@ -25,7 +25,7 @@ import sharp from 'sharp'
 // ─────────────────────────────────────────────────────────────
 
 function findLayoutPattern(sg: StyleGuide, sectionType: string): LayoutPattern | undefined {
-  return sg.layoutPatterns.find(p => p.section.toLowerCase() === sectionType.toLowerCase())
+  return (sg.layoutPatterns ?? []).find(p => p.section.toLowerCase() === sectionType.toLowerCase())
 }
 
 /**
@@ -800,7 +800,7 @@ export async function runLayerImage(
     }
 
     // ── v5: layoutPatterns 중 bgType='layer-image'인 누락 섹션 자동 채움 ──
-    const sectionsToFill = styleGuide.layoutPatterns
+    const sectionsToFill = (styleGuide.layoutPatterns ?? [])
       .filter(lp => lp.bgType === 'layer-image')
       .map(lp => lp.section.toLowerCase())
       .filter(sec => {

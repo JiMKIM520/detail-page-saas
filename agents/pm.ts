@@ -208,7 +208,7 @@ function validateArtDirectorV5(
   data: { styleGuide: StyleGuide; stylingPrompts: StylingPromptsJson }
 ): string[] {
   const issues: string[] = []
-  const layerSections = data.styleGuide.layoutPatterns
+  const layerSections = (data.styleGuide.layoutPatterns ?? [])
     .filter(lp => lp.bgType === 'layer-image')
     .map(lp => lp.section.toLowerCase())
   const briefs = data.stylingPrompts.sectionImageBriefs ?? []

@@ -121,7 +121,9 @@ export interface StyleGuide {
     cornerRadius: string
     shadows: string
   }
-  layoutPatterns: LayoutPattern[]
+  /** 아트디렉터 스키마 슬림화(2026-07-26) 이후 미출력 — 씬 디자이너가 씬별로 직접 설계한다.
+   *  구 산출물 호환을 위해 필드는 남기되 옵셔널. 읽는 쪽은 반드시 `?? []`로 받을 것. */
+  layoutPatterns?: LayoutPattern[]
   sectionRhythm: string
   referenceUrls: string[]
   designNotes: string

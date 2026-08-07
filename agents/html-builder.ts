@@ -15,7 +15,7 @@ type CopySection = RefinedCopy['sections'][number]
 
 // ── v5 헬퍼: layoutPattern 조회 ──────────────────────────────────
 function findLayoutPattern(sg: StyleGuide, sectionType: string): LayoutPattern | undefined {
-  return sg.layoutPatterns.find(p => p.section.toLowerCase() === sectionType.toLowerCase())
+  return (sg.layoutPatterns ?? []).find(p => p.section.toLowerCase() === sectionType.toLowerCase())
 }
 
 // ── v5: section_${type}_{role} 키로 layer image 경로 조회 ────────
@@ -92,7 +92,7 @@ function hasMinimalContent(copySection: CopySection): boolean {
 
 function buildBackgroundStyleMap(styleGuide: StyleGuide): Map<string, string> {
   const map = new Map<string, string>()
-  for (const lp of styleGuide.layoutPatterns) {
+  for (const lp of styleGuide.layoutPatterns ?? []) {
     if (lp.backgroundStyle) {
       map.set(lp.section.toLowerCase(), lp.backgroundStyle)
     }
@@ -121,7 +121,7 @@ function isDarkBackground(style: string): boolean {
 
 function buildPatternMap(styleGuide: StyleGuide): Map<string, string> {
   const map = new Map<string, string>()
-  for (const lp of styleGuide.layoutPatterns) {
+  for (const lp of styleGuide.layoutPatterns ?? []) {
     map.set(lp.section.toLowerCase(), lp.pattern)
   }
   return map
@@ -2392,7 +2392,7 @@ export async function runHtmlBuilder(
     const sizeKb = Math.round(fs.statSync(htmlPath).size / 1024)
     console.log(`[HTML Builder] 완료 (${elapsed()}ms) — index.html (${sizeKb}KB)`)
 
-    saveJson({ generatedAt: new Date().toISOString(), patterns: styleGuide.layoutPatterns }, `${outputDir}/html-build-report.json`)
+    saveJson({ generatedAt: new Date().toISOString(), patterns: styleGuide.layoutPatterns ?? [] }, `${outputDir}/html-build-report.json`)
 
     return { success: true, data: { htmlPath }, durationMs: elapsed() }
   } catch (err: unknown) {
