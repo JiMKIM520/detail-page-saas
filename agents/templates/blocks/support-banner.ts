@@ -24,7 +24,6 @@ export function supportBannerHtml(width: number): string {
   </div>
   <div style="flex:1 1 auto;min-width:0;font-family:var(--font-body);color:#2c4a44">
     <p style="margin:0;font-size:25px;line-height:1.5;font-weight:700">본 상세페이지는 <span style="color:${TEAL}">하나파워온스토어 소상공인 지원사업</span>을 통해 제작되었습니다.</p>
-    <p style="margin:10px 0 0;font-size:21px;line-height:1.5;color:#5d7a74">하나파워온스토어 소상공인 지원단 · 02-722-1875<br>hanapoweronteam@gmail.com</p>
   </div>
 </section>`
 }
