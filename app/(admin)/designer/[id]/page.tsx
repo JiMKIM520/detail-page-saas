@@ -123,7 +123,7 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
                예전에는 생성 버튼이 디자이너에게만 보여 관리자가 초안 단계에서 막혔다(2026-08-07). */
             <>
               {(!hasDraft || status === 'design_failed') && (
-                <GenerateDraftButton projectId={id} status={status} />
+                <GenerateDraftButton projectId={id} status={status} shotCount={stylingShots.length} />
               )}
               <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
               <DeliveryPanel
@@ -136,7 +136,7 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
             </>
           ) : !hasDraft || status === 'design_failed' ? (
             /* 디자이너: 초안 미생성 → AI 초안 생성 / design_failed → 재시도(이전 초안이 있어도 복구 경로 노출) */
-            <GenerateDraftButton projectId={id} status={status} />
+            <GenerateDraftButton projectId={id} status={status} shotCount={stylingShots.length} />
           ) : (
             /* 디자이너: 최종본 제출(관리자 검수요청) */
             <DeliveryPanel projectId={id} designId={design?.id} mode="designer" finalSubmitted={finalSubmitted} />

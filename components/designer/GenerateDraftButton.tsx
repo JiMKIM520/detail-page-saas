@@ -8,12 +8,17 @@ import { useRouter } from 'next/navigation'
  * /api/designs/generate가 워커 잡(kind='draft')을 등록하고 즉시 반환하므로,
  * 완료는 폴링으로 받는다. 조립은 실측 10~20분이라 함수에서 기다릴 수 없다.
  */
-export function GenerateDraftButton({ projectId, status }: { projectId: string; status: string }) {
+export function GenerateDraftButton(
+  { projectId, status, shotCount = 0 }: { projectId: string; status: string; shotCount?: number },
+) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [queued, setQueued] = useState(false)
   const router = useRouter()
   const generating = status === 'design_generating'
+  // 스타일링샷이 하나도 없으면 조립할 이미지가 없다. 예전에는 그냥 눌려서
+  // "Invalid transition: prompt_ready → design_generating"으로 실패했다(2026-08-07 로모노소프).
+  const noShots = shotCount === 0
 
   // 조립이 도는 동안 화면을 되살린다 — 끝나면 초안 미리보기로 바뀐다
   useEffect(() => {
@@ -53,12 +58,17 @@ export function GenerateDraftButton({ projectId, status }: { projectId: string; 
           10~20분 걸리며, 창을 닫아도 계속 진행됩니다.
         </p>
       </div>
+      {noShots && (
+        <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          스타일링샷이 아직 없습니다. <b>스타일링샷 제작</b> 단계에서 먼저 생성해 주세요.
+        </p>
+      )}
       {error && (
         <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
       )}
       <button
         onClick={generate}
-        disabled={loading || generating || queued}
+        disabled={loading || generating || queued || noShots}
         className="w-full bg-primary-600 text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-primary-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
       >
         {loading ? (
