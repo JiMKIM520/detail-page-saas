@@ -78,6 +78,8 @@ interface DraftData {
   shipping_info?: string
   return_policy?: string
   cs_info?: string
+  /** 저장 시각(ISO). 첫 화면에서 "작성 중" 안내에 쓴다. */
+  savedAt?: string
 }
 
 function StepIndicator({ current }: { current: number }) {
@@ -356,6 +358,7 @@ export function IntakeForm({
         shipping_info: vals.shipping_info,
         return_policy: vals.return_policy,
         cs_info: vals.cs_info,
+        savedAt: new Date().toISOString(),
       }
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
       setSaveMsg('임시저장되었습니다')

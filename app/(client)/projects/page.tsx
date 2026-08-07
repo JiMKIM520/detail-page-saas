@@ -1,9 +1,19 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { ProjectCard } from '@/components/shared/ProjectCard'
+import { IntakeEntry } from '@/components/client/IntakeEntry'
 import type { ProjectStatus } from '@/lib/status-machine'
-import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
+/**
+ * 기업 첫 화면.
+ *
+ * 예전에는 제출한 프로젝트를 카드로 한 번 더 거쳐야 내용을 볼 수 있었다. 카드를 없애고
+ * 상태에 따라 바로 해당 화면을 보여준다(2026-08-07 요청):
+ *   제출 완료 → 제출한 의뢰서 화면으로 바로 이동
+ *   작성 중   → 이어쓰기 안내 (임시저장은 localStorage에 있어 IntakeEntry가 확인)
+ *   시작 전   → '디자인 의뢰 시작하기'만
+ */
 export default async function ClientProjectsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -12,6 +22,13 @@ export default async function ClientProjectsPage() {
     .select('*')
     .eq('client_id', user!.id)
     .order('created_at', { ascending: false })
+
+  const projectList = projects ?? []
+
+  // 제출한 의뢰서가 하나면 그 화면이 곧 첫 화면이다 — 카드를 거치지 않는다
+  if (projectList.length === 1) {
+    redirect(`/projects/${projectList[0].id}`)
+  }
 
   const service = createServiceClient()
   const { data: profile } = await service
@@ -22,78 +39,21 @@ export default async function ClientProjectsPage() {
 
   const usageCount = profile?.usage_count ?? 0
   const usageLimit = profile?.usage_limit ?? 1
-  const usageExhausted = usageCount >= usageLimit
-  const projectList = projects ?? []
-  const singleProject = projectList.length === 1 ? projectList[0] : null
 
   return (
     <div>
-      {/* 헤더 */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-text-primary">내 상세페이지</h1>
-          <p className="text-sm text-text-tertiary mt-1">
-            사용량 {usageCount} / {usageLimit}건
-          </p>
-        </div>
-        {!usageExhausted && (
-          <Link href="/intake"
-            className="inline-flex items-center gap-2 bg-primary-600 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-primary-700 shadow-sm hover:shadow-md transition-all">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            디자인 의뢰 시작하기
-          </Link>
-        )}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-text-primary">내 상세페이지</h1>
+        <p className="text-sm text-text-tertiary mt-1">
+          사용량 {usageCount} / {usageLimit}건
+        </p>
       </div>
 
-      {/* 프로젝트가 없는 경우 */}
       {projectList.length === 0 && (
-        <div className="text-center py-24 bg-surface rounded-2xl border border-border border-dashed">
-          <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-          </div>
-          <p className="text-sm text-text-tertiary mb-6">상세페이지 제작을 의뢰해보세요</p>
-          {!usageExhausted && (
-            <Link href="/intake"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-primary-700 shadow-sm transition-all">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-              디자인 의뢰 시작하기
-            </Link>
-          )}
-        </div>
+        <IntakeEntry usageExhausted={usageCount >= usageLimit} />
       )}
 
-      {/* 단일 프로젝트 — 바로 상세 카드로 강조 */}
-      {singleProject && (
-        <Link href={`/projects/${singleProject.id}`} className="block group">
-          <div className="bg-surface rounded-2xl border border-primary-200 hover:border-primary-400 hover:shadow-lg transition-all p-6">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <p className="text-xs font-medium text-primary-600 mb-1">진행 중인 상세페이지</p>
-                <h2 className="text-xl font-bold text-text-primary group-hover:text-primary-700 transition-colors">
-                  {singleProject.company_name}
-                </h2>
-              </div>
-              <svg className="w-5 h-5 text-primary-400 group-hover:text-primary-600 transition-colors flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </div>
-            <div className="pt-4 border-t border-border/50 flex items-center justify-between">
-              <p className="text-xs text-text-tertiary">
-                의뢰일 {new Date(singleProject.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-              <span className="text-xs font-semibold text-primary-600">자세히 보기 →</span>
-            </div>
-          </div>
-        </Link>
-      )}
-
-      {/* 다중 프로젝트 — 최소 리스트 (비정상 케이스, 폴백) */}
+      {/* 의뢰서가 둘 이상인 비정상 케이스 — 목록으로 폴백 */}
       {projectList.length > 1 && (
         <div className="grid gap-3">
           {projectList.map(project => (
