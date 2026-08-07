@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>누끼 모델 비교 — 기존 vs Bria</title>
+<style>
+  :root{
+    --ink-1:#15181d; --ink-2:#3c434f; --ink-3:#79818f;
+    --line:#e2e5ea; --bg:#fbfbfc; --card:#fff;
+    --bria:#1d6f5c; --bria-bg:#e6f2ee;
+    --biref:#8a4b1f; --biref-bg:#f6ece2;
+    --same:#6b7280; --same-bg:#f1f2f4;
+    --warn:#8a6d1f; --warn-bg:#faf3df;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --ink-1:#eef0f3; --ink-2:#c2c8d1; --ink-3:#8d95a2;
+      --line:#2c313a; --bg:#111318; --card:#181b21;
+      --bria:#63c5a8; --bria-bg:#153029; --biref:#d09a66; --biref-bg:#2f2418;
+      --same:#9aa1ac; --same-bg:#22262d; --warn:#d8bb68; --warn-bg:#2d2718; }
+  }
+  :root[data-theme="dark"]{ --ink-1:#eef0f3; --ink-2:#c2c8d1; --ink-3:#8d95a2;
+    --line:#2c313a; --bg:#111318; --card:#181b21;
+    --bria:#63c5a8; --bria-bg:#153029; --biref:#d09a66; --biref-bg:#2f2418;
+    --same:#9aa1ac; --same-bg:#22262d; --warn:#d8bb68; --warn-bg:#2d2718; }
+  :root[data-theme="light"]{ --ink-1:#15181d; --ink-2:#3c434f; --ink-3:#79818f;
+    --line:#e2e5ea; --bg:#fbfbfc; --card:#fff;
+    --bria:#1d6f5c; --bria-bg:#e6f2ee; --biref:#8a4b1f; --biref-bg:#f6ece2;
+    --same:#6b7280; --same-bg:#f1f2f4; --warn:#8a6d1f; --warn-bg:#faf3df; }
+
+  body{background:var(--bg);color:var(--ink-1);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1180px;margin:0 auto;padding:44px 20px 80px;}
+  h1{font-size:clamp(23px,3.4vw,31px);font-weight:750;letter-spacing:-.02em;margin:0 0 10px;text-wrap:balance;}
+  .lede{color:var(--ink-2);font-size:15px;margin:0 0 6px;max-width:66ch;}
+  .meta-top{color:var(--ink-3);font-size:12.5px;margin:0 0 28px;}
+
+  .verdict{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:14px;}
+  .verdict h2{font-size:17px;font-weight:700;margin:0 0 12px;letter-spacing:-.01em;text-wrap:balance;}
+  .verdict p{color:var(--ink-2);font-size:14.5px;margin:0 0 10px;max-width:74ch;}
+  .verdict p:last-child{margin-bottom:0;}
+  .verdict b{color:var(--ink-1);font-weight:650;}
+
+  .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin:16px 0 30px;}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .box h3{margin:0 0 8px;font-size:14px;font-weight:700;}
+  .box.b h3{color:var(--bria);} .box.k h3{color:var(--biref);}
+  .box ul{margin:0;padding-left:17px;color:var(--ink-2);font-size:13.5px;}
+  .box li{margin-bottom:5px;}
+
+  .list{display:flex;flex-direction:column;gap:14px;}
+  .row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px 18px;}
+  .row header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px;flex-wrap:wrap;}
+  .row h3{margin:0;font-size:14px;font-weight:650;letter-spacing:-.01em;word-break:break-all;}
+  .co{color:var(--ink-3);font-size:12px;}
+  .row .meta{display:flex;align-items:center;gap:9px;flex-shrink:0;}
+  .num{color:var(--ink-3);font-size:11.5px;font-variant-numeric:tabular-nums;}
+
+  .pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;letter-spacing:.01em;}
+  .pill.b{background:var(--bria-bg);color:var(--bria);}
+  .pill.k{background:var(--biref-bg);color:var(--biref);}
+  .pill.s{background:var(--same-bg);color:var(--same);}
+  .pill.w{background:var(--warn-bg);color:var(--warn);}
+
+  .tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media(max-width:640px){.tri{grid-template-columns:1fr;}}
+  figure{margin:0;}
+  figure a{display:block;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff;}
+  figure img{display:block;width:100%;height:auto;}
+  figure.cut a{
+    background-color:#fff;
+    background-image:linear-gradient(45deg,#e8e9ed 25%,transparent 25%,transparent 75%,#e8e9ed 75%),
+                     linear-gradient(45deg,#e8e9ed 25%,transparent 25%,transparent 75%,#e8e9ed 75%);
+    background-size:16px 16px;background-position:0 0,8px 8px;}
+  figcaption{color:var(--ink-3);font-size:11.5px;margin-top:6px;text-align:center;}
+  .note{margin:12px 0 0;padding:10px 13px;background:var(--same-bg);border-radius:8px;
+    color:var(--ink-2);font-size:13px;}
+
+  a:focus-visible{outline:2px solid var(--bria);outline-offset:3px;}
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
+    color:var(--ink-3);font-size:12px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>누끼 모델 비교 — 어느 쪽도 혼자서는 부족합니다</h1>
+  <p class="lede">기업이 제출한 제품 사진 전량을 두 모델로 각각 처리해 나란히 놓았습니다. 가운데가 지금 쓰는 BiRefNet, 오른쪽이 Bria입니다. 체커무늬가 투명 영역이고, <b>이미지를 누르면 원본 해상도</b>로 열립니다.</p>
+  <p class="meta-top">2026-08-07 · 45장 처리(파일명 중복 3건 제외한 42행) · 8개 기업</p>
+
+  <div class="verdict">
+    <h2>흰 배경 문제는 Bria가 풉니다. 다만 Bria가 새로 만드는 문제도 있습니다.</h2>
+    <p>처음 문제였던 <b>흰 선풍기</b>는 Bria가 완전히 복원했습니다. 기존 모델이 프레임·받침대·스탠드를 통째로 날려버렸던 그 컷입니다. 선물박스 뚜껑처럼 <b>브랜드가 인쇄된 면을 살려야 하는 경우</b>에도 Bria가 낫습니다.</p>
+    <p>그런데 반대 사례도 나왔습니다. 핸드크림 패키지에서는 <b>Bria가 제품 표면을 반투명하게 파먹었고</b>, 접시에 담긴 연출컷에서는 접시와 냅킨까지 전부 남겨 소품이 제품처럼 붙었습니다. 이 세 컷은 기존 모델이 더 낫습니다.</p>
+    <p><b>42장 중 37장은 두 모델의 차이가 3%p 미만</b>으로 사실상 같습니다. 갈리는 것은 5장뿐이고, 그 5장이 2 대 3으로 나뉩니다. 즉 <b>한쪽으로 고정하면 반드시 일부를 잃습니다.</b></p>
+  </div>
+
+  <div class="split">
+    <div class="box b">
+      <h3>Bria가 이기는 경우</h3>
+      <ul>
+        <li>흰 배경 위 흰 제품 — 경계가 거의 없는 컷</li>
+        <li>패키지 뚜껑·부속처럼 제품에 붙은 큰 면</li>
+        <li>전경을 넓게 잡아 <b>잘려나갈 위험이 낮다</b></li>
+      </ul>
+    </div>
+    <div class="box k">
+      <h3>기존(BiRefNet)이 이기는 경우</h3>
+      <ul>
+        <li>접시·냅킨·소품을 걷어내야 하는 연출컷</li>
+        <li>주 피사체만 정확히 따내는 상황</li>
+        <li>패키지 표면을 파먹지 않음 (Bria 실패 사례 있음)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="list">
+<article class="row">
+  <header><div><h3>H11A9689.png</h3><span class="co">루미트론</span></div>
+  <div class="meta"><span class="pill b">Bria 우세</span><span class="num">31.0% → 63.5%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/14_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/14_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/14_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div><p class="note">기존은 프레임·받침대·스탠드가 통째로 날아갔다. Bria가 제품 전체를 정확히 복원.</p>
+</article>
+<article class="row">
+  <header><div><h3>m1.jpg</h3><span class="co">강릉카페 체크이스트</span></div>
+  <div class="meta"><span class="pill k">기존 우세</span><span class="num">19.8% → 47.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/05_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/05_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/05_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div><p class="note">접시·냅킨까지 남겼다. 제품은 구움과자이므로 기존(빵만)이 의도에 맞다.</p>
+</article>
+<article class="row">
+  <header><div><h3>패키지400축소.jpg</h3><span class="co">강릉카페 체크이스트</span></div>
+  <div class="meta"><span class="pill b">Bria 우세</span><span class="num">55.7% → 78.7%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/03_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/03_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/03_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div><p class="note">기존은 브랜드 로고가 인쇄된 뚜껑을 잘라냈다. 뚜껑도 제품의 일부다.</p>
+</article>
+<article class="row">
+  <header><div><h3>티그레메이커스1.jpg</h3><span class="co">강릉카페 체크이스트</span></div>
+  <div class="meta"><span class="pill k">기존 우세</span><span class="num">15.8% → 34.3%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/02_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/02_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/02_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div><p class="note">접시·냅킨을 남겼다. 소품 제거 관점에서 기존이 낫다.</p>
+</article>
+<article class="row">
+  <header><div><h3>여름(45ml)패키지.png</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill k">기존 우세</span><span class="num">91.8% → 79.7%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/40_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/40_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/40_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div><p class="note">Bria가 패키지 하단 향료 목록 부분을 반투명하게 파먹었다. 기존이 깨끗하다.</p>
+</article>
+<article class="row">
+  <header><div><h3>H11A9707.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">35.2% → 32.7%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/27_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/27_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/27_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>패키지 4종 정면.jpg</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">69.1% → 71.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/43_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/43_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/43_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>박스세트 정면.jpg</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">69.2% → 71.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/44_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/44_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/44_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9763.png</h3><span class="co">동원</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">72.3% → 73.6%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/06_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/06_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/06_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>화장품04.png</h3><span class="co">아로마티카</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">40.3% → 41.6%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/34_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/34_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/34_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>티그레블루베리절단면.jpg</h3><span class="co">강릉카페 체크이스트</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">70.0% → 71.2%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/04_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/04_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/04_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>여름(45ml).png</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">69.0% → 68.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/39_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/39_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/39_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9693.png</h3><span class="co">루미트론</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">38.1% → 38.8%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/16_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/16_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/16_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9685.png</h3><span class="co">루미트론</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">74.3% → 75.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/18_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/18_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/18_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9704.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">57.2% → 56.5%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/32_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/32_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/32_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9779.png</h3><span class="co">동원</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">40.5% → 41.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/07_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/07_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/07_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9719.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">55.7% → 55.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/29_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/29_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/29_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9687.png</h3><span class="co">루미트론</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">35.2% → 34.7%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/17_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/17_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/17_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9715.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">49.6% → 49.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/24_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/24_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/24_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9717.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">54.6% → 55.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/30_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/30_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/30_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>화장품02.png</h3><span class="co">아로마티카</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">26.4% → 26.9%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/37_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/37_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/37_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9750.png</h3><span class="co">동원</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">43.6% → 43.3%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/09_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/09_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/09_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>커피잔02.png</h3><span class="co">로모노소프</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">43.6% → 43.3%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/13_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/13_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/13_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>화장품03.png</h3><span class="co">아로마티카</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">37.4% → 37.1%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/36_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/36_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/36_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>패키지 4종 눕힘.jpg</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">57.3% → 57.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/41_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/41_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/41_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>패키지 4종 스탠드.jpg</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">70.4% → 70.7%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/42_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/42_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/42_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>IMG_0116.JPG</h3><span class="co">강릉카페 체크이스트</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">40.2% → 40.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/01_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/01_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/01_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9742.png</h3><span class="co">동원</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">35.8% → 35.6%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/08_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/08_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/08_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9769.png</h3><span class="co">동원</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">41.0% → 40.8%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/10_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/10_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/10_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>커피잔01.png</h3><span class="co">로모노소프</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">61.2% → 61.4%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/11_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/11_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/11_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>커피잔03.png</h3><span class="co">로모노소프</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">60.0% → 59.8%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/12_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/12_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/12_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9696.png</h3><span class="co">루미트론</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">53.6% → 53.8%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/15_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/15_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/15_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>프로핏04.png</h3><span class="co">매일</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">24.0% → 24.2%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/22_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/22_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/22_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>화장품05.png</h3><span class="co">아로마티카</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">29.1% → 28.9%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/35_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/35_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/35_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>화장품01.png</h3><span class="co">아로마티카</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">43.4% → 43.2%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/38_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/38_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/38_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>프로핏03.png</h3><span class="co">매일</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">26.9% → 26.8%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/19_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/19_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/19_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>프로핏01.png</h3><span class="co">매일</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">27.1% → 27.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/21_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/21_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/21_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>프로핏02.png</h3><span class="co">매일</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">21.1% → 21.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/23_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/23_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/23_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9711.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">78.9% → 79.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/33_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/33_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/33_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>박스세트 사선.jpg</h3><span class="co">주식회사 럽앤다이브</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">70.6% → 70.7%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/45_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/45_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/45_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>프로핏05.png</h3><span class="co">매일</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">21.0% → 21.0%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/20_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/20_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/20_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>
+<article class="row">
+  <header><div><h3>H11A9702.png</h3><span class="co">모모스</span></div>
+  <div class="meta"><span class="pill s">차이 미미</span><span class="num">78.5% → 78.5%</span></div></header>
+  <div class="tri">
+    <figure><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_orig.jpg" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_orig.jpg" alt=""></a><figcaption>원본</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-review/31_cut.png" alt=""></a><figcaption>기존 · BiRefNet</figcaption></figure>
+    <figure class="cut"><a href="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/31_cut.png" target="_blank"><img loading="lazy" src="https://uddyemjqoxqttzpminwa.supabase.co/storage/v1/object/public/designs/nukki-bria/31_cut.png" alt=""></a><figcaption>Bria RMBG</figcaption></figure>
+  </div>
+</article>  </div>
+  <footer>기존 BiRefNet v2(General Use Light, 1024) · Bria RMBG 2.0 — 둘 다 fal.ai 경유 · 하나파워온스토어 레벨업</footer>
+</div>
+</body>
+</html>
