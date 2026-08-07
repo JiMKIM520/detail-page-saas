@@ -1,6 +1,6 @@
 'use client'
 import { thumbUrl } from '@/lib/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface Shot { name: string; url: string }
@@ -15,26 +15,41 @@ export function StylingShotGenerator({
   const [shots, setShots] = useState<Shot[]>(initialShots)
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
+  const [notice, setNotice] = useState('')
+  const [polling, setPolling] = useState(false)
   const router = useRouter()
 
+  // 컷이 20장을 넘어 Vercel 함수 안에서 완주할 수 없다(300초 초과 → 무응답).
+  // 워커에 등록만 하고, 완료는 폴링으로 받는다.
   async function generate() {
-    setLoading(true); setErr('')
+    setLoading(true); setErr(''); setNotice('')
     try {
-      const res = await fetch('/api/photography/generate-shots', {
+      const res = await fetch('/api/photography/queue-shots', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ project_id: projectId }),
       })
       const json = await res.json()
-      if (!res.ok) { setErr(json.error || 'AI 생성에 실패했습니다.'); return }
-      // 캐시 버스트
-      setShots((json.shots as Shot[]).map(s => ({ ...s, url: s.url + '?t=' + Date.now() })))
-      router.refresh()
+      if (!res.ok) { setErr(json.error || 'AI 생성 요청에 실패했습니다.'); return }
+      setNotice(json.message ?? '생성을 시작했습니다.')
+      setPolling(true)
     } catch (e) {
       setErr('네트워크 오류: ' + String(e).slice(0, 120))
     } finally {
       setLoading(false)
     }
   }
+
+  // 워커가 컷을 올리는 동안 목록을 되살린다 — 잡이 끝나면 서버가 새 목록을 내려준다
+  useEffect(() => {
+    if (!polling) return
+    const id = setInterval(() => {
+      if (document.visibilityState === 'visible') router.refresh()
+    }, 15_000)
+    return () => clearInterval(id)
+  }, [polling, router])
+
+  // 서버가 새 컷을 내려주면 화면에 반영
+  useEffect(() => { setShots(initialShots) }, [initialShots])
 
   return (
     <div className="bg-surface rounded-xl border border-border p-6">
@@ -46,12 +61,15 @@ export function StylingShotGenerator({
           className="inline-flex items-center gap-2 bg-primary-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
         >
           {loading ? (
-            <><span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />생성 중… (2~3분)</>
+            <><span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />요청 중…</>
+          ) : polling ? (
+            <><span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />생성 중…</>
           ) : (shots.length > 0 ? 'AI로 재생성' : 'AI로 생성')}
         </button>
       </div>
       <p className="text-xs text-text-tertiary mb-4">
         기획안의 스타일링 프롬프트로 Gemini가 제품 사진을 참조해 직접 생성합니다. (외부 업로드 불필요)
+        컷 수가 많아 10~20분 걸리며, 창을 닫아도 계속 진행됩니다.
       </p>
 
       {!hasPrompts && (
@@ -61,6 +79,11 @@ export function StylingShotGenerator({
       )}
       {err && (
         <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-3">{err}</p>
+      )}
+      {notice && !err && (
+        <p className="text-sm text-primary-700 bg-primary-50 border border-primary-200 rounded-lg px-4 py-3 mb-3">
+          {notice} 완료되면 아래 목록이 자동으로 채워집니다.
+        </p>
       )}
 
       {shots.length > 0 ? (
