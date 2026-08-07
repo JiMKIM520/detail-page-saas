@@ -4,93 +4,93 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>피그마 → 포토샵 호환 문제와 대책</title>
+<title>피그마 → 포토샵 레이아웃 깨짐 해결</title>
 <style>
   :root{
     --ink-1:#16181d; --ink-2:#3d4450; --ink-3:#78808e;
-    --line:#e3e6eb; --bg:#fbfbfc; --card:#fff; --rail:#eef0f4;
-    --fix:#1b6b52; --fix-bg:#e8f3ef;
-    --risk:#9a4b1a; --risk-bg:#fbeee3;
-    --open:#7a6a1c; --open-bg:#f9f4e0;
+    --line:#e3e6eb; --bg:#fbfbfc; --card:#fff; --rail:#eff1f4;
+    --hi:#9a3d1a; --hi-bg:#fbeae1;
+    --mid:#7a6512; --mid-bg:#f9f2dc;
+    --low:#4a5560; --low-bg:#eef1f4;
+    --go:#1b6b52; --go-bg:#e8f3ef;
     --accent:#2c5f8a;
   }
   @media (prefers-color-scheme:dark){
     :root{ --ink-1:#eff1f4; --ink-2:#c4cad3; --ink-3:#8e96a3;
       --line:#2d323b; --bg:#111318; --card:#181b21; --rail:#20242b;
-      --fix:#5fbf9c; --fix-bg:#14302a; --risk:#d99a63; --risk-bg:#2f2519;
-      --open:#d4bd60; --open-bg:#2c2717; --accent:#7fb0d8; }
+      --hi:#e09a72; --hi-bg:#331f16; --mid:#d4bd60; --mid-bg:#2c2717;
+      --low:#9aa4b0; --low-bg:#222730; --go:#5fbf9c; --go-bg:#14302a; --accent:#7fb0d8; }
   }
   :root[data-theme="dark"]{ --ink-1:#eff1f4; --ink-2:#c4cad3; --ink-3:#8e96a3;
     --line:#2d323b; --bg:#111318; --card:#181b21; --rail:#20242b;
-    --fix:#5fbf9c; --fix-bg:#14302a; --risk:#d99a63; --risk-bg:#2f2519;
-    --open:#d4bd60; --open-bg:#2c2717; --accent:#7fb0d8; }
+    --hi:#e09a72; --hi-bg:#331f16; --mid:#d4bd60; --mid-bg:#2c2717;
+    --low:#9aa4b0; --low-bg:#222730; --go:#5fbf9c; --go-bg:#14302a; --accent:#7fb0d8; }
   :root[data-theme="light"]{ --ink-1:#16181d; --ink-2:#3d4450; --ink-3:#78808e;
-    --line:#e3e6eb; --bg:#fbfbfc; --card:#fff; --rail:#eef0f4;
-    --fix:#1b6b52; --fix-bg:#e8f3ef; --risk:#9a4b1a; --risk-bg:#fbeee3;
-    --open:#7a6a1c; --open-bg:#f9f4e0; --accent:#2c5f8a; }
+    --line:#e3e6eb; --bg:#fbfbfc; --card:#fff; --rail:#eff1f4;
+    --hi:#9a3d1a; --hi-bg:#fbeae1; --mid:#7a6512; --mid-bg:#f9f2dc;
+    --low:#4a5560; --low-bg:#eef1f4; --go:#1b6b52; --go-bg:#e8f3ef; --accent:#2c5f8a; }
 
   body{background:var(--bg);color:var(--ink-1);
     font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
     line-height:1.65;-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:920px;margin:0 auto;padding:48px 20px 90px;}
+  .wrap{max-width:940px;margin:0 auto;padding:48px 20px 90px;}
 
   h1{font-size:clamp(24px,3.6vw,33px);font-weight:750;letter-spacing:-.022em;margin:0 0 12px;text-wrap:balance;}
-  .lede{color:var(--ink-2);font-size:15.5px;margin:0 0 6px;max-width:64ch;}
-  .stamp{color:var(--ink-3);font-size:12.5px;margin:0 0 34px;}
+  .lede{color:var(--ink-2);font-size:15.5px;margin:0 0 6px;max-width:66ch;}
+  .stamp{color:var(--ink-3);font-size:12.5px;margin:0 0 36px;}
 
-  h2{font-size:19px;font-weight:720;letter-spacing:-.015em;margin:44px 0 6px;text-wrap:balance;}
+  h2{font-size:19px;font-weight:720;letter-spacing:-.015em;margin:46px 0 5px;text-wrap:balance;}
   h2 + .sub{color:var(--ink-3);font-size:13.5px;margin:0 0 18px;}
-  p{color:var(--ink-2);font-size:14.8px;margin:0 0 13px;max-width:70ch;}
+  p{color:var(--ink-2);font-size:14.8px;margin:0 0 13px;max-width:72ch;}
   b{color:var(--ink-1);font-weight:650;}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
     background:var(--rail);padding:1.5px 5px;border-radius:4px;}
 
-  .why{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:24px 26px;margin:8px 0 6px;}
-  .why p:last-child{margin-bottom:0;}
+  .verdict{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:24px 26px;}
+  .verdict p:last-child{margin-bottom:0;}
 
-  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 4px;}
-  @media(max-width:620px){.cols{grid-template-columns:1fr;}}
-  .col{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:17px 19px;}
-  .col h3{margin:0 0 9px;font-size:13.5px;font-weight:700;color:var(--accent);}
-  .col ul{margin:0;padding-left:17px;}
-  .col li{color:var(--ink-2);font-size:13.6px;margin-bottom:6px;}
+  .cause{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:17px 20px;margin-bottom:11px;}
+  .cause-head{display:flex;align-items:baseline;gap:11px;margin-bottom:7px;flex-wrap:wrap;}
+  .cause h3{margin:0;font-size:14.8px;font-weight:700;letter-spacing:-.01em;}
+  .lv{font-size:10.5px;font-weight:750;padding:2.5px 8px;border-radius:20px;flex-shrink:0;letter-spacing:.02em;}
+  .lv.h{background:var(--hi-bg);color:var(--hi);}
+  .lv.m{background:var(--mid-bg);color:var(--mid);}
+  .lv.l{background:var(--low-bg);color:var(--low);}
+  .cause p{font-size:13.9px;margin:0;}
 
-  .case{background:var(--card);border:1px solid var(--line);border-radius:13px;
-    padding:20px 22px;margin-bottom:13px;}
-  .case-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
-    margin-bottom:12px;flex-wrap:wrap;}
-  .case h3{margin:0;font-size:15.5px;font-weight:700;letter-spacing:-.01em;}
-  .tag{font-size:11px;font-weight:700;padding:3.5px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
-  .tag.fix{background:var(--fix-bg);color:var(--fix);}
-  .tag.open{background:var(--open-bg);color:var(--open);}
-  .rowline{display:grid;grid-template-columns:66px 1fr;gap:10px;margin-bottom:9px;align-items:baseline;}
-  .rowline:last-child{margin-bottom:0;}
-  .k{color:var(--ink-3);font-size:12px;font-weight:650;padding-top:2px;}
-  .v{color:var(--ink-2);font-size:14px;}
-  .v b{color:var(--ink-1);}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:14px 0 0;}
+  ol.steps li{counter-increment:s;position:relative;padding-left:34px;margin-bottom:13px;
+    color:var(--ink-2);font-size:14.3px;}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;
+    width:22px;height:22px;border-radius:6px;background:var(--rail);color:var(--ink-1);
+    font-size:11.5px;font-weight:700;display:grid;place-items:center;}
+  ol.steps b{display:block;color:var(--ink-1);margin-bottom:1px;}
 
-  table{width:100%;border-collapse:collapse;font-size:13.8px;margin:6px 0 4px;}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:22px 24px;}
+  .check ul{list-style:none;padding:0;margin:0;}
+  .check li{position:relative;padding-left:26px;margin-bottom:10px;color:var(--ink-2);font-size:14px;}
+  .check li:last-child{margin-bottom:0;}
+  .check li::before{content:'';position:absolute;left:0;top:6px;width:13px;height:13px;
+    border:1.5px solid var(--ink-3);border-radius:3px;}
+  .check .grp{font-size:11.5px;font-weight:700;color:var(--accent);letter-spacing:.03em;
+    margin:18px 0 9px;padding-left:0;}
+  .check .grp:first-child{margin-top:0;}
+  .check .grp::before{display:none;}
+
   .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:13.8px;}
   th,td{padding:10px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
   th{color:var(--ink-3);font-size:12px;font-weight:650;white-space:nowrap;}
   td{color:var(--ink-2);}
   td:first-child{color:var(--ink-1);font-weight:620;white-space:nowrap;}
   tbody tr:last-child td{border-bottom:none;}
-  .yes{color:var(--fix);font-weight:650;} .no{color:var(--risk);font-weight:650;}
 
-  .rec{background:var(--fix-bg);border:1px solid transparent;border-radius:13px;padding:22px 24px;margin-top:8px;}
-  .rec h3{margin:0 0 10px;font-size:15.5px;font-weight:720;color:var(--fix);}
-  .rec p{color:var(--ink-2);}
+  .rec{background:var(--go-bg);border-radius:13px;padding:22px 24px;margin-top:10px;}
+  .rec h3{margin:0 0 10px;font-size:15.5px;font-weight:720;color:var(--go);}
   .rec p:last-child{margin-bottom:0;}
-
-  .note{background:var(--rail);border-radius:10px;padding:13px 16px;margin:14px 0;
+  .note{background:var(--rail);border-radius:10px;padding:13px 16px;margin:16px 0;
     color:var(--ink-2);font-size:13.6px;}
-  ol.steps{counter-reset:s;list-style:none;padding:0;margin:14px 0 0;}
-  ol.steps li{counter-increment:s;position:relative;padding-left:34px;margin-bottom:11px;
-    color:var(--ink-2);font-size:14.3px;}
-  ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;
-    width:22px;height:22px;border-radius:6px;background:var(--rail);color:var(--ink-1);
-    font-size:11.5px;font-weight:700;display:grid;place-items:center;}
   footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);
     color:var(--ink-3);font-size:12px;}
 </style>
@@ -98,130 +98,124 @@
 <body>
 <div class="wrap">
 
-  <h1>피그마 → 포토샵 호환 문제와 대책</h1>
-  <p class="lede">"피그마에서는 멀쩡한데 포토샵에서 깨진다"는 신고가 반복됐습니다. 우연이 아니라 두 도구의 구조 차이에서 나오는 예측 가능한 문제라, 원인별로 나눠 정리하고 어디까지 막았는지 적었습니다.</p>
-  <p class="stamp">2026-08-07 · 하나파워온스토어 레벨업 상세페이지</p>
+  <h1>피그마 → 포토샵, 레이아웃이 깨지는 이유</h1>
+  <p class="lede">피그마에서 편집한 시안을 포토샵으로 넘기면 레이아웃이 어긋나는 문제를 조사했습니다. 원인이 하나가 아니라 셋이 겹쳐 있고, 그중 둘은 오늘 바로 없앨 수 있습니다.</p>
+  <p class="stamp">2026-08-07 · 하나파워온스토어 레벨업 상세페이지 · 가로 860px · 세로 7,000px 이상</p>
 
-  <h2>왜 반복되는가</h2>
-  <p class="sub">도구의 성격이 근본적으로 다릅니다</p>
-  <div class="why">
-    <p>피그마는 웹 기반이라 <b>없는 것을 알아서 메웁니다.</b> 폰트가 없으면 서버에서 대체하고, 이미지 포맷이 확장자와 달라도 내용을 보고 읽습니다. 그래서 피그마에서는 대부분 그냥 열립니다.</p>
-    <p>포토샵은 로컬 프로그램이라 <b>없는 것을 메우지 않습니다.</b> 폰트가 PC에 설치돼 있지 않으면 글자가 깨지고, 파일 헤더가 확장자와 다르면 아예 열기를 거부합니다.</p>
-    <p>즉 <b>피그마에서 정상인 것은 검증이 아닙니다.</b> 포토샵 기준으로 만들어야 양쪽 다 통과합니다.</p>
+  <div class="verdict">
+    <p><b>가장 큰 원인은 폰트입니다.</b> 피그마는 웹폰트를 서버에서 받아 그리지만, 포토샵은 PC에 설치된 폰트만 봅니다. 우리가 쓰는 한국어 36종이 디자이너 PC에 없으면 포토샵은 다른 폰트로 바꿔 버리고, 글자 폭이 달라지면서 줄바꿈이 밀리고 그 아래가 전부 어긋납니다.</p>
+    <p><b>두 번째는 좌표입니다.</b> 피그마는 <code>y: 1456.5</code> 같은 소수점 위치를 허용하고, 오토 레이아웃을 쓰면 저절로 생깁니다. 포토샵은 이를 반올림하는데, 요소마다 반올림 방향이 달라 1~2px씩 어긋난 것이 <b>7,000px를 내려오는 동안 쌓여</b> 눈에 띄게 벌어집니다.</p>
+    <p><b>세 번째는 오토 레이아웃 자체입니다.</b> 포토샵에는 대응 개념이 없어, 옮기는 순간 모든 요소가 절대 좌표로 굳습니다. 내용에 따라 높이가 늘어나던 텍스트 박스가 피그마가 계산한 위치와 다른 자리에 놓입니다.</p>
   </div>
 
-  <div class="cols">
-    <div class="col">
-      <h3>피그마가 관대한 지점</h3>
-      <ul>
-        <li>폰트 없으면 서버가 대체해 보여줌</li>
-        <li>JPEG를 .png로 저장해도 내용 보고 읽음</li>
-        <li>색 프로파일 자동 변환</li>
-      </ul>
-    </div>
-    <div class="col">
-      <h3>포토샵이 엄격한 지점</h3>
-      <ul>
-        <li>로컬에 폰트 없으면 □ 박스로 깨짐</li>
-        <li>헤더와 확장자 불일치면 열기 거부</li>
-        <li>파일이 손상됐다고 판단하면 그대로 중단</li>
-      </ul>
-    </div>
+  <h2>원인별 영향도</h2>
+  <p class="sub">조사에서 확인된 순서대로</p>
+
+  <div class="cause">
+    <div class="cause-head"><h3>한국어 웹폰트가 PC에 없음</h3><span class="lv h">영향 큼</span></div>
+    <p>피그마는 CDN에서 폰트를 받아 그리고, 포토샵은 OS 설치 폰트만 참조합니다. 우리가 쓰는 <code>woff2</code>는 <b>웹 전용 포맷이라 포토샵이 아예 인식하지 못합니다.</b> 데스크톱용 OTF/TTF를 따로 설치해야 합니다.</p>
   </div>
 
-  <h2>실제로 발생한 3건</h2>
-  <p class="sub">시트에 접수된 순서대로</p>
-
-  <div class="case">
-    <div class="case-head">
-      <h3>① Helvetica가 포토샵에서 □ 박스로 깨짐</h3>
-      <span class="tag fix">차단됨</span>
-    </div>
-    <div class="rowline"><span class="k">증상</span><span class="v">피그마에서는 한글로 보이는데 포토샵에서 열면 전부 □ 박스</span></div>
-    <div class="rowline"><span class="k">원인</span><span class="v">AI가 디자인할 때 시스템 기본 폰트(Helvetica·Arial 등)를 골랐습니다. 이 폰트들은 한글 자소를 갖고 있지 않습니다.</span></div>
-    <div class="rowline"><span class="k">대책</span><span class="v">제공해 주신 <b>드라이브 폰트 36종만</b> 쓸 수 있게 화이트리스트로 묶었습니다. AI가 목록 밖 폰트를 고르면 <b>생성 자체가 실패하고 다시 시도</b>합니다 — 경고가 아니라 차단입니다. 제목·스토리·본문·강조 네 자리를 각각 검사합니다.</span></div>
+  <div class="cause">
+    <div class="cause-head"><h3>소수점 좌표 반올림이 누적됨</h3><span class="lv h">영향 큼</span></div>
+    <p>피그마가 허용하는 소수 좌표를 포토샵이 반올림합니다. 요소 하나로는 1px이지만 세로 7,000px에 걸쳐 수십 개가 각기 다른 방향으로 반올림되면 틈과 겹침이 눈에 띄게 쌓입니다.</p>
   </div>
 
-  <div class="case">
-    <div class="case-head">
-      <h3>② 스타일링컷이 포토샵에서 열리지 않음</h3>
-      <span class="tag fix">해결됨</span>
-    </div>
-    <div class="rowline"><span class="k">증상</span><span class="v">맥·윈도우 모두 파일이 잠긴 듯 열리지 않음</span></div>
-    <div class="rowline"><span class="k">원인</span><span class="v">파일 이름은 <code>.png</code>인데 내용은 JPEG였습니다. 이미지 생성 API가 상황에 따라 다른 포맷을 돌려주는데 확장자만 붙여 저장했습니다. 피그마는 내용을 보고 열지만 포토샵은 거부합니다.</span></div>
-    <div class="rowline"><span class="k">대책</span><span class="v">기존 <b>181장을 실제 PNG로 재변환</b>했습니다. 다만 재인코딩이 관리자 배치 경로 <b>한 곳에만</b> 붙어 있어, 화면 버튼으로 만든 컷은 여전히 포맷이 어긋난 채 저장되고 있었습니다(2026-08-07 재점검에서 발견). 지금은 <b>이미지 생성 함수 자체가 PNG를 보장</b>하도록 바꿔, 어느 경로로 만들든 같은 결과가 나옵니다.</span></div>
+  <div class="cause">
+    <div class="cause-head"><h3>오토 레이아웃이 절대 좌표로 굳음</h3><span class="lv h">영향 큼</span></div>
+    <p>포토샵에 오토 레이아웃 개념이 없어 패딩·간격 계산이 사라지고 위치가 고정됩니다. 특히 높이가 유동적인(hug) 텍스트 박스에서 어긋남이 큽니다.</p>
   </div>
 
-  <div class="case">
-    <div class="case-head">
-      <h3>③ 스타일링컷이 가로 500px로 눌려 있음</h3>
-      <span class="tag fix">오늘 해결</span>
-    </div>
-    <div class="rowline"><span class="k">증상</span><span class="v">다운로드해 PC에서 열면 가로 500px 고정. 피그마에서는 큰 사이즈로 정상</span></div>
-    <div class="rowline"><span class="k">원인</span><span class="v">화면에 보여주는 축소본 주소가 <b>가로만 500으로 줄이고 세로는 원본 그대로</b> 두고 있었습니다(896×1200 → 500×1200). 화면에서는 CSS가 잘라 보여줘 멀쩡해 보였지만, 그 이미지를 우클릭 저장하면 찌그러진 파일이 저장됩니다. 게다가 스타일링샷 화면에는 <b>다운로드 버튼이 아예 없어</b> 우클릭 저장 말고는 방법이 없었습니다.</span></div>
-    <div class="rowline"><span class="k">대책</span><span class="v">비율을 유지하도록 고쳤고(500×670으로 정상 축소 확인), 스타일링샷 화면에 <b>원본 다운로드 버튼</b>을 넣었습니다.</span></div>
+  <div class="cause">
+    <div class="cause-head"><h3>줄간격·자간 계산 방식이 다름</h3><span class="lv m">영향 보통</span></div>
+    <p>피그마는 줄간격을 CSS 방식으로 위아래 균등 분배하고, 포토샵은 글자 시각 경계를 기준으로 잡습니다. 같은 숫자를 넣어도 박스 높이가 달라집니다. 자간은 <b>피그마 % × 10 = 포토샵 트래킹</b>으로 환산됩니다(5% → 50).</p>
   </div>
 
-  <div class="note">
-    <b>공통 교훈</b> — 세 건 모두 "피그마에서 확인했으니 괜찮다"고 지나갔다가 포토샵에서 드러났습니다. 앞으로 결과물 확인은 <b>포토샵에서 한 번 열어보는 것</b>을 기준으로 삼는 편이 안전합니다.
+  <div class="cause">
+    <div class="cause-head"><h3>피그마가 큰 이미지를 자동으로 줄임</h3><span class="lv m">영향 보통</span></div>
+    <p>한 변이 <b>4,096px를 넘는 사진은 피그마에 올리는 순간 자동 축소</b>됩니다. 고해상도 제품 사진이 피그마 진입 시점에 이미 흐려지고, 내보낸 결과도 흐린 채로 나옵니다.</p>
   </div>
 
-  <h2>지금 걸려 있는 안전장치</h2>
-  <table>
-    <thead><tr><th>대상</th><th>장치</th><th>실패하면</th></tr></thead>
-    <tbody>
-      <tr><td>폰트</td><td>드라이브 36종 화이트리스트 검사</td><td>생성 중단 후 재시도</td></tr>
-      <tr><td>이미지 포맷</td><td>저장 직전 PNG 재인코딩</td><td>업로드 실패로 기록</td></tr>
-      <tr><td>이미지 크기</td><td>비율 유지 축소 + 원본 다운로드 분리</td><td>—</td></tr>
-    </tbody>
-  </table>
+  <div class="cause">
+    <div class="cause-head"><h3>색 프로파일 불일치</h3><span class="lv m">영향 보통</span></div>
+    <p>피그마는 sRGB로만 내보냅니다. 포토샵 작업 공간이 Adobe RGB로 잡혀 있으면 열 때 색이 달라집니다.</p>
+  </div>
 
-  <h2>아직 남은 위험</h2>
-  <p>폰트를 36종으로 묶었지만, <b>디자이너 PC에 그 폰트가 설치돼 있어야</b> 포토샵에서 제대로 보입니다. 파일만 열리고 폰트가 없으면 다시 대체 폰트로 깨집니다.</p>
-  <p>현재는 웹 미리보기에 폰트가 파일째 심어져 있어 브라우저에서는 항상 정상으로 보입니다. 그래서 <b>브라우저 확인만으로는 이 문제를 못 잡습니다.</b></p>
+  <h2>오늘 바로 할 수 있는 것</h2>
+  <p class="sub">설치만 하면 되는 것과 설정 몇 개</p>
   <ol class="steps">
-    <li>디자이너 PC에 드라이브 36종을 <b>미리 전부 설치</b>해 두기</li>
-    <li>새 폰트를 목록에 추가할 때는 설치 안내를 함께 배포하기</li>
-    <li>납품 전 확인은 포토샵에서 열어 글자 깨짐 여부까지 보기</li>
+    <li><b>36종 폰트를 OTF/TTF로 PC에 설치</b>가장 큰 원인을 한 번에 없앱니다. 우리가 드린 <code>woff2</code>는 웹 전용이라 포토샵이 못 읽으므로, 각 폰트 배포처에서 데스크톱용 파일을 받아 설치해 주세요. 설치하면 피그마 데스크톱 앱도 로컬 폰트를 자동으로 인식합니다.</li>
+    <li><b>포토샵 색 공간을 sRGB로</b>Edit → Color Settings → Working Spaces → RGB를 <code>sRGB IEC61966-2.1</code>로. PNG를 열 때 뜨는 창에서는 <b>Use Embedded Profile</b>(변환하지 않음)을 고르세요.</li>
+    <li><b>피그마에서 픽셀 그리드 스냅 켜기</b>View → Snap to Pixel Grid. 내보내기 전 프레임의 X·Y·W·H가 모두 정수인지 확인하고, 소수가 보이면 정수로 고쳐 주세요. 오토 레이아웃 안쪽 프레임도 봐야 합니다.</li>
+    <li><b>저장은 Export As로</b>Save for Web(Legacy)은 큰 이미지에서 다운샘플링이 일어납니다. File → Export → Export As를 쓰세요.</li>
   </ol>
 
-  <h2>결과물 형식 — 더 근본적인 선택지</h2>
-  <p class="sub">이전에 논의했던 세 가지 방안</p>
-  <p>지금은 웹 미리보기(HTML)와 이미지를 드리고 디자이너가 다시 조립합니다. 편집 가능한 형태로 바로 드리면 호환 문제가 줄어듭니다.</p>
+  <div class="note">
+    <b>급하면 이 방법이 확실합니다</b> — 피그마에서 <b>PNG 1배율로 통째 내보내</b> 포토샵에서 열면 레이아웃이 100% 그대로 옵니다. 레이어와 텍스트 편집을 포기하는 대신 어긋남이 원천적으로 없습니다. 포토샵에서 사진 보정만 하신다면 이게 가장 안전합니다.
+  </div>
 
+  <h2>며칠 걸리는 개선</h2>
   <div class="scroll">
   <table>
-    <thead><tr><th>방안</th><th>결과물</th><th>바로 편집</th><th>필요 도구</th><th>구현</th></tr></thead>
+    <thead><tr><th>방법</th><th>얻는 것</th><th>잃는 것</th><th>비용</th></tr></thead>
     <tbody>
       <tr>
-        <td>A. PSD</td>
-        <td>레이어·텍스트가 살아 있는 <code>.psd</code></td>
-        <td class="yes">즉시</td><td>포토샵</td><td>3~4일</td>
+        <td>오토 레이아웃 해제 후 변환</td>
+        <td>좌표 어긋남 대부분 해소</td>
+        <td>피그마에서 재편집 시 레이아웃 자동 정렬 불가</td>
+        <td>플러그인 무료</td>
       </tr>
       <tr>
-        <td>B. 레이어 키트</td>
-        <td>섹션 이미지 + 배경 + 폰트 + 배치 정보</td>
-        <td class="no">직접 조합</td><td>무관</td><td>2일</td>
+        <td>PSD 변환 플러그인</td>
+        <td>레이어 구조 유지</td>
+        <td>폰트 미설치 시 여전히 깨짐 · 정확도 100% 아님</td>
+        <td>무료~월 $49</td>
       </tr>
       <tr>
-        <td>C. Figma SVG</td>
-        <td>피그마에 import하는 섹션별 SVG</td>
-        <td class="yes">import 후 즉시</td><td>피그마</td><td>2~3일</td>
+        <td>이미지 배치형 PSD 내보내기</td>
+        <td>레이아웃 정확도 가장 높음</td>
+        <td>텍스트 편집 완전 불가(모두 이미지)</td>
+        <td>무료</td>
       </tr>
     </tbody>
   </table>
   </div>
 
+  <h2>근본 해결 — 피그마를 건너뛰기</h2>
+  <p class="sub">우리 파이프라인이 PSD를 바로 만드는 방안</p>
   <div class="rec">
-    <h3>권장 — A(PSD)</h3>
-    <p>지금 겪는 문제가 <b>전부 포토샵 쪽에서 터지고 있습니다.</b> 포토샵이 바로 여는 형태로 만들면 확장자·포맷 문제가 원천적으로 사라지고, 텍스트가 레이어로 살아 있어 폰트도 그 자리에서 바꿀 수 있습니다.</p>
-    <p>다만 <b>폰트 설치 문제는 PSD로도 해결되지 않습니다.</b> 36종을 디자이너 PC에 미리 깔아두는 일은 어느 방안을 택하든 필요합니다.</p>
-    <p>피그마를 주로 쓰신다면 C를, 두 도구를 오간다면 A와 C를 함께 내보내는 것도 가능합니다(구현 5~6일).</p>
+    <h3>기술적으로 가능하고, 3~5일이면 됩니다</h3>
+    <p>지금 문제는 전부 <b>피그마와 포토샵 사이</b>에서 생깁니다. 우리가 처음부터 PSD를 드리면 그 구간이 사라집니다. 필요한 재료는 이미 다 있습니다 — 레이어별 이미지, 색·폰트 정보, 각 요소의 좌표를 파이프라인이 이미 만들고 있고, 조립할 라이브러리(<code>ag-psd</code>)도 검증된 것이 있습니다.</p>
+    <p>남는 작업은 <b>자간·줄간격 단위 환산</b>과 <b>폰트 이름 매핑표</b> 정도입니다. 텍스트 레이어가 살아 있어 포토샵에서 바로 고칠 수 있습니다.</p>
+    <p><b>다만 폰트 설치는 이 방법으로도 피할 수 없습니다.</b> PSD의 텍스트 레이어는 폰트 이름만 갖고 있어서, 그 폰트가 PC에 없으면 포토샵이 대체 폰트로 바꿉니다.</p>
+  </div>
+  <p>먼저 판단하실 것이 있습니다. <b>포토샵에서 글자를 직접 고치시나요, 아니면 사진 보정만 하시나요?</b> 글자 수정을 피그마에서 하고 포토샵에서는 보정만 한다면, PNG 1배율 내보내기로 충분해서 개발할 이유가 없습니다. 포토샵에서 글자를 자주 고쳐야 한다면 PSD 직접 생성이 확실히 이득입니다.</p>
+
+  <h2>디자이너 확인 목록</h2>
+  <div class="check">
+    <ul>
+      <li class="grp">시작 전 한 번만</li>
+      <li>36종 한국어 폰트를 OTF/TTF로 PC에 설치했다 (woff2는 포토샵이 못 읽음)</li>
+      <li>포토샵 작업 공간이 sRGB IEC61966-2.1로 되어 있다</li>
+
+      <li class="grp">피그마에서 내보내기 전</li>
+      <li>Snap to Pixel Grid가 켜져 있다</li>
+      <li>프레임의 X·Y·W·H가 모두 정수다 (오토 레이아웃 안쪽 포함)</li>
+      <li>텍스트 레이어의 Vertical Trim이 모두 None이다</li>
+      <li>제품 사진이 한 변 4,096px를 넘지 않는다 (넘으면 흐려짐)</li>
+      <li>Pass-Through 블렌드 그룹을 Flatten 또는 Normal로 바꿨다</li>
+      <li>Corner Smoothing이 0%를 넘는 도형은 Flatten했다</li>
+
+      <li class="grp">포토샵에서 열 때</li>
+      <li>PNG는 Export As로 내보냈다 (Save for Web 아님)</li>
+      <li>색 프로파일 창에서 Use Embedded Profile을 골랐다</li>
+      <li>PSD 변환을 썼다면 텍스트의 폰트 이름·크기·자간을 피그마와 대조했다</li>
+    </ul>
   </div>
 
   <footer>
-    근거: 폰트 화이트리스트 <code>agents/templates/blocks/shared.ts</code> · 검사 <code>agents/art-director.ts</code> ·
-    이미지 변환 <code>lib/image.ts</code> — 각 수치는 실제 파일로 확인했습니다.
+    조사에서 확인하지 못한 것 — Save for Web의 정확한 픽셀 한도는 자료마다 8,192px와 30,000px로 갈립니다.
+    어느 쪽이든 우리 7,000px 상세페이지는 범위 안이라 실무에 영향은 없습니다.
   </footer>
 </div>
 </body>
