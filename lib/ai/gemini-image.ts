@@ -79,9 +79,27 @@ async function callGeminiImage(modelId: string, opts: GenerateImageOptions): Pro
   const parts = response.candidates?.[0]?.content?.parts
   if (!parts) throw new Error(`Gemini ${modelId}: 응답에 parts 없음`)
 
+  /** 이미 PNG면 그대로, 아니면 PNG로 재인코딩. 매직바이트로 판별한다. */
+  async function toPng(buf: Buffer, model: string): Promise<Buffer> {
+    const isPng = buf.length > 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47
+    if (isPng) return buf
+    try {
+      const sharp = (await import('sharp')).default
+      return await sharp(buf).png().toBuffer()
+    } catch (e) {
+      // 재인코딩에 실패하면 원본을 넘긴다 — 이미지가 없는 것보다는 낫고, 업로드 후 검수에서 걸린다
+      console.warn(`[gemini-image] PNG 재인코딩 실패(${model}):`, String(e).slice(0, 120))
+      return buf
+    }
+  }
+
   for (const part of parts) {
     if (part.inlineData?.data) {
-      return Buffer.from(part.inlineData.data, 'base64')
+      // Gemini는 요청과 무관하게 WebP·JPEG를 돌려줄 때가 있다. 호출처는 전부 .png로
+      // 저장하므로 그대로 두면 확장자와 내용이 어긋나 포토샵이 파일 열기를 거부한다
+      // (2026-08-06 신고). 호출처마다 재인코딩을 붙이면 빠뜨리는 곳이 생기므로
+      // 여기서 한 번에 PNG를 보장한다.
+      return await toPng(Buffer.from(part.inlineData.data, 'base64'), modelId)
     }
   }
 
