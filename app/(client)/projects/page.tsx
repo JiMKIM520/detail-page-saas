@@ -23,7 +23,9 @@ export default async function ClientProjectsPage() {
     .eq('client_id', user!.id)
     .order('created_at', { ascending: false })
 
-  const projectList = projects ?? []
+  // invited는 관리자가 계정만 열어둔 상태로, 프로젝트 행은 있어도 의뢰서는 아직 없다.
+  // 행 개수로 판단하면 의뢰서를 쓰지도 않은 기업이 빈 상세 화면으로 끌려가 시작 버튼을 잃는다.
+  const projectList = (projects ?? []).filter(p => p.status !== 'invited')
 
   // 제출한 의뢰서가 하나면 그 화면이 곧 첫 화면이다 — 카드를 거치지 않는다
   if (projectList.length === 1) {
