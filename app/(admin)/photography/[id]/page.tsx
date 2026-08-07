@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { StylingShotGenerator } from '@/components/photography/StylingShotGenerator'
 import { StylingPromptPanel } from '@/components/photography/StylingPromptPanel'
+import { WorkflowSteps } from '@/components/shared/WorkflowSteps'
+import type { ProjectStatus } from '@/lib/status-machine'
 import { downloadFromStorage } from '@/lib/storage'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -59,6 +61,11 @@ export default async function PhotographyPage({
         <p className="text-sm text-text-tertiary mt-1">
           {(project.platforms as any)?.name} · {project.category} · AI 스타일링샷 생성
         </p>
+      </div>
+
+      {/* 다음 단계(초안 제작)로 넘어갈 길이 없어 여기서 막히던 문제 — 단계 내비를 노출한다 */}
+      <div className="mb-6">
+        <WorkflowSteps projectId={id} status={project.status as ProjectStatus} />
       </div>
 
       {/* AI 스타일링샷 생성·확인 (Gemini API 직접 생성) */}

@@ -14,6 +14,7 @@ import { InternalNotes } from '@/components/admin/InternalNotes'
 import { ExpandableIntake } from '@/components/admin/ExpandableIntake'
 import { ReviseDoneButton } from '@/components/planner/ReviseDoneButton'
 import { AutoRefresh } from '@/components/shared/AutoRefresh'
+import { WorkflowSteps } from '@/components/shared/WorkflowSteps'
 import { fetchManageIds } from '@/lib/manage-id'
 import { ScreenshotUpload } from '@/components/admin/ScreenshotUpload'
 import { downloadFromStorage } from '@/lib/storage'
@@ -122,6 +123,11 @@ export default async function PlannerReviewPage({ params }: { params: Promise<{ 
         <p className="text-sm text-text-tertiary mt-1">
           {(project.platforms as any)?.name} · {project.category}
         </p>
+      </div>
+
+      {/* 기획 승인 뒤 스타일링샷·초안 화면으로 넘어갈 길이 이 화면에 없어 막히던 문제 */}
+      <div className="mb-6">
+        <WorkflowSteps projectId={id} status={project.status as ProjectStatus} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
