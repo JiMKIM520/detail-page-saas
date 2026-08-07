@@ -43,12 +43,19 @@ export function transformedUrl(
   return `${rendered}?${query}${hash ? `#${hash}` : ''}`;
 }
 
-/** 목록·그리드용 작은 썸네일 */
+/**
+ * 목록·그리드용 작은 썸네일.
+ *
+ * resize는 반드시 'contain' — 'cover'나 미지정으로 width만 주면 Supabase가 높이를
+ * 원본 그대로 둬서 이미지가 가로로만 눌린다(실측: 896x1200 → 500x1200).
+ * 화면에서는 CSS object-cover가 가려주지만, 이 이미지를 우클릭 저장하면
+ * 찌그러진 파일이 그대로 저장된다 — "스타일링컷이 가로 500px로 고정" 신고의 원인(2026-08-07).
+ */
 export function thumbUrl(url: string | null | undefined, width = 400): string {
-  return transformedUrl(url, { width, quality: 70, resize: 'cover' });
+  return transformedUrl(url, { width, quality: 70, resize: 'contain' });
 }
 
 /** 본문에 크게 보여주는 미리보기 (상세페이지 시안 등) */
 export function previewUrl(url: string | null | undefined, width = 1200): string {
-  return transformedUrl(url, { width, quality: 78 });
+  return transformedUrl(url, { width, quality: 78, resize: 'contain' });
 }

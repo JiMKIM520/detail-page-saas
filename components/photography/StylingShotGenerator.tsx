@@ -17,7 +17,30 @@ export function StylingShotGenerator({
   const [err, setErr] = useState('')
   const [notice, setNotice] = useState('')
   const [polling, setPolling] = useState(false)
+  const [busy, setBusy] = useState<string | null>(null)
   const router = useRouter()
+
+  /** 원본(변환 안 거친 공개 URL)을 받아 저장. cross-origin이라 <a download>가 무시돼 blob로 강제한다. */
+  async function download(shot: Shot) {
+    setBusy(shot.name)
+    try {
+      const res = await fetch(shot.url, { cache: 'no-store' })
+      if (!res.ok) throw new Error('HTTP ' + res.status)
+      const blob = await res.blob()
+      const href = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = href
+      a.download = `${shot.name}.png`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(href)
+    } catch {
+      window.open(shot.url, '_blank', 'noopener')
+    } finally {
+      setBusy(null)
+    }
+  }
 
   // 컷이 20장을 넘어 Vercel 함수 안에서 완주할 수 없다(300초 초과 → 무응답).
   // 워커에 등록만 하고, 완료는 폴링으로 받는다.
@@ -89,9 +112,17 @@ export function StylingShotGenerator({
       {shots.length > 0 ? (
         <div className="grid grid-cols-3 gap-3">
           {shots.map((s, i) => (
-            <figure key={i} className="rounded-lg overflow-hidden border border-border bg-white">
+            <figure key={i} className="rounded-lg overflow-hidden border border-border bg-white group relative">
               <img src={thumbUrl(s.url, 500)} alt={s.name} className="w-full aspect-[3/4] object-cover" loading="lazy" />
               <figcaption className="text-xs text-text-tertiary px-2.5 py-2 truncate">{s.name}</figcaption>
+              {/* 다운로드 수단이 없어 화면 썸네일을 우클릭 저장하게 되고, 그러면 축소본을 받게 된다 */}
+              <button
+                onClick={() => download(s)}
+                disabled={busy === s.name}
+                className="absolute inset-x-2 bottom-9 opacity-0 group-hover:opacity-100 transition-opacity bg-text-primary/90 text-white text-xs font-medium rounded-lg py-1.5 disabled:opacity-60"
+              >
+                {busy === s.name ? '저장 중…' : '⤓ 원본 다운로드'}
+              </button>
             </figure>
           ))}
         </div>
