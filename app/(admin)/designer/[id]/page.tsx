@@ -101,8 +101,8 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
             </div>
           )}
 
-          {/* 스타일링샷 다운로드 — 디자이너 Figma 작업용 */}
-          {!isAdmin && (
+          {/* 스타일링샷 다운로드·재생성 — 관리자도 전 과정을 직접 진행하므로 함께 노출한다 */}
+          {(
             <div className="rounded-xl border border-border bg-surface p-5">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-text-primary">스타일링샷 (Figma 작업용)</h3>
@@ -119,8 +119,12 @@ export default async function DesignerReviewPage({ params }: { params: Promise<{
 
         <div className="space-y-6">
           {isAdmin ? (
-            /* 관리자: 초안 전달 + 최종 발송 */
+            /* 관리자: 초안 생성부터 전달·최종 발송까지 전 과정을 직접 진행한다.
+               예전에는 생성 버튼이 디자이너에게만 보여 관리자가 초안 단계에서 막혔다(2026-08-07). */
             <>
+              {(!hasDraft || status === 'design_failed') && (
+                <GenerateDraftButton projectId={id} status={status} />
+              )}
               <SendDraftPanel projectId={id} designId={design?.id} alreadySent={!!design?.preview_url} />
               <DeliveryPanel
                 projectId={id}

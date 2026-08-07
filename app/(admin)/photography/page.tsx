@@ -11,7 +11,6 @@ interface PageProps {
 
 export default async function StylingListPage({ searchParams }: PageProps) {
   const params = await searchParams
-  const showAll = params.all === '1'
 
   const supabase = await createClient()
 
@@ -19,6 +18,10 @@ export default async function StylingListPage({ searchParams }: PageProps) {
   const role = user?.user_metadata?.role as string | undefined
   const isAdmin = role === 'admin'
   const userId = user?.id ?? ''
+
+  // 관리자는 배정을 받지 않으므로 '내 작업'이 늘 비어 있었다 — 전체를 기본으로 두고
+  // 내 작업(?mine=1)을 선택 항목으로 돌린다. 디자이너는 항상 본인 배정만 본다.
+  const showAll = isAdmin && params.mine !== '1'
 
   // 디자이너는 배정받은(designer_id) 작업만, 관리자는 전체(또는 내 작업) 표시
   let query = supabase
@@ -68,22 +71,22 @@ export default async function StylingListPage({ searchParams }: PageProps) {
             <Link
               href="/photography"
               className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
-                !showAll
-                  ? 'bg-primary-600 text-white border-primary-600'
-                  : 'bg-white text-text-secondary border-border hover:border-primary-300'
-              }`}
-            >
-              내 작업
-            </Link>
-            <Link
-              href="/photography?all=1"
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
                 showAll
                   ? 'bg-slate-700 text-white border-slate-700'
                   : 'bg-white text-text-secondary border-border hover:border-slate-400'
               }`}
             >
               전체 보기
+            </Link>
+            <Link
+              href="/photography?mine=1"
+              className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                !showAll
+                  ? 'bg-primary-600 text-white border-primary-600'
+                  : 'bg-white text-text-secondary border-border hover:border-primary-300'
+              }`}
+            >
+              내 작업
             </Link>
           </div>
         )}

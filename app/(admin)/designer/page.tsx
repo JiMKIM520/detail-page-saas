@@ -26,7 +26,9 @@ export default async function DesignerDashboard({ searchParams }: PageProps) {
     .select('id, company_name, status, category, designer_id, created_at, client_id, platforms(name)')
     // design_failed(생성 실패 — 재시도 대상)·designer_working(수작업 인계)·revision_1/2(수정요청)도
     // 디자이너 작업 대상 — 누락 시 해당 프로젝트가 목록에서 사라져 방치되던 실사례
-    .in('status', ['design_review', 'design_generating', 'design_failed', 'designer_working', 'revision_1', 'revision_2'])
+    // photo_uploaded(스타일링샷 완료 — 초안 생성 대기)가 빠져 있어, 샷을 다 만들고도
+    // 초안 화면 목록에 뜨지 않아 다음 단계로 못 넘어갔다(2026-08-07)
+    .in('status', ['photo_uploaded', 'design_review', 'design_generating', 'design_failed', 'designer_working', 'revision_1', 'revision_2'])
     .order('created_at', { ascending: true })
 
   if (!isAdmin) {
