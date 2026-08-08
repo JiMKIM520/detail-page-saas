@@ -87,7 +87,12 @@ async function runShots(projectId: string): Promise<string> {
   const meta = { category: (proj as { category?: string } | null)?.category ?? 'food', platform: 'smartstore', aspectRatio: '3:4' }
 
   let ok = 0, fail = 0
+  let first = true
   for (const shot of todo) {
+    // 28장을 간격 없이 연달아 던지면 모델 3종이 한꺼번에 503을 뱉는 구간에 들어간다
+    // (2026-08-07 럽앤다이브: 폴백이 있는데도 14장이 통째로 실패). 사이를 띄운다.
+    if (!first) await new Promise((r) => setTimeout(r, 1500))
+    first = false
     const label = String(shot.filename ?? shot.name ?? '?')
     // Gemini가 일시적으로 503(과부하)을 내는 일이 잦다. 한 번 실패했다고 넘기면 그 컷은
     // 영영 비고, 28컷 중 절반이 빠진 채 초안이 조립된다(2026-08-07 럽앤다이브 14/28).
@@ -125,13 +130,26 @@ async function runShots(projectId: string): Promise<string> {
   const target = Math.min(shots.length, 28)
   const enough = generated >= Math.ceil(target * 0.8)
   if (!enough) {
-    console.warn(`[worker/shots] 컷 부족 — ${generated}/${target}. 다음 단계로 넘기지 않는다`)
+    // 부족분은 스스로 다시 채운다. runShots는 이미 있는 파일을 건너뛰므로 재실행이 안전하고,
+    // 503은 대개 몇 분 뒤면 풀린다. 사람이 눌러줘야만 완성되는 구조를 만들지 않는다.
+    // 무한 반복은 막는다 — 같은 프로젝트의 shots 잡이 5개를 넘으면 멈추고 사람에게 넘긴다.
+    const { count } = await svc
+      .from('jobs').select('id', { count: 'exact', head: true })
+      .eq('project_id', projectId).eq('kind', 'shots')
+    const rounds = count ?? 0
+    const canRetry = rounds < 5
+    console.warn(`[worker/shots] 컷 부족 — ${generated}/${target}${canRetry ? ' · 자동 재시도 등록' : ' · 재시도 한도 도달'}`)
     await svc.from('project_logs').insert({
       project_id: projectId,
       from_status: (proj as { status?: string } | null)?.status ?? null,
       to_status: (proj as { status?: string } | null)?.status ?? null,
-      note: `스타일링샷 부족(${generated}/${target}) — 재생성이 필요합니다`,
+      note: canRetry
+        ? `스타일링샷 부족(${generated}/${target}) — 자동 재시도 ${rounds}회차`
+        : `스타일링샷 부족(${generated}/${target}) — 자동 재시도 한도 도달, 확인이 필요합니다`,
     })
+    if (canRetry) {
+      await svc.from('jobs').insert({ project_id: projectId, kind: 'shots', status: 'pending' })
+    }
   }
   if (enough) {
     const cur = (proj as { status?: string } | null)?.status
@@ -172,8 +190,21 @@ async function runJob(job: Job): Promise<string> {
   }
   if (job.kind === 'shots') return runShots(job.project_id)
   if (job.kind === 'draft') {
+    // 조립할 이미지가 없으면 시작하지 않는다. 예전에는 그대로 진행하다
+    // "Invalid transition: prompt_ready → design_generating"으로 죽어, 화면에도 원인을
+    // 알 수 없는 문구만 남았다(2026-08-07 로모노소프).
+    const { data: shotFiles } = await svc.storage
+      .from('designs').list(`projects/${job.project_id}/styling_real`, { limit: 100 })
+    const shotCount = (shotFiles ?? []).filter((f) => f.name?.endsWith('.png')).length
+    if (shotCount === 0) {
+      throw new Error('스타일링샷이 한 장도 없습니다 — 샷 생성을 먼저 완료하세요')
+    }
+
     const { data: p } = await svc.from('projects').select('status').eq('id', job.project_id).single()
-    if (p && String(p.status) === 'design_generating') {
+    const cur = p ? String(p.status) : ''
+    // photo_uploaded에서 출발해야 조립이 상태를 진행시킬 수 있다.
+    // 재시도(design_generating)뿐 아니라, 샷을 확보하고도 prompt_ready에 머문 경우도 정렬한다.
+    if (cur === 'design_generating' || cur === 'prompt_ready') {
       await svc.from('projects').update({ status: 'photo_uploaded' }).eq('id', job.project_id)
     }
     const r = await runPipelineForProject(job.project_id)
