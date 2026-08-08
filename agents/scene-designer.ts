@@ -11,7 +11,7 @@ import type { PageBlueprint } from './page-planner'
 import type { Tokens } from './templates/blocks/types'
 import { getStyleLanguage } from './templates/blocks/style-languages'
 import { variantTone } from './templates/blocks/variant-meta'
-import { buildFontLinks } from './templates/blocks/shared'
+import { buildFontLinks, resolveWhitelistFont } from './templates/blocks/shared'
 import { supportBannerHtml } from './templates/blocks/support-banner'
 
 export interface SceneDesignInput {
@@ -114,6 +114,44 @@ export function validateSceneHtml(html: string, ns: string): string[] {
   return issues
 }
 
+/**
+ * 씬 CSS가 선언한 폰트를 걷어낸다.
+ *
+ * 씬은 자기 색·여백을 자유롭게 정하는 게 설계 의도지만, 폰트까지 마음대로 잡으면
+ * :root에 심어둔 화이트리스트 폰트를 덮어쓴다. 실측(2026-08-07 로모노소프)에서
+ * .sc1·.sc3·.sc5·.sc6이 각각 Helvetica Neue·Playfair Display·Georgia를 선언했고,
+ * 셋 다 한글 글자가 없어 포토샵에서 □ 박스로 깨진다(시트 요청 2번의 그 증상).
+ *
+ * 선언을 지우면 :root 값이 그대로 상속되므로 디자인 의도는 유지되고 폰트만 정상화된다.
+ * 화이트리스트 안의 폰트를 지정한 경우에는 손대지 않는다.
+ */
+export function sanitizeSceneFonts(html: string, sceneNo: number): string {
+  const dropped: string[] = []
+
+  // 1) --font-* 변수 재정의 — 화이트리스트 밖이면 선언째 제거
+  let out = html.replace(/--font-(display|body|serif|hand)\s*:\s*([^;}]+)[;]?/gi, (full, role, value) => {
+    const first = String(value).split(',')[0].replace(/['"]/g, '').trim()
+    if (resolveWhitelistFont(first)) return full
+    dropped.push(`--font-${role}: ${first}`)
+    return ''
+  })
+
+  // 2) font-family 직접 선언 — var(--font-*)를 쓰는 것은 정상이므로 건드리지 않는다
+  out = out.replace(/font-family\s*:\s*([^;}]+)[;]?/gi, (full, value) => {
+    const v = String(value)
+    if (/var\(--font/i.test(v)) return full
+    const first = v.split(',')[0].replace(/['"]/g, '').trim()
+    if (resolveWhitelistFont(first)) return full
+    dropped.push(`font-family: ${first}`)
+    return 'font-family: var(--font-body);'
+  })
+
+  if (dropped.length > 0) {
+    console.warn(`[Scene Designer] 씬 ${sceneNo} 비허용 폰트 ${dropped.length}건 제거 — ${dropped.slice(0, 4).join(' · ')}`)
+  }
+  return out
+}
+
 export interface SceneDesignPageInput {
   productName: string
   moodKeywords: string[]
@@ -190,7 +228,7 @@ export async function runSceneDesignPage(
     if (!r.success || !r.data) {
       return { success: false, error: `씬 ${n} 설계 실패: ${r.error}`, durationMs: elapsed() }
     }
-    parts.push(r.data.html)
+    parts.push(sanitizeSceneFonts(r.data.html, n))
     prevTone = g.tone
   }
 
