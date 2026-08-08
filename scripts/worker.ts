@@ -14,7 +14,15 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { runPlanningForProject, runPipelineForProject, fetchProductRefFiles } from '@/lib/pipeline-bridge'
 
 const POLL_MS = 10_000
-const STALE_RUNNING_MIN = 45 // 워커 크래시로 남은 running 잡 복구 기준
+/**
+ * 워커가 죽으면 실행 중이던 잡이 running인 채로 남아 그 프로젝트가 통째로 멈춘다.
+ * 45분은 너무 길었다 — 재배포 한 번에 한 건이 45분간 방치됐다(2026-08-07 로모노소프 실측).
+ *
+ * 이 복구는 워커가 시작할 때 한 번만 돈다. 갓 시작한 워커는 아직 아무 잡도 집지 않았으므로,
+ * 지금 running인 것은 전부 죽은 워커가 남긴 것이다. 5분이면 충분히 안전하다.
+ * (다중 워커로 늘릴 때는 인스턴스 식별자를 잡에 남기고 자기 것만 건너뛰도록 바꿔야 한다)
+ */
+const STALE_RUNNING_MIN = 5
 
 type Job = {
   id: string
