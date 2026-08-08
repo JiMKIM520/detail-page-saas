@@ -62,14 +62,19 @@ function hrefFor(p: ListProject): string {
   return planner.includes(p.status) ? `/planner/${p.id}` : `/pipeline/${p.id}`
 }
 
-/** D-day(마감 기준) 또는 경과일(접수 기준) */
+/**
+ * D-day(마감 기준) 또는 접수 후 경과일.
+ *
+ * 같은 열에 'D-9'(남은 일수)와 '31일'(지난 일수)이 섞여 정반대로 읽히던 문제가 있었다
+ * (2026-08-07 검토). 경과일에는 '접수'를 붙여 무엇을 세는 숫자인지 드러낸다.
+ */
 function timeLabel(p: ListProject): { text: string; tone: 'tight' | 'normal' | 'muted' } {
   if (p.due_date) {
     const diff = Math.ceil((new Date(p.due_date).getTime() - Date.now()) / 86_400_000)
     return { text: diff >= 0 ? `D-${diff}` : `D+${-diff}`, tone: diff <= 3 ? 'tight' : 'normal' }
   }
   const days = Math.floor((Date.now() - new Date(p.created_at).getTime()) / 86_400_000)
-  return { text: days > 0 ? `${days}일` : '오늘', tone: 'muted' }
+  return { text: days > 0 ? `접수 ${days}일째` : '접수 오늘', tone: 'muted' }
 }
 
 function tagChips(tags: Record<string, boolean> | null): string[] {

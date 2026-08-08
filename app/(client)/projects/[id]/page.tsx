@@ -25,6 +25,21 @@ const STAGE_DESCRIPTIONS: Record<ClientStage, string> = {
   delivered: '상세페이지가 완성되었습니다. 담당자가 이메일로 최종 파일을 발송했습니다.',
 }
 
+
+/**
+ * '제작 중' 한 단계에 접수 직후부터 조립 직전까지가 모두 묶여 있어, 아직 아무 작업도
+ * 시작하지 않은 기업에게 "제작하고 있습니다"라고 안내됐다(2026-08-07 검토).
+ * 기업이 지금 무엇을 기다리는지 알 수 있게 상태별로 나눈다.
+ */
+function preparingDescription(status: ProjectStatus): string {
+  if (status === 'invited') return '아직 의뢰서가 제출되지 않았습니다.'
+  if (status === 'intake_submitted') return '제출하신 의뢰서를 담당자가 확인하고 있습니다.'
+  if (status === 'script_generating' || status === 'script_review' || status === 'script_approved') {
+    return '담당자가 상세페이지 구성안을 검토하고 있습니다.'
+  }
+  return '담당자가 상세페이지를 제작하고 있습니다.'
+}
+
 function statusIndex(status: ProjectStatus): number {
   // S1 5종(invited·designer_working·draft_submitted·revision_1·revision_2) 누락 시 indexOf=-1로
   // 모든 >= 비교가 false → revision_1/2에서 사업자가 검토하던 초안이 사라지던 실사례. 전 상태 포함.
@@ -231,7 +246,9 @@ export default async function ClientProjectDetailPage({
         <p className="text-sm text-text-secondary leading-relaxed">
           {clientStage === 'review' && revisionUsed > 0
             ? `${revisionUsed}차 수정본이 완성되었습니다. 확인 후 의견을 남겨주세요.${revisionUsed >= 2 ? ' (수정 2회를 모두 사용하셨습니다.)' : ''}`
-            : STAGE_DESCRIPTIONS[clientStage]}
+            : clientStage === 'preparing'
+              ? preparingDescription(status)
+              : STAGE_DESCRIPTIONS[clientStage]}
           {clientStage === 'preparing' && (
             <span className="ml-1 text-text-tertiary text-xs">
               (현재: {CLIENT_STATUS_LABELS[status]})

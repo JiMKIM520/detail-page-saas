@@ -31,7 +31,9 @@ const MY_WORK_COLUMNS: MyWorkColumn[] = [
     // 실종되던 갭(럽앤 E2E 검출) — 배정 컬럼에 포함
     statuses: ['design_review', 'design_generating', 'design_failed', 'revision_1', 'revision_2'],
     showStartWork: true,
-    showDraftLink: true,
+    // 시작하지 않은 건에서 곧바로 1차시안을 낼 수 있어 순서가 뒤엉켰다(2026-08-07 검토).
+    // '작업 시작'으로 작업중에 들어간 뒤 제출한다 — 작업중 컬럼에서 제출 링크가 열린다.
+    showDraftLink: false,
   },
   {
     key: 'working',
