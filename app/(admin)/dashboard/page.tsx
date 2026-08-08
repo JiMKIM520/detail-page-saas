@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import DashboardList, { type ListProject } from '@/components/admin/DashboardList'
+import { PipelineHealth } from '@/components/admin/PipelineHealth'
+import { fetchPipelineHealth } from '@/lib/pipeline-health'
 import type { ProjectStatus } from '@/lib/status-machine'
 
 /**
@@ -58,6 +60,9 @@ export default async function DashboardPage() {
     tags: p.tags,
   }))
 
+  // 실패·멈춤은 목록을 훑어서는 보이지 않는다 — 맨 위에서 먼저 알린다
+  const health = await fetchPipelineHealth()
+
   return (
     <div>
       <div className="mb-6">
@@ -66,6 +71,8 @@ export default async function DashboardPage() {
           전체 {projects.length}건 · 단계별로 확인하고 행을 눌러 작업 페이지로 이동하세요
         </p>
       </div>
+
+      <PipelineHealth issues={health} />
 
       <DashboardList projects={projects} staff={staff} />
     </div>

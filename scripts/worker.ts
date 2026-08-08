@@ -117,10 +117,23 @@ async function runShots(projectId: string): Promise<string> {
       }
     }
   }
-  // 절반 이상 확보 시 상태 전진(콘솔 advance와 동일 기준)
+  // 컷이 모자란 채로 다음 단계에 넘어가면 이미지가 빈 초안이 나온다. 예전에는 절반만 채워도
+  // 조용히 전진해 14/28로 조립된 실사례가 있었다(2026-08-07 럽앤다이브). 기준을 8할로 올리고,
+  // 모자라면 전진하지 않고 이력에 남겨 화면(이상 징후 배너)에서 보이게 한다.
   const { data: after } = await svc.storage.from('designs').list(`projects/${projectId}/styling_real`, { limit: 100 })
   const generated = (after ?? []).filter((f) => f.name?.endsWith('.png')).length
-  if (generated >= Math.ceil(Math.min(shots.length, 28) / 2)) {
+  const target = Math.min(shots.length, 28)
+  const enough = generated >= Math.ceil(target * 0.8)
+  if (!enough) {
+    console.warn(`[worker/shots] 컷 부족 — ${generated}/${target}. 다음 단계로 넘기지 않는다`)
+    await svc.from('project_logs').insert({
+      project_id: projectId,
+      from_status: (proj as { status?: string } | null)?.status ?? null,
+      to_status: (proj as { status?: string } | null)?.status ?? null,
+      note: `스타일링샷 부족(${generated}/${target}) — 재생성이 필요합니다`,
+    })
+  }
+  if (enough) {
     const cur = (proj as { status?: string } | null)?.status
     try {
       if (cur === 'design_plan_review') await transitionStatus(svc, projectId, 'prompt_ready', { note: '워커 샷 생성' })
