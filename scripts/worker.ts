@@ -88,18 +88,33 @@ async function runShots(projectId: string): Promise<string> {
 
   let ok = 0, fail = 0
   for (const shot of todo) {
-    try {
-      const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt) ? shot.finalPrompt : buildShotPrompt(shot, rules, meta as never)
-      const refIdx = pickShotReferences(String(shot.name ?? '') + ' ' + String(shot.filename ?? ''), names)
-      const refs = shot.withProduct === false ? [] : refIdx.map((i: number) => nukki[i]).filter(Boolean)
-      const buf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: shot.frameRatio ?? '3:4', model: shot.prominence === 'support' ? 'nb2' : 'pro' })
-      const path = `projects/${projectId}/styling_real/${shot.filename || `${shot.name}.png`}`
-      const { error } = await svc.storage.from('designs').upload(path, buf, { contentType: 'image/png', upsert: true })
-      if (error) throw new Error(error.message)
-      ok++
-    } catch (e) {
-      fail++
-      console.warn(`[worker/shots] ✗ ${shot.filename}:`, String(e).slice(0, 100))
+    const label = String(shot.filename ?? shot.name ?? '?')
+    // Gemini가 일시적으로 503(과부하)을 내는 일이 잦다. 한 번 실패했다고 넘기면 그 컷은
+    // 영영 비고, 28컷 중 절반이 빠진 채 초안이 조립된다(2026-08-07 럽앤다이브 14/28).
+    // regen 스크립트와 같은 3회·점증 대기 재시도를 둔다.
+    let done = false
+    for (let attempt = 1; attempt <= 3 && !done; attempt++) {
+      try {
+        const fp: string = shot.finalPrompt && /\[OUTPUT SPECS\]/.test(shot.finalPrompt) ? shot.finalPrompt : buildShotPrompt(shot, rules, meta as never)
+        const refIdx = pickShotReferences(String(shot.name ?? '') + ' ' + String(shot.filename ?? ''), names)
+        const refs = shot.withProduct === false ? [] : refIdx.map((i: number) => nukki[i]).filter(Boolean)
+        const buf = await generateDesignImage({ prompt: ensureHeroFraming(fp, shot), referenceImages: refs, aspectRatio: shot.frameRatio ?? '3:4', model: shot.prominence === 'support' ? 'nb2' : 'pro' })
+        const path = `projects/${projectId}/styling_real/${shot.filename || `${shot.name}.png`}`
+        const { error } = await svc.storage.from('designs').upload(path, buf, { contentType: 'image/png', upsert: true })
+        if (error) throw new Error(error.message)
+        ok++
+        done = true
+      } catch (e) {
+        const msg = String(e).slice(0, 100)
+        if (attempt === 3) {
+          fail++
+          console.warn(`[worker/shots] ✗ ${label}: ${msg}`)
+        } else {
+          const wait = attempt * 5000
+          console.warn(`[worker/shots] … ${label} 실패(${attempt}/3) — ${wait / 1000}초 후 재시도: ${msg}`)
+          await new Promise((r) => setTimeout(r, wait))
+        }
+      }
     }
   }
   // 절반 이상 확보 시 상태 전진(콘솔 advance와 동일 기준)
